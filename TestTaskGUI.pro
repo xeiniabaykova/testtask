@@ -25,9 +25,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
         MainWindow.cpp \
-    FileIO.cpp
+    FileIO.cpp \
+    GeometricPrimitiveCreator.cxx \
+    LineCreator.cxx \
+    CircleCreator.cpp \
+    pointcreator.cpp
 
 HEADERS  += MainWindow.h \
-    FileIO.h
+    FileIO.h \
+    GeometricPrimitiveCreator.h \
+    PointCreator.h \
+    CircleCreator.h \
+    LineCreator.h
 
 FORMS    += MainWindow.ui
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../Qt/5.8/msvc2015_64/lib/ -lQt5Charts
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../Qt/5.8/msvc2015_64/lib/ -lQt5Chartsd
+else:unix: LIBS += -L$$PWD/../../../../Qt/5.8/msvc2015_64/lib/ -lQt5Charts
+
+INCLUDEPATH += $$PWD/../../../../Qt/5.8/msvc2015_64/include
+DEPENDPATH += $$PWD/../../../../Qt/5.8/msvc2015_64/include
+

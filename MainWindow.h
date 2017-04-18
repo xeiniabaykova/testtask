@@ -2,11 +2,16 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+
+#include <QtCharts/QChartView>
+#include <QtCharts/QLineSeries>
+
 class QLabel;
 namespace Ui {
 class MainWindow;
 }
 
+QT_CHARTS_USE_NAMESPACE
 class FileIO;
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -32,7 +37,7 @@ private:
    QAction        * loadAct;
 
    QAction        * clearScreenAct;
-
+   QChart         * chart;
 private slots:
 
     void          SaveFile         ();
@@ -51,7 +56,7 @@ private slots:
     void          ClearScreen      ();
 
 public:
-    explicit MainWindow          ( QWidget *parent = 0 );
+    explicit MainWindow          ( QChart *chart, QWidget *parent = 0 );
     void CreateActions           ();
     void CreateMenus             ();
     ~MainWindow                  ();

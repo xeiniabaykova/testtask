@@ -2,10 +2,13 @@
 #include "ui_MainWindow.h"
 #include "FileIO.h"
 #include <QLabel>
+#include "PointCreator.h"
+#include <QtWidgets/QMainWindow>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+MainWindow::MainWindow( QChart *chart, QWidget *parent ) :
+    chart( chart ),
+    QMainWindow( parent ),
+    ui( new Ui::MainWindow )
 {
     ui->setupUi(this);
 }
@@ -99,7 +102,12 @@ void MainWindow::LoadFile()
 
 void MainWindow::CreatePoint()
 {
-
+    QPointF Point (10,10);
+    PointCreator aCreator;
+    aCreator.CreatePoint (chart,Point );
+    QChartView *chartView = new QChartView(chart);
+     setCentralWidget( chartView );
+    show();
 }
 
 void MainWindow::CreateLine()
