@@ -3,10 +3,12 @@
 
 #include "GeometricPrimitiveCreator.h"
 #include <QPointF>
+
 QT_CHARTS_USE_NAMESPACE
+
 class PointCreator: public GeometricPrimitiveCreator {
 public:
-    void CreatePoint( QChart * chart, QPointF Point);
+    virtual void Create( QChart * chart, const std::vector<QPoint>& points );
 };
 
 #endif // POINTCREATOR_H

@@ -3,7 +3,12 @@
 #include "FileIO.h"
 #include <QLabel>
 #include "PointCreator.h"
+#include "EllipseCreator.h"
+#include "LineCreator.h"
 #include <QtWidgets/QMainWindow>
+#include <functional>
+#include <cmath>
+#define _USE_MATH_DEFINES
 
 MainWindow::MainWindow( QChart *chart, QWidget *parent ) :
     chart( chart ),
@@ -63,7 +68,7 @@ void MainWindow::CreateActions()
     createCircleAct = new QAction( tr("&CreateCircle"), this );
     createCircleAct->setShortcuts( QKeySequence::New );
     createCircleAct->setStatusTip( tr("Creating circle") );
-    connect( createCircleAct, &QAction::triggered, this, &MainWindow::CreateCircle );
+    connect( createCircleAct, &QAction::triggered, this, &MainWindow::CreateEllipse );
 
     createNurbsAct = new QAction( tr("&CreateNurbs"), this );
     createNurbsAct->setShortcuts( QKeySequence::New );
@@ -102,22 +107,21 @@ void MainWindow::LoadFile()
 
 void MainWindow::CreatePoint()
 {
-    QPointF Point (10,10);
-    PointCreator aCreator;
-    aCreator.CreatePoint (chart,Point );
-    QChartView *chartView = new QChartView(chart);
-     setCentralWidget( chartView );
-    show();
+    pointsfromscreen.sufficient = 1;
+    creatorGeometry = new PointCreator();
 }
 
 void MainWindow::CreateLine()
 {
+    pointsfromscreen.sufficient = 2;
+    creatorGeometry = new LineCreator();
 
 }
 
-void MainWindow::CreateCircle()
+void MainWindow::CreateEllipse()
 {
-
+    pointsfromscreen.sufficient = 3;
+    creatorGeometry = new EllipseCreator();
 }
 
 void MainWindow::CreateNurbs()
@@ -130,10 +134,30 @@ void MainWindow::FindIntersection()
 
 }
 
-void MainWindow::ClearScreen(){
+void MainWindow::ClearScreen()
+{
 
 }
 
-void MainWindow::DeleteCurve(){
+void MainWindow::DeleteCurve()
+{
 
+}
+
+
+void MainWindow::mousePressEvent( QMouseEvent *event )
+{
+    if ( pointsfromscreen.sufficient < 0 ) return;
+    if ( pointsfromscreen.sufficient > 0 )
+    {
+        pointsfromscreen.points.push_back( event->pos() );
+        PointCreator creator;
+        creator.Create( chart, pointsfromscreen.points );
+        pointsfromscreen.sufficient--;
+        return;
+    } else {
+      creatorGeometry->Create( chart,  pointsfromscreen.points );
+      pointsfromscreen.sufficient = -10;
+      pointsfromscreen.points.resize(0);
+    }
 }

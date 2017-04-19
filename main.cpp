@@ -17,6 +17,8 @@ int main(int argc, char *argv[])
     MainWindow w(chart);
     w.CreateActions();
     w.CreateMenus();
+    QChartView *chartView = new QChartView( chart );
+    w.setCentralWidget( chartView );
     w.show();
 
     return a.exec();

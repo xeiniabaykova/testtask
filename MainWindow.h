@@ -5,6 +5,8 @@
 
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
+#include "CollectPoints.h"
+#include "GeometricPrimitiveCreator.h"
 
 class QLabel;
 namespace Ui {
@@ -13,31 +15,34 @@ class MainWindow;
 
 QT_CHARTS_USE_NAMESPACE
 class FileIO;
+
 class MainWindow : public QMainWindow {
     Q_OBJECT
 private:
    Ui::MainWindow * ui;
 
-   QMenu          * importExportMenu;
-   QMenu          * createCurveMenu;
-   QMenu          * optionsMenu;
-   QMenu          * screenMenu;
+   QMenu                     * importExportMenu;
+   QMenu                     * createCurveMenu;
+   QMenu                     * optionsMenu;
+   QMenu                     * screenMenu;
 
-   QAction        * createPointAct;
-   QAction        * createLineAct;
-   QAction        * createCircleAct;
-   QAction        * createNurbsAct;
+   QAction                   * createPointAct;
+   QAction                   * createLineAct;
+   QAction                   * createCircleAct;
+   QAction                   * createNurbsAct;
 
-   QAction        * findIntersectionAct;
+   QAction                   * findIntersectionAct;
 
-   QAction        * deleteCurveAct;
-   QLabel         * infoLabel;
+   QAction                   * deleteCurveAct;
+   QLabel                    * infoLabel;
 
-   QAction        * saveAct;
-   QAction        * loadAct;
+   QAction                   * saveAct;
+   QAction                   * loadAct;
 
-   QAction        * clearScreenAct;
-   QChart         * chart;
+   QAction                   * clearScreenAct;
+   QChart                    * chart;
+   CollectPoints               pointsfromscreen;
+   GeometricPrimitiveCreator * creatorGeometry;
 private slots:
 
     void          SaveFile         ();
@@ -46,7 +51,7 @@ private slots:
 
     void          CreatePoint      ();
     void          CreateLine       ();
-    void          CreateCircle     ();
+    void          CreateEllipse    ();
     void          CreateNurbs      ();
 
     void          FindIntersection ();
@@ -57,6 +62,7 @@ private slots:
 
 public:
     explicit MainWindow          ( QChart *chart, QWidget *parent = 0 );
+    void mousePressEvent         ( QMouseEvent *event );
     void CreateActions           ();
     void CreateMenus             ();
     ~MainWindow                  ();

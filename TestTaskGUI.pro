@@ -28,15 +28,24 @@ SOURCES += main.cpp\
     FileIO.cpp \
     GeometricPrimitiveCreator.cxx \
     LineCreator.cxx \
-    CircleCreator.cpp \
-    pointcreator.cpp
+    EllipseCreator.cpp \
+    CollectPoints.cpp \
+    PointCreator.cpp \
+    Line.cpp \
+    Point.cpp \
+    Ellipse.cpp
 
 HEADERS  += MainWindow.h \
     FileIO.h \
     GeometricPrimitiveCreator.h \
     PointCreator.h \
-    CircleCreator.h \
-    LineCreator.h
+    LineCreator.h \
+    EllipseCreator.h \
+    CollectPoints.h \
+    Line.h \
+    Point.h \
+    Ellipse.h \
+    GeometricPrimitive.h
 
 FORMS    += MainWindow.ui
 
