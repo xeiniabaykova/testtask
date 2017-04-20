@@ -11,7 +11,7 @@ Ellipse::Ellipse(const std::vector<QPoint>& points)
 }
 QPoint Ellipse::GetPoint( double t )
 {
-  return QPoint (center.x() + r1 * sin(t), center.y() + r2 * cos(t) );
+  return QPoint ( center.x() + r1 * sin(t), center.y() + r2 * cos(t) );
 }
 
 QPoint Ellipse::GetRange()

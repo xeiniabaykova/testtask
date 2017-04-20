@@ -13,7 +13,6 @@ int main(int argc, char *argv[])
   chart->legend()->hide();
   chart->createDefaultAxes();
 
-  //chartView->setRenderHint(QPainter::Antialiasing);
   MainWindow w(chart);
   w.CreateActions();
   w.CreateMenus();

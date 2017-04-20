@@ -8,7 +8,7 @@
 
 
 MainWindow::MainWindow( QChart *chart, QWidget *parent ) :
-  windowHandler(chart),
+  windowHandler( chart ),
   QMainWindow( parent ),
   ui( new Ui::MainWindow )
 {
@@ -45,92 +45,92 @@ void MainWindow::CreateActions()
   saveAct = new QAction( tr("&Save"), this );
   saveAct->setShortcuts( QKeySequence::New );
   saveAct->setStatusTip( tr("Save into file") );
-  connect( saveAct, &QAction::triggered, this, &MainWindow::SaveFile );
+  connect( saveAct, &QAction::triggered, this, &MainWindow::OnSaveFile );
 
   loadAct = new QAction ( tr("&Load"), this);
   loadAct->setShortcuts( QKeySequence::New );
   loadAct->setStatusTip( tr("Load from file") );
-  connect( loadAct, &QAction::triggered, this, &MainWindow::LoadFile );
+  connect( loadAct, &QAction::triggered, this, &MainWindow::OnLoadFile );
 
   createPointAct = new QAction ( tr("&CreatePoint"), this );
   createPointAct->setShortcuts( QKeySequence::New );
   createPointAct->setStatusTip( tr("Creating point") );
-  connect( createPointAct, &QAction::triggered, this, &MainWindow::CreatePoint );
+  connect( createPointAct, &QAction::triggered, this, &MainWindow::OnCreatePoint );
 
   createLineAct = new QAction( tr("&CreateLine"), this );
   createLineAct->setShortcuts( QKeySequence::New );
   createLineAct->setStatusTip( tr("Creating line") );
-  connect( createLineAct, &QAction::triggered, this, &MainWindow::CreateLine );
+  connect( createLineAct, &QAction::triggered, this, &MainWindow::OnCreateLine );
 
   createCircleAct = new QAction( tr("&CreateCircle"), this );
   createCircleAct->setShortcuts( QKeySequence::New );
   createCircleAct->setStatusTip( tr("Creating circle") );
-  connect( createCircleAct, &QAction::triggered, this, &MainWindow::CreateEllipse );
+  connect( createCircleAct, &QAction::triggered, this, &MainWindow::OnCreateEllipse );
 
   createNurbsAct = new QAction( tr("&CreateNurbs"), this );
   createNurbsAct->setShortcuts( QKeySequence::New );
   createNurbsAct->setStatusTip( tr("Creating nurbs") );
-  connect( createNurbsAct, &QAction::triggered, this, &MainWindow::CreateNurbs );
+  connect( createNurbsAct, &QAction::triggered, this, &MainWindow::OnCreateNurbs );
 
   deleteCurveAct = new QAction( tr("&DeleteCurve"), this );
   deleteCurveAct->setShortcuts( QKeySequence::New );
   deleteCurveAct->setStatusTip( tr("DeleteCurve") );
-  connect( deleteCurveAct, &QAction::triggered, this, &MainWindow::DeleteCurve );
+  connect( deleteCurveAct, &QAction::triggered, this, &MainWindow::OnDeleteCurve );
 
   findIntersectionAct = new QAction( tr("&Find Intersection"), this );
   findIntersectionAct->setShortcuts( QKeySequence::New );
   findIntersectionAct->setStatusTip( tr("Find Intersection") );
-  connect( findIntersectionAct, &QAction::triggered, this, &MainWindow::FindIntersection );
+  connect( findIntersectionAct, &QAction::triggered, this, &MainWindow::OnFindIntersection );
 
   clearScreenAct = new QAction( tr("&Clear Screen"), this );
   clearScreenAct->setShortcuts( QKeySequence::New );
   clearScreenAct->setStatusTip( tr("Clear Screen") );
-  connect( clearScreenAct, &QAction::triggered, this, &MainWindow::ClearScreen );
+  connect( clearScreenAct, &QAction::triggered, this, &MainWindow::OnClearScreen );
 
 
 }
 
-void MainWindow::SaveFile()
+void MainWindow::OnSaveFile()
 {
   windowHandler.SaveFile();
 }
 
-void MainWindow::LoadFile()
+void MainWindow::OnLoadFile()
 {
   windowHandler.LoadFile();
 }
 
-void MainWindow::CreatePoint()
+void MainWindow::OnCreatePoint()
 {
   windowHandler.CreatePoint();
 }
 
-void MainWindow::CreateLine()
+void MainWindow::OnCreateLine()
 {
   windowHandler.CreateLine();
 }
 
-void MainWindow::CreateEllipse()
+void MainWindow::OnCreateEllipse()
 {
   windowHandler.CreateEllipse();
 }
 
-void MainWindow::CreateNurbs()
+void MainWindow::OnCreateNurbs()
 {
 
 }
 
-void MainWindow::FindIntersection()
+void MainWindow::OnFindIntersection()
 {
 
 }
 
-void MainWindow::ClearScreen()
+void MainWindow::OnClearScreen()
 {
 
 }
 
-void MainWindow::DeleteCurve()
+void MainWindow::OnDeleteCurve()
 {
 }
 

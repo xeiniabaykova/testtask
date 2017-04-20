@@ -32,7 +32,6 @@ SOURCES += main.cpp\
     Point.cpp \
     Ellipse.cpp \
     LineCreator.cpp \
-    GeometricPrimitiveCreator.cpp \
     MainWindowHandler.cpp
 
 HEADERS  += MainWindow.h \

@@ -10,48 +10,55 @@ namespace Ui {
 class MainWindow;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
+/// Класс, представляющий клавное окно
+/**
+*/
+///////////////////////////////////////////////////////////////////////////////
+///
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
 private:
-  Ui::MainWindow * ui;
+  Ui::MainWindow    * ui;
 
-  QMenu                     * importExportMenu;
-  QMenu                     * createCurveMenu;
-  QMenu                     * optionsMenu;
-  QMenu                     * screenMenu;
+  QMenu             * importExportMenu;
+  QMenu             * createCurveMenu;
+  QMenu             * optionsMenu;
+  QMenu             * screenMenu;
 
-  QAction                   * createPointAct;
-  QAction                   * createLineAct;
-  QAction                   * createCircleAct;
-  QAction                   * createNurbsAct;
+  QAction           * createPointAct;
+  QAction           * createLineAct;
+  QAction           * createCircleAct;
+  QAction           * createNurbsAct;
 
-  QAction                   * findIntersectionAct;
+  QAction           * findIntersectionAct;
 
-  QAction                   * deleteCurveAct;
-  QLabel                    * infoLabel;
+  QAction           * deleteCurveAct;
+  QLabel            * infoLabel;
 
-  QAction                   * saveAct;
-  QAction                   * loadAct;
+  QAction           * saveAct;
+  QAction           * loadAct;
 
-  QAction                   * clearScreenAct;
-  MainWindowHandler           windowHandler;
+  QAction           * clearScreenAct;
+  MainWindowHandler windowHandler;
 private slots:
 
-  void          SaveFile         ();
-  void          LoadFile         ();
+  void OnSaveFile ();
+  void OnLoadFile ();
 
 
-  void          CreatePoint      ();
-  void          CreateLine       ();
-  void          CreateEllipse    ();
-  void          CreateNurbs      ();
+  void OnCreatePoint      ();
+  void OnCreateLine       ();
+  void OnCreateEllipse    ();
+  void OnCreateNurbs      ();
 
-  void          FindIntersection ();
+  void OnFindIntersection ();
 
-  void          DeleteCurve      ();
+  void OnDeleteCurve      ();
 
-  void          ClearScreen      ();
+  void OnClearScreen      ();
 
 public:
   explicit MainWindow          ( QChart *chart, QWidget *parent = 0 );
