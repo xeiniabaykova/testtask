@@ -1,7 +1,7 @@
 #ifndef CIRCLECREATOR_H
 #define CIRCLECREATOR_H
 
-#include "geometricprimitivecreator.h"
+#include "GeometricPrimitiveCreator.h"
 #include <functional>
 
 class QPointF;
