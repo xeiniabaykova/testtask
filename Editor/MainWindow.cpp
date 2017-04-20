@@ -2,6 +2,7 @@
 #include "FileIO.h"
 #include <QLabel>
 #include <QtWidgets/QMainWindow>
+#include <ui_mainwindow.h>
 
 
 
