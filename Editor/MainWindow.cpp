@@ -5,8 +5,6 @@
 #include <ui_mainwindow.h>
 
 
-
-
 MainWindow::MainWindow( QChart *chart, QWidget *parent ) :
   windowHandler( chart ),
   QMainWindow( parent ),
