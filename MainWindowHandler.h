@@ -24,9 +24,9 @@ public:
     GeometricPrimitiveCreator * creator;
   };
 private:
-  std::vector<QPoint> points;
-  QChart             *   chart;
-  Creator                GeomCreator;
+  std::vector<QPoint>  points;
+  QChart             * chart;
+  Creator              GeomCreator;
 public:
   MainWindowHandler (QChart * chart);
 
