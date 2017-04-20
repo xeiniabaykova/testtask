@@ -6,8 +6,8 @@
 
 class FileIO: public QWidget {
 public:
-    void Open();
-    void Save();
+  void Open();
+  void Save();
 };
 
 #endif // FILEIO_H

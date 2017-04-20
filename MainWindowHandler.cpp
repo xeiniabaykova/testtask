@@ -8,33 +8,33 @@ MainWindowHandler::MainWindowHandler (QChart * chart):
   chart(chart){}
 
 void MainWindowHandler::AddPointFromScreen( QPoint point ) {
-  pointsFromScreen.points.push_back( point );
+  points.push_back( point );
 }
 
 void MainWindowHandler::AddSufficientNum ( int num ) {
-  sufficient = num;
+  GeomCreator.sufficient = num;
 }
 
 bool MainWindowHandler::IsSufficientNum(){
-  return ( pointsFromScreen.points.size() == sufficient );
+  return ( points.size() == GeomCreator.sufficient );
 }
 
 void MainWindowHandler::CreatePoint() {
 
-  sufficient = 1;
-  creator = new PointCreator();
+  GeomCreator.sufficient = 1;
+  GeomCreator.creator = new PointCreator();
 }
 
 void MainWindowHandler::CreateLine() {
 
-  sufficient = 2;
-  creator = new LineCreator();
+  GeomCreator.sufficient = 2;
+  GeomCreator.creator = new LineCreator();
 }
 
 void MainWindowHandler::CreateEllipse() {
 
-  sufficient = 3;
-  creator = new EllipseCreator();
+  GeomCreator.sufficient = 3;
+  GeomCreator.creator = new EllipseCreator();
 }
 
 void MainWindowHandler::CreateNurbs() {
@@ -49,20 +49,21 @@ void MainWindowHandler::LoadFile() {
 
 void MainWindowHandler::SaveFile() {
 
-    FileIO save;
-    save.Save();
+  FileIO save;
+  save.Save();
 }
 
- void MainWindowHandler::CreateCurve() {
-     creator->Create( chart,pointsFromScreen.points );
+void MainWindowHandler::CreateCurve() {
+  GeomCreator.creator->Create( chart,points );
 
+}
+
+void MainWindowHandler::MouseEvent( QMouseEvent *event ) {
+
+ if ( !IsSufficientNum() )
+ {
+   AddPointFromScreen( event->pos() );
+ } else {
+   CreateCurve();
  }
-
- void MainWindowHandler:MouseEvent(){
-
-  if ( !windowHandler.IsSufficientNum() )
-      {
-        windowHandler.AddPointFromScreen( event->pos() );
-      } else {
-       windowHandler.CreateCurve();
- }
+}

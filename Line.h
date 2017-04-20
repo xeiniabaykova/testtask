@@ -7,9 +7,9 @@
 class Line: public GeometricPrimitive
 {
 public:
-    Line();
-    QPoint GetPoint( double t );
-    QPoint GetRange();
+  Line();
+  QPoint GetPoint( double t );
+  QPoint GetRange();
 };
 
 #endif // LINE_H

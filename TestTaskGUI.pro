@@ -27,7 +27,6 @@ SOURCES += main.cpp\
         MainWindow.cpp \
     FileIO.cpp \
     EllipseCreator.cpp \
-    CollectPoints.cpp \
     PointCreator.cpp \
     Line.cpp \
     Point.cpp \
@@ -42,7 +41,6 @@ HEADERS  += MainWindow.h \
     PointCreator.h \
     LineCreator.h \
     EllipseCreator.h \
-    CollectPoints.h \
     Line.h \
     Point.h \
     Ellipse.h \

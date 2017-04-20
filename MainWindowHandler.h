@@ -1,7 +1,6 @@
 #ifndef MAINWINDOWHANDLER_H
 #define MAINWINDOWHANDLER_H
 
-#include "collectpoints.h"
 #include "GeometricPrimitiveCreator.h"
 #include <QtCharts/QChartView>
 #include <QPoint>
@@ -18,27 +17,31 @@ QT_CHARTS_USE_NAMESPACE
 
 
 class MainWindowHandler {
-
-private:
-    CollectPoints          pointsFromScreen;
-    QChart             *   chart;
-    int                    sufficient;
-    GeometricPrimitiveCreator * creator;
 public:
-    MainWindowHandler (QChart * chart);
+  struct Creator {
+    int                         sufficient;
+    GeometricPrimitiveCreator * creator;
+  };
+private:
+  std::vector<QPoint> points;
+  QChart             *   chart;
+  Creator                GeomCreator;
+public:
+  MainWindowHandler (QChart * chart);
 
-    void AddPointFromScreen( QPoint point );
-    void AddSufficientNum (int num);
-    bool IsSufficientNum ();
+  void AddPointFromScreen( QPoint point );
+  void AddSufficientNum (int num);
+  bool IsSufficientNum ();
 
-    void              CreatePoint    ();
-    void              CreateLine     ();
-    void              CreateEllipse  ();
-    void              CreateNurbs    ();
+  void              CreatePoint    ();
+  void              CreateLine     ();
+  void              CreateEllipse  ();
+  void              CreateNurbs    ();
 
-    void              LoadFile        ();
-    void              SaveFile        ();
-    void              CreateCurve     ();
+  void              LoadFile        ();
+  void              SaveFile        ();
+  void              CreateCurve     ();
+  void              MouseEvent( QMouseEvent *event );
 
 };
 

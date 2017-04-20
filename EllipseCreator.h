@@ -9,7 +9,7 @@ QT_CHARTS_USE_NAMESPACE
 
 class EllipseCreator: public GeometricPrimitiveCreator {
 public:
-    virtual void Create( QChart * chart, const std::vector<QPoint>& points );
+  virtual void Create( QChart * chart, const std::vector<QPoint>& points );
 };
 
 #endif // CIRCLECREATOR_H

@@ -7,9 +7,9 @@
 class Point:  public GeometricPrimitive
 {
 public:
-    Point( QPoint point );
-    QPoint GetPoint( double t );
-    QPoint GetRange();
+  Point( QPoint point );
+  QPoint GetPoint( double t );
+  QPoint GetRange();
 };
 
 #endif // POINT_H

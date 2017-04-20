@@ -12,53 +12,53 @@ class MainWindow;
 
 
 class MainWindow : public QMainWindow {
-    Q_OBJECT
+  Q_OBJECT
 private:
-   Ui::MainWindow * ui;
+  Ui::MainWindow * ui;
 
-   QMenu                     * importExportMenu;
-   QMenu                     * createCurveMenu;
-   QMenu                     * optionsMenu;
-   QMenu                     * screenMenu;
+  QMenu                     * importExportMenu;
+  QMenu                     * createCurveMenu;
+  QMenu                     * optionsMenu;
+  QMenu                     * screenMenu;
 
-   QAction                   * createPointAct;
-   QAction                   * createLineAct;
-   QAction                   * createCircleAct;
-   QAction                   * createNurbsAct;
+  QAction                   * createPointAct;
+  QAction                   * createLineAct;
+  QAction                   * createCircleAct;
+  QAction                   * createNurbsAct;
 
-   QAction                   * findIntersectionAct;
+  QAction                   * findIntersectionAct;
 
-   QAction                   * deleteCurveAct;
-   QLabel                    * infoLabel;
+  QAction                   * deleteCurveAct;
+  QLabel                    * infoLabel;
 
-   QAction                   * saveAct;
-   QAction                   * loadAct;
+  QAction                   * saveAct;
+  QAction                   * loadAct;
 
-   QAction                   * clearScreenAct;
-   MainWindowHandler           windowHandler;
+  QAction                   * clearScreenAct;
+  MainWindowHandler           windowHandler;
 private slots:
 
-    void          SaveFile         ();
-    void          LoadFile         ();
+  void          SaveFile         ();
+  void          LoadFile         ();
 
 
-    void          CreatePoint      ();
-    void          CreateLine       ();
-    void          CreateEllipse    ();
-    void          CreateNurbs      ();
+  void          CreatePoint      ();
+  void          CreateLine       ();
+  void          CreateEllipse    ();
+  void          CreateNurbs      ();
 
-    void          FindIntersection ();
+  void          FindIntersection ();
 
-    void          DeleteCurve      ();
+  void          DeleteCurve      ();
 
-    void          ClearScreen      ();
+  void          ClearScreen      ();
 
 public:
-    explicit MainWindow          ( QChart *chart, QWidget *parent = 0 );
-    void mousePressEvent         ( QMouseEvent *event );
-    void CreateActions           ();
-    void CreateMenus             ();
-    ~MainWindow                  ();
+  explicit MainWindow          ( QChart *chart, QWidget *parent = 0 );
+  void mousePressEvent         ( QMouseEvent *event );
+  void CreateActions           ();
+  void CreateMenus             ();
+  ~MainWindow                  ();
 };
 
 #endif // MAINWINDOW_H
