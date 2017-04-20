@@ -26,14 +26,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         MainWindow.cpp \
     FileIO.cpp \
-    GeometricPrimitiveCreator.cxx \
-    LineCreator.cxx \
     EllipseCreator.cpp \
     CollectPoints.cpp \
     PointCreator.cpp \
     Line.cpp \
     Point.cpp \
-    Ellipse.cpp
+    Ellipse.cpp \
+    LineCreator.cpp \
+    GeometricPrimitiveCreator.cpp \
+    MainWindowHandler.cpp
 
 HEADERS  += MainWindow.h \
     FileIO.h \
@@ -45,7 +46,8 @@ HEADERS  += MainWindow.h \
     Line.h \
     Point.h \
     Ellipse.h \
-    GeometricPrimitive.h
+    GeometricPrimitive.h \
+    MainWindowHandler.h
 
 FORMS    += MainWindow.ui
 

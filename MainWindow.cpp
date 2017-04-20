@@ -2,16 +2,13 @@
 #include "ui_MainWindow.h"
 #include "FileIO.h"
 #include <QLabel>
-#include "PointCreator.h"
-#include "EllipseCreator.h"
-#include "LineCreator.h"
 #include <QtWidgets/QMainWindow>
-#include <functional>
-#include <cmath>
-#define _USE_MATH_DEFINES
+
+
+
 
 MainWindow::MainWindow( QChart *chart, QWidget *parent ) :
-    chart( chart ),
+    windowHandler(chart),
     QMainWindow( parent ),
     ui( new Ui::MainWindow )
 {
@@ -95,33 +92,27 @@ void MainWindow::CreateActions()
 
 void MainWindow::SaveFile()
 {
-    FileIO save;
-    save.Save();
+    windowHandler.SaveFile();
 }
 
 void MainWindow::LoadFile()
 {
-    FileIO open;
-    open.Open();
+    windowHandler.LoadFile();
 }
 
 void MainWindow::CreatePoint()
 {
-    pointsfromscreen.sufficient = 1;
-    creatorGeometry = new PointCreator();
+    windowHandler.CreatePoint();
 }
 
 void MainWindow::CreateLine()
 {
-    pointsfromscreen.sufficient = 2;
-    creatorGeometry = new LineCreator();
-
+    windowHandler.CreateLine();
 }
 
 void MainWindow::CreateEllipse()
 {
-    pointsfromscreen.sufficient = 3;
-    creatorGeometry = new EllipseCreator();
+    windowHandler.CreateEllipse();
 }
 
 void MainWindow::CreateNurbs()
@@ -147,17 +138,7 @@ void MainWindow::DeleteCurve()
 
 void MainWindow::mousePressEvent( QMouseEvent *event )
 {
-    if ( pointsfromscreen.sufficient < 0 ) return;
-    if ( pointsfromscreen.sufficient > 0 )
-    {
-        pointsfromscreen.points.push_back( event->pos() );
-        PointCreator creator;
-        creator.Create( chart, pointsfromscreen.points );
-        pointsfromscreen.sufficient--;
-        return;
-    } else {
-      creatorGeometry->Create( chart,  pointsfromscreen.points );
-      pointsfromscreen.sufficient = -10;
-      pointsfromscreen.points.resize(0);
-    }
+  windowHandler.MouseEvent(event);
+
 }
+

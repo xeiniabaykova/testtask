@@ -2,19 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
 #include <QtCharts/QChartView>
-#include <QtCharts/QLineSeries>
-#include "CollectPoints.h"
-#include "GeometricPrimitiveCreator.h"
+#include "MainWindowHandler.h"
 
 class QLabel;
 namespace Ui {
 class MainWindow;
 }
 
-QT_CHARTS_USE_NAMESPACE
-class FileIO;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -40,9 +35,7 @@ private:
    QAction                   * loadAct;
 
    QAction                   * clearScreenAct;
-   QChart                    * chart;
-   CollectPoints               pointsfromscreen;
-   GeometricPrimitiveCreator * creatorGeometry;
+   MainWindowHandler           windowHandler;
 private slots:
 
     void          SaveFile         ();

@@ -3,11 +3,17 @@
 
 #include <QPoint>
 #include <vector>
+
+///////////////////////////////////////////////////////////////////////////////
+//
+/// Класс хранения точек, полученных с экрана
+/**
+*/
+///////////////////////////////////////////////////////////////////////////////
+///
 class CollectPoints
 {
 public:
-    bool isSufficient;
-    int  sufficient;
     std::vector<QPoint> points;
     CollectPoints();
 };
