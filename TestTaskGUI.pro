@@ -24,29 +24,28 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        MainWindow.cpp \
-    FileIO.cpp \
-    EllipseCreator.cpp \
-    PointCreator.cpp \
-    Line.cpp \
-    Point.cpp \
-    Ellipse.cpp \
-    LineCreator.cpp \
-    MainWindowHandler.cpp
+        Editor/MainWindow.cpp \
+    Editor/FileIO.cpp \
+    Editor/EllipseCreator.cpp \
+    Editor/PointCreator.cpp \
+    Math/Line.cpp \
+    Math/Point.cpp \
+    Math/Ellipse.cpp \
+    Editor/LineCreator.cpp \
+    Editor/MainWindowHandler.cpp \
 
-HEADERS  += MainWindow.h \
-    FileIO.h \
-    GeometricPrimitiveCreator.h \
-    PointCreator.h \
-    LineCreator.h \
-    EllipseCreator.h \
-    Line.h \
-    Point.h \
-    Ellipse.h \
-    GeometricPrimitive.h \
-    MainWindowHandler.h
+HEADERS  += Editor/MainWindow.h \
+    Editor/FileIO.h \
+    Editor/GeometricPrimitiveCreator.h \
+    Editor/PointCreator.h \
+    Editor/LineCreator.h \
+    Editor/EllipseCreator.h \
+    Math/Line.h \
+    Math/Point.h \
+    Math/Ellipse.h \
+    Math/GeometricPrimitive.h \
+    Editor/MainWindowHandler.h \
 
-FORMS    += MainWindow.ui
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../Qt/5.8/msvc2015_64/lib/ -lQt5Charts
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../Qt/5.8/msvc2015_64/lib/ -lQt5Chartsd
@@ -54,4 +53,7 @@ else:unix: LIBS += -L$$PWD/../../../../Qt/5.8/msvc2015_64/lib/ -lQt5Charts
 
 INCLUDEPATH += $$PWD/../../../../Qt/5.8/msvc2015_64/include
 DEPENDPATH += $$PWD/../../../../Qt/5.8/msvc2015_64/include
+
+STATECHARTS += \
+    yy.scxml
 

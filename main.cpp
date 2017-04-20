@@ -1,4 +1,4 @@
-#include "MainWindow.h"
+#include "Editor/MainWindow.h"
 #include <QApplication>
 
 #include <QtCharts/QChartView>

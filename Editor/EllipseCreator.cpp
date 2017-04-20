@@ -2,7 +2,7 @@
 #include <QtCharts/QAbstractAxis>
 #include <QtCharts/QSplineSeries>
 #include <QtCharts/QValueAxis>
-#include "Ellipse.h"
+#include "Math/Ellipse.h"
 
 void EllipseCreator::Create( QChart * chart, const std::vector<QPoint>& points )
 {
