@@ -45,6 +45,7 @@ HEADERS  += Editor/MainWindow.h \
     Math/Ellipse.h \
     Math/GeometricPrimitive.h \
     Editor/MainWindowHandler.h \
+	Editor/ui_mainwindow.h \
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../Qt/5.8/msvc2015_64/lib/ -lQt5Charts
