@@ -4,7 +4,9 @@
 #include <QtWidgets/QMainWindow>
 #include <ui_mainwindow.h>
 
-
+//------------------------------------------------------------------------------
+// \ru Конструктор MainWindow. Создается вспомогательный класс windowHandler  и форма MainWindow
+// ---
 MainWindow::MainWindow( QChart *chart, QWidget *parent ) :
   windowHandler( chart ),
   QMainWindow( parent ),
@@ -18,6 +20,17 @@ MainWindow::~MainWindow()
   delete ui;
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+    \ru создаются меню : "File" с подменю "Open" "Save",
+    \ru "Curves" с подменю "Create point", "Create Line", "Create Ellipse",
+    \ru "create nurbs"
+    \ru "Options" с подменю "DeleteCurve" "Find Intersection"
+    \ru "Screen"  с подменю "Clear Screen"
+
+*/
+//-----------------------------------------------------------------------------
 void MainWindow::CreateMenus()
 {
   importExportMenu = menuBar()->addMenu( tr("&File") );
@@ -27,7 +40,7 @@ void MainWindow::CreateMenus()
   createCurveMenu = menuBar()->addMenu( tr("&Curves") );
   createCurveMenu->addAction( createPointAct );
   createCurveMenu->addAction( createLineAct );
-  createCurveMenu->addAction( createCircleAct );
+  createCurveMenu->addAction( createEllipseAct );
   createCurveMenu->addAction( createNurbsAct );
 
   optionsMenu = menuBar()->addMenu( tr("&Options") );
@@ -38,6 +51,15 @@ void MainWindow::CreateMenus()
   screenMenu->addAction( clearScreenAct );
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+   \ru создаются действия для пунктов меню:
+   \ru "save", "load", "create point", "create line", "create ellipse",
+   \ru "create nurbs", "delete curve", "find intersection", "Clear Screen"
+
+*/
+//-----------------------------------------------------------------------------
 void MainWindow::CreateActions()
 {
   saveAct = new QAction( tr("&Save"), this );
@@ -60,10 +82,10 @@ void MainWindow::CreateActions()
   createLineAct->setStatusTip( tr("Creating line") );
   connect( createLineAct, &QAction::triggered, this, &MainWindow::OnCreateLine );
 
-  createCircleAct = new QAction( tr("&CreateCircle"), this );
-  createCircleAct->setShortcuts( QKeySequence::New );
-  createCircleAct->setStatusTip( tr("Creating circle") );
-  connect( createCircleAct, &QAction::triggered, this, &MainWindow::OnCreateEllipse );
+  createEllipseAct = new QAction( tr("&CreateEllipse"), this );
+  createEllipseAct->setShortcuts( QKeySequence::New );
+  createEllipseAct->setStatusTip( tr("Creating circle") );
+  connect( createEllipseAct, &QAction::triggered, this, &MainWindow::OnCreateEllipse );
 
   createNurbsAct = new QAction( tr("&CreateNurbs"), this );
   createNurbsAct->setShortcuts( QKeySequence::New );
@@ -84,55 +106,122 @@ void MainWindow::CreateActions()
   clearScreenAct->setShortcuts( QKeySequence::New );
   clearScreenAct->setStatusTip( tr("Clear Screen") );
   connect( clearScreenAct, &QAction::triggered, this, &MainWindow::OnClearScreen );
-
-
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+   \ru обработчик события пункта меню "save"
+
+*/
+//-----------------------------------------------------------------------------
 void MainWindow::OnSaveFile()
 {
   windowHandler.SaveFile();
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+   \ru обработчик события пункта меню "load"
+
+*/
+//-----------------------------------------------------------------------------
 void MainWindow::OnLoadFile()
 {
   windowHandler.LoadFile();
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+   \ru обработчик события пункта меню "create point"
+
+*/
+//-----------------------------------------------------------------------------
 void MainWindow::OnCreatePoint()
 {
   windowHandler.CreatePoint();
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+   \ru обработчик события пункта меню "create line"
+
+*/
+//-----------------------------------------------------------------------------
 void MainWindow::OnCreateLine()
 {
   windowHandler.CreateLine();
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+   \ru обработчик события пункта меню "create ellipse"
+
+*/
+//-----------------------------------------------------------------------------
 void MainWindow::OnCreateEllipse()
 {
   windowHandler.CreateEllipse();
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+   \ru обработчик события пункта меню "create nurbs"
+
+*/
+//-----------------------------------------------------------------------------
 void MainWindow::OnCreateNurbs()
 {
 
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+   \ru обработчик события пункта меню "find intersection"
+
+*/
+//-----------------------------------------------------------------------------
 void MainWindow::OnFindIntersection()
 {
 
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+   \ru обработчик события пункта меню "clear screen"
+
+*/
+//-----------------------------------------------------------------------------
 void MainWindow::OnClearScreen()
 {
 
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+   \ru обработчик события пункта меню "delete curve"
+
+*/
+//-----------------------------------------------------------------------------
 void MainWindow::OnDeleteCurve()
 {
 }
 
 
+//-----------------------------------------------------------------------------
+/**
+   \ru обработчик события клика мышки
+
+*/
+//-----------------------------------------------------------------------------
 void MainWindow::mousePressEvent( QMouseEvent *event )
 {
   windowHandler.MouseEvent( event );

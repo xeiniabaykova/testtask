@@ -1,15 +1,28 @@
 #include "Line.h"
 
-Line::Line()
+
+//-----------------------------------------------------------------------------
+/**
+  \ru Коструктор Line Записывается начальная точка и вектор направления
+*/
+//-----------------------------------------------------------------------------
+Line::Line( const std::vector<QPoint>& points )
 {
+  startPoint = points[0];
+  direction = QPointF( points[0].x() - points[1].x(),points[0].y() - points[1].y() );
 }
 
-QPoint Line::GetRange()
+//-----------------------------------------------------------------------------
+/**
+  \ru возращаются границы параметра t для прямой
+*/
+//-----------------------------------------------------------------------------
+QPointF Line::GetRange()
 {
-  return QPoint( 0,1 );
+  return QPointF( 0.0,1.0 );
 }
 
-QPoint Line::GetPoint( double t )
+QPointF Line::GetPoint( double t )
 {
-  return QPoint( 0,0 );
+  return QPoint( 0.0,0.0 );
 }

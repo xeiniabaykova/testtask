@@ -2,22 +2,23 @@
 #define LINE_H
 #include <functional>
 #include <QPoint>
+#include <vector>
 #include "GeometricPrimitive.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-/// Класс геометрического представления линии
-/**
-*/
-///////////////////////////////////////////////////////////////////////////////
-///
 
+//------------------------------------------------------------------------------
+/** \brief \ru Класс геометрического представления линии \~
+*/
+// ---
 class Line: public GeometricPrimitive
 {
+private:
+  QPointF startPoint;
+  QPointF direction;
 public:
-  Line();
-  QPoint GetPoint( double t );
-  QPoint GetRange();
+  Line( const std::vector<QPoint>& points );
+  QPointF GetPoint( double t );
+  QPointF GetRange();
 };
 
 #endif // LINE_H

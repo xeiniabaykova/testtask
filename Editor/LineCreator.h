@@ -3,14 +3,12 @@
 #include "GeometricPrimitiveCreator.h"
 
 QT_CHARTS_USE_NAMESPACE
-///////////////////////////////////////////////////////////////////////////////
-//  Класс для отображения линни в GUI
-///
-/**
-*/
-///////////////////////////////////////////////////////////////////////////////
-///
 
+
+//------------------------------------------------------------------------------
+/** \brief \ru Класс для отображения линни в GUI. \~
+*/
+// ---
 class LineCreator: public GeometricPrimitiveCreator {
 public:
   void Create( QChart * chart, const std::vector<QPoint>& points );

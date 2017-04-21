@@ -4,21 +4,18 @@
 #include <QPoint>
 #include "GeometricPrimitive.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-/// Класс геометрического представления точки
-/**
+
+//------------------------------------------------------------------------------
+/** \brief \ru Класс геометрического представления точки \~
 */
-///////////////////////////////////////////////////////////////////////////////
-///
-
-
-class Point:  public GeometricPrimitive
-{
+// ---
+class Point:  public GeometricPrimitive {
+private:
+  QPointF point;
 public:
-  Point  ( QPoint point );
-  QPoint GetPoint( double t );
-  QPoint GetRange();
+  Point  ( QPointF point );
+  QPointF GetPoint( double t );
+  QPointF GetRange();
 };
 
 #endif // POINT_H

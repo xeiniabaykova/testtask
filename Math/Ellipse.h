@@ -4,14 +4,11 @@
 #include <vector>
 #include "GeometricPrimitive.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// Класс геометрического представления эллипса
-///
-/**
-*/
-///////////////////////////////////////////////////////////////////////////////
-///
 
+//------------------------------------------------------------------------------
+/** \brief \ru Класс геометрического представления эллипса \~
+*/
+// ---
 class Ellipse: public GeometricPrimitive
 {
 private:
@@ -20,8 +17,8 @@ private:
   double r2;
 public:
   Ellipse ( const std::vector<QPoint>& points );
-  QPoint  GetPoint( double t );
-  QPoint  GetRange();
+  QPointF  GetPoint( double t );
+  QPointF  GetRange();
 };
 
 #endif // ELLIPSE_H

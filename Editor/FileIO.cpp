@@ -1,5 +1,10 @@
 #include "FileIO.h"
 
+
+
+//------------------------------------------------------------------------------
+// \ru создается диалоговое окно открытия файла
+// ---
 void FileIO::Open()
 {
   QFileDialog::getOpenFileName( this, tr("Open Document"), QDir::currentPath(),
@@ -16,6 +21,10 @@ void FileIO::Open()
   }
 }
 
+
+//------------------------------------------------------------------------------
+// \ru создается диалоговое окно сохранения файла
+// ---
 void FileIO::Save()
 {
   QString filename = QFileDialog::getSaveFileName(
