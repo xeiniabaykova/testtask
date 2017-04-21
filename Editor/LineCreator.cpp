@@ -1,5 +1,5 @@
 #include "LineCreator.h"
-#include "math/Line.h"
+#include "Math/Line.h"
 #include <QtCharts/QLineSeries>
 
 

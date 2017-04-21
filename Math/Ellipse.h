@@ -1,6 +1,6 @@
 #ifndef ELLIPSE_H
 #define ELLIPSE_H
-#include <QPoint.h>
+#include <QPoint>
 #include <vector>
 #include "GeometricPrimitive.h"
 

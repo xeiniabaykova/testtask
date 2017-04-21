@@ -2,7 +2,7 @@
 #include "FileIO.h"
 #include <QLabel>
 #include <QtWidgets/QMainWindow>
-#include <ui_mainwindow.h>
+#include <ui_MainWindow.h>
 
 //------------------------------------------------------------------------------
 // \ru Конструктор MainWindow. Создается вспомогательный класс windowHandler  и форма MainWindow
