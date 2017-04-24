@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------
 Line::Line( Point startPoint, Point endPoint ):
   startPoint( startPoint ),
-  direction( startPoint.GetX() - endPoint.GetX(), startPoint.GetY() - endPoint.GetY() )
+  direction( endPoint.GetX() - startPoint.GetX(), endPoint.GetY() - startPoint.GetY() )
 {}
 
 //-----------------------------------------------------------------------------
