@@ -20,7 +20,7 @@ Ellipse::Ellipse( Point center, double r1, double r2 ):
 //-----------------------------------------------------------------------------
 Point Ellipse::GetPoint( double t ) const
 {
-  return Point ( center.GetX() + r1 * sin(t), center.GetY() + r2 * cos(t) );
+  return Point( center.GetX() + r1 * sin(t), center.GetY() + r2 * cos(t) );
 }
 
 
@@ -31,5 +31,28 @@ Point Ellipse::GetPoint( double t ) const
 //-----------------------------------------------------------------------------
 Range Ellipse::GetRange() const
 {
-  return Range ( 0.0, 2.0 * 3.14 );
+  return Range( 0.0, 2.0 * 3.14 );
 }
+
+
+//-----------------------------------------------------------------------------
+/**
+  \ru возвращает производную элипса по параметру t
+*/
+//-----------------------------------------------------------------------------
+Point Ellipse::GetDerivativePoint( double t ) const
+{
+  return Point( r1 * cos(t), -r2 * sin(t) );
+}
+
+
+//-----------------------------------------------------------------------------
+/**
+  \ru возвращает вторую эллипса по параметру t
+*/
+//-----------------------------------------------------------------------------
+Point Ellipse::Get2DerivativePoint( double t ) const
+{
+  return Point( -r1 * sin(t), -r2 * cos(t) );
+}
+

@@ -19,8 +19,10 @@ public:
   // \ru Создание точки по точке
   // ---
   GeometricPoint( Point point );
-  virtual Point GetPoint( double t ) const;              ///< заплатка для общности: возвращает точку
-  virtual Range GetRange() const;                        ///< заплатка для общности: возвращает нулевую парамтризацию
+  virtual Point GetPoint( double t ) const;            ///< заплатка для общности: возвращает точку
+  virtual Point GetDerivativePoint( double t ) const;  ///< заплатка для общности: возвращает точку
+  virtual Point Get2DerivativePoint( double t ) const; ///< заплатка для общности: возвращает точку
+  virtual Range GetRange() const;                      ///< заплатка для общности: возвращает нулевую парамтризацию
 };
 
 

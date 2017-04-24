@@ -1,10 +1,10 @@
 #include "LineCreator.h"
-#include "math/Line.h"
+#include "Math/Line.h"
 #include <QtCharts/QLineSeries>
 
 
 //------------------------------------------------------------------------------
-// \ru создание линии по двум точкамЖ началу и концу
+// \ru создание линии по двум точкам: началу и концу
 // ---
 std::shared_ptr<GeometricPrimitive> LineCreator::Create( const std::vector<Point>& points )
 {

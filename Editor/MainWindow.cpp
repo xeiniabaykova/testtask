@@ -2,7 +2,7 @@
 #include "FileIO.h"
 #include <QLabel>
 #include <QtWidgets/QMainWindow>
-#include <ui_mainwindow.h>
+#include <ui_MainWindow.h>
 
 //------------------------------------------------------------------------------
 // \ru Конструктор MainWindow. Создается вспомогательный класс windowHandler  и форма MainWindow
@@ -11,7 +11,7 @@ MainWindow::MainWindow( QChart *chart, QWidget *parent ) :
   windowHandler( chart ),
   QMainWindow( parent ),
   ui( new Ui::MainWindow ),
-  importExportMenu (0),
+  importExportMenu(0),
   createCurveMenu(0),
   optionsMenu(0),
   screenMenu(0),
