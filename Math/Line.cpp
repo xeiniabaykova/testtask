@@ -6,23 +6,28 @@
   \ru Коструктор Line Записывается начальная точка и вектор направления
 */
 //-----------------------------------------------------------------------------
-Line::Line( const std::vector<QPoint>& points )
-{
-  startPoint = points[0];
-  direction = QPointF( points[0].x() - points[1].x(),points[0].y() - points[1].y() );
-}
+Line::Line( Point startPoint, Point endPoint ):
+  startPoint( startPoint ),
+  direction( startPoint.GetX() - endPoint.GetX(), startPoint.GetY() - endPoint.GetY() )
+{}
 
 //-----------------------------------------------------------------------------
 /**
-  \ru возращаются границы параметра t для прямой
+  \ru возращаются границы параметра t для прямой: [0, 1]
 */
 //-----------------------------------------------------------------------------
-QPointF Line::GetRange()
+Range Line::GetRange() const
 {
-  return QPointF( 0.0,1.0 );
+  return Range( 0.0, 1.0 );
 }
 
-QPointF Line::GetPoint( double t )
+
+//-----------------------------------------------------------------------------
+/**
+  \ru возвращается точка по параметру t
+*/
+//-----------------------------------------------------------------------------
+Point Line::GetPoint( double t ) const
 {
-  return QPoint( 0.0,0.0 );
+  return Point( startPoint.GetX() + direction.GetX() * t, startPoint.GetY() + direction.GetY() * t );
 }

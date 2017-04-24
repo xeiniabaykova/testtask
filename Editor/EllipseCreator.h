@@ -2,10 +2,6 @@
 #define CIRCLECREATOR_H
 
 #include "GeometricPrimitiveCreator.h"
-#include <functional>
-
-class QPointF;
-QT_CHARTS_USE_NAMESPACE
 
 
 //------------------------------------------------------------------------------
@@ -14,7 +10,10 @@ QT_CHARTS_USE_NAMESPACE
 // ---
 class EllipseCreator: public GeometricPrimitiveCreator {
 public:
-  virtual void Create( QChart * chart, const std::vector<QPoint>& points );
+  //-------------------------------------------------------------------------------
+  // \ru создает эллипс по трем точкам: одна в центре, две на границах, возвращает указатель на базовый класс для геометрии
+  // ---
+  virtual std::shared_ptr<GeometricPrimitive> Create( const std::vector<Point>& points );
 };
 
 #endif // CIRCLECREATOR_H

@@ -10,7 +10,20 @@
 MainWindow::MainWindow( QChart *chart, QWidget *parent ) :
   windowHandler( chart ),
   QMainWindow( parent ),
-  ui( new Ui::MainWindow )
+  ui( new Ui::MainWindow ),
+  importExportMenu (0),
+  createCurveMenu(0),
+  optionsMenu(0),
+  screenMenu(0),
+  createPointAct(0),
+  createLineAct(0),
+  createEllipseAct(0),
+  createNurbsAct(0),
+  findIntersectionAct(0),
+  deleteCurveAct(0),
+  saveAct(0),
+  loadAct(0),
+  clearScreenAct(0)
 {
   ui->setupUi(this);
 }

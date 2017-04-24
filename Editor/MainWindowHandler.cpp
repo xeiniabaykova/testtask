@@ -6,14 +6,17 @@
 #include <QtWidgets/QMessageBox>
 
 
+
 //-----------------------------------------------------------------------------
 /**
   \ru Конструктор MainWindowHandler
 */
 //-----------------------------------------------------------------------------
 MainWindowHandler::MainWindowHandler (QChart * chart):
-  chart(chart){}
-
+  chart( chart ),
+  printChart( chart ),
+  points(0),
+  GeomCreator(0, nullptr ) {}
 
 
 //-----------------------------------------------------------------------------
@@ -21,7 +24,7 @@ MainWindowHandler::MainWindowHandler (QChart * chart):
   \ru добавление точки с экрана в массив точек
 */
 //-----------------------------------------------------------------------------
-void MainWindowHandler::AddPointFromScreen( QPoint point ) {
+void MainWindowHandler::AddPointFromScreen( Point point ) {
   points.push_back( point );
 }
 
@@ -134,7 +137,8 @@ void MainWindowHandler::SaveFile() {
 */
 //-----------------------------------------------------------------------------
 void MainWindowHandler::CreateCurve() {
-  GeomCreator.creator->Create( chart,points );
+  DisplayedFigure currentFugure( GeomCreator.creator->Create(points) );
+  printChart.AddFigure( currentFugure.GetPoints() );
   points.resize(0);
 
 }
@@ -151,9 +155,9 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event ) {
 
  if ( !IsSufficientNum() )
  {
-   AddPointFromScreen( event->pos() );
+   AddPointFromScreen( Point(event->pos().x(), event->pos().y()) );
  } else {
-   AddPointFromScreen( event->pos() );
+   AddPointFromScreen( Point(event->pos().x(), event->pos().y()) );
    CreateCurve();
  }
 }

@@ -1,17 +1,21 @@
 #ifndef GEOMETRICPRIMITIVECREATOR_H
 #define GEOMETRICPRIMITIVECREATOR_H
-#include <QtCharts/QChartView>
-
-QT_CHARTS_USE_NAMESPACE
+#include <Math/GeometricPrimitive.h>
+#include <memory>
+#include <Math/Point.h>
+#include <vector>
 
 
 //------------------------------------------------------------------------------
-/** \brief \ru Абстрактный класс для отображения геометрического объекта. \~
+/** \brief \ru Абстрактный класс для создания геометрического объекта. \~
 */
 // ---
 class GeometricPrimitiveCreator {
 public:
-  virtual void Create( QChart * chart, const std::vector<QPoint>& points ) = 0;
+  //-------------------------------------------------------------------------------
+  // \ru создает геометрический примитив по точкам
+  // ---
+  virtual std::shared_ptr<GeometricPrimitive> Create( const std::vector<Point>& points ) = 0;
 };
 
 #endif // GEOMETRICPRIMITIVECREATOR_H

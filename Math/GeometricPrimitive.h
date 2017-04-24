@@ -1,16 +1,18 @@
 #ifndef GEOMETRICPRIMITIVE_H
 #define GEOMETRICPRIMITIVE_H
 
-#include <QPoint>
-
+#include <Math/Point.h>
+#include <Math/Range.h>
 
 //------------------------------------------------------------------------------
 /** \brief \ru Абстрактный класс для геометрического объекта \~
 */
 // ---
-class GeometricPrimitive {
-  virtual QPointF GetPoint( double t ) = 0;
-  virtual QPointF GetRange() = 0;
+class GeometricPrimitive { 
+public:
+  virtual Point GetPoint( double t ) const = 0; ///< возвращает точку на кривой по параметру t
+  virtual Range GetRange() const = 0;           ///< возвращает допустимые границы параметра
+  virtual ~GeometricPrimitive() = default;
 };
 
 #endif // GEOMETRICPRIMITIVE_H

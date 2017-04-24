@@ -1,26 +1,15 @@
 #include "PointCreator.h"
-#include "Math/Point.h"
+#include "Math/GeometricPoint.h"
 #include <QtCharts/QChartView>
 #include <QtCharts/QScatterSeries>
 
 
 //-----------------------------------------------------------------------------
 /**
-  \ru отображение точки на экране
+  \ru создание геометрического представления точки
 */
 //-----------------------------------------------------------------------------
-void PointCreator::Create( QChart * chart, const std::vector<QPoint>& points )
+std::shared_ptr<GeometricPrimitive> PointCreator::Create( const std::vector<Point>& points )
 {
-  QScatterSeries *series0 = new QScatterSeries();
-  Point currentPoint( points[0] );
-
-  series0->setName( "scatter1" );
-  series0->setMarkerShape( QScatterSeries::MarkerShapeCircle );
-  series0->setMarkerSize( 15.0 );
-  *series0 << chart->mapToValue( points[0] ) ;
-
-  chart->addSeries( series0 );
-  chart->createDefaultAxes();
-
-  chart->setDropShadowEnabled( false );
+  return std::make_shared<GeometricPoint> ( points[0]);
 }

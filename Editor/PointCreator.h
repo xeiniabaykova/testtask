@@ -2,18 +2,19 @@
 #define POINTCREATOR_H
 
 #include "GeometricPrimitiveCreator.h"
-#include <QPointF>
-
-QT_CHARTS_USE_NAMESPACE
+#include <Math/Point.h>
 
 
 //------------------------------------------------------------------------------
-/** \brief \ru Класс отображения точки. \~
+/** \brief \ru Класс создания точки. \~
 */
 // ---
 class PointCreator: public GeometricPrimitiveCreator {
 public:
-  virtual void Create( QChart * chart, const std::vector<QPoint>& points );
+  //-------------------------------------------------------------------------------
+  // \ru создает геометрическое представление точки
+  // ---
+  virtual std::shared_ptr<GeometricPrimitive> Create( const std::vector<Point>& points );
 };
 
 #endif // POINTCREATOR_H

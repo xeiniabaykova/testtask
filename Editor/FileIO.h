@@ -11,8 +11,8 @@
 // ---
 class FileIO: public QWidget {
 public:
-  void Open();
-  void Save();
+  void Open(); ///< \ru создается диалог открытия файла
+  void Save(); ///< \ru создается диалог сохранения файла
 };
 
 #endif // FILEIO_H

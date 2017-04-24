@@ -1,0 +1,4 @@
+#ifndef NURBSCREATOR_H
+#define NURBSCREATOR_H
+
+#endif // NURBSCREATOR_H

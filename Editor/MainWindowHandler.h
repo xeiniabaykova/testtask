@@ -5,8 +5,9 @@
 #include <QtCharts/QChartView>
 #include <QPoint>
 #include <vector>
+#include "DisplayedFigure.h"
+#include "PrintFigure.h"
 
-QT_CHARTS_USE_NAMESPACE
 
 
 //------------------------------------------------------------------------------
@@ -23,15 +24,20 @@ public:
   struct Creator {
     int                         sufficient;
     GeometricPrimitiveCreator * creator;
+    Creator( int sufficient, GeometricPrimitiveCreator * creator ):
+      sufficient( sufficient ),
+      creator ( creator ) {}
   };
 private:
-  std::vector<QPoint>  points;      ///< точки, полученные с экрана
-  QChart             * chart;       ///< объект для отрисовки графика
-  Creator              GeomCreator; ///< объект для создания геометрического примитива
+  std::vector<Point>           points;      ///< точки, полученные с экрана
+  QChart                       * chart;     ///< объект для отрисовки графика
+  Creator                      GeomCreator; ///< объект для создания геометрического примитива
+  std::vector<DisplayedFigure> fugures;     ///< объект для хранения отображаемых примитивов
+  PrintFigure                  printChart;  ///< объект для отображения геометрического примитива
 public:
   MainWindowHandler (QChart * chart);
 
-  void AddPointFromScreen           ( QPoint point ); ///< добавление точки с экрана в массив
+  void AddPointFromScreen           ( Point point ); ///< добавление точки с экрана в массив
   void AddSufficientNum             (int num);        ///< добавление необходимого количества точек
   bool IsSufficientNum              ();               ///< проверка на необходимое количество точек
 

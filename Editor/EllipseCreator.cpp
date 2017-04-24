@@ -7,22 +7,17 @@
 
 
 //------------------------------------------------------------------------------
-// \ru Создает геометрический примитив эллипс и отрисоывает его на экране
+// \ru Создает эллипс по центру и двум граничным точкам
 // ---
-void EllipseCreator::Create( QChart * chart, const std::vector<QPoint>& points )
+std::shared_ptr<GeometricPrimitive> EllipseCreator::Create( const std::vector<Point>& points )
 {
-  QLineSeries * ellipseseries = new QLineSeries();
-  int colSteps = 10;
-  Ellipse current( points );
-  double steprange = abs( current.GetRange().y() - current.GetRange().x() ) / colSteps;
+  Point center( points[0] );
+  double r1 = sqrt( (points[0].GetX() - points[1].GetX()) * (points[0].GetX() - points[1].GetX()) +
+      (points[0].GetY() - points[1].GetY()) * (points[0].GetY() - points[1].GetY()) );
 
+  double r2 = sqrt( (points[0].GetX() - points[2].GetX()) * (points[0].GetX() - points[2].GetX()) +
+      (points[0].GetY() - points[2].GetY()) * (points[0].GetY() - points[2].GetY()) );
 
-  for ( int i = 0; i <= colSteps; i++ )
-  {
-    *ellipseseries <<  chart->mapToValue( current.GetPoint(i * steprange) ) ;
-  }
+ return std::make_shared<Ellipse>( center, r1, r2 );
 
-  chart->addSeries( ellipseseries );
-  chart->createDefaultAxes();
-  chart->setDropShadowEnabled( false );
 }

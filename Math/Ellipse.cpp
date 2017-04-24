@@ -8,26 +8,19 @@
   \ru Коструктор Ellipse. Вычисляются два радиуса и записывается центральная точка
 */
 //-----------------------------------------------------------------------------
-Ellipse::Ellipse( const std::vector<QPoint>& points )
-{
-  center = points[0];
-
-  r1 = sqrt( (points[0].x() - points[1].x()) *(points[0].x() - points[1].x())
-      + ( points[0].y() - points[1].y() ) *(points[0].y() - points[1].y()) );
-
-  r2 = sqrt( (points[0].x() - points[2].x()) *(points[0].x() - points[2].x())
-      + ( points[0].y() - points[2].y() ) *(points[0].y() - points[2].y()) );
-}
-
+Ellipse::Ellipse( Point center, double r1, double r2 ):
+  center(center),
+  r1(r1),
+  r2(r2){}
 
 //-----------------------------------------------------------------------------
 /**
   \ru возвращается точка по параметру t
 */
 //-----------------------------------------------------------------------------
-QPointF Ellipse::GetPoint( double t )
+Point Ellipse::GetPoint( double t ) const
 {
-  return QPointF ( center.x() + r1 * sin(t), center.y() + r2 * cos(t) );
+  return Point ( center.GetX() + r1 * sin(t), center.GetY() + r2 * cos(t) );
 }
 
 
@@ -36,7 +29,7 @@ QPointF Ellipse::GetPoint( double t )
   \ru возращаются границы параметра t для эллипса
 */
 //-----------------------------------------------------------------------------
-QPointF Ellipse::GetRange()
+Range Ellipse::GetRange() const
 {
-  return QPointF ( 0.0, 2.0 * 3.14 );
+  return Range ( 0.0, 2.0 * 3.14 );
 }

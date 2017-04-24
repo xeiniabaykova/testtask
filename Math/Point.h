@@ -1,21 +1,23 @@
 #ifndef POINT_H
 #define POINT_H
-#include <functional>
-#include <QPoint>
-#include "GeometricPrimitive.h"
-
 
 //------------------------------------------------------------------------------
-/** \brief \ru Класс геометрического представления точки \~
+/** \brief \ru Класс для фактического представления точки \~
 */
 // ---
-class Point:  public GeometricPrimitive {
+class Point
+{
 private:
-  QPointF point;
+  double x; // координата x
+  double y; // координата y
 public:
-  Point  ( QPointF point );
-  QPointF GetPoint( double t );
-  QPointF GetRange();
+  //-------------------------------------------------------------------------------
+  // \ru создание точки по координатам x, y.
+  Point() {}
+  Point   ( double x, double y );
+  Point   ( const Point& point );
+  double  GetX() const; // возвращает координату x
+  double  GetY() const; // возвращает координату y
 };
 
 #endif // POINT_H

@@ -4,17 +4,11 @@
 
 
 //------------------------------------------------------------------------------
-// \ru отображение линии на экране по двум точкам, создание геометрического примитива линия
+// \ru создание линии по двум точкамЖ началу и концу
 // ---
-void LineCreator::Create(QChart * chart, const std::vector<QPoint>& points )
+std::shared_ptr<GeometricPrimitive> LineCreator::Create( const std::vector<Point>& points )
 {
-  QLineSeries *series0 = new QLineSeries();
-  Line currentLine( points );
-  *series0 << chart->mapToValue( points[0] );
-  *series0 << chart->mapToValue( points[1] );
-
-  chart->addSeries( series0 );
-  chart->createDefaultAxes();
-  chart->setDropShadowEnabled( false );
-
+  Point startPoint( points[0] );
+  Point endPoint( points[1]) ;
+  return std::make_shared <Line>( startPoint, endPoint );
 }

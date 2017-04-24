@@ -2,16 +2,17 @@
 #define LINECREATOR_H
 #include "GeometricPrimitiveCreator.h"
 
-QT_CHARTS_USE_NAMESPACE
-
 
 //------------------------------------------------------------------------------
-/** \brief \ru Класс для отображения линни в GUI. \~
-*/
+/** \brief \ru Класс для создания геометрического представления линии. \~
+**/
 // ---
 class LineCreator: public GeometricPrimitiveCreator {
 public:
-  void Create( QChart * chart, const std::vector<QPoint>& points );
+  //-------------------------------------------------------------------------------
+  // \ru создает линию по двум точкам: началу и концу
+  // ---
+ virtual std::shared_ptr<GeometricPrimitive> Create( const std::vector<Point>& points );
 };
 
 #endif // LINECREATOR_H

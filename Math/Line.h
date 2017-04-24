@@ -1,7 +1,6 @@
 #ifndef LINE_H
 #define LINE_H
-#include <functional>
-#include <QPoint>
+#include <Math/Point.h>
 #include <vector>
 #include "GeometricPrimitive.h"
 
@@ -13,12 +12,15 @@
 class Line: public GeometricPrimitive
 {
 private:
-  QPointF startPoint;
-  QPointF direction;
+  Point startPoint; ///< начальная точка
+  Point direction;  ///< направление
 public:
-  Line( const std::vector<QPoint>& points );
-  QPointF GetPoint( double t );
-  QPointF GetRange();
+  //-------------------------------------------------------------------------------
+  // \ru создание линии по двум точкам: началу и концу
+  // ---
+  Line( Point startPoint, Point endPoint );
+  virtual Point GetPoint( double t ) const;              ///< возвращает точку по параметру t
+  virtual Range GetRange() const;                        ///< возвращает парметризацию  параметризация от [0, 1]
 };
 
 #endif // LINE_H
