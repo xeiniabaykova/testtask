@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------
 DisplayedFigure::DisplayedFigure( std::shared_ptr<GeometricPrimitive> figure ):
   figure( figure ),
-  displayedPoints( 0 ) {}
+  displayedPoints(0) {}
 
 
 //-----------------------------------------------------------------------------

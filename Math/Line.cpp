@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------
 Line::Line( Point startPoint, Point endPoint ):
   startPoint( startPoint ),
-  direction( startPoint.GetX() - endPoint.GetX(), startPoint.GetY() - endPoint.GetY() )
+  direction( endPoint.GetX() - startPoint.GetX(), endPoint.GetY() - startPoint.GetY() )
 {}
 
 //-----------------------------------------------------------------------------
@@ -40,6 +40,7 @@ Point Line::GetPoint( double t ) const
 //-----------------------------------------------------------------------------
 Point Line::GetDerivativePoint( double t ) const
 {
+  (void)t;
   return direction;
 }
 
@@ -51,5 +52,6 @@ Point Line::GetDerivativePoint( double t ) const
 //-----------------------------------------------------------------------------
 Point Line::Get2DerivativePoint( double t ) const
 {
+  (void)t;
   return Point ( 0.0, 0.0 );
 }

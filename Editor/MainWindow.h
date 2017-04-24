@@ -41,9 +41,9 @@ private:
   MainWindowHandler windowHandler;          ///< \ru вспомогательный класс для обработки событий
 private slots:
   /// \ru обработчик события открытия файла
-  void OnSaveFile ();
+  void OnSaveFile         ();
    /// \ru обработчик события сохранения файла
-  void OnLoadFile ();
+  void OnLoadFile         ();
 
   /// \ru обработчик события создания точки
   void OnCreatePoint      ();
