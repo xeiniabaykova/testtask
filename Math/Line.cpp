@@ -55,3 +55,16 @@ Point Line::Get2DerivativePoint( double t ) const
   (void)t;
   return Point ( 0.0, 0.0 );
 }
+
+
+//-----------------------------------------------------------------------------
+/**
+  \ru позвращается полилилния для текущей линии - это начало конец
+*/
+//-----------------------------------------------------------------------------
+void Line::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy ) const
+{
+  polyLinePoints.push_back( startPoint );
+  polyLinePoints.push_back( GetPoint(GetRange().GetEnd()) );
+}
+

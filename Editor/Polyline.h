@@ -1,5 +1,5 @@
-#ifndef DISPLAYEDFIGURE_H
-#define DISPLAYEDFIGURE_H
+#ifndef POLYLINE_H
+#define POLYLINE_H
 #include "Math/Point.h"
 #include "GeometricPrimitiveCreator.h"
 
@@ -11,11 +11,11 @@
 */
 // ---
 
-class DisplayedFigure {
+class Polyline {
 
 private:
   std::vector<Point>                  displayedPoints;  ///<  точки для отображения примитива
-  std::shared_ptr<GeometricPrimitive> figure;           ///<  геометрический примитив
+  const  GeometricPrimitive * figure;           ///<  геометрический примитив
   double                              precision;        ///<  точность для создания полилинии
 private:
   //-------------------------------------------------------------------------------
@@ -27,12 +27,11 @@ public:
   //-------------------------------------------------------------------------------
   // \ru на вход подается геометрический примитив
   // ---
-  DisplayedFigure( std::shared_ptr<GeometricPrimitive> figure );
+  Polyline( const GeometricPrimitive * figure, double precision );
   //-------------------------------------------------------------------------------
   // \ru расчитываются точки для отображения геометрического примитива, возвращается массив из полученных точек
   // ---
   std::vector<Point>                  GetPoints();
-  std::shared_ptr<GeometricPrimitive> GetFigure(); ///< возвразается геометрический примитив
 };
 
 #endif // DISPLAYEDFIGURE_H

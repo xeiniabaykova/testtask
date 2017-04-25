@@ -147,8 +147,9 @@ void MainWindowHandler::SaveFile()
 //-----------------------------------------------------------------------------
 void MainWindowHandler::CreateCurve()
 {
-  DisplayedFigure currentFugure( GeomCreator.creator->Create(points) );
-  printChart.AddFigure( currentFugure.GetPoints() );
+  std::vector<Point> currentPoints;
+  GeomCreator.creator->Create( points )->GetAsPolyLine( currentPoints, 0.01 );
+  printChart.AddFigure( currentPoints );
   points.resize(0);
 
 }
@@ -186,6 +187,7 @@ void MainWindowHandler::PrintCharacteristicPoint( Point point )
   PointCreator *creator = new PointCreator();
   std::vector<Point> currentPoint;
   currentPoint.push_back( point );
-  DisplayedFigure currentFugure( creator->Create(currentPoint) );
-  printChart.AddFigure( currentFugure.GetPoints() );
+  std::vector<Point> currentPoints;
+  creator->Create( currentPoint )->GetAsPolyLine( currentPoints, 0.01 );
+  printChart.AddFigure( currentPoints );
 }

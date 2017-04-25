@@ -56,3 +56,14 @@ Point GeometricPoint::Get2DerivativePoint( double t ) const
   return point;
 
 }
+
+
+//-----------------------------------------------------------------------------
+/**
+  \ru позвращается полилилния для текущей точки
+*/
+//-----------------------------------------------------------------------------
+void GeometricPoint::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy ) const
+{
+  polyLinePoints.push_back( point );
+}

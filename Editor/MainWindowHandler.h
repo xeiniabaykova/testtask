@@ -5,7 +5,7 @@
 #include <QtCharts/QChartView>
 #include <QPoint>
 #include <vector>
-#include "DisplayedFigure.h"
+#include "Polyline.h"
 #include "PrintFigure.h"
 
 
@@ -43,7 +43,7 @@ private:
   std::vector<Point>           points;      ///< точки, полученные с экрана
   QChart                       * chart;     ///< объект для отрисовки графика
   Creator                      GeomCreator; ///< объект для создания геометрического примитива
-  std::vector<DisplayedFigure> fugures;     ///< объект для хранения отображаемых примитивов
+ // std::vector<DisplayedFigure> fugures;     ///< объект для хранения отображаемых примитивов
   PrintFigure                  printChart;  ///< объект для отображения геометрического примитива
   CurrentState                 state;       ///< объект для хранения текущего состояния окна
 public:

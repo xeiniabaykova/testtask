@@ -23,6 +23,7 @@ public:
   virtual Point GetDerivativePoint  ( double t ) const; ///< возвращает производную линнии по параметру t
   virtual Point Get2DerivativePoint ( double t ) const; ///< возвращает вторую производную на линии по параметру t
   virtual Range GetRange            () const;           ///< возвращает парметризацию  параметризация от [0, 1]
+  virtual void  GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< возвращает полилинию для линии (это две точки - начало и конец)
 };
 
 #endif // LINE_H
