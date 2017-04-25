@@ -25,8 +25,12 @@ include_directories(
 
 set(SOURCE_FILES
         main.cpp
+        Editor/DisplayedFigure.cpp
+        Editor/DisplayedFigure.h
         Editor/EllipseCreator.cpp
         Editor/EllipseCreator.h
+        Editor/GeometricPrimitiveCreator.cpp
+        Editor/GeometricPrimitiveCreator.h
         Editor/FileIO.cpp
         Editor/FileIO.h
         Editor/GeometricPrimitiveCreator.cpp
@@ -37,15 +41,25 @@ set(SOURCE_FILES
         Editor/MainWindow.h
         Editor/MainWindowHandler.cpp
         Editor/MainWindowHandler.h
+        Editor/NurbsCreator.h
         Editor/PointCreator.cpp
         Editor/PointCreator.h
+        Editor/PrintFigure.cpp
+        Editor/PrintFigure.h
         Math/Ellipse.cpp
         Math/Ellipse.h
+        Math/GeometricPoint.cpp
+        Math/GeometricPoint.h
         Math/GeometricPrimitive.h
         Math/Line.cpp
         Math/Line.h
+        Math/NurbsCurve.cpp
+        Math/NurbsCurve.h
         Math/Point.cpp
         Math/Point.h
+        Math/Range.cpp
+        Math/Range.h
+        Serealizer/curveserializer.h
         )
 
 add_executable(TestTask1 ${SOURCE_FILES})
