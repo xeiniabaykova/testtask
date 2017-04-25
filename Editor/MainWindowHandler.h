@@ -61,7 +61,9 @@ public:
   void SaveFile                 ();                     ///< сохранение текущих кривых в файл
   void CreateCurve              ();                     ///< общая функция для создания кривой
   void MouseEvent               ( QMouseEvent *event ); ///< обработка клика мышкой
-  void PrintCharacteristicPoint ( Point point );                     ///< отображение на экране точек, выбранных пользователем
+  void StopCreateCurve          ();                     ///< обработка клика мышкой
+  void PrintCharacteristicPoint ( Point point );        ///< отображение на экране точек, выбранных пользователем
+  void SetCheckableCurrentItem  ();
 
 };
 

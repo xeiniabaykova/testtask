@@ -24,25 +24,17 @@ int main(int argc, char *argv[])
   w.CreateActions();
   w.CreateMenus();
 
+  QLineSeries *series0 = new QLineSeries();
+  chart->legend()->setVisible(false);
+  chart->addSeries(series0);
 
-      QLineSeries *series0 = new QLineSeries();
+  QChartView *chartView = new QChartView(chart);
 
-      //*series0 << QPointF(1, 5) << QPointF(3, 7) << QPointF(7, 6) << QPointF(9, 7) << QPointF(12, 6)
-         //      << QPointF(16, 7) << QPointF(18, 5);
+  chartView->setRenderHint(QPainter::Antialiasing);
 
-
-      chart->addSeries(series0);
-      chart->createDefaultAxes();
-     // chart->axisX()->setRange(0, 20);
-    //  chart->axisY()->setRange(0, 10);
-
-      QChartView *chartView = new QChartView(chart);
-      chartView->setRenderHint(QPainter::Antialiasing);
-
-
-      w.setCentralWidget(chartView);
-      w.resize(400, 300);
-      w.show();
+  w.setCentralWidget(chartView);
+  w.resize(400, 300);
+  w.show();
 
       return a.exec();
 }

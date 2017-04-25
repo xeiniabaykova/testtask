@@ -153,6 +153,10 @@ void MainWindowHandler::CreateCurve()
 
 }
 
+void MainWindowHandler::StopCreateCurve()
+{
+  state = StateExpectAction;
+}
 
 //-----------------------------------------------------------------------------
 /**
@@ -172,7 +176,6 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
        AddPointFromScreen( Point(event->pos().x(), event->pos().y()) );
        PrintCharacteristicPoint ( Point(event->pos().x(), event->pos().y()) );
        CreateCurve();
-       state = StateExpectAction;
      }
   }
 }

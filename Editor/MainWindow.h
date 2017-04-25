@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QtCharts/QChartView>
+#include <QActionGroup>
 #include "MainWindowHandler.h"
 
 class QLabel;
@@ -29,7 +30,7 @@ private:
   QAction           * createLineAct;        ///< \ru событие создания линии
   QAction           * createEllipseAct;     ///< \ru событие создания эллипса
   QAction           * createNurbsAct;       ///< \ru событие создания nurbs - кривой
-
+  QAction           * stopCreateCurveAct;   ///< \ru событие прекращения создания кривых
   QAction           * findIntersectionAct;  ///< \ru событие нахождения пересечения
 
   QAction           * deleteCurveAct;       ///< \ru событие удаления кривой
@@ -39,6 +40,7 @@ private:
 
   QAction           * clearScreenAct;       ///< \ru событие очистки экрана
   MainWindowHandler windowHandler;          ///< \ru вспомогательный класс для обработки событий
+  QActionGroup      * creatorCurves;        ///< \ru группа для меню создания кривых
 private slots:
   /// \ru обработчик события открытия файла
   void OnSaveFile         ();
@@ -53,6 +55,8 @@ private slots:
   void OnCreateEllipse    ();
   /// \ru обработчик события создания nurbs
   void OnCreateNurbs      ();
+   /// \ru обработчик события прекращения создания кривых
+  void OnStopCreateCurve  ();
   /// \ru обработчик события нахождения пересечения
   void OnFindIntersection ();
   /// \ru обработчик события удаления кривой

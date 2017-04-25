@@ -19,6 +19,7 @@ MainWindow::MainWindow( QChart *chart, QWidget *parent ) :
   createLineAct(0),
   createEllipseAct(0),
   createNurbsAct(0),
+  stopCreateCurveAct(0),
   findIntersectionAct(0),
   deleteCurveAct(0),
   saveAct(0),
@@ -38,7 +39,7 @@ MainWindow::~MainWindow()
 /**
     \ru создаются меню : "File" с подменю "Open" "Save",
     \ru "Curves" с подменю "Create point", "Create Line", "Create Ellipse",
-    \ru "create nurbs"
+    \ru "Create Nurbs", "Stop create curve"
     \ru "Options" с подменю "DeleteCurve" "Find Intersection"
     \ru "Screen"  с подменю "Clear Screen"
 
@@ -55,6 +56,7 @@ void MainWindow::CreateMenus()
   createCurveMenu->addAction( createLineAct );
   createCurveMenu->addAction( createEllipseAct );
   createCurveMenu->addAction( createNurbsAct );
+  createCurveMenu->addAction( stopCreateCurveAct );
 
   optionsMenu = menuBar()->addMenu( tr("&Options") );
   optionsMenu->addAction( deleteCurveAct );
@@ -85,9 +87,11 @@ void MainWindow::CreateActions()
   loadAct->setStatusTip( tr("Load from file") );
   connect( loadAct, &QAction::triggered, this, &MainWindow::OnLoadFile );
 
+
   createPointAct = new QAction ( tr("&CreatePoint"), this );
   createPointAct->setShortcuts( QKeySequence::New );
   createPointAct->setStatusTip( tr("Creating point") );
+  createPointAct->setShortcut(tr("CTRL+Q"));
   connect( createPointAct, &QAction::triggered, this, &MainWindow::OnCreatePoint );
 
   createLineAct = new QAction( tr("&CreateLine"), this );
@@ -104,6 +108,18 @@ void MainWindow::CreateActions()
   createNurbsAct->setShortcuts( QKeySequence::New );
   createNurbsAct->setStatusTip( tr("Creating nurbs") );
   connect( createNurbsAct, &QAction::triggered, this, &MainWindow::OnCreateNurbs );
+
+  creatorCurves = new QActionGroup(this);
+  creatorCurves->addAction(createPointAct);
+  creatorCurves->addAction(createLineAct);
+  creatorCurves->addAction(createEllipseAct);
+  creatorCurves->addAction(createNurbsAct);
+
+
+  stopCreateCurveAct = new QAction( tr("&Stop create curve"), this );
+  stopCreateCurveAct->setShortcuts( QKeySequence::New );
+  stopCreateCurveAct->setStatusTip( tr("") );
+  connect( stopCreateCurveAct, &QAction::triggered, this, &MainWindow::OnStopCreateCurve );
 
   deleteCurveAct = new QAction( tr("&DeleteCurve"), this );
   deleteCurveAct->setShortcuts( QKeySequence::New );
@@ -154,6 +170,8 @@ void MainWindow::OnLoadFile()
 //-----------------------------------------------------------------------------
 void MainWindow::OnCreatePoint()
 {
+  createPointAct->setCheckable( true );
+  createPointAct->setChecked( true );
   windowHandler.CreatePoint();
 }
 
@@ -166,7 +184,9 @@ void MainWindow::OnCreatePoint()
 //-----------------------------------------------------------------------------
 void MainWindow::OnCreateLine()
 {
-  windowHandler.CreateLine();
+  createLineAct->setCheckable( true );
+   createLineAct->setChecked( true );
+   windowHandler.CreateLine();
 }
 
 
@@ -178,6 +198,8 @@ void MainWindow::OnCreateLine()
 //-----------------------------------------------------------------------------
 void MainWindow::OnCreateEllipse()
 {
+  createEllipseAct->setCheckable( true );
+  createEllipseAct->setChecked( true );
   windowHandler.CreateEllipse();
 }
 
@@ -193,6 +215,19 @@ void MainWindow::OnCreateNurbs()
 
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+   \ru обработчик события пункта меню "Stop create curve"
+
+*/
+//-----------------------------------------------------------------------------
+void MainWindow::OnStopCreateCurve()
+{
+  createEllipseAct->setChecked( true );
+  createEllipseAct->setChecked( false );
+  windowHandler.StopCreateCurve();
+}
 
 //-----------------------------------------------------------------------------
 /**

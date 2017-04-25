@@ -70,3 +70,5 @@ DEPENDPATH += $$PWD/../../../../Qt/5.8/msvc2015_64/include
 STATECHARTS += \
     yy.scxml
 
+RESOURCES +=
+
