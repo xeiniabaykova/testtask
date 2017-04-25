@@ -37,7 +37,8 @@ SOURCES += main.cpp\
     Math/Range.cpp \
     Math/GeometricPoint.cpp \
     Editor/PrintFigure.cpp \
-    Editor/Polyline.cpp
+    Editor/Polyline.cpp \
+    Editor/CurveSelector.cpp
 
 HEADERS  += Editor/MainWindow.h \
     Editor/FileIO.h \
@@ -57,7 +58,8 @@ HEADERS  += Editor/MainWindow.h \
     Math/GeometricPoint.h \
     Editor/PrintFigure.h \
     Editor/NurbsCreator.h \
-    Editor/Polyline.h
+    Editor/Polyline.h \
+    Editor/CurveSelector.h
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../Qt/5.8/msvc2015_64/lib/ -lQt5Charts

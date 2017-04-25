@@ -2,6 +2,7 @@
 #define MAINWINDOWHANDLER_H
 
 #include "GeometricPrimitiveCreator.h"
+#include "CurveSelector.h"
 #include <QtCharts/QChartView>
 #include <QPoint>
 #include <vector>
@@ -46,6 +47,7 @@ private:
  // std::vector<DisplayedFigure> fugures;     ///< объект для хранения отображаемых примитивов
   PrintFigure                  printChart;  ///< объект для отображения геометрического примитива
   CurrentState                 state;       ///< объект для хранения текущего состояния окна
+  CurveSelector                selector;   ///< объект для селектирования кривых, отображаемых на экране
 public:
   MainWindowHandler (QChart * chart);
 

@@ -4,6 +4,7 @@
 #include "EllipseCreator.h"
 #include "FileIO.h"
 #include <QtWidgets/QMessageBox>
+#include <QtCharts/QScatterSeries>
 
 
 
@@ -16,6 +17,7 @@ MainWindowHandler::MainWindowHandler (QChart * chart):
   chart( chart ),
   printChart( chart ),
   points(0),
+  selector( chart ),
   GeomCreator(0, nullptr ) {}
 
 
@@ -178,6 +180,14 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
        PrintCharacteristicPoint ( Point(event->pos().x(), event->pos().y()) );
        CreateCurve();
      }
+  } else if (state == StateExpectAction) {
+    QPointF currentPoint = chart->mapToValue( QPointF(event->pos().x(), event->pos().y()) );
+    int selectSeries = selector.GetCurve( Point (currentPoint.x(), currentPoint.y()) );
+    if ( selectSeries != -1 ) {
+      QXYSeries* current = static_cast<QXYSeries*>( chart->series()[selectSeries] );
+       current->setColor( QColor(153, 255, 255) );
+  }
+    state = StateExpectAction;
   }
 }
 
