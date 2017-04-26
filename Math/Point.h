@@ -18,6 +18,18 @@ public:
   Point   ( const Point& point );
   double  GetX() const; // возвращает координату x
   double  GetY() const; // возвращает координату y
+  Point operator * (double param) const
+  {
+ return Point (x * param, y * param);
+  }
+  Point operator - ( Point point ) const
+  {
+    return Point (x - point.GetX(), y - point.GetY());
+  }
+  Point operator + ( Point point ) const
+  {
+    return Point (x + point.GetX(), y + point.GetY());
+  }
 };
 
 #endif // POINT_H

@@ -3,6 +3,7 @@
 #include "Math/Point.h"
 #include "GeometricPrimitiveCreator.h"
 #include <QtCharts/QChartView>
+#include <QtCharts/QLineSeries>
 #include <vector>
 QT_CHARTS_USE_NAMESPACE
 
@@ -24,6 +25,6 @@ public:
   //-------------------------------------------------------------------------------
   // \ru на вход передается массив точек для отображения
   // ---
-  void AddFigure( const std::vector<Point>& points );  ///< добавление новой кривой
+  QXYSeries* AddFigure( const std::vector<Point>& points );  ///< добавление новой кривой
 };
 #endif // PRINTFUGURE_H

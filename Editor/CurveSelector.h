@@ -2,6 +2,7 @@
 #define CURVESELECTOR_H
 
 #include <Math/Point.h>
+#include <vector>
 #include <QtCharts/QChartView>
 QT_CHARTS_USE_NAMESPACE
 
@@ -12,9 +13,9 @@ QT_CHARTS_USE_NAMESPACE
 class CurveSelector
 {
 private:
-  QChart *chart;
+  const std::vector<std::vector<Point>>& points;
 public:
-  CurveSelector( QChart *chart );
+  CurveSelector( const std::vector<std::vector<Point>>& points );
   int GetCurve( Point point ); ///< отдает номер series в chart, у которой расстояние меньше допустимого
 };
 

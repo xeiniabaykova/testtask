@@ -275,3 +275,8 @@ void MainWindow::mousePressEvent( QMouseEvent *event )
   windowHandler.MouseEvent( event );
 }
 
+void MainWindow::mouseDoubleClickEvent( QMouseEvent * event )
+{
+  windowHandler.MouseDoubleClickEvent( event );
+}
+
