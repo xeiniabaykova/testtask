@@ -73,7 +73,8 @@ public:
 
   void CreatePoint              ();                     ///< создание и отображение точки
   void CreateLine               ();                     ///< создание и отображение линии
-  void CreateEllipse            ();                     ///< создание и отображение Эллипса
+  void CreateEllipse            ();                     ///< создание и отображение эллипса
+  void CreateCircle             ();                     ///< создание и отображение окружности
   void CreateNurbs              ();                     ///< создание и отображение nurbs
   void LoadFile                 ();                     ///< сохранение текущих кривых из файла
   void SaveFile                 ();                     ///< сохранение текущих кривых в файл

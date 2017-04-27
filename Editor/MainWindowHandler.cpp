@@ -90,7 +90,7 @@ void MainWindowHandler::CreateLine()
 
 //-----------------------------------------------------------------------------
 /**
-  \ru задается необходимое количество точек - 2
+  \ru задается необходимое количество точек - 3
   \ru создается объект для создания геометрического представления эллипса
 
 */
@@ -102,6 +102,20 @@ void MainWindowHandler::CreateEllipse()
   GeomCreator.creator = new EllipseCreator();
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+  \ru задается необходимое количество точек - 2
+  \ru создается объект для создания геометрического представления окружности
+
+*/
+//-----------------------------------------------------------------------------
+void MainWindowHandler::CreateCircle()
+{
+  state = StateCreateCurve;
+  GeomCreator.sufficient = 2;
+//  GeomCreator.creator = new CircleCreator();
+}
 
 //-----------------------------------------------------------------------------
 /**
@@ -206,7 +220,20 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
           chartCurve.chartPoints[i]->setColor( QColor(153, 255, 255) );
       for ( int i = 0; i< chartCurve.referencePoints.size(); i++)
           chartCurve.referencePoints[i]->setColor( QColor(153, 255, 255) );
-  }
+  } else {
+      for ( int j = 0; j < isSelected.size(); j++ )
+      {
+        DisplayChartCurve chartCurve =  screenCurves[screenPolyIndexes.at(j)];
+        for ( int i = 0; i< chartCurve.chartPoints.size(); i++)
+            chartCurve.chartPoints[i]->setColor( QColor(51, 0, 51) );
+        for ( int i = 0; i< chartCurve.referencePoints.size(); i++)
+            chartCurve.referencePoints[i]->setColor( QColor(51, 0, 51) );
+
+      }
+      isSelected.resize(0);
+
+
+    }
     state = StateExpectAction;
   }
 }

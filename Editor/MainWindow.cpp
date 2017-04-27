@@ -18,6 +18,7 @@ MainWindow::MainWindow( QChart *chart, QWidget *parent ) :
   createPointAct(0),
   createLineAct(0),
   createEllipseAct(0),
+  createCircleAct(0),
   createNurbsAct(0),
   stopCreateCurveAct(0),
   findIntersectionAct(0),
@@ -39,7 +40,7 @@ MainWindow::~MainWindow()
 /**
     \ru создаются меню : "File" с подменю "Open" "Save",
     \ru "Curves" с подменю "Create point", "Create Line", "Create Ellipse",
-    \ru "Create Nurbs", "Stop create curve"
+    \ru "Create Nurbs", "Create Circle" "Stop create curve"
     \ru "Options" с подменю "DeleteCurve" "Find Intersection"
     \ru "Screen"  с подменю "Clear Screen"
 
@@ -56,7 +57,9 @@ void MainWindow::CreateMenus()
   createCurveMenu->addAction( createLineAct );
   createCurveMenu->addAction( createEllipseAct );
   createCurveMenu->addAction( createNurbsAct );
+  createCurveMenu->addAction( createCircleAct );
   createCurveMenu->addAction( stopCreateCurveAct );
+
 
   optionsMenu = menuBar()->addMenu( tr("&Options") );
   optionsMenu->addAction( deleteCurveAct );
@@ -70,7 +73,7 @@ void MainWindow::CreateMenus()
 //-----------------------------------------------------------------------------
 /**
    \ru создаются действия для пунктов меню:
-   \ru "save", "load", "create point", "create line", "create ellipse",
+   \ru "save", "load", "create point", "create line", "create ellipse", "create Circle"
    \ru "create nurbs", "delete curve", "find intersection", "Clear Screen"
 
 */
@@ -109,11 +112,18 @@ void MainWindow::CreateActions()
   createNurbsAct->setStatusTip( tr("Creating nurbs") );
   connect( createNurbsAct, &QAction::triggered, this, &MainWindow::OnCreateNurbs );
 
+  createCircleAct = new QAction( tr("&Create Circle"), this );
+  createCircleAct->setShortcuts( QKeySequence::New );
+  createCircleAct->setStatusTip( tr("Creating Circle") );
+  connect( createCircleAct, &QAction::triggered, this, &MainWindow::OnCreateCircle );
+
+
   creatorCurves = new QActionGroup(this);
-  creatorCurves->addAction(createPointAct);
-  creatorCurves->addAction(createLineAct);
-  creatorCurves->addAction(createEllipseAct);
-  creatorCurves->addAction(createNurbsAct);
+  creatorCurves->addAction( createPointAct );
+  creatorCurves->addAction( createLineAct ) ;
+  creatorCurves->addAction( createEllipseAct );
+  creatorCurves->addAction( createCircleAct );
+  creatorCurves->addAction( createNurbsAct );
 
 
   stopCreateCurveAct = new QAction( tr("&Stop create curve"), this );
@@ -206,6 +216,20 @@ void MainWindow::OnCreateEllipse()
 
 //-----------------------------------------------------------------------------
 /**
+   \ru обработчик события пункта меню "create circle"
+
+*/
+//-----------------------------------------------------------------------------
+void MainWindow::OnCreateCircle()
+{
+  createCircleAct->setCheckable( true );
+  createCircleAct->setChecked( true );
+  windowHandler.CreateCircle();
+}
+
+
+//-----------------------------------------------------------------------------
+/**
    \ru обработчик события пункта меню "create nurbs"
 
 */
@@ -275,7 +299,8 @@ void MainWindow::mousePressEvent( QMouseEvent *event )
   windowHandler.MouseEvent( event );
 }
 
-void MainWindow::resizeEvent( QResizeEvent *event )
+void MainWindow::resizeEvent(QResizeEvent *event)
 {
-  windowHandler.ResizeEvent( event );
+
+  windowHandler.ResizeEvent ( event );
 }

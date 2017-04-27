@@ -29,6 +29,7 @@ private:
   QAction           * createPointAct;       ///< \ru событие создания точки
   QAction           * createLineAct;        ///< \ru событие создания линии
   QAction           * createEllipseAct;     ///< \ru событие создания эллипса
+  QAction           * createCircleAct;     ///< \ru событие создания эллипса
   QAction           * createNurbsAct;       ///< \ru событие создания nurbs - кривой
   QAction           * stopCreateCurveAct;   ///< \ru событие прекращения создания кривых
   QAction           * findIntersectionAct;  ///< \ru событие нахождения пересечения
@@ -53,6 +54,8 @@ private slots:
   void OnCreateLine       ();
   /// \ru обработчик события создания эллипса
   void OnCreateEllipse    ();
+  /// \ru обработчик события создания окружности
+  void OnCreateCircle     ();
   /// \ru обработчик события создания nurbs
   void OnCreateNurbs      ();
    /// \ru обработчик события прекращения создания кривых
@@ -71,8 +74,9 @@ public:
   explicit MainWindow          ( QChart *chart, QWidget *parent = 0 );
   /// \ru обработчик события клика мышкой
   void mousePressEvent         ( QMouseEvent *event );
-/// \ru обработчик события изменения размера экрана
-  void resizeEvent             ( QResizeEvent *event );
+ 
+  /// \ru обработчик события изменения размера экрана
+  void resizeEvent(QResizeEvent *event);
   /// \ru создать события
   void CreateActions           ();
   /// \ru создать меню
