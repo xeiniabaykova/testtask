@@ -25,6 +25,7 @@ private:
   QMenu             * createCurveMenu;      ///< \ru меню создания кривых
   QMenu             * optionsMenu;          ///< \ru меню настроек
   QMenu             * screenMenu;
+  QMenu             * contextMenu;
 
   QAction           * createPointAct;       ///< \ru событие создания точки
   QAction           * createLineAct;        ///< \ru событие создания линии
@@ -66,6 +67,11 @@ private slots:
   void OnDeleteCurve      ();
   /// \ru обработчик события очистки экрана
   void OnClearScreen      ();
+  void contextMenuRequested( const QPoint& point);
+protected:
+#ifndef QT_NO_CONTEXTMENU
+    void contextMenuEvent(QContextMenuEvent *event) override;
+#endif // QT_NO_CONTEXTMENU
 
 public:
   /** \brief \ru Инициализация.
@@ -74,6 +80,7 @@ public:
   explicit MainWindow          ( QChart *chart, QWidget *parent = 0 );
   /// \ru обработчик события клика мышкой
   void mousePressEvent         ( QMouseEvent *event );
+ // void MainWindow::contextMenuEvent(QContextMenuEvent *event);
  
   /// \ru обработчик события изменения размера экрана
   void resizeEvent(QResizeEvent *event);

@@ -63,7 +63,9 @@ private:
   std::vector<std::vector<Point>>        geomPolylines;
   std::map<int, int>                    screenPolyIndexes;
   std::vector<int> isSelected;
-
+  QColor  currentColor;
+  QColor  selectingColor;
+  std::vector<QXYSeries*> currentSeriesPoint;
 public:
   MainWindowHandler (QChart * chart);
 
@@ -80,11 +82,12 @@ public:
   void SaveFile                 ();                     ///< сохранение текущих кривых в файл
   void CreateCurve              ( std::vector<QXYSeries*> currentSeriesPoint );                     ///< общая функция для создания кривой
   void MouseEvent               ( QMouseEvent *event ); ///< обработка клика мышкой
-  void MouseDoubleClickEvent               ( QMouseEvent *event ); ///< обработка двойного клика мышкой
   void StopCreateCurve          ();                     ///< обработка клика мышкой
   void PrintCharacteristicPoint ( Point point, std::vector<QXYSeries*>& currentSeriesPoint );        ///< отображение на экране точек, выбранных пользователем
   void SetCheckableCurrentItem  ();
   void ResizeEvent              ( QResizeEvent *event ); ///< обработка изменения размера окна
+  void StateExpect( QMouseEvent *event );
+  void AddColortSeries( const DisplayChartCurve& chartCurve, QColor color );
 
 };
 

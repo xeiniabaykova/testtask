@@ -34,13 +34,24 @@ MainWindow::~MainWindow()
 {
   delete ui;
 }
+#ifndef QT_NO_CONTEXTMENU
+void MainWindow::contextMenuEvent(QContextMenuEvent *event)
+{
+    QMenu menu(this);
 
-
+    stopCreateCurveAct = new QAction( tr("&stop create curve"), this );
+    stopCreateCurveAct->setShortcuts( QKeySequence::New );
+    stopCreateCurveAct->setStatusTip( tr("stop sreating curve") );
+    connect( stopCreateCurveAct, &QAction::triggered, this, &MainWindow::OnStopCreateCurve );
+    menu.addAction(stopCreateCurveAct);
+    menu.exec(event->globalPos());
+}
+#endif // QT_NO_CONTEXTMENU
 //-----------------------------------------------------------------------------
 /**
     \ru создаются меню : "File" с подменю "Open" "Save",
     \ru "Curves" с подменю "Create point", "Create Line", "Create Ellipse",
-    \ru "Create Nurbs", "Create Circle" "Stop create curve"
+    \ru "Create Nurbs", "Create Circle"
     \ru "Options" с подменю "DeleteCurve" "Find Intersection"
     \ru "Screen"  с подменю "Clear Screen"
 
@@ -58,7 +69,6 @@ void MainWindow::CreateMenus()
   createCurveMenu->addAction( createEllipseAct );
   createCurveMenu->addAction( createNurbsAct );
   createCurveMenu->addAction( createCircleAct );
-  createCurveMenu->addAction( stopCreateCurveAct );
 
 
   optionsMenu = menuBar()->addMenu( tr("&Options") );
@@ -91,28 +101,28 @@ void MainWindow::CreateActions()
   connect( loadAct, &QAction::triggered, this, &MainWindow::OnLoadFile );
 
 
-  createPointAct = new QAction ( tr("&CreatePoint"), this );
+  createPointAct = new QAction ( tr("&Point"), this );
   createPointAct->setShortcuts( QKeySequence::New );
   createPointAct->setStatusTip( tr("Creating point") );
   createPointAct->setShortcut(tr("CTRL+Q"));
   connect( createPointAct, &QAction::triggered, this, &MainWindow::OnCreatePoint );
 
-  createLineAct = new QAction( tr("&CreateLine"), this );
+  createLineAct = new QAction( tr("&Line"), this );
   createLineAct->setShortcuts( QKeySequence::New );
   createLineAct->setStatusTip( tr("Creating line") );
   connect( createLineAct, &QAction::triggered, this, &MainWindow::OnCreateLine );
 
-  createEllipseAct = new QAction( tr("&CreateEllipse"), this );
+  createEllipseAct = new QAction( tr("&Ellipse"), this );
   createEllipseAct->setShortcuts( QKeySequence::New );
   createEllipseAct->setStatusTip( tr("Creating circle") );
   connect( createEllipseAct, &QAction::triggered, this, &MainWindow::OnCreateEllipse );
 
-  createNurbsAct = new QAction( tr("&CreateNurbs"), this );
+  createNurbsAct = new QAction( tr("&Nurbs"), this );
   createNurbsAct->setShortcuts( QKeySequence::New );
   createNurbsAct->setStatusTip( tr("Creating nurbs") );
   connect( createNurbsAct, &QAction::triggered, this, &MainWindow::OnCreateNurbs );
 
-  createCircleAct = new QAction( tr("&Create Circle"), this );
+  createCircleAct = new QAction( tr("&Circle"), this );
   createCircleAct->setShortcuts( QKeySequence::New );
   createCircleAct->setStatusTip( tr("Creating Circle") );
   connect( createCircleAct, &QAction::triggered, this, &MainWindow::OnCreateCircle );
@@ -125,11 +135,6 @@ void MainWindow::CreateActions()
   creatorCurves->addAction( createCircleAct );
   creatorCurves->addAction( createNurbsAct );
 
-
-  stopCreateCurveAct = new QAction( tr("&Stop create curve"), this );
-  stopCreateCurveAct->setShortcuts( QKeySequence::New );
-  stopCreateCurveAct->setStatusTip( tr("") );
-  connect( stopCreateCurveAct, &QAction::triggered, this, &MainWindow::OnStopCreateCurve );
 
   deleteCurveAct = new QAction( tr("&DeleteCurve"), this );
   deleteCurveAct->setShortcuts( QKeySequence::New );
@@ -248,8 +253,11 @@ void MainWindow::OnCreateNurbs()
 //-----------------------------------------------------------------------------
 void MainWindow::OnStopCreateCurve()
 {
-  createEllipseAct->setChecked( true );
-  createEllipseAct->setChecked( false );
+
+  createPointAct->setCheckable( true );
+  createPointAct->setChecked( true );
+  createPointAct->setCheckable( false );
+  createPointAct->setChecked( false );
   windowHandler.StopCreateCurve();
 }
 
@@ -303,4 +311,10 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 {
 
   windowHandler.ResizeEvent ( event );
+}
+
+
+void MainWindow::contextMenuRequested(const QPoint& point)
+{
+    contextMenu->popup(mapToGlobal(point));
 }

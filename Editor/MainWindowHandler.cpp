@@ -21,7 +21,9 @@ MainWindowHandler::MainWindowHandler (QChart * chart):
   points(0),
   selector( geomPolylines ),
   GeomCreator(0, nullptr ),
-  state (StateExpectAction){}
+  state (StateExpectAction),
+  currentColor( 153, 255, 255 ),
+  selectingColor( 51, 0, 51 ){}
 
 
 //-----------------------------------------------------------------------------
@@ -164,21 +166,20 @@ void MainWindowHandler::SaveFile()
   \ru обнуляется массив точек полученных с экрана
 */
 //-----------------------------------------------------------------------------
-void MainWindowHandler::CreateCurve( std::vector<QXYSeries*> currentSeriesPoint )
+void MainWindowHandler::CreateCurve( std::vector<QXYSeries*> referenceSeriesPoint )
 {
   DisplayChartCurve curve;
   screenCurves.push_back(curve);
+
   std::vector<Point> currentPoints;
-  GeomCreator.creator->Create( points )->GetAsPolyLine( currentPoints, 0.01 );
+  GeomCreator.creator->Create( points )->GetAsPolyLine( currentPoints, 0.001 );
   geomPolylines.push_back( currentPoints );
-  int num = std::max((int)(screenCurves.size() - 1), 0);
-  if (currentPoints.size() == 1)
-    screenCurves[num].referencePoints.push_back(printChart.AddFigure( currentPoints ));
-  else {
-    screenCurves[num].chartPoints.push_back(printChart.AddFigure( currentPoints ));
-    screenCurves[num].referencePoints = currentSeriesPoint;
- }
-  screenPolyIndexes.insert( std::pair<int, int> (geomPolylines.size() - 1, num) );
+
+  screenCurves[screenCurves.size() - 1].chartPoints.push_back( printChart.AddFigure( currentPoints ) );
+  screenCurves[screenCurves.size() - 1].referencePoints = referenceSeriesPoint;
+
+
+  screenPolyIndexes.insert( std::pair<int, int> (geomPolylines.size() - 1, screenCurves.size() - 1) );
   points.resize(0);
 
 }
@@ -195,9 +196,12 @@ void MainWindowHandler::StopCreateCurve()
   \ru если недостаточно, точка добавляется в массив
 */
 //-----------------------------------------------------------------------------
+
 void MainWindowHandler::MouseEvent( QMouseEvent *event )
 {
-  std::vector<QXYSeries*> currentSeriesPoint;
+   if( event->buttons() == Qt::RightButton )
+     return;
+
   if (state == StateCreateCurve) {
      if ( !IsSufficientNum() )
      {
@@ -208,50 +212,50 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
        QPointF currentPoint = chart->mapToValue(event->pos());
        AddPointFromScreen( Point(currentPoint.x(), currentPoint.y()) );
        PrintCharacteristicPoint ( Point(currentPoint.x(), currentPoint.y()), currentSeriesPoint );
-       CreateCurve(currentSeriesPoint);
+       CreateCurve( currentSeriesPoint );
+       currentSeriesPoint.resize(0);
      }
   } else if (state == StateExpectAction) {
-    QPointF currentPoint = chart->mapToValue( QPointF(event->pos().x(), event->pos().y()) );
-    int selectSeries = selector.GetCurve( Point (currentPoint.x(), currentPoint.y()) );
-    if ( selectSeries != -1 ) {
-      DisplayChartCurve chartCurve =  screenCurves[screenPolyIndexes.at(selectSeries)];
-      isSelected.push_back(selectSeries);
-      for ( int i = 0; i< chartCurve.chartPoints.size(); i++)
-          chartCurve.chartPoints[i]->setColor( QColor(153, 255, 255) );
-      for ( int i = 0; i< chartCurve.referencePoints.size(); i++)
-          chartCurve.referencePoints[i]->setColor( QColor(153, 255, 255) );
-  } else {
-      for ( int j = 0; j < isSelected.size(); j++ )
-      {
-        DisplayChartCurve chartCurve =  screenCurves[screenPolyIndexes.at(j)];
-        for ( int i = 0; i< chartCurve.chartPoints.size(); i++)
-            chartCurve.chartPoints[i]->setColor( QColor(51, 0, 51) );
-        for ( int i = 0; i< chartCurve.referencePoints.size(); i++)
-            chartCurve.referencePoints[i]->setColor( QColor(51, 0, 51) );
 
-      }
-      isSelected.resize(0);
-
-
-    }
-    state = StateExpectAction;
+  StateExpect ( event );
   }
 }
 
-
-void  MainWindowHandler::MouseDoubleClickEvent( QMouseEvent *event )
+void MainWindowHandler::StateExpect( QMouseEvent *event )
 {
-  for ( int j = 0; j< isSelected.size(); j++ )
-  {
-    DisplayChartCurve chartCurve =  screenCurves[screenPolyIndexes.at(j)];
-    for ( int i = 0; i< chartCurve.chartPoints.size(); i++)
-        chartCurve.chartPoints[i]->setColor( QColor(51, 0, 51) );
-    for ( int i = 0; i< chartCurve.referencePoints.size(); i++)
-        chartCurve.referencePoints[i]->setColor( QColor(51, 0, 51) );
+  QPointF currentPoint = chart->mapToValue( QPointF(event->pos().x(), event->pos().y()) );
+  int selectSeries = selector.GetCurve( Point (currentPoint.x(), currentPoint.y()) );
+  if ( selectSeries != -1 ) {
+    isSelected.push_back(selectSeries);
+    DisplayChartCurve chartCurve =  screenCurves[screenPolyIndexes.at(selectSeries)];
+    AddColortSeries( chartCurve, currentColor );
+  }
 
+if ( selectSeries == -1 ){
+  for ( int j = 0; j < isSelected.size(); j++ )
+  {
+    int current = screenPolyIndexes.find(isSelected[j])->second;
+    DisplayChartCurve chartCurve =  screenCurves[current];
+    AddColortSeries( chartCurve, selectingColor );
   }
   isSelected.resize(0);
+}
+  state = StateExpectAction;
 
+}
+
+
+void MainWindowHandler::AddColortSeries( const DisplayChartCurve& chartCurve, QColor color )
+{
+  for ( int i = 0; i < chartCurve.chartPoints.size(); i++)
+  {
+      chartCurve.chartPoints[i]->setColor( color );
+  }
+  for ( int i = 0; i < chartCurve.referencePoints.size(); i++)
+  {
+
+      chartCurve.referencePoints[i]->setColor( color );
+  }
 }
 
 void MainWindowHandler::PrintCharacteristicPoint( Point point, std::vector<QXYSeries*>& currentSeriesPoint )
