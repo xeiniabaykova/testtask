@@ -20,7 +20,8 @@ MainWindowHandler::MainWindowHandler (QChart * chart):
   printChart( chart ),
   points(0),
   selector( geomPolylines ),
-  GeomCreator(0, nullptr ) {}
+  GeomCreator(0, nullptr ),
+  state (StateExpectAction){}
 
 
 //-----------------------------------------------------------------------------
@@ -242,6 +243,14 @@ void MainWindowHandler::ResizeEvent( QResizeEvent *event )
   QRect rec = QApplication::desktop()->screenGeometry();
    double height = rec.height();
    double width = rec.width();
-   chart->resize( width, height );
+    chart->resize( width, height );
+   for ( int j = 0; j< screenCurves.size(); j++ )
+   {
+     DisplayChartCurve chartCurve =  screenCurves[screenPolyIndexes.at(j)];
+     for ( int i = 0; i< chartCurve.chartPoints.size(); i++)
+         for (int k = 0; k < chartCurve.chartPoints[i]->count(); k++)
+          chart->mapToValue( chartCurve.chartPoints[i]->at(k) );
+
+     }
 
 }

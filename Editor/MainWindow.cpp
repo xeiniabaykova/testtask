@@ -275,8 +275,7 @@ void MainWindow::mousePressEvent( QMouseEvent *event )
   windowHandler.MouseEvent( event );
 }
 
-void MainWindow::mouseDoubleClickEvent( QMouseEvent * event )
+void MainWindow::resizeEvent( QResizeEvent *event )
 {
-  windowHandler.MouseDoubleClickEvent( event );
+  windowHandler.ResizeEvent( event );
 }
-

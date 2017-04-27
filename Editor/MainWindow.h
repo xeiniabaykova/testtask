@@ -71,7 +71,8 @@ public:
   explicit MainWindow          ( QChart *chart, QWidget *parent = 0 );
   /// \ru обработчик события клика мышкой
   void mousePressEvent         ( QMouseEvent *event );
-  void MainWindow::mouseDoubleClickEvent( QMouseEvent * event );
+/// \ru обработчик события изменения размера экрана
+  void resizeEvent             ( QResizeEvent *event );
   /// \ru создать события
   void CreateActions           ();
   /// \ru создать меню
