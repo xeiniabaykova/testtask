@@ -4,6 +4,7 @@
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QDesktopWidget>
 
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMainWindow>
@@ -17,8 +18,11 @@ int main(int argc, char *argv[])
 {
   QApplication a( argc, argv );
 
-  QChart *chart = new QChart();
+  QRect rec = QApplication::desktop()->screenGeometry();
+   double height = rec.height();
+   double width = rec.width();
 
+  QChart *chart = new QChart();
 
   MainWindow w( chart );
   w.CreateActions();
@@ -33,8 +37,8 @@ int main(int argc, char *argv[])
   chartView->setRenderHint(QPainter::Antialiasing);
 
   w.setCentralWidget(chartView);
-  w.resize(400, 300);
+  w.resize( width,  height );
   w.show();
 
-      return a.exec();
+  return a.exec();
 }

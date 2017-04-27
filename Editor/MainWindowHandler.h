@@ -83,6 +83,7 @@ public:
   void StopCreateCurve          ();                     ///< обработка клика мышкой
   void PrintCharacteristicPoint ( Point point, std::vector<QXYSeries*>& currentSeriesPoint );        ///< отображение на экране точек, выбранных пользователем
   void SetCheckableCurrentItem  ();
+  void ResizeEvent              ( QResizeEvent *event ); ///< обработка изменения размера окна
 
 };
 

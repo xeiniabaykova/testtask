@@ -4,6 +4,7 @@
 #include "EllipseCreator.h"
 #include "FileIO.h"
 #include <QtWidgets/QMessageBox>
+#include <QtWidgets/QDesktopWidget>
 #include <QtCharts/QScatterSeries>
 #include <algorithm>
 
@@ -233,4 +234,14 @@ void MainWindowHandler::PrintCharacteristicPoint( Point point, std::vector<QXYSe
   std::vector<Point> currentPoints;
   creator->Create( currentPoint )->GetAsPolyLine( currentPoints, 0.01 );
   currentSeriesPoint.push_back( printChart.AddFigure( currentPoints ) );
+}
+
+
+void MainWindowHandler::ResizeEvent( QResizeEvent *event )
+{
+  QRect rec = QApplication::desktop()->screenGeometry();
+   double height = rec.height();
+   double width = rec.width();
+   chart->resize( width, height );
+
 }
