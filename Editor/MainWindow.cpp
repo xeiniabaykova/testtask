@@ -19,6 +19,7 @@ MainWindow::MainWindow( QChart *chart, QWidget *parent ) :
   createLineAct(0),
   createEllipseAct(0),
   createCircleAct(0),
+  createPolylineAct(0),
   createNurbsAct(0),
   stopCreateCurveAct(0),
   findIntersectionAct(0),
@@ -67,6 +68,7 @@ void MainWindow::CreateMenus()
   createCurveMenu->addAction( createPointAct );
   createCurveMenu->addAction( createLineAct );
   createCurveMenu->addAction( createEllipseAct );
+  createCurveMenu->addAction( createPolylineAct );
   createCurveMenu->addAction( createNurbsAct );
   createCurveMenu->addAction( createCircleAct );
 
@@ -116,6 +118,11 @@ void MainWindow::CreateActions()
   createEllipseAct->setShortcuts( QKeySequence::New );
   createEllipseAct->setStatusTip( tr("Creating circle") );
   connect( createEllipseAct, &QAction::triggered, this, &MainWindow::OnCreateEllipse );
+
+  createPolylineAct = new QAction( tr("&Polyline"), this );
+  createPolylineAct->setShortcuts( QKeySequence::New );
+  createPolylineAct->setStatusTip( tr("Creating circle") );
+  connect( createPolylineAct, &QAction::triggered, this, &MainWindow::OnCreatePolyline );
 
   createNurbsAct = new QAction( tr("&Nurbs"), this );
   createNurbsAct->setShortcuts( QKeySequence::New );
@@ -295,6 +302,10 @@ void MainWindow::OnDeleteCurve()
 {
 }
 
+void MainWindow::OnCreatePolyline()
+{
+  windowHandler.CreatePolyline();
+}
 
 //-----------------------------------------------------------------------------
 /**

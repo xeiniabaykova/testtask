@@ -6,6 +6,7 @@
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QDesktopWidget>
 #include <QtCharts/QScatterSeries>
+#include <QInputDialog>
 #include <algorithm>
 
 
@@ -172,13 +173,16 @@ void MainWindowHandler::CreateCurve( std::vector<QXYSeries*> referenceSeriesPoin
   screenCurves.push_back(curve);
 
   std::vector<Point> currentPoints;
+  if (state == StateCreatePolyline) {
+    geomPolylines.push_back( points );
+    screenCurves[screenCurves.size() - 1].chartPoints.push_back( printChart.AddFigure( points ) );
+  } else {
   GeomCreator.creator->Create( points )->GetAsPolyLine( currentPoints, 0.001 );
   geomPolylines.push_back( currentPoints );
-
   screenCurves[screenCurves.size() - 1].chartPoints.push_back( printChart.AddFigure( currentPoints ) );
+  }
+
   screenCurves[screenCurves.size() - 1].referencePoints = referenceSeriesPoint;
-
-
   screenPolyIndexes.insert( std::pair<int, int> (geomPolylines.size() - 1, screenCurves.size() - 1) );
   points.resize(0);
 
@@ -202,7 +206,7 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
    if( event->buttons() == Qt::RightButton )
      return;
 
-  if (state == StateCreateCurve) {
+  if ( state == StateCreateCurve || state == StateCreatePolyline ) {
      if ( !IsSufficientNum() )
      {
        QPointF currentPoint = chart->mapToValue(event->pos());
@@ -223,7 +227,7 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
 
 void MainWindowHandler::StateExpect( QMouseEvent *event )
 {
-  QPointF currentPoint = chart->mapToValue( QPointF(event->pos().x(), event->pos().y()) );
+  QPointF currentPoint = chart->mapToValue( QPointF(event->pos().x() + 10, event->pos().y() -50) );
   int selectSeries = selector.GetCurve( Point (currentPoint.x(), currentPoint.y()) );
   if ( selectSeries != -1 ) {
     isSelected.push_back(selectSeries);
@@ -285,3 +289,13 @@ void MainWindowHandler::ResizeEvent( QResizeEvent *event )
      }
 
 }
+
+ void MainWindowHandler::CreatePolyline()
+ {
+   bool ok;
+       int i = QInputDialog::getInt(0, ("Polyline Points"),
+                                    ("amount of points"), 25, 0, 100, 1, &ok);
+       if (ok)
+           GeomCreator.sufficient = i;
+       state = StateCreatePolyline;
+ }

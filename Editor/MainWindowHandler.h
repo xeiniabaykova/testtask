@@ -40,7 +40,8 @@ public:
     StateCreateCurve,
     StateExpectAction,
     StateDeleteCurve,
-    StateFindIntersecion
+    StateFindIntersecion,
+    StateCreatePolyline
   };
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   /** \brief \ru Вспомогательные данные. \~
@@ -80,6 +81,7 @@ public:
   void CreateNurbs              ();                     ///< создание и отображение nurbs
   void LoadFile                 ();                     ///< сохранение текущих кривых из файла
   void SaveFile                 ();                     ///< сохранение текущих кривых в файл
+  void CreatePolyline           ();                     ///< создание полилинии
   void CreateCurve              ( std::vector<QXYSeries*> currentSeriesPoint );                     ///< общая функция для создания кривой
   void MouseEvent               ( QMouseEvent *event ); ///< обработка клика мышкой
   void StopCreateCurve          ();                     ///< обработка клика мышкой

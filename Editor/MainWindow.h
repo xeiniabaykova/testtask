@@ -30,7 +30,8 @@ private:
   QAction           * createPointAct;       ///< \ru событие создания точки
   QAction           * createLineAct;        ///< \ru событие создания линии
   QAction           * createEllipseAct;     ///< \ru событие создания эллипса
-  QAction           * createCircleAct;     ///< \ru событие создания эллипса
+  QAction           * createCircleAct;     ///< \ru событие создания окружности
+  QAction           * createPolylineAct;     ///< \ru событие создания полилинии
   QAction           * createNurbsAct;       ///< \ru событие создания nurbs - кривой
   QAction           * stopCreateCurveAct;   ///< \ru событие прекращения создания кривых
   QAction           * findIntersectionAct;  ///< \ru событие нахождения пересечения
@@ -67,6 +68,8 @@ private slots:
   void OnDeleteCurve      ();
   /// \ru обработчик события очистки экрана
   void OnClearScreen      ();
+  /// \ru обработчик события создания полилинии
+  void OnCreatePolyline   ();
   void contextMenuRequested( const QPoint& point);
 protected:
 #ifndef QT_NO_CONTEXTMENU
