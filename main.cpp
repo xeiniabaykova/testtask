@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
    double width = rec.width();
 
   QChart *chart = new QChart();
-
+  chart->resize( width, height );
   MainWindow w( chart );
   w.CreateActions();
   w.CreateMenus();
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
   chartView->setRenderHint(QPainter::Antialiasing);
 
   w.setCentralWidget(chartView);
-  w.resize( width,  height );
+  w.resize( 600, 800 );
   w.show();
 
   return a.exec();

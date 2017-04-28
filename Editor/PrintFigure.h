@@ -1,10 +1,11 @@
 #ifndef PRINTFUGURE_H
 #define PRINTFUGURE_H
 #include "Math/Point.h"
-#include "GeometricPrimitiveCreator.h"
-#include <QtCharts/QChartView>
-#include <QtCharts/QLineSeries>
+#include <QtCharts/QChart>
+#include <QtCharts/QXYSeries>
 #include <vector>
+
+
 QT_CHARTS_USE_NAMESPACE
 
 //------------------------------------------------------------------------------

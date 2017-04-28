@@ -14,9 +14,9 @@
 class Polyline {
 
 private:
-  std::vector<Point>                  displayedPoints;  ///<  точки для отображения примитива
+  std::vector<Point>          displayedPoints;  ///<  точки для отображения примитива
   const  GeometricPrimitive * figure;           ///<  геометрический примитив
-  double                              precision;        ///<  точность для создания полилинии
+  double                      precision;        ///<  точность для создания полилинии
 private:
   //-------------------------------------------------------------------------------
   // \ru считает приращение параметра t, необходимое для того, чтобы полигон кривой

@@ -31,7 +31,7 @@ private:
   QAction           * createLineAct;        ///< \ru событие создания линии
   QAction           * createEllipseAct;     ///< \ru событие создания эллипса
   QAction           * createCircleAct;     ///< \ru событие создания окружности
-  QAction           * createPolylineAct;     ///< \ru событие создания полилинии
+  QAction           * createPolylineAct;     ///< \ru событие создания окружности
   QAction           * createNurbsAct;       ///< \ru событие создания nurbs - кривой
   QAction           * stopCreateCurveAct;   ///< \ru событие прекращения создания кривых
   QAction           * findIntersectionAct;  ///< \ru событие нахождения пересечения

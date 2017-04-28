@@ -3,11 +3,12 @@
 #include "LineCreator.h"
 #include "EllipseCreator.h"
 #include "FileIO.h"
-#include <QtWidgets/QMessageBox>
+//#include <QtWidgets/QMessageBox>
 #include <QtWidgets/QDesktopWidget>
-#include <QtCharts/QScatterSeries>
 #include <QInputDialog>
-#include <algorithm>
+
+//#include <QtCharts/QScatterSeries>
+//#include <algorithm>
 
 
 

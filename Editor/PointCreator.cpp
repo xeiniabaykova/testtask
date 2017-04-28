@@ -1,7 +1,7 @@
 #include "PointCreator.h"
 #include "Math/GeometricPoint.h"
-#include <QtCharts/QChartView>
-#include <QtCharts/QScatterSeries>
+//#include <QtCharts/QChartView>
+//#include <QtCharts/QScatterSeries>
 
 
 //-----------------------------------------------------------------------------
@@ -11,5 +11,5 @@
 //-----------------------------------------------------------------------------
 std::shared_ptr<GeometricPrimitive> PointCreator::Create( const std::vector<Point>& points )
 {
-  return std::make_shared<GeometricPoint> ( points[0]);
+  return std::make_shared<GeometricPoint> ( points[0] );
 }
