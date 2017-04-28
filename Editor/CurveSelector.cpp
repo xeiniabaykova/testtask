@@ -33,7 +33,7 @@ double Distance( Point point1, Point point2 )
        if ( c1 <= 0 )
            return Distance( point, first );
 
-       double c2 = Dot(v,v);
+       double c2 = Dot( v, v );
        if ( c2 <= c1 )
            return Distance( point, second );
 

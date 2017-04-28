@@ -371,6 +371,7 @@ void MainWindow::OnReColorCurve()
   d->setLayout(vbox);
 
   int result = d->exec();
+
   QColor newColor;
   if(result == QDialog::Accepted)
   {

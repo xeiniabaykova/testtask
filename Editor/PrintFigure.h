@@ -3,6 +3,7 @@
 #include "Math/Point.h"
 #include <QtCharts/QChart>
 #include <QtCharts/QXYSeries>
+#include <QtCharts/QValueAxis>
 #include <vector>
 
 
@@ -18,6 +19,8 @@ class PrintFigure {
 
 private:
   QChart * chart;  ///< для отображения графика
+  QValueAxis * axisX;
+  QValueAxis * axisY;
 public:
   //-------------------------------------------------------------------------------
   // \ru chart - на вход передается средство для отбражения графика

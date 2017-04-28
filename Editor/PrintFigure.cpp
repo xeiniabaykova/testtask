@@ -1,6 +1,7 @@
 #include "PrintFigure.h"
 #include <QtCharts/QScatterSeries>
 #include <QtCharts/QLineSeries>
+#include <QtCharts/QValueAxis>
 #include <QtWidgets/QMessageBox>
 
 
@@ -10,7 +11,22 @@
 */
 //-----------------------------------------------------------------------------
 PrintFigure::PrintFigure( QChart * chart ):
-  chart( chart ) {}
+  chart( chart ) {
+  axisX = new QValueAxis;
+  axisX->setRange( 0, 10 );
+  chart->addAxis(axisX, Qt::AlignBottom);
+
+  axisY = new QValueAxis;
+  axisY->setRange( 0, 10 );
+  chart->addAxis(axisY, Qt::AlignLeft);
+  chart->legend()->setVisible(false);
+  QLineSeries *series = new QLineSeries;
+  *series<<QPointF( 0, 0 )<<QPointF( 10, 10);
+  series->setColor(QColor(255,255,255) );
+  chart->addSeries( series );
+  chart->axisX()->setVisible( false );
+  chart->axisY()->setVisible( false );
+}
 
 
 //-----------------------------------------------------------------------------
@@ -29,23 +45,18 @@ void PrintFigure::AddFigure( const std::vector<Point>& points, const std::vector
   seriesRef->setColor( color );
 
   for ( int i = 0; i < points.size(); i++ )
-    *currentseries <<QPointF(points[i].GetX(), points[i].GetY())  ;
+    *currentseries <<QPointF(points[i].GetX(), points[i].GetY());
 
   for ( int i = 0; i < refPoints.size(); i++ )
-    *seriesRef << QPointF( refPoints[i].GetX(), refPoints[i].GetY())  ;
+    *seriesRef << QPointF( refPoints[i].GetX(), refPoints[i].GetY());
+
   seriesRef->setMarkerShape( QScatterSeries::MarkerShapeCircle );
   seriesRef->setMarkerSize( 15.0 );
+  chart->addSeries( currentseries );
+  chart->addSeries( seriesRef );
 
-   chart->addSeries( currentseries );
-   chart->addSeries( seriesRef );
-chart->createDefaultAxes();
-   chart->axisX()->setMin(0);
-   chart->axisX()->setMax(10);
-
-   chart->axisY()->setMin(0);
-   chart->axisY()->setMax(10);
-
-
-    chart->axisX()->setVisible(false);
-    chart->axisY()->setVisible(false);
+  currentseries->attachAxis( axisX );
+  currentseries->attachAxis( axisY );
+  seriesRef->attachAxis( axisX );
+  seriesRef->attachAxis( axisY );
 }

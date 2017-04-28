@@ -5,6 +5,7 @@
 #include "CurveSelector.h"
 #include <QtCharts/QChartView>
 #include <QtCharts/QScatterSeries>
+#include <QtCharts/QValueAxis>
 #include <QPoint>
 #include <vector>
 #include "Polyline.h"
@@ -45,19 +46,18 @@ public:
   };
 
 private:
-  std::vector<Point>                  points;      ///< точки, полученные с экрана
-  QChart                                * chart;     ///< объект для отрисовки графика
-  Creator                               GeomCreator; ///< объект для создания геометрического примитива
-  PrintFigure                           printChart;  ///< объект для отображения геометрического примитива
-  CurrentState                           state;       ///< объект для хранения текущего состояния окна
-  CurveSelector                          selector;   ///< объект для селектирования кривых, отображаемых на экране
-  std::vector<std::vector<Point>>        geomPolylines;
-      std::vector<std::vector<Point>>        geomReferencedPoints;
-  std::vector<int> isSelected;
-
-  QColor  currentColor;
-  QColor  selectingColor;
-  std::vector<Point> currentSeriesPoint;
+  std::vector<Point>              points;               ///< точки, полученные с экрана
+  QChart                        * chart;                ///< объект для отрисовки графика
+  Creator                         geomCreator;          ///< объект для создания геометрического примитива
+  PrintFigure                     printChart;           ///< объект для отображения геометрического примитива
+  CurrentState                    state;                ///< объект для хранения текущего состояния окна
+  CurveSelector                   selector;             ///< объект для селектирования кривых, отображаемых на экране
+  std::vector<std::vector<Point>> geomPolylines;        ///< полилиния для геометрии, отображенной на экране
+  std::vector<std::vector<Point>> geomReferencedPoints; ///< опорные точки геометрии, отображенной на экране
+  std::vector<Point>              currentSeriesPoint;
+  std::vector<int>                isSelected;           ///< индексы селектированных кривых
+  QColor                          selectingColor;       ///< цвет, обозначающий селектированную кривую
+  QColor                          currentColor;         ///< цвет неселктированной кривой
 public:
   MainWindowHandler (QChart * chart);
 
@@ -65,21 +65,21 @@ public:
   void AddSufficientNum         (int num);             ///< добавление необходимого количества точек
   bool IsSufficientNum          ();                    ///< проверка на необходимое количество точек
 
-  void CreatePoint              ();                     ///< создание и отображение точки
-  void CreateLine               ();                     ///< создание и отображение линии
-  void CreateEllipse            ();                     ///< создание и отображение эллипса
-  void CreateCircle             ();                     ///< создание и отображение окружности
-  void CreateNurbs              ();                     ///< создание и отображение nurbs
-  void LoadFile                 ();                     ///< сохранение текущих кривых из файла
-  void SaveFile                 ();                     ///< сохранение текущих кривых в файл
-  void CreatePolyline           ();                     ///< создание полилинии
+  void CreatePoint              ();                                           ///< создание и отображение точки
+  void CreateLine               ();                                           ///< создание и отображение линии
+  void CreateEllipse            ();                                           ///< создание и отображение эллипса
+  void CreateCircle             ();                                           ///< создание и отображение окружности
+  void CreateNurbs              ();                                           ///< создание и отображение nurbs
+  void LoadFile                 ();                                           ///< сохранение текущих кривых из файла
+  void SaveFile                 ();                                           ///< сохранение текущих кривых в файл
+  void CreatePolyline           ();                                           ///< создание полилинии
   void CreateCurve              ( std::vector<Point> referenceSeriesPoint ); ///< общая функция для создания кривой
   void MouseEvent               ( QMouseEvent *event ); ///< обработка клика мышкой
   void StopCreateCurve          ();                     ///< обработка клика мышкой
   void SetCheckableCurrentItem  ();
   void ResizeEvent              ( QResizeEvent *event ); ///< обработка изменения размера окна
-  void StateExpect( QMouseEvent *event );
-  void ChangeColor( QColor color ); ///< обработка изменения цвета кривой
+  void StateExpect              ( QMouseEvent *event );
+  void ChangeColor              ( QColor color ); ///< обработка изменения цвета кривой
   void DeleteCurve(); ///< обработка удаления кривой
 
 };
