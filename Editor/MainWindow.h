@@ -34,6 +34,7 @@ private:
   QAction           * createPolylineAct;     ///< \ru событие создания окружности
   QAction           * createNurbsAct;       ///< \ru событие создания nurbs - кривой
   QAction           * stopCreateCurveAct;   ///< \ru событие прекращения создания кривых
+  QAction           * reColorAct;           ///< \ru событие изменение цвета кривой
   QAction           * findIntersectionAct;  ///< \ru событие нахождения пересечения
 
   QAction           * deleteCurveAct;       ///< \ru событие удаления кривой
@@ -70,6 +71,8 @@ private slots:
   void OnClearScreen      ();
   /// \ru обработчик события создания полилинии
   void OnCreatePolyline   ();
+  /// \ru обработчик изменения цвета кривой
+  void OnReColorCurve     ();
   void contextMenuRequested( const QPoint& point);
 protected:
 #ifndef QT_NO_CONTEXTMENU

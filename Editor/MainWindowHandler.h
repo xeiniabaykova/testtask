@@ -90,6 +90,7 @@ public:
   void ResizeEvent              ( QResizeEvent *event ); ///< обработка изменения размера окна
   void StateExpect( QMouseEvent *event );
   void AddColortSeries( const DisplayChartCurve& chartCurve, QColor color );
+  void ChangeColor( QColor color );
 
 };
 

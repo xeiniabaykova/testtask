@@ -253,7 +253,13 @@ if ( selectSeries == -1 ){
   state = StateExpectAction;
 
 }
-
+void  MainWindowHandler::ChangeColor( QColor color ){
+  for (int i = 0; i < isSelected.size(); i++) {
+    int current = screenPolyIndexes.find(isSelected[i])->second;
+    DisplayChartCurve chartCurve =  screenCurves[current];
+    AddColortSeries( chartCurve, color );
+  }
+}
 
 void MainWindowHandler::AddColortSeries( const DisplayChartCurve& chartCurve, QColor color )
 {

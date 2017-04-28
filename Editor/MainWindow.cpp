@@ -3,6 +3,10 @@
 #include <QLabel>
 #include <QtWidgets/QMainWindow>
 #include <ui_MainWindow.h>
+#include <QInputDialog>
+#include <QtWidgets/QVBoxLayout>
+#include <QComboBox>
+#include <QDialogButtonBox>
 
 //------------------------------------------------------------------------------
 // \ru Конструктор MainWindow. Создается вспомогательный класс windowHandler  и форма MainWindow
@@ -44,7 +48,13 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event)
     stopCreateCurveAct->setShortcuts( QKeySequence::New );
     stopCreateCurveAct->setStatusTip( tr("stop sreating curve") );
     connect( stopCreateCurveAct, &QAction::triggered, this, &MainWindow::OnStopCreateCurve );
-    menu.addAction(stopCreateCurveAct);
+
+    reColorAct = new QAction( tr("&change color curve"), this );
+    reColorAct->setShortcuts( QKeySequence::New );
+    reColorAct->setStatusTip( tr("stop sreating curve") );
+    connect( reColorAct, &QAction::triggered, this, &MainWindow::OnReColorCurve );
+    menu.addAction( stopCreateCurveAct );
+    menu.addAction( reColorAct );
     menu.exec(event->globalPos());
 }
 #endif // QT_NO_CONTEXTMENU
@@ -316,6 +326,49 @@ void MainWindow::OnCreatePolyline()
 void MainWindow::mousePressEvent( QMouseEvent *event )
 {
   windowHandler.MouseEvent( event );
+}
+
+void MainWindow::OnReColorCurve()
+{
+  QDialog * d = new QDialog();
+  QVBoxLayout * vbox = new QVBoxLayout();
+
+  QLabel* RLabel = new QLabel("&R:", this);
+  QLabel* GLabel = new QLabel("&G:", this);
+  QLabel* BLabel = new QLabel("&B:", this);
+  QLineEdit * r = new QLineEdit();
+  QLineEdit * g = new QLineEdit();
+  QLineEdit * b = new QLineEdit();
+  QDialogButtonBox * buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
+                                                      | QDialogButtonBox::Cancel);
+
+  QObject::connect(buttonBox, SIGNAL(accepted()), d, SLOT(accept()));
+  QObject::connect(buttonBox, SIGNAL(rejected()), d, SLOT(reject()));
+  RLabel->setBuddy(r);
+  GLabel->setBuddy(g);
+  BLabel->setBuddy(b);
+
+  vbox->addWidget(RLabel);
+  vbox->addWidget(r);
+  vbox->addWidget(GLabel);
+  vbox->addWidget(g);
+  vbox->addWidget(BLabel);
+  vbox->addWidget(b);
+
+  vbox->addWidget(buttonBox);
+
+  d->setLayout(vbox);
+
+  int result = d->exec();
+  QColor newColor;
+  if(result == QDialog::Accepted)
+  {
+   newColor.setRed( r->text().toInt() );
+   newColor.setGreen( g->text().toInt() );
+   newColor.setBlue( b->text().toInt() );
+
+  }
+  windowHandler.ChangeColor(newColor);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
