@@ -20,30 +20,32 @@ PrintFigure::PrintFigure( QChart * chart ):
   если это набор точек, то отображаем как QLineSeries (точки, соединенные линиями)
 */
 //-----------------------------------------------------------------------------
-QXYSeries* PrintFigure::AddFigure( const std::vector<Point>& points ) {
+void PrintFigure::AddFigure( const std::vector<Point>& points, const std::vector<Point>& refPoints, QColor color ) {
 
-  if ( points.size() == 1 ) {
-    QScatterSeries *series0 = new QScatterSeries();
-    series0->setColor( QColor( 51, 0, 51 ) );
-    series0->setPointLabelsVisible(false);
-    series0->setMarkerShape( QScatterSeries::MarkerShapeCircle );
-    series0->setMarkerSize( 15.0 );
-    *series0 << QPointF(points[0].GetX(), points[0].GetY())  ;
-    chart->addSeries( series0 );
-    chart->createDefaultAxes();
-  } else {
-     QLineSeries * currentseries = new QLineSeries();
-      currentseries->setColor( QColor( 51, 0, 51 ) );
-    for ( int i = 0; i < points.size(); i++ )
-        *currentseries << QPointF(points[i].GetX(), points[i].GetY())  ;
-    chart->addSeries( currentseries );
-    chart->createDefaultAxes();
-    chart->setDropShadowEnabled( false );
-  }
-    int num = std::max((int)(chart->series().size() - 1), 0);
+  QLineSeries * currentseries = new QLineSeries();
+  currentseries->setColor( color );
+
+  QScatterSeries *seriesRef = new QScatterSeries();
+  seriesRef->setColor( color );
+
+  for ( int i = 0; i < points.size(); i++ )
+    *currentseries <<QPointF(points[i].GetX(), points[i].GetY())  ;
+
+  for ( int i = 0; i < refPoints.size(); i++ )
+    *seriesRef << QPointF( refPoints[i].GetX(), refPoints[i].GetY())  ;
+  seriesRef->setMarkerShape( QScatterSeries::MarkerShapeCircle );
+  seriesRef->setMarkerSize( 15.0 );
+
+   chart->addSeries( currentseries );
+   chart->addSeries( seriesRef );
+chart->createDefaultAxes();
+   chart->axisX()->setMin(0);
+   chart->axisX()->setMax(10);
+
+   chart->axisY()->setMin(0);
+   chart->axisY()->setMax(10);
+
 
     chart->axisX()->setVisible(false);
     chart->axisY()->setVisible(false);
-  return static_cast<QXYSeries*> ( chart->series()[num] );
-
 }

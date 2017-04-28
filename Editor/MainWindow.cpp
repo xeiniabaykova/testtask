@@ -53,8 +53,12 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event)
     reColorAct->setShortcuts( QKeySequence::New );
     reColorAct->setStatusTip( tr("stop sreating curve") );
     connect( reColorAct, &QAction::triggered, this, &MainWindow::OnReColorCurve );
+
+
+
     menu.addAction( stopCreateCurveAct );
     menu.addAction( reColorAct );
+    menu.addAction( deleteCurveAct );
     menu.exec(event->globalPos());
 }
 #endif // QT_NO_CONTEXTMENU
@@ -310,6 +314,7 @@ void MainWindow::OnClearScreen()
 //-----------------------------------------------------------------------------
 void MainWindow::OnDeleteCurve()
 {
+  windowHandler.DeleteCurve();
 }
 
 void MainWindow::OnCreatePolyline()
@@ -328,6 +333,12 @@ void MainWindow::mousePressEvent( QMouseEvent *event )
   windowHandler.MouseEvent( event );
 }
 
+//-----------------------------------------------------------------------------
+/**
+   \ru обработчик события изменения цвета кривой
+
+*/
+//-----------------------------------------------------------------------------
 void MainWindow::OnReColorCurve()
 {
   QDialog * d = new QDialog();
@@ -342,20 +353,20 @@ void MainWindow::OnReColorCurve()
   QDialogButtonBox * buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
                                                       | QDialogButtonBox::Cancel);
 
-  QObject::connect(buttonBox, SIGNAL(accepted()), d, SLOT(accept()));
-  QObject::connect(buttonBox, SIGNAL(rejected()), d, SLOT(reject()));
+  QObject::connect( buttonBox, SIGNAL(accepted()), d, SLOT(accept()) );
+  QObject::connect( buttonBox, SIGNAL(rejected()), d, SLOT(reject()) );
   RLabel->setBuddy(r);
   GLabel->setBuddy(g);
   BLabel->setBuddy(b);
 
-  vbox->addWidget(RLabel);
+  vbox->addWidget( RLabel );
   vbox->addWidget(r);
-  vbox->addWidget(GLabel);
+  vbox->addWidget( GLabel );
   vbox->addWidget(g);
-  vbox->addWidget(BLabel);
+  vbox->addWidget( BLabel );
   vbox->addWidget(b);
 
-  vbox->addWidget(buttonBox);
+  vbox->addWidget( buttonBox );
 
   d->setLayout(vbox);
 

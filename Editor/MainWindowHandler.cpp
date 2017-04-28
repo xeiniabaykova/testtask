@@ -3,9 +3,11 @@
 #include "LineCreator.h"
 #include "EllipseCreator.h"
 #include "FileIO.h"
-//#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QMessageBox>
 #include <QtWidgets/QDesktopWidget>
 #include <QInputDialog>
+#include <fstream>
+#include <functional>
 
 //#include <QtCharts/QScatterSeries>
 //#include <algorithm>
@@ -168,23 +170,19 @@ void MainWindowHandler::SaveFile()
   \ru обнуляется массив точек полученных с экрана
 */
 //-----------------------------------------------------------------------------
-void MainWindowHandler::CreateCurve( std::vector<QXYSeries*> referenceSeriesPoint )
+void MainWindowHandler::CreateCurve( std::vector<Point> referenceSeriesPoint )
 {
-  DisplayChartCurve curve;
-  screenCurves.push_back(curve);
 
   std::vector<Point> currentPoints;
   if (state == StateCreatePolyline) {
     geomPolylines.push_back( points );
-    screenCurves[screenCurves.size() - 1].chartPoints.push_back( printChart.AddFigure( points ) );
+    printChart.AddFigure( points, referenceSeriesPoint );
   } else {
   GeomCreator.creator->Create( points )->GetAsPolyLine( currentPoints, 0.001 );
   geomPolylines.push_back( currentPoints );
-  screenCurves[screenCurves.size() - 1].chartPoints.push_back( printChart.AddFigure( currentPoints ) );
+  geomReferencedPoints.push_back( referenceSeriesPoint );
+  printChart.AddFigure( currentPoints, referenceSeriesPoint );
   }
-
-  screenCurves[screenCurves.size() - 1].referencePoints = referenceSeriesPoint;
-  screenPolyIndexes.insert( std::pair<int, int> (geomPolylines.size() - 1, screenCurves.size() - 1) );
   points.resize(0);
 
 }
@@ -217,11 +215,11 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
      {
        QPointF currentPoint = chart->mapToValue(event->pos());
        AddPointFromScreen( Point(currentPoint.x(), currentPoint.y()) );
-       PrintCharacteristicPoint ( Point(currentPoint.x(), currentPoint.y()), currentSeriesPoint );
+       currentSeriesPoint.push_back( Point(currentPoint.x(), currentPoint.y()) );
      } else {
        QPointF currentPoint = chart->mapToValue(event->pos());
        AddPointFromScreen( Point(currentPoint.x(), currentPoint.y()) );
-       PrintCharacteristicPoint ( Point(currentPoint.x(), currentPoint.y()), currentSeriesPoint );
+       currentSeriesPoint.push_back( Point(currentPoint.x(), currentPoint.y()) );
        CreateCurve( currentSeriesPoint );
        currentSeriesPoint.resize(0);
      }
@@ -237,16 +235,23 @@ void MainWindowHandler::StateExpect( QMouseEvent *event )
   int selectSeries = selector.GetCurve( Point (currentPoint.x(), currentPoint.y()) );
   if ( selectSeries != -1 ) {
     isSelected.push_back(selectSeries);
-    DisplayChartCurve chartCurve =  screenCurves[screenPolyIndexes.at(selectSeries)];
-    AddColortSeries( chartCurve, currentColor );
+    std::vector<Point> currentPoints;
+     chart->removeAllSeries();
+     for ( int i = 0; i < geomPolylines.size(); i++ )
+     {
+       if (std::find (isSelected.begin(), isSelected.end(), i ) == isSelected.end() ){
+         printChart.AddFigure( geomPolylines[i], geomReferencedPoints[i], selectingColor );
+       } else
+         printChart.AddFigure( geomPolylines[i], geomReferencedPoints[i], currentColor );
+     }
   }
 
 if ( selectSeries == -1 ){
-  for ( int j = 0; j < isSelected.size(); j++ )
+  chart->removeAllSeries();
+  for ( int j = 0; j < geomPolylines.size(); j++ )
   {
-    int current = screenPolyIndexes.find(isSelected[j])->second;
-    DisplayChartCurve chartCurve =  screenCurves[current];
-    AddColortSeries( chartCurve, selectingColor );
+
+      printChart.AddFigure( geomPolylines[j], geomReferencedPoints[j], selectingColor );
   }
   isSelected.resize(0);
 }
@@ -254,36 +259,25 @@ if ( selectSeries == -1 ){
 
 }
 void  MainWindowHandler::ChangeColor( QColor color ){
+
   for (int i = 0; i < isSelected.size(); i++) {
-    int current = screenPolyIndexes.find(isSelected[i])->second;
-    DisplayChartCurve chartCurve =  screenCurves[current];
-    AddColortSeries( chartCurve, color );
+   printChart.AddFigure( geomPolylines[i], geomReferencedPoints[i], color );
   }
-}
 
-void MainWindowHandler::AddColortSeries( const DisplayChartCurve& chartCurve, QColor color )
+}
+void MainWindowHandler::DeleteCurve()
 {
-  for ( int i = 0; i < chartCurve.chartPoints.size(); i++)
-  {
-      chartCurve.chartPoints[i]->setColor( color );
-  }
-  for ( int i = 0; i < chartCurve.referencePoints.size(); i++)
-  {
-
-      chartCurve.referencePoints[i]->setColor( color );
-  }
+   std::sort( isSelected.begin(), isSelected.end(), std::greater<int>() );
+   for ( int i = 0; i < isSelected.size(); i++ )
+   {
+   geomPolylines.erase( geomPolylines.begin() + isSelected[i] );
+   geomReferencedPoints.erase( geomReferencedPoints.begin() + isSelected[i] );
+   }
+   chart->removeAllSeries();
+   for ( int i = 0; i< geomPolylines.size(); i++)
+      printChart.AddFigure( geomPolylines[i], geomReferencedPoints[i], selectingColor );
+   isSelected.resize(0);
 }
-
-void MainWindowHandler::PrintCharacteristicPoint( Point point, std::vector<QXYSeries*>& currentSeriesPoint )
-{
-  PointCreator *creator = new PointCreator();
-  std::vector<Point> currentPoint;
-  currentPoint.push_back( point );
-  std::vector<Point> currentPoints;
-  creator->Create( currentPoint )->GetAsPolyLine( currentPoints, 0.01 );
-  currentSeriesPoint.push_back( printChart.AddFigure( currentPoints ) );
-}
-
 
 void MainWindowHandler::ResizeEvent( QResizeEvent *event )
 {

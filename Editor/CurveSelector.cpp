@@ -63,7 +63,7 @@ int CurveSelector::GetCurve( Point point )
   {
     for ( int j = 1; j < points[i].size(); j++ )
     {
-      if (Distance( points[i][j - 1], points[i][j], point)  < 0.01)
+      if (Distance( points[i][j - 1], points[i][j], point)  < 0.1)
        return i;
     }
   }

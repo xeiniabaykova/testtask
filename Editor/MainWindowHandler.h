@@ -43,15 +43,6 @@ public:
     StateFindIntersecion,
     StateCreatePolyline
   };
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  /** \brief \ru Вспомогательные данные. \~
-      \details \ru структура, соединяющаяя опорные Series кривой и точки для отрисовки кривой \~
-    */
-  // ---
-  struct DisplayChartCurve {
-    std::vector<QXYSeries* > referencePoints;
-    std::vector<QXYSeries* > chartPoints;
-  };
 
 private:
   std::vector<Point>                  points;      ///< точки, полученные с экрана
@@ -60,13 +51,13 @@ private:
   PrintFigure                           printChart;  ///< объект для отображения геометрического примитива
   CurrentState                           state;       ///< объект для хранения текущего состояния окна
   CurveSelector                          selector;   ///< объект для селектирования кривых, отображаемых на экране
-  std::vector<DisplayChartCurve>                      screenCurves;
   std::vector<std::vector<Point>>        geomPolylines;
-  std::map<int, int>                    screenPolyIndexes;
+      std::vector<std::vector<Point>>        geomReferencedPoints;
   std::vector<int> isSelected;
+
   QColor  currentColor;
   QColor  selectingColor;
-  std::vector<QXYSeries*> currentSeriesPoint;
+  std::vector<Point> currentSeriesPoint;
 public:
   MainWindowHandler (QChart * chart);
 
@@ -82,15 +73,14 @@ public:
   void LoadFile                 ();                     ///< сохранение текущих кривых из файла
   void SaveFile                 ();                     ///< сохранение текущих кривых в файл
   void CreatePolyline           ();                     ///< создание полилинии
-  void CreateCurve              ( std::vector<QXYSeries*> currentSeriesPoint );                     ///< общая функция для создания кривой
+  void CreateCurve              ( std::vector<Point> referenceSeriesPoint ); ///< общая функция для создания кривой
   void MouseEvent               ( QMouseEvent *event ); ///< обработка клика мышкой
   void StopCreateCurve          ();                     ///< обработка клика мышкой
-  void PrintCharacteristicPoint ( Point point, std::vector<QXYSeries*>& currentSeriesPoint );        ///< отображение на экране точек, выбранных пользователем
   void SetCheckableCurrentItem  ();
   void ResizeEvent              ( QResizeEvent *event ); ///< обработка изменения размера окна
   void StateExpect( QMouseEvent *event );
-  void AddColortSeries( const DisplayChartCurve& chartCurve, QColor color );
-  void ChangeColor( QColor color );
+  void ChangeColor( QColor color ); ///< обработка изменения цвета кривой
+  void DeleteCurve(); ///< обработка удаления кривой
 
 };
 

@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
 
   chart->setSizePolicy( QSizePolicy::Policy::Maximum,QSizePolicy::Policy::Maximum );
   chart->resize( width, height );
+   chart->createDefaultAxes();
   MainWindow w( chart );
   w.CreateActions();
   w.CreateMenus();

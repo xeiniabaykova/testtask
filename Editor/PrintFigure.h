@@ -26,6 +26,6 @@ public:
   //-------------------------------------------------------------------------------
   // \ru на вход передается массив точек для отображения
   // ---
-  QXYSeries* AddFigure( const std::vector<Point>& points );  ///< добавление новой кривой
+  void AddFigure( const std::vector<Point>& points, const std::vector<Point>& refPoints, QColor color = QColor (51, 0 , 51) );  ///< добавление новой кривой
 };
 #endif // PRINTFUGURE_H
