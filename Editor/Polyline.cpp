@@ -1,6 +1,6 @@
 #include "Polyline.h"
-#include "Math/GeometricPoint.h"
-#include "Math/Line.h"
+//#include "Math/GeometricPoint.h"
+//#include "Math/Line.h"
 #include <cmath>
 
 //-----------------------------------------------------------------------------

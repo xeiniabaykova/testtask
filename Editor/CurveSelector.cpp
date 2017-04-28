@@ -1,8 +1,5 @@
 #include "CurveSelector.h"
-#include <QtCharts/QScatterSeries>
-#include <QtCharts/QLineSeries>
 #include <cmath>
-#include <QtWidgets/QMessageBox>
 
 namespace {
 

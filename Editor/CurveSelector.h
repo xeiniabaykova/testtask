@@ -3,8 +3,6 @@
 
 #include <Math/Point.h>
 #include <vector>
-#include <QtCharts/QChartView>
-QT_CHARTS_USE_NAMESPACE
 
 //------------------------------------------------------------------------------
 /** \brief \ru Класс для создания селектирования кривых, отображенных на экране. \~

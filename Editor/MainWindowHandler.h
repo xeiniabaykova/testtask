@@ -19,7 +19,7 @@
 // ---
 class MainWindowHandler {
 public:
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //------------------------------------------------------------------------------
   /** \brief \ru Вспомогательные данные. \~
       \details \ru Количество точек, необходимых для отрисовки текущей кривой, обьект, отрисовывающий текущую кривую \~
     */
@@ -31,7 +31,7 @@ public:
       sufficient( sufficient ),
       creator( creator ) {}
   };
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //------------------------------------------------------------------------------
   /** \brief \ru Вспомогательные данные. \~
       \details \ru текущее состояние приложения: создание, удаление кривой, нахождение пересечения \~
     */
@@ -42,7 +42,8 @@ public:
     StateDeleteCurve,
     StateFindIntersecion
   };
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  //------------------------------------------------------------------------------
   /** \brief \ru Вспомогательные данные. \~
       \details \ru структура, соединяющаяя опорные Series кривой и точки для отрисовки кривой \~
     */
@@ -53,19 +54,19 @@ public:
   };
 
 private:
-  std::vector<Point>                  points;      ///< точки, полученные с экрана
-  QChart                                * chart;     ///< объект для отрисовки графика
-  Creator                               GeomCreator; ///< объект для создания геометрического примитива
-  PrintFigure                           printChart;  ///< объект для отображения геометрического примитива
-  CurrentState                           state;       ///< объект для хранения текущего состояния окна
-  CurveSelector                          selector;   ///< объект для селектирования кривых, отображаемых на экране
-  std::vector<DisplayChartCurve>                      screenCurves;
-  std::vector<std::vector<Point>>        geomPolylines;
-  std::map<int, int>                    screenPolyIndexes;
-  std::vector<int> isSelected;
-  QColor  currentColor;
-  QColor  selectingColor;
-  std::vector<QXYSeries*> currentSeriesPoint;
+  std::vector<Point>               points;      ///< точки, полученные с экрана
+  QChart *                         chart;     ///< объект для отрисовки графика
+  Creator                          GeomCreator; ///< объект для создания геометрического примитива
+  PrintFigure                      printChart;  ///< объект для отображения геометрического примитива
+  CurrentState                     state;       ///< объект для хранения текущего состояния окна
+  CurveSelector                    selector;   ///< объект для селектирования кривых, отображаемых на экране
+  std::vector<DisplayChartCurve>   screenCurves;
+  std::vector<std::vector<Point>>  geomPolylines;
+  std::map<int, int>               screenPolyIndexes;
+  std::vector<int>                 isSelected;
+  QColor                           currentColor;
+  QColor                           selectingColor;
+  std::vector<QXYSeries*>          currentSeriesPoint;
 public:
   MainWindowHandler (QChart * chart);
 
@@ -86,8 +87,8 @@ public:
   void PrintCharacteristicPoint ( Point point, std::vector<QXYSeries*>& currentSeriesPoint );        ///< отображение на экране точек, выбранных пользователем
   void SetCheckableCurrentItem  ();
   void ResizeEvent              ( QResizeEvent *event ); ///< обработка изменения размера окна
-  void StateExpect( QMouseEvent *event );
-  void AddColortSeries( const DisplayChartCurve& chartCurve, QColor color );
+  void StateExpect              ( QMouseEvent *event );
+  void AddColortSeries          ( const DisplayChartCurve& chartCurve, QColor color );
 
 };
 
