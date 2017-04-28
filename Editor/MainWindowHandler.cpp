@@ -207,6 +207,11 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
    if( event->buttons() == Qt::RightButton )
      return;
 
+    QRect rec = QApplication::desktop()->screenGeometry();
+    double height = rec.height();
+    double width = rec.width();
+    chart->resize( width, height );
+
   if ( state == StateCreateCurve || state == StateCreatePolyline ) {
      if ( !IsSufficientNum() )
      {
@@ -228,7 +233,7 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
 
 void MainWindowHandler::StateExpect( QMouseEvent *event )
 {
-  QPointF currentPoint = chart->mapToValue( QPointF(event->pos().x() + 10, event->pos().y() -50) );
+  QPointF currentPoint = chart->mapToValue( QPointF(event->pos().x(), event->pos().y() - 30) );
   int selectSeries = selector.GetCurve( Point (currentPoint.x(), currentPoint.y()) );
   if ( selectSeries != -1 ) {
     isSelected.push_back(selectSeries);
@@ -280,14 +285,6 @@ void MainWindowHandler::ResizeEvent( QResizeEvent *event )
    double height = rec.height();
    double width = rec.width();
     chart->resize( width, height );
-   for ( int j = 0; j< screenCurves.size(); j++ )
-   {
-     DisplayChartCurve chartCurve =  screenCurves[screenPolyIndexes.at(j)];
-     for ( int i = 0; i< chartCurve.chartPoints.size(); i++)
-         for (int k = 0; k < chartCurve.chartPoints[i]->count(); k++)
-          chart->mapToValue( chartCurve.chartPoints[i]->at(k) );
-
-     }
 
 }
 

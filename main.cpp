@@ -23,6 +23,8 @@ int main(int argc, char *argv[])
    double width = rec.width();
 
   QChart *chart = new QChart();
+
+  chart->setSizePolicy( QSizePolicy::Policy::Maximum,QSizePolicy::Policy::Maximum );
   chart->resize( width, height );
   MainWindow w( chart );
   w.CreateActions();
