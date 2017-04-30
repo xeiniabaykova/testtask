@@ -30,6 +30,6 @@ public:
   //-------------------------------------------------------------------------------
   // \ru на вход передается массив точек для отображения
   // ---
-  void AddFigure( DisplayedCurve * curve, QColor color = QColor (51, 0 , 51) );  ///< добавление новой кривой
+  void AddFigure( std::shared_ptr<DisplayedCurve> curve, QColor color = QColor (51, 0 , 51) );  ///< добавление новой кривой
 };
 #endif // PRINTFUGURE_H

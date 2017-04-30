@@ -37,7 +37,8 @@ PrintFigure::PrintFigure( QChart * chart ):
   если это набор точек, то отображаем как QLineSeries (точки, соединенные линиями)
 */
 //-----------------------------------------------------------------------------
-void PrintFigure::AddFigure( DisplayedCurve * curve, QColor color ) {
+void PrintFigure::AddFigure( std::shared_ptr<DisplayedCurve> curve, QColor color ) 
+{
 
   QLineSeries * currentseries = new QLineSeries();
   currentseries->setColor( color );

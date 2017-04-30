@@ -175,7 +175,7 @@ void MainWindowHandler::SaveFile()
 void MainWindowHandler::CreateCurve()
 {
   std::vector<Point> currentPoints;
-  DisplayedCurve * curve = new DisplayedCurve;
+  std::shared_ptr<DisplayedCurve> curve = std::make_shared< DisplayedCurve>();
 
   std::shared_ptr<GeometricPrimitive> primitive = geomCreator.creator->Create( points );
   curve->primitive = primitive;
@@ -240,7 +240,7 @@ void MainWindowHandler::StateExpect( QMouseEvent *event )
   int selectSeries = selector.GetCurve( Point (currentPoint.x(), currentPoint.y()) );
 
   if ( selectSeries != -1 ) {
-    isSelected.push_back(selectSeries);
+    isSelected.push_back( selectSeries );
     chart->removeAllSeries();
 
     for ( int i = 0; i < displayedCurves.size(); i++ )
@@ -272,6 +272,7 @@ void MainWindowHandler::ChangeColor( QColor color )
 {
   for ( int i = 0; i < isSelected.size(); i++ )
    printChart.AddFigure( displayedCurves[isSelected[i]], color );
+  isSelected.clear();
 }
 
 
@@ -286,12 +287,14 @@ void MainWindowHandler::DeleteCurve()
   for ( int i = 0; i < isSelected.size(); i++ )
   {
     displayedCurves.erase( displayedCurves.begin() + isSelected[i] );
+    geomPolylines.erase( geomPolylines.begin() + isSelected[i] );
   }
   chart->removeAllSeries();
   for ( int i = 0; i < displayedCurves.size(); i++ )
     printChart.AddFigure( displayedCurves[i], selectingColor );
 
   isSelected.clear();
+  state = StateExpectAction;
 }
 
 

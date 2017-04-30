@@ -11,7 +11,7 @@
 #include "Polyline.h"
 #include "PrintFigure.h"
 #include <Editor/DisplayedCurve.h>
-
+#include <memory>
 
 
 //------------------------------------------------------------------------------
@@ -57,7 +57,7 @@ private:
   std::vector<int>                isSelected;           ///< индексы селектированных кривых
   QColor                          selectingColor;       ///< цвет, обозначающий селектированную кривую
   QColor                          currentColor;         ///< цвет неселктированной кривой
-  std::vector<DisplayedCurve*>     displayedCurves;
+  std::vector<std::shared_ptr<DisplayedCurve>>     displayedCurves;
 public:
   MainWindowHandler (QChart * chart);
 
