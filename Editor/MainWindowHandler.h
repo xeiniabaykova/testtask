@@ -10,7 +10,7 @@
 #include <vector>
 #include "Polyline.h"
 #include "PrintFigure.h"
-#include <map>
+#include <Editor/DisplayedCurve.h>
 
 
 
@@ -26,10 +26,10 @@ public:
     */
   // ---
   struct Creator {
-    int                         sufficient;
+    int                         numExpectedPoits;
     GeometricPrimitiveCreator * creator;
-    Creator( int sufficient, GeometricPrimitiveCreator * creator ):
-      sufficient( sufficient ),
+    Creator( int numExpectedPoits, GeometricPrimitiveCreator * creator ):
+      numExpectedPoits( numExpectedPoits ),
       creator( creator ) {}
   };
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -37,7 +37,8 @@ public:
       \details \ru текущее состояние приложения: создание, удаление кривой, нахождение пересечения \~
     */
   // ---
-  enum CurrentState {
+  enum CurrentState
+  {
     StateCreateCurve,
     StateExpectAction,
     StateDeleteCurve,
@@ -53,11 +54,10 @@ private:
   CurrentState                    state;                ///< объект для хранения текущего состояния окна
   CurveSelector                   selector;             ///< объект для селектирования кривых, отображаемых на экране
   std::vector<std::vector<Point>> geomPolylines;        ///< полилиния для геометрии, отображенной на экране
-  std::vector<std::vector<Point>> geomReferencedPoints; ///< опорные точки геометрии, отображенной на экране
-  std::vector<Point>              currentSeriesPoint;
   std::vector<int>                isSelected;           ///< индексы селектированных кривых
   QColor                          selectingColor;       ///< цвет, обозначающий селектированную кривую
   QColor                          currentColor;         ///< цвет неселктированной кривой
+  std::vector<DisplayedCurve*>     displayedCurves;
 public:
   MainWindowHandler (QChart * chart);
 
@@ -73,7 +73,7 @@ public:
   void LoadFile                 ();                                           ///< сохранение текущих кривых из файла
   void SaveFile                 ();                                           ///< сохранение текущих кривых в файл
   void CreatePolyline           ();                                           ///< создание полилинии
-  void CreateCurve              ( std::vector<Point> referenceSeriesPoint ); ///< общая функция для создания кривой
+  void CreateCurve              (); ///< общая функция для создания кривой
   void MouseEvent               ( QMouseEvent *event ); ///< обработка клика мышкой
   void StopCreateCurve          ();                     ///< обработка клика мышкой
   void SetCheckableCurrentItem  ();

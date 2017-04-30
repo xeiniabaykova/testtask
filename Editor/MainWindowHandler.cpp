@@ -8,6 +8,8 @@
 #include <QInputDialog>
 #include <fstream>
 #include <functional>
+#include <QtCharts/QLineSeries>
+#include "GeomPolylineCreator.h"
 
 //#include <QtCharts/QScatterSeries>
 //#include <algorithm>
@@ -50,7 +52,7 @@ void MainWindowHandler::AddPointFromScreen( Point point )
 //-----------------------------------------------------------------------------
 void MainWindowHandler::AddSufficientNum ( int num )
 {
-  geomCreator.sufficient = num;
+  geomCreator.numExpectedPoits = num;
 }
 
 
@@ -62,7 +64,7 @@ void MainWindowHandler::AddSufficientNum ( int num )
 //-----------------------------------------------------------------------------
 bool MainWindowHandler::IsSufficientNum()
 {
-  return ( points.size() == geomCreator.sufficient - 1 );
+  return ( points.size() == geomCreator.numExpectedPoits );
 }
 
 
@@ -76,7 +78,7 @@ bool MainWindowHandler::IsSufficientNum()
 void MainWindowHandler::CreatePoint()
 {
   state = StateCreateCurve;
-  geomCreator.sufficient = 1;
+  geomCreator.numExpectedPoits = 1;
   geomCreator.creator = new PointCreator();
 }
 
@@ -91,7 +93,7 @@ void MainWindowHandler::CreatePoint()
 void MainWindowHandler::CreateLine()
 {
   state = StateCreateCurve;
-  geomCreator.sufficient = 2;
+  geomCreator.numExpectedPoits = 2;
   geomCreator.creator = new LineCreator();
 }
 
@@ -106,7 +108,7 @@ void MainWindowHandler::CreateLine()
 void MainWindowHandler::CreateEllipse()
 {
   state = StateCreateCurve;
-  geomCreator.sufficient = 3;
+  geomCreator.numExpectedPoits = 3;
   geomCreator.creator = new EllipseCreator();
 }
 
@@ -121,7 +123,7 @@ void MainWindowHandler::CreateEllipse()
 void MainWindowHandler::CreateCircle()
 {
   state = StateCreateCurve;
-  geomCreator.sufficient = 2;
+  geomCreator.numExpectedPoits = 2;
 //  GeomCreator.creator = new CircleCreator();
 }
 
@@ -170,23 +172,18 @@ void MainWindowHandler::SaveFile()
   \ru обнуляется массив точек полученных с экрана
 */
 //-----------------------------------------------------------------------------
-void MainWindowHandler::CreateCurve( std::vector<Point> referenceSeriesPoint )
+void MainWindowHandler::CreateCurve()
 {
   std::vector<Point> currentPoints;
-  if ( state == StateCreatePolyline )
-  {
-    geomPolylines.push_back( points );
-    printChart.AddFigure( points, referenceSeriesPoint );
-  }
-  else
-  {
-    std::shared_ptr<GeometricPrimitive> primitive = geomCreator.creator->Create( points );
-    primitive->GetAsPolyLine( currentPoints, 0.001 );
-    geomPolylines.push_back( currentPoints );
-    geomReferencedPoints.push_back( referenceSeriesPoint );
-    printChart.AddFigure( currentPoints, referenceSeriesPoint );
-  }
-  points.clear();
+  DisplayedCurve * curve = new DisplayedCurve;
+
+  std::shared_ptr<GeometricPrimitive> primitive = geomCreator.creator->Create( points );
+  curve->primitive = primitive;
+  curve->referencedPoints = points;
+  displayedCurves.push_back( curve );
+  primitive->GetAsPolyLine( currentPoints, 0.001 );
+  geomPolylines.push_back( currentPoints );
+  printChart.AddFigure( curve );
 }
 
 void MainWindowHandler::StopCreateCurve()
@@ -214,20 +211,12 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
 
   if ( state == StateCreateCurve || state == StateCreatePolyline )
   {
-
-    if ( !IsSufficientNum() )
+    QPointF currentPoint = chart->mapToValue( event->pos() );
+    AddPointFromScreen( Point(currentPoint.x(), currentPoint.y()) );
+    if ( IsSufficientNum() )
     {
-      QPointF currentPoint = chart->mapToValue( event->pos() );
-      AddPointFromScreen( Point(currentPoint.x(), currentPoint.y()) );
-      currentSeriesPoint.push_back( Point(currentPoint.x(), currentPoint.y()) );
-    }
-    else
-    {
-      QPointF currentPoint = chart->mapToValue( event->pos() );
-      AddPointFromScreen( Point(currentPoint.x(), currentPoint.y()) );
-      currentSeriesPoint.push_back( Point(currentPoint.x(), currentPoint.y()) );
-      CreateCurve( currentSeriesPoint );
-      currentSeriesPoint.resize(0);
+      CreateCurve();
+      points.clear();
     }
   }
   else
@@ -249,23 +238,25 @@ void MainWindowHandler::StateExpect( QMouseEvent *event )
 {
   QPointF currentPoint = chart->mapToValue( QPointF(event->pos().x(), event->pos().y() - 30) );
   int selectSeries = selector.GetCurve( Point (currentPoint.x(), currentPoint.y()) );
+
   if ( selectSeries != -1 ) {
     isSelected.push_back(selectSeries);
     chart->removeAllSeries();
-    for ( int i = 0; i < geomPolylines.size(); i++ )
+
+    for ( int i = 0; i < displayedCurves.size(); i++ )
     {
       if (std::find (isSelected.begin(), isSelected.end(), i ) == isSelected.end() )
-        printChart.AddFigure( geomPolylines[i], geomReferencedPoints[i], selectingColor );
+        printChart.AddFigure( displayedCurves[i], selectingColor );
       else
-        printChart.AddFigure( geomPolylines[i], geomReferencedPoints[i], currentColor );
+        printChart.AddFigure( displayedCurves[i], currentColor );
     }
   }
 
   if ( selectSeries == -1 )
   {
     chart->removeAllSeries();
-    for ( int j = 0; j < geomPolylines.size(); j++ )
-      printChart.AddFigure( geomPolylines[j], geomReferencedPoints[j], selectingColor );
+    for ( int j = 0; j < displayedCurves.size(); j++ )
+      printChart.AddFigure( displayedCurves[j], selectingColor );
     isSelected.clear();
   }
   state = StateExpectAction;
@@ -280,7 +271,7 @@ void MainWindowHandler::StateExpect( QMouseEvent *event )
 void MainWindowHandler::ChangeColor( QColor color )
 {
   for ( int i = 0; i < isSelected.size(); i++ )
-   printChart.AddFigure( geomPolylines[i], geomReferencedPoints[i], color );
+   printChart.AddFigure( displayedCurves[isSelected[i]], color );
 }
 
 
@@ -294,12 +285,11 @@ void MainWindowHandler::DeleteCurve()
   std::sort( isSelected.begin(), isSelected.end(), std::greater<int>() );
   for ( int i = 0; i < isSelected.size(); i++ )
   {
-    geomPolylines.erase( geomPolylines.begin() + isSelected[i] );
-    geomReferencedPoints.erase( geomReferencedPoints.begin() + isSelected[i] );
+    displayedCurves.erase( displayedCurves.begin() + isSelected[i] );
   }
   chart->removeAllSeries();
-  for ( int i = 0; i< geomPolylines.size(); i++ )
-    printChart.AddFigure( geomPolylines[i], geomReferencedPoints[i], selectingColor );
+  for ( int i = 0; i < displayedCurves.size(); i++ )
+    printChart.AddFigure( displayedCurves[i], selectingColor );
 
   isSelected.clear();
 }
@@ -323,6 +313,7 @@ void MainWindowHandler::CreatePolyline()
   bool ok;
   int i = QInputDialog::getInt( 0, ("Polyline Points"), ("amount of points"), 25, 0, 100, 1, &ok );
   if (ok)
-    geomCreator.sufficient = i;
+    geomCreator.numExpectedPoits = i;
   state = StateCreatePolyline;
+  geomCreator.creator = new GeomPolylineCreator();
 }

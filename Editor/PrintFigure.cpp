@@ -3,6 +3,7 @@
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QValueAxis>
 #include <QtWidgets/QMessageBox>
+#include <Math/GeometricPrimitive.h>
 
 
 //-----------------------------------------------------------------------------
@@ -22,10 +23,10 @@ PrintFigure::PrintFigure( QChart * chart ):
   chart->legend()->setVisible(false);
   QLineSeries *series = new QLineSeries;
   *series<<QPointF( 0, 0 )<<QPointF( 10, 10);
-  series->setColor(QColor(255,255,255) );
+  series->setColor( QColor(255,255,255) );
   chart->addSeries( series );
-  chart->axisX()->setVisible( false );
-  chart->axisY()->setVisible( false );
+  //chart->axisX()->setVisible( false );
+  //chart->axisY()->setVisible( false );
 }
 
 
@@ -36,19 +37,21 @@ PrintFigure::PrintFigure( QChart * chart ):
   если это набор точек, то отображаем как QLineSeries (точки, соединенные линиями)
 */
 //-----------------------------------------------------------------------------
-void PrintFigure::AddFigure( const std::vector<Point>& points, const std::vector<Point>& refPoints, QColor color ) {
+void PrintFigure::AddFigure( DisplayedCurve * curve, QColor color ) {
 
   QLineSeries * currentseries = new QLineSeries();
   currentseries->setColor( color );
 
   QScatterSeries *seriesRef = new QScatterSeries();
   seriesRef->setColor( color );
+  std::vector<Point> polyPoints;
+  curve->primitive->GetAsPolyLine( polyPoints, 0.01 );
 
-  for ( int i = 0; i < points.size(); i++ )
-    *currentseries <<QPointF(points[i].GetX(), points[i].GetY());
+  for ( int i = 0; i < polyPoints.size(); i++ )
+    *currentseries <<QPointF( polyPoints[i].GetX(), polyPoints[i].GetY() );
 
-  for ( int i = 0; i < refPoints.size(); i++ )
-    *seriesRef << QPointF( refPoints[i].GetX(), refPoints[i].GetY());
+  for ( int i = 0; i < curve->referencedPoints.size(); i++ )
+    *seriesRef << QPointF( curve->referencedPoints[i].GetX(), curve->referencedPoints[i].GetY());
 
   seriesRef->setMarkerShape( QScatterSeries::MarkerShapeCircle );
   seriesRef->setMarkerSize( 15.0 );
