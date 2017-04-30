@@ -1,74 +1,73 @@
-#include "Ellipse.h"
+#include "Circle.h"
 #include <vector>
 #include <cmath>
 #include "Editor/Polyline.h"
+# define M_PI           3.14159265358979323846  /* pi */
 
 
 //-----------------------------------------------------------------------------
 /**
-  \ru Коструктор Ellipse. Вычисляются два радиуса и записывается центральная точка
+  \ru Коструктор Circle. Вычисляются записываются два радиуса и центральная точка
 */
 //-----------------------------------------------------------------------------
-Ellipse::Ellipse( Point center, double r1, double r2 ):
+Circle::Circle( Point center, double r ):
   center(center),
-  r1(r1),
-  r2(r2){}
+  r(r){}
 
 //-----------------------------------------------------------------------------
 /**
   \ru возвращается точка по параметру t
 */
 //-----------------------------------------------------------------------------
-Point Ellipse::GetPoint( double t ) const
+Point Circle::GetPoint( double t ) const
 {
-  return Point( center.GetX() + r1 * sin(t), center.GetY() + r2 * cos(t) );
+  return Point( center.GetX() + r * sin(t), center.GetY() + r * cos(t) );
 }
 
 
 //-----------------------------------------------------------------------------
 /**
-  \ru возращаются границы параметра t для эллипса
+  \ru возращаются границы параметра t для окружности
 */
 //-----------------------------------------------------------------------------
-
-
-Range Ellipse::GetRange() const
+Range Circle::GetRange() const
 {
-  return Range( 0.0, 2.0 * 3.14 );
+  return Range( 0.0, 2.0 * M_PI );
 }
 
 
 //-----------------------------------------------------------------------------
 /**
-  \ru возвращает производную элипса по параметру t
+  \ru возвращает производную окружности по параметру t
 */
 //-----------------------------------------------------------------------------
-Point Ellipse::GetDerivativePoint( double t ) const
+
+
+Point Circle::GetDerivativePoint( double t ) const
 {
-  return Point( r1 * cos(t), -r2 * sin(t) );
+  return Point( r * cos(t), -r * sin(t) );
 }
 
 
 //-----------------------------------------------------------------------------
 /**
-  \ru возвращает вторую эллипса по параметру t
+  \ru возвращает вторую окружности по параметру t
 */
 //-----------------------------------------------------------------------------
-Point Ellipse::Get2DerivativePoint( double t ) const
+Point Circle::Get2DerivativePoint( double t ) const
 {
-  return Point( -r1 * sin(t), -r2 * cos(t) );
+  return Point( -r * sin(t), -r * cos(t) );
 }
 
 
 //-----------------------------------------------------------------------------
 /**
-  \ru позвращается полилилния для эллипса - используется общий алгоритм
+  \ru позвращается полилилния для окружности - используется общий алгоритм
 */
 //-----------------------------------------------------------------------------
-void Ellipse::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy ) const
+void Circle::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy ) const
 {
   Polyline polyline( this, accuracy );
   polyLinePoints = polyline.GetPoints();
 }
-
 

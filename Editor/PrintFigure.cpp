@@ -25,8 +25,8 @@ PrintFigure::PrintFigure( QChart * chart ):
   *series<<QPointF( 0, 0 )<<QPointF( 10, 10);
   series->setColor( QColor(255,255,255) );
   chart->addSeries( series );
-  //chart->axisX()->setVisible( false );
-  //chart->axisY()->setVisible( false );
+  chart->axisX()->setVisible( false );
+  chart->axisY()->setVisible( false );
 }
 
 

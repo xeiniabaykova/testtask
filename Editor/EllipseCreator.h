@@ -1,5 +1,5 @@
-#ifndef CIRCLECREATOR_H
-#define CIRCLECREATOR_H
+#ifndef ELLIPSECREATOR_H
+#define ELLIPSECREATOR_H
 
 #include "GeometricPrimitiveCreator.h"
 
@@ -16,4 +16,4 @@ public:
   virtual std::shared_ptr<GeometricPrimitive> Create( const std::vector<Point>& points );
 };
 
-#endif // CIRCLECREATOR_H
+#endif // ELLIPSECREATOR_H

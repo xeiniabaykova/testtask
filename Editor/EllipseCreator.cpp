@@ -1,9 +1,5 @@
 #include "EllipseCreator.h"
-#include <QtCharts/QAbstractAxis>
-#include <QtCharts/QSplineSeries>
-#include <QtCharts/QValueAxis>
 #include "Math/Ellipse.h"
-#include <QtWidgets/QMessageBox>
 
 
 //------------------------------------------------------------------------------
