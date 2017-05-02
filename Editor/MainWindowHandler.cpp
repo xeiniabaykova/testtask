@@ -317,6 +317,12 @@ void MainWindowHandler::ResizeEvent( QResizeEvent *event )
   chart->resize( width, height );
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+  функции обработки события создания полилнии
+*/
+//-----------------------------------------------------------------------------
 void MainWindowHandler::CreatePolyline()
 {
   state = StateCreatePolyline;
@@ -324,10 +330,32 @@ void MainWindowHandler::CreatePolyline()
   geomCreator.numExpectedPoits = -1;
 }
 
+
+
+//-----------------------------------------------------------------------------
+/**
+  КОСТЫЛЬ! для верной работы функции maptovalue
+*/
+//-----------------------------------------------------------------------------
 void MainWindowHandler::CreateEmptySeries()
 {
   QLineSeries *series = new QLineSeries;
   *series<<QPointF( 0, 0 )<<QPointF( 10, 10 );
   series->setColor( QColor(255,255,255) );
   chart->addSeries( series );
+}
+
+
+//-----------------------------------------------------------------------------
+/**
+   обработка события очистки экрана
+*/
+//-----------------------------------------------------------------------------
+void MainWindowHandler::ClearScreen()
+{
+   chart->removeAllSeries();
+   isSelected.clear();
+   displayedCurves.clear();
+   geomPolylines.clear();
+   state = StateExpectAction;
 }

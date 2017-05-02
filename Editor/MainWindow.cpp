@@ -154,12 +154,12 @@ void MainWindow::CreateActions()
 
 
   creatorCurves = new QActionGroup(this);
-  creatorCurves->addAction( createPointAct );
-  creatorCurves->addAction( createLineAct ) ;
-  creatorCurves->addAction( createEllipseAct );
-  creatorCurves->addAction( createCircleAct );
+//  creatorCurves->addAction( createPointAct );
+//  creatorCurves->addAction( createLineAct ) ;
+//  creatorCurves->addAction( createEllipseAct );
+//  creatorCurves->addAction( createCircleAct );
   creatorCurves->addAction( createPolylineAct );
-  creatorCurves->addAction( createNurbsAct );
+ // creatorCurves->addAction( createNurbsAct );
 
 
   deleteCurveAct = new QAction( tr("&delete curve"), this );
@@ -281,10 +281,8 @@ void MainWindow::OnCreateNurbs()
 void MainWindow::OnStopCreateCurve()
 {
 
-  createPointAct->setCheckable( true );
-  createPointAct->setChecked( true );
-  createPointAct->setCheckable( false );
-  createPointAct->setChecked( false );
+  createPolylineAct->setCheckable( false );
+  createPolylineAct->setChecked( false );
   windowHandler.StopCreateCurve();
 }
 
@@ -308,7 +306,7 @@ void MainWindow::OnFindIntersection()
 //-----------------------------------------------------------------------------
 void MainWindow::OnClearScreen()
 {
-
+  windowHandler.ClearScreen();
 }
 
 
@@ -320,6 +318,8 @@ void MainWindow::OnClearScreen()
 //-----------------------------------------------------------------------------
 void MainWindow::OnDeleteCurve()
 {
+  createPolylineAct->setCheckable( false );
+  createPolylineAct->setChecked( false );
   windowHandler.DeleteCurve();
 }
 
