@@ -1,5 +1,6 @@
 #include "EllipseCreator.h"
 #include "Math/Ellipse.h"
+#include <cmath>
 
 
 //------------------------------------------------------------------------------
