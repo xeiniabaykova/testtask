@@ -30,7 +30,6 @@ public:
    */
    //---
   Line( Point startPoint, Point endPoint );
-  Line() = delete;
   ~Line() = default;
 private:
   Line( const Line &obj ) = delete;
