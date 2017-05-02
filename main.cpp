@@ -2,16 +2,12 @@
 #include <QApplication>
 
 #include <QtCharts/QChartView>
-#include <QtCharts/QLineSeries>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QDesktopWidget>
 
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMainWindow>
 #include <QtCharts/QChartView>
-#include <QtCharts/QLineSeries>
-#include <QtCharts/QAreaSeries>
-#include <QtCharts/QValueAxis>
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -26,12 +22,9 @@ int main(int argc, char *argv[])
   QChart *chart = new QChart();
   chart->setSizePolicy( QSizePolicy::Policy::Maximum,QSizePolicy::Policy::Maximum );
   chart->resize( width, height );
-
-
   MainWindow w( chart );
   w.CreateActions();
   w.CreateMenus();
-
 
   QChartView *chartView = new QChartView(chart);
 

@@ -1,10 +1,10 @@
 #include "GeomPolylineCreator.h"
 #include <Math/GeomPolyline.h>
-#include <QtCharts/QLineSeries>
 
 
 //------------------------------------------------------------------------------
-// \ru создание полилинии по точкам
+// \ru создание полилинии по точкам:
+// точки - вершины полинии
 // ---
 std::shared_ptr<GeometricPrimitive> GeomPolylineCreator::Create( const std::vector<Point>& points )
 {

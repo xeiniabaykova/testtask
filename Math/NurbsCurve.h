@@ -20,7 +20,11 @@ private:
   std::vector<double> weights;
   std::vector<int>    nodes;
   bool                isClosed;
+private:
+  NurbsCurve( const NurbsCurve &obj ) = delete;
+  NurbsCurve& NurbsCurve::operator=( NurbsCurve &obj ) = delete;
 public:
+  NurbsCurve() = delete;
   //-------------------------------------------------------------------------------
   // \ru создание Nurbs - кривой по опорным точкам, весам, узлам и замкнутости
   // ---
@@ -34,7 +38,7 @@ public:
   virtual Point GetDerivativePoint  ( double t ) const;                                             ///< возвращает производную по параметру t
   virtual Point Get2DerivativePoint ( double t ) const;                                             ///< возвращает вторую производную по параметру t
   virtual void  GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< возвращает полилинию для Nurbs - кривой с точностью accuracy
-
+  ~NurbsCurve() = delete;
 };
 
 

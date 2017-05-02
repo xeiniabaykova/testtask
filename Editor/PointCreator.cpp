@@ -1,7 +1,5 @@
 #include "PointCreator.h"
 #include "Math/GeometricPoint.h"
-//#include <QtCharts/QChartView>
-//#include <QtCharts/QScatterSeries>
 
 
 //-----------------------------------------------------------------------------

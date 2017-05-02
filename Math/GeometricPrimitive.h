@@ -10,7 +10,11 @@
 */
 // ---
 class GeometricPrimitive { 
+private:
+  GeometricPrimitive( const GeometricPrimitive &obj ) = delete;
+  GeometricPrimitive& GeometricPrimitive::operator=( GeometricPrimitive &obj ) = delete;
 public:
+  GeometricPrimitive() = default;
   virtual Point GetPoint            ( double t ) const = 0;                                         ///< возвращает точку на кривой по параметру t
   virtual Range GetRange            () const = 0;                                                   ///< возвращает допустимые границы параметра
   virtual Point GetDerivativePoint  ( double t ) const = 0;                                         ///< возвращает производную точки точки на кривой по параметру t

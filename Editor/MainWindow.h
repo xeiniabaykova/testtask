@@ -1,3 +1,11 @@
+////////////////////////////////////////////////////////////////////////////////
+/**
+  \file
+  \brief \ru  представление главной формы\~
+
+*/
+////////////////////////////////////////////////////////////////////////////////
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -18,6 +26,13 @@ class MainWindow;
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
+public:
+  /** \brief \ru Инициализация.
+               \param[in] chart  - \ru объект для отрисовки графика.\~
+           */
+  explicit MainWindow          ( QChart *chart, QWidget *parent = 0 );
+  ~MainWindow                  ();
+
 private:
   Ui::MainWindow    * ui;                   ///< \ru графический интерфейс главного окна
 
@@ -30,8 +45,8 @@ private:
   QAction           * createPointAct;       ///< \ru событие создания точки
   QAction           * createLineAct;        ///< \ru событие создания линии
   QAction           * createEllipseAct;     ///< \ru событие создания эллипса
-  QAction           * createCircleAct;     ///< \ru событие создания окружности
-  QAction           * createPolylineAct;     ///< \ru событие создания окружности
+  QAction           * createCircleAct;      ///< \ru событие создания окружности
+  QAction           * createPolylineAct;    ///< \ru событие создания окружности
   QAction           * createNurbsAct;       ///< \ru событие создания nurbs - кривой
   QAction           * stopCreateCurveAct;   ///< \ru событие прекращения создания кривых
   QAction           * reColorAct;           ///< \ru событие изменение цвета кривой
@@ -45,12 +60,30 @@ private:
   QAction           * clearScreenAct;       ///< \ru событие очистки экрана
   MainWindowHandler windowHandler;          ///< \ru вспомогательный класс для обработки событий
   QActionGroup      * creatorCurves;        ///< \ru группа для меню создания кривых
+
+protected:
+#ifndef QT_NO_CONTEXTMENU
+    void contextMenuEvent(QContextMenuEvent *event) override;
+#endif // QT_NO_CONTEXTMENU
+
+public:
+  /// \ru обработчик события клика мышкой
+  void mousePressEvent         ( QMouseEvent *event ); 
+  /// \ru обработчик события изменения размера экрана
+  void resizeEvent(QResizeEvent *event);
+  /// \ru создать события
+  void CreateActions           ();
+  /// \ru создать меню
+  void CreateMenus             ();
+
+private:
+  MainWindow( const MainWindow &obj ) = delete;
+  MainWindow& MainWindow::operator=( MainWindow &obj ) = delete;
 private slots:
   /// \ru обработчик события открытия файла
   void OnSaveFile         ();
    /// \ru обработчик события сохранения файла
   void OnLoadFile         ();
-
   /// \ru обработчик события создания точки
   void OnCreatePoint      ();
   /// \ru обработчик события создания линии
@@ -74,27 +107,7 @@ private slots:
   /// \ru обработчик изменения цвета кривой
   void OnReColorCurve     ();
   void contextMenuRequested( const QPoint& point);
-protected:
-#ifndef QT_NO_CONTEXTMENU
-    void contextMenuEvent(QContextMenuEvent *event) override;
-#endif // QT_NO_CONTEXTMENU
 
-public:
-  /** \brief \ru Инициализация.
-               \param[in] chart  - \ru объект для отрисовки графика.\~
-           */
-  explicit MainWindow          ( QChart *chart, QWidget *parent = 0 );
-  /// \ru обработчик события клика мышкой
-  void mousePressEvent         ( QMouseEvent *event );
- // void MainWindow::contextMenuEvent(QContextMenuEvent *event);
- 
-  /// \ru обработчик события изменения размера экрана
-  void resizeEvent(QResizeEvent *event);
-  /// \ru создать события
-  void CreateActions           ();
-  /// \ru создать меню
-  void CreateMenus             ();
-  ~MainWindow                  ();
 };
 
 #endif // MAINWINDOW_H

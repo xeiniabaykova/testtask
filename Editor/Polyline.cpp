@@ -5,7 +5,7 @@
 
 //-----------------------------------------------------------------------------
 /**
-  \ru На вход отдается геометрический примитив
+  \ru На вход отдается геометрический примитив и точность создания полилинии
 */
 //-----------------------------------------------------------------------------
 Polyline::Polyline( const GeometricPrimitive* figure, double precision ):
@@ -18,14 +18,15 @@ Polyline::Polyline( const GeometricPrimitive* figure, double precision ):
 /**
   \ru Расчитываются точки для отображения: Если интервала нулевой, считаем, что это одна
   точка, возращаем ее.
-  Если интервал ненулевой, то обходи его с постоянным шагов с количеством разбиений равным 1000
+  Если интервал ненулевой, то обходи его с приращением, которое определяем на каждом шаге
 */
 //-----------------------------------------------------------------------------
 std::vector<Point> Polyline::GetPoints()
 {
     // если не точка и не прямая, то применяем общий алгоритм
     double t = figure->GetRange().GetStart();
-    while ( t < figure->GetRange().GetEnd() ){
+    while ( t < figure->GetRange().GetEnd() )
+    {
       Point point ( figure->GetPoint(t) );
       displayedPoints.push_back( point );
       t += CountingStep( t );
@@ -41,8 +42,8 @@ std::vector<Point> Polyline::GetPoints()
 double Polyline::CountingStep( double tCurrent )
 {
   precision = 0.01;
-  Point firstDerivative = figure->GetDerivativePoint(tCurrent);
-  Point secondDerivative = figure->Get2DerivativePoint(tCurrent);
+  Point firstDerivative = figure->GetDerivativePoint( tCurrent );
+  Point secondDerivative = figure->Get2DerivativePoint( tCurrent );
   double vectorMult = firstDerivative.GetX() * secondDerivative.GetY() - firstDerivative.GetY() * secondDerivative.GetX();
   double normVectorMult = sqrt( vectorMult * vectorMult );
   double normFirstDerivative = sqrt( firstDerivative.GetX() * firstDerivative.GetX() +  firstDerivative.GetY() * firstDerivative.GetY() );

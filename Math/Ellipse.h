@@ -17,6 +17,9 @@ private:
   Point center; ///< центр
   double r1;     ///< первый радиус
   double r2;     ///< второй радиус
+private:
+  Ellipse( const Ellipse &obj ) = delete;
+  Ellipse& Ellipse::operator=( Ellipse &obj ) = delete;
 public:
   //-------------------------------------------------------------------------------
   // \ru создание эллипса по точке в центре и двум радиусам

@@ -15,7 +15,11 @@ class Circle: public GeometricPrimitive
 private:
   Point center; ///< центр
   double r;     ///< радиус
+private:
+  Circle( const Circle &obj ) = delete;
+  Circle& Circle::operator=( Circle &obj ) = delete;
 public:
+  Circle() = delete;
   //-------------------------------------------------------------------------------
   // \ru создание окружности по точке в центре и радиусу
   // ---
@@ -25,6 +29,7 @@ public:
   virtual Point GetDerivativePoint  ( double t ) const;                                             ///< возвращает производную на окружности по параметру t
   virtual Point Get2DerivativePoint ( double t ) const;                                             ///< возвращает вторую производную на окружности по параметру t
   virtual void  GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< возвращает полилинию для эллипса
+  ~Circle() = default;
 };
 
 #endif // CIRCLE_H

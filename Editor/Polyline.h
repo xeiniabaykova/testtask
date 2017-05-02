@@ -1,3 +1,11 @@
+////////////////////////////////////////////////////////////////////////////////
+/**
+  \file
+  \brief \ru  создатель полилинии по геометрической кривой\~
+
+*/
+////////////////////////////////////////////////////////////////////////////////
+
 #ifndef POLYLINE_H
 #define POLYLINE_H
 #include "Math/Point.h"
@@ -12,18 +20,8 @@
 // ---
 
 class Polyline {
-
-private:
-  std::vector<Point>          displayedPoints;  ///<  точки для отображения примитива
-  const  GeometricPrimitive * figure;           ///<  геометрический примитив
-  double                      precision;        ///<  точность для создания полилинии
-private:
-  //-------------------------------------------------------------------------------
-  // \ru считает приращение параметра t, необходимое для того, чтобы полигон кривой
-  // апроксимировал кривую с нужной точностью.
-  // ---
-  double CountingStep( double tCurrent );
 public:
+  Polyline() = default;
   //-------------------------------------------------------------------------------
   // \ru на вход подается геометрический примитив
   // ---
@@ -31,7 +29,22 @@ public:
   //-------------------------------------------------------------------------------
   // \ru расчитываются точки для отображения геометрического примитива, возвращается массив из полученных точек
   // ---
-  std::vector<Point>                  GetPoints();
+  ~Polyline() = default;
+
+private:
+  Polyline( const Polyline &obj ) = delete;
+  Polyline& Polyline::operator= (Polyline &obj ) = delete;
+
+private:
+  std::vector<Point>          displayedPoints;  ///<  точки для отображения примитива
+  const  GeometricPrimitive * figure;           ///<  геометрический примитив
+  double                      precision;        ///<  точность для создания полилинии
+
+private:
+  double             CountingStep ( double tCurrent ); /// \ru получить по текущему tCurrent шаг по кривой, удовлятворяющий хордовому отклонению  precision
+public:
+  std::vector<Point> GetPoints    ();                  ///<  получить точки полилинии
+
 };
 
 #endif // DISPLAYEDFIGURE_H

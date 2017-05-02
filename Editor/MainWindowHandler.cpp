@@ -4,16 +4,11 @@
 #include "EllipseCreator.h"
 #include "Editor/CircleCreator.h"
 #include "FileIO.h"
-#include <QtWidgets/QMessageBox>
 #include <QtWidgets/QDesktopWidget>
 #include <QInputDialog>
-#include <fstream>
-#include <functional>
 #include <QtCharts/QLineSeries>
 #include "GeomPolylineCreator.h"
-
-//#include <QtCharts/QScatterSeries>
-//#include <algorithm>
+#include <functional>
 
 
 
@@ -29,8 +24,9 @@ MainWindowHandler::MainWindowHandler (QChart * chart):
   selector( geomPolylines ),
   geomCreator( 0, nullptr ),
   state ( StateExpectAction ),
-  currentColor( 153, 255, 255 ),
-  selectingColor( 51, 0, 51 )
+  normalColor( 51, 0, 51 ),
+  selectedColor( 190, 0, 21 ),
+  accuracy( 0.001 )
 {
 }
 
@@ -80,7 +76,7 @@ void MainWindowHandler::CreatePoint()
 {
   state = StateCreateCurve;
   geomCreator.numExpectedPoits = 1;
-  geomCreator.creator = new PointCreator();
+ // geomCreator.creator = new PointCreator();
 }
 
 
@@ -182,7 +178,7 @@ void MainWindowHandler::CreateCurve()
   curve->primitive = primitive;
   curve->referencedPoints = points;
   displayedCurves.push_back( curve );
-  primitive->GetAsPolyLine( currentPoints, 0.001 );
+  primitive->GetAsPolyLine( currentPoints, accuracy );
   geomPolylines.push_back( currentPoints );
   printChart.AddFigure( curve );
 }
@@ -219,7 +215,7 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
   CreateEmptySeries();
   if ( state == StateCreateCurve  || state == StateCreatePolyline)
   {
-    QPointF currentPoint = chart->mapToValue( QPointF(event->x(), event->y()) );
+    QPointF currentPoint = chart->mapToValue( QPointF(event->x(), event->y() - 30) );
     AddPointFromScreen( Point(currentPoint.x(), currentPoint.y()) );
     printChart.AddReferencedPoint( Point(currentPoint.x(), currentPoint.y()) );
     if ( IsSufficientNum() )
@@ -246,28 +242,32 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
 void MainWindowHandler::StateExpect( QMouseEvent *event )
 {
   QPointF currentPoint = chart->mapToValue( QPointF(event->pos().x(), event->pos().y() - 30) );
-  int selectSeries = selector.GetCurve( Point (currentPoint.x(), currentPoint.y()) );
-
-  if ( selectSeries != -1 ) {
-    auto it = std::find (isSelected.begin(), isSelected.end(), selectSeries );
-      if (it != isSelected.end())
-        isSelected.erase( it );
-      else
-        isSelected.push_back( selectSeries );
-
+  int selectedSeries = selector.GetCurve( Point (currentPoint.x(), currentPoint.y()) );
+  // если selectedSeries == -1, то ни одна линия не селектированна
+  if ( selectedSeries != -1 )
+  {
+    DoubleSelectionRemoved( selectedSeries );
     chart->removeAllSeries();
-
     for ( int i = 0; i < displayedCurves.size(); i++ )
     {
-      if (std::find (isSelected.begin(), isSelected.end(), i ) == isSelected.end() )
-        printChart.AddFigure( displayedCurves[i], selectingColor );
+      if (std::find (selectedIndexes.begin(), selectedIndexes.end(), i ) == selectedIndexes.end() )
+        printChart.AddFigure( displayedCurves[i],  normalColor );
       else
-        printChart.AddFigure( displayedCurves[i], currentColor );
+        printChart.AddFigure( displayedCurves[i], selectedColor );
     }
   }
   state = StateExpectAction;
 }
 
+void MainWindowHandler::DoubleSelectionRemoved( int indexSelectedCurve )
+{
+  auto it = std::find (selectedIndexes.begin(), selectedIndexes.end(), indexSelectedCurve );
+    if (it != selectedIndexes.end())
+      selectedIndexes.erase( it );
+    else
+      selectedIndexes.push_back( indexSelectedCurve );
+
+}
 
 //-----------------------------------------------------------------------------
 /**
@@ -276,9 +276,9 @@ void MainWindowHandler::StateExpect( QMouseEvent *event )
 //-----------------------------------------------------------------------------
 void MainWindowHandler::ChangeColor( QColor color )
 {
-  for ( int i = 0; i < isSelected.size(); i++ )
-   printChart.AddFigure( displayedCurves[isSelected[i]], color );
-  isSelected.clear();
+  for ( int i = 0; i < selectedIndexes.size(); i++ )
+   printChart.AddFigure( displayedCurves[selectedIndexes[i]], color );
+  selectedIndexes.clear();
 }
 
 
@@ -289,17 +289,17 @@ void MainWindowHandler::ChangeColor( QColor color )
 //-----------------------------------------------------------------------------
 void MainWindowHandler::DeleteCurve()
 {
-  std::sort( isSelected.begin(), isSelected.end(), std::greater<int>() );
-  for ( int i = 0; i < isSelected.size(); i++ )
+  std::sort( selectedIndexes.begin(), selectedIndexes.end(), std::greater<int>() );
+  for ( int i = 0; i < selectedIndexes.size(); i++ )
   {
-    displayedCurves.erase( displayedCurves.begin() + isSelected[i] );
-    geomPolylines.erase( geomPolylines.begin() + isSelected[i] );
+    displayedCurves.erase( displayedCurves.begin() + selectedIndexes[i] );
+    geomPolylines.erase( geomPolylines.begin() + selectedIndexes[i] );
   }
   chart->removeAllSeries();
   for ( int i = 0; i < displayedCurves.size(); i++ )
-    printChart.AddFigure( displayedCurves[i], selectingColor );
+    printChart.AddFigure( displayedCurves[i], normalColor );
 
-  isSelected.clear();
+  selectedIndexes.clear();
   state = StateExpectAction;
 }
 
@@ -331,7 +331,6 @@ void MainWindowHandler::CreatePolyline()
 }
 
 
-
 //-----------------------------------------------------------------------------
 /**
   КОСТЫЛЬ! для верной работы функции maptovalue
@@ -340,7 +339,7 @@ void MainWindowHandler::CreatePolyline()
 void MainWindowHandler::CreateEmptySeries()
 {
   QLineSeries *series = new QLineSeries;
-  *series<<QPointF( 0, 0 )<<QPointF( 10, 10 );
+  *series<<QPointF( 0, 0 ) << QPointF( 10, 10 );
   series->setColor( QColor(255,255,255) );
   chart->addSeries( series );
 }
@@ -354,7 +353,7 @@ void MainWindowHandler::CreateEmptySeries()
 void MainWindowHandler::ClearScreen()
 {
    chart->removeAllSeries();
-   isSelected.clear();
+   selectedIndexes.clear();
    displayedCurves.clear();
    geomPolylines.clear();
    state = StateExpectAction;
