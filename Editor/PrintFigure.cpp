@@ -25,6 +25,10 @@ PrintFigure::PrintFigure( QChart * chart ):
   *series<<QPointF( 0, 0 )<<QPointF( 10, 10);
   series->setColor( QColor(255,255,255) );
   chart->addSeries( series );
+  seriesReferenced = new QScatterSeries();
+  chart->addSeries( seriesReferenced );
+  seriesReferenced->attachAxis( axisX );
+  seriesReferenced->attachAxis( axisY );
   chart->axisX()->setVisible( false );
   chart->axisY()->setVisible( false );
 }
@@ -58,9 +62,24 @@ void PrintFigure::AddFigure( std::shared_ptr<DisplayedCurve> curve, QColor color
   seriesRef->setMarkerSize( 15.0 );
   chart->addSeries( currentseries );
   chart->addSeries( seriesRef );
+  //seriesReferenced->clear();
+  // seriesReferenced = new QScatterSeries();
 
   currentseries->attachAxis( axisX );
   currentseries->attachAxis( axisY );
+  seriesRef->attachAxis( axisX );
+  seriesRef->attachAxis( axisY );
+}
+
+
+void PrintFigure::AddReferencedPoint( Point point, QColor color )
+{
+  QScatterSeries *seriesRef = new QScatterSeries();
+  seriesRef->setColor( color );
+  *seriesRef << QPointF( point.GetX(), point.GetY() );
+  seriesRef->setMarkerShape( QScatterSeries::MarkerShapeCircle );
+  seriesRef->setMarkerSize( 15.0 );
+  chart->addSeries( seriesRef );
   seriesRef->attachAxis( axisX );
   seriesRef->attachAxis( axisY );
 }

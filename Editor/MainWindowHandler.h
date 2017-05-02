@@ -81,6 +81,7 @@ public:
   void StateExpect              ( QMouseEvent *event );
   void ChangeColor              ( QColor color ); ///< обработка изменения цвета кривой
   void DeleteCurve(); ///< обработка удаления кривой
+  void CreateEmptySeries();
 
 };
 
