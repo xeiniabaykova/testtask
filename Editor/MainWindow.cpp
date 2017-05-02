@@ -79,7 +79,7 @@ void MainWindow::CreateMenus()
   importExportMenu->addAction( loadAct );
 
   createCurveMenu = menuBar()->addMenu( tr("&Curves") );
-  createCurveMenu->addAction( createPointAct );
+ // createCurveMenu->addAction( createPointAct );
   createCurveMenu->addAction( createLineAct );
   createCurveMenu->addAction( createEllipseAct );
   createCurveMenu->addAction( createPolylineAct );
@@ -124,11 +124,13 @@ void MainWindow::CreateActions()
   connect( createPointAct, &QAction::triggered, this, &MainWindow::OnCreatePoint );
 
   createLineAct = new QAction( tr("&Line"), this );
+  createLineAct->setDisabled( true );
  // createLineAct->setShortcuts( QKeySequence::New );
   createLineAct->setStatusTip( tr("Creating line") );
   connect( createLineAct, &QAction::triggered, this, &MainWindow::OnCreateLine );
 
   createEllipseAct = new QAction( tr("&Ellipse"), this );
+  createEllipseAct->setDisabled( true );
  // createEllipseAct->setShortcuts( QKeySequence::New );
   createEllipseAct->setStatusTip( tr("Creating circle") );
   connect( createEllipseAct, &QAction::triggered, this, &MainWindow::OnCreateEllipse );
@@ -139,27 +141,30 @@ void MainWindow::CreateActions()
   connect( createPolylineAct, &QAction::triggered, this, &MainWindow::OnCreatePolyline );
 
   createNurbsAct = new QAction( tr("&Nurbs"), this );
+  createNurbsAct->setDisabled( true );
  // createNurbsAct->setShortcuts( QKeySequence::New );
   createNurbsAct->setStatusTip( tr("Creating nurbs") );
   connect( createNurbsAct, &QAction::triggered, this, &MainWindow::OnCreateNurbs );
 
   createCircleAct = new QAction( tr("&Circle"), this );
+  createCircleAct->setDisabled( true );
  // createCircleAct->setShortcuts( QKeySequence::New );
   createCircleAct->setStatusTip( tr("Creating Circle") );
   connect( createCircleAct, &QAction::triggered, this, &MainWindow::OnCreateCircle );
 
 
   creatorCurves = new QActionGroup(this);
-  creatorCurves->addAction( createPointAct );
-  creatorCurves->addAction( createLineAct ) ;
-  creatorCurves->addAction( createEllipseAct );
-  creatorCurves->addAction( createCircleAct );
-  creatorCurves->addAction( createNurbsAct );
+//  creatorCurves->addAction( createPointAct );
+//  creatorCurves->addAction( createLineAct ) ;
+//  creatorCurves->addAction( createEllipseAct );
+//  creatorCurves->addAction( createCircleAct );
+  creatorCurves->addAction( createPolylineAct );
+ // creatorCurves->addAction( createNurbsAct );
 
 
-  deleteCurveAct = new QAction( tr("&DeleteCurve"), this );
+  deleteCurveAct = new QAction( tr("&delete curve"), this );
  // deleteCurveAct->setShortcuts( QKeySequence::New );
-  deleteCurveAct->setStatusTip( tr("DeleteCurve") );
+  deleteCurveAct->setStatusTip( tr("delete curve") );
   connect( deleteCurveAct, &QAction::triggered, this, &MainWindow::OnDeleteCurve );
 
   findIntersectionAct = new QAction( tr("&Find Intersection"), this );
@@ -262,7 +267,8 @@ void MainWindow::OnCreateCircle()
 //-----------------------------------------------------------------------------
 void MainWindow::OnCreateNurbs()
 {
-
+  createNurbsAct->setCheckable( true );
+  createNurbsAct->setChecked( true );
 }
 
 
@@ -275,10 +281,8 @@ void MainWindow::OnCreateNurbs()
 void MainWindow::OnStopCreateCurve()
 {
 
-  createPointAct->setCheckable( true );
-  createPointAct->setChecked( true );
-  createPointAct->setCheckable( false );
-  createPointAct->setChecked( false );
+  createPolylineAct->setCheckable( false );
+  createPolylineAct->setChecked( false );
   windowHandler.StopCreateCurve();
 }
 
@@ -302,7 +306,7 @@ void MainWindow::OnFindIntersection()
 //-----------------------------------------------------------------------------
 void MainWindow::OnClearScreen()
 {
-
+  windowHandler.ClearScreen();
 }
 
 
@@ -314,11 +318,15 @@ void MainWindow::OnClearScreen()
 //-----------------------------------------------------------------------------
 void MainWindow::OnDeleteCurve()
 {
+  createPolylineAct->setCheckable( false );
+  createPolylineAct->setChecked( false );
   windowHandler.DeleteCurve();
 }
 
 void MainWindow::OnCreatePolyline()
 {
+  createPolylineAct->setCheckable( true );
+  createPolylineAct->setChecked( true );
   windowHandler.CreatePolyline();
 }
 

@@ -73,14 +73,16 @@ public:
   void LoadFile                 ();                                           ///< сохранение текущих кривых из файла
   void SaveFile                 ();                                           ///< сохранение текущих кривых в файл
   void CreatePolyline           ();                                           ///< создание полилинии
-  void CreateCurve              (); ///< общая функция для создания кривой
-  void MouseEvent               ( QMouseEvent *event ); ///< обработка клика мышкой
-  void StopCreateCurve          ();                     ///< обработка клика мышкой
+  void CreateCurve              ();                                           ///< общая функция для создания кривой
+  void MouseEvent               ( QMouseEvent *event );                       ///< обработка клика мышкой
+  void StopCreateCurve          ();                                           ///< обработка клика мышкой
   void SetCheckableCurrentItem  ();
-  void ResizeEvent              ( QResizeEvent *event ); ///< обработка изменения размера окна
+  void ResizeEvent              ( QResizeEvent *event );                    ///< обработка изменения размера окна
   void StateExpect              ( QMouseEvent *event );
-  void ChangeColor              ( QColor color ); ///< обработка изменения цвета кривой
-  void DeleteCurve(); ///< обработка удаления кривой
+  void ChangeColor              ( QColor color );                          ///< обработка изменения цвета кривой
+  void DeleteCurve();                                                      ///< обработка удаления кривой
+  void CreateEmptySeries();
+  void ClearScreen();
 
 };
 

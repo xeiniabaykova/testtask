@@ -191,7 +191,6 @@ void MainWindowHandler::StopCreateCurve()
 {
   if ( state == StateCreatePolyline )
   {
-
     CreateCurve();
     points.clear();
   }
@@ -212,15 +211,17 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
   if( event->buttons() == Qt::RightButton )
     return;
 
+
   QRect rec = QApplication::desktop()->screenGeometry();
   double height = rec.height();
   double width = rec.width();
   chart->resize( width, height );
-
+  CreateEmptySeries();
   if ( state == StateCreateCurve  || state == StateCreatePolyline)
   {
-    QPointF currentPoint = chart->mapToValue( event->pos() );
+    QPointF currentPoint = chart->mapToValue( QPointF(event->x(), event->y()) );
     AddPointFromScreen( Point(currentPoint.x(), currentPoint.y()) );
+    printChart.AddReferencedPoint( Point(currentPoint.x(), currentPoint.y()) );
     if ( IsSufficientNum() )
     {
       CreateCurve();
@@ -248,7 +249,12 @@ void MainWindowHandler::StateExpect( QMouseEvent *event )
   int selectSeries = selector.GetCurve( Point (currentPoint.x(), currentPoint.y()) );
 
   if ( selectSeries != -1 ) {
-    isSelected.push_back( selectSeries );
+    auto it = std::find (isSelected.begin(), isSelected.end(), selectSeries );
+      if (it != isSelected.end())
+        isSelected.erase( it );
+      else
+        isSelected.push_back( selectSeries );
+
     chart->removeAllSeries();
 
     for ( int i = 0; i < displayedCurves.size(); i++ )
@@ -258,14 +264,6 @@ void MainWindowHandler::StateExpect( QMouseEvent *event )
       else
         printChart.AddFigure( displayedCurves[i], currentColor );
     }
-  }
-
-  if ( selectSeries == -1 )
-  {
-    chart->removeAllSeries();
-    for ( int j = 0; j < displayedCurves.size(); j++ )
-      printChart.AddFigure( displayedCurves[j], selectingColor );
-    isSelected.clear();
   }
   state = StateExpectAction;
 }
@@ -319,8 +317,45 @@ void MainWindowHandler::ResizeEvent( QResizeEvent *event )
   chart->resize( width, height );
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+  функции обработки события создания полилнии
+*/
+//-----------------------------------------------------------------------------
 void MainWindowHandler::CreatePolyline()
 {
   state = StateCreatePolyline;
   geomCreator.creator = new GeomPolylineCreator();
+  geomCreator.numExpectedPoits = -1;
+}
+
+
+
+//-----------------------------------------------------------------------------
+/**
+  КОСТЫЛЬ! для верной работы функции maptovalue
+*/
+//-----------------------------------------------------------------------------
+void MainWindowHandler::CreateEmptySeries()
+{
+  QLineSeries *series = new QLineSeries;
+  *series<<QPointF( 0, 0 )<<QPointF( 10, 10 );
+  series->setColor( QColor(255,255,255) );
+  chart->addSeries( series );
+}
+
+
+//-----------------------------------------------------------------------------
+/**
+   обработка события очистки экрана
+*/
+//-----------------------------------------------------------------------------
+void MainWindowHandler::ClearScreen()
+{
+   chart->removeAllSeries();
+   isSelected.clear();
+   displayedCurves.clear();
+   geomPolylines.clear();
+   state = StateExpectAction;
 }
