@@ -45,12 +45,12 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event)
     QMenu menu(this);
 
     stopCreateCurveAct = new QAction( tr("&stop create curve"), this );
-    stopCreateCurveAct->setShortcuts( QKeySequence::New );
+    //stopCreateCurveAct->setShortcuts( QKeySequence::New );
     stopCreateCurveAct->setStatusTip( tr("stop sreating curve") );
     connect( stopCreateCurveAct, &QAction::triggered, this, &MainWindow::OnStopCreateCurve );
 
     reColorAct = new QAction( tr("&change color curve"), this );
-    reColorAct->setShortcuts( QKeySequence::New );
+    //reColorAct->setShortcuts( QKeySequence::New );
     reColorAct->setStatusTip( tr("stop sreating curve") );
     connect( reColorAct, &QAction::triggered, this, &MainWindow::OnReColorCurve );
 
@@ -107,44 +107,44 @@ void MainWindow::CreateMenus()
 void MainWindow::CreateActions()
 {
   saveAct = new QAction( tr("&Save"), this );
-  saveAct->setShortcuts( QKeySequence::New );
+ // saveAct->setShortcuts( QKeySequence::New );
   saveAct->setStatusTip( tr("Save into file") );
   connect( saveAct, &QAction::triggered, this, &MainWindow::OnSaveFile );
 
   loadAct = new QAction ( tr("&Load"), this);
-  loadAct->setShortcuts( QKeySequence::New );
+//  loadAct->setShortcuts( QKeySequence::New );
   loadAct->setStatusTip( tr("Load from file") );
   connect( loadAct, &QAction::triggered, this, &MainWindow::OnLoadFile );
 
 
   createPointAct = new QAction ( tr("&Point"), this );
-  createPointAct->setShortcuts( QKeySequence::New );
+ // createPointAct->setShortcuts( QKeySequence::New );
   createPointAct->setStatusTip( tr("Creating point") );
   createPointAct->setShortcut(tr("CTRL+Q"));
   connect( createPointAct, &QAction::triggered, this, &MainWindow::OnCreatePoint );
 
   createLineAct = new QAction( tr("&Line"), this );
-  createLineAct->setShortcuts( QKeySequence::New );
+ // createLineAct->setShortcuts( QKeySequence::New );
   createLineAct->setStatusTip( tr("Creating line") );
   connect( createLineAct, &QAction::triggered, this, &MainWindow::OnCreateLine );
 
   createEllipseAct = new QAction( tr("&Ellipse"), this );
-  createEllipseAct->setShortcuts( QKeySequence::New );
+ // createEllipseAct->setShortcuts( QKeySequence::New );
   createEllipseAct->setStatusTip( tr("Creating circle") );
   connect( createEllipseAct, &QAction::triggered, this, &MainWindow::OnCreateEllipse );
 
   createPolylineAct = new QAction( tr("&Polyline"), this );
-  createPolylineAct->setShortcuts( QKeySequence::New );
+ // createPolylineAct->setShortcuts( QKeySequence::New );
   createPolylineAct->setStatusTip( tr("Creating circle") );
   connect( createPolylineAct, &QAction::triggered, this, &MainWindow::OnCreatePolyline );
 
   createNurbsAct = new QAction( tr("&Nurbs"), this );
-  createNurbsAct->setShortcuts( QKeySequence::New );
+ // createNurbsAct->setShortcuts( QKeySequence::New );
   createNurbsAct->setStatusTip( tr("Creating nurbs") );
   connect( createNurbsAct, &QAction::triggered, this, &MainWindow::OnCreateNurbs );
 
   createCircleAct = new QAction( tr("&Circle"), this );
-  createCircleAct->setShortcuts( QKeySequence::New );
+ // createCircleAct->setShortcuts( QKeySequence::New );
   createCircleAct->setStatusTip( tr("Creating Circle") );
   connect( createCircleAct, &QAction::triggered, this, &MainWindow::OnCreateCircle );
 
@@ -158,17 +158,17 @@ void MainWindow::CreateActions()
 
 
   deleteCurveAct = new QAction( tr("&DeleteCurve"), this );
-  deleteCurveAct->setShortcuts( QKeySequence::New );
+ // deleteCurveAct->setShortcuts( QKeySequence::New );
   deleteCurveAct->setStatusTip( tr("DeleteCurve") );
   connect( deleteCurveAct, &QAction::triggered, this, &MainWindow::OnDeleteCurve );
 
   findIntersectionAct = new QAction( tr("&Find Intersection"), this );
-  findIntersectionAct->setShortcuts( QKeySequence::New );
+ // findIntersectionAct->setShortcuts( QKeySequence::New );
   findIntersectionAct->setStatusTip( tr("Find Intersection") );
   connect( findIntersectionAct, &QAction::triggered, this, &MainWindow::OnFindIntersection );
 
   clearScreenAct = new QAction( tr("&Clear Screen"), this );
-  clearScreenAct->setShortcuts( QKeySequence::New );
+ // clearScreenAct->setShortcuts( QKeySequence::New );
   clearScreenAct->setStatusTip( tr("Clear Screen") );
   connect( clearScreenAct, &QAction::triggered, this, &MainWindow::OnClearScreen );
 }
