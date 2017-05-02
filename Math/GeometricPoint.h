@@ -1,3 +1,11 @@
+////////////////////////////////////////////////////////////////////////////////
+/**
+  \file
+  \brief \ru  точка в двумерном пространстве (возможно, больше не нужно)\~
+
+*/
+////////////////////////////////////////////////////////////////////////////////
+
 #ifndef GEOMETRICPOINT_H
 #define GEOMETRICPOINT_H
 #include <vector>
@@ -19,10 +27,10 @@ public:
   // \ru Создание точки по точке
   // ---
   GeometricPoint( Point point );
-  virtual Point GetPoint            ( double t ) const;                                           ///< заплатка для общности: возвращает точку
-  virtual Point GetDerivativePoint  ( double t ) const;                                           ///< заплатка для общности: возвращает точку
-  virtual Point Get2DerivativePoint ( double t ) const;                                           ///< заплатка для общности: возвращает точку
-  virtual Range GetRange            () const;                                                     ///< заплатка для общности: возвращает нулевую парамтризацию
+  virtual Point GetPoint            ( double t ) const;                                             ///< заплатка для общности: возвращает точку
+  virtual Point GetDerivativePoint  ( double t ) const;                                             ///< заплатка для общности: возвращает точку
+  virtual Point Get2DerivativePoint ( double t ) const;                                             ///< заплатка для общности: возвращает точку
+  virtual Range GetRange            () const;                                                       ///< заплатка для общности: возвращает нулевую парамтризацию
   virtual void  GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< возвращает полилинию для точки (это сама точка)
 };
 

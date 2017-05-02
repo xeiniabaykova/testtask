@@ -67,7 +67,7 @@ public:
 
 private:
   std::vector<Point>                           points;               ///< точки, полученные с экрана
-  QChart                                      * chart;               ///< объект для отрисовки графика
+  QChart                                      *chart;                ///< объект для отрисовки графика
   Creator                                      geomCreator;          ///< объект для создания геометрического примитива
   PrintFigure                                  printChart;           ///< объект для отображения геометрического примитива
   CurrentState                                 state;                ///< объект для хранения текущего состояния окна
