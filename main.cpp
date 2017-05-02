@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
   chartView->setRenderHint(QPainter::Antialiasing);
 
   w.setCentralWidget(chartView);
-  w.resize( 600, 800 );
+  w.resize( 600, 400 );
   w.show();
 
   return a.exec();

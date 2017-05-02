@@ -2,6 +2,7 @@
 #include "PointCreator.h"
 #include "LineCreator.h"
 #include "EllipseCreator.h"
+#include "Editor/CircleCreator.h"
 #include "FileIO.h"
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QDesktopWidget>
@@ -124,7 +125,7 @@ void MainWindowHandler::CreateCircle()
 {
   state = StateCreateCurve;
   geomCreator.numExpectedPoits = 2;
-//  GeomCreator.creator = new CircleCreator();
+  geomCreator.creator = new CircleCreator();
 }
 
 //-----------------------------------------------------------------------------
@@ -188,7 +189,14 @@ void MainWindowHandler::CreateCurve()
 
 void MainWindowHandler::StopCreateCurve()
 {
+  if ( state == StateCreatePolyline )
+  {
+
+    CreateCurve();
+    points.clear();
+  }
   state = StateExpectAction;
+
 }
 
 //-----------------------------------------------------------------------------
@@ -209,7 +217,7 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
   double width = rec.width();
   chart->resize( width, height );
 
-  if ( state == StateCreateCurve || state == StateCreatePolyline )
+  if ( state == StateCreateCurve  || state == StateCreatePolyline)
   {
     QPointF currentPoint = chart->mapToValue( event->pos() );
     AddPointFromScreen( Point(currentPoint.x(), currentPoint.y()) );
@@ -313,10 +321,6 @@ void MainWindowHandler::ResizeEvent( QResizeEvent *event )
 
 void MainWindowHandler::CreatePolyline()
 {
-  bool ok;
-  int i = QInputDialog::getInt( 0, ("Polyline Points"), ("amount of points"), 25, 0, 100, 1, &ok );
-  if (ok)
-    geomCreator.numExpectedPoits = i;
   state = StateCreatePolyline;
   geomCreator.creator = new GeomPolylineCreator();
 }
