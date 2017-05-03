@@ -24,6 +24,7 @@ private:
   double accuracy;                               ///< точность селектирования
 
 public:
+  CurveSelector() = default;
   CurveSelector( const std::vector<std::vector<Point>>& points );
   ~CurveSelector() = default;
 

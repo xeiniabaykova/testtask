@@ -18,15 +18,15 @@
 */
 //-----------------------------------------------------------------------------
 MainWindowHandler::MainWindowHandler (QChart * chart):
-  chart( chart ),
-  printChart( chart ),
-  points( 0 ),
-  selector( geomPolylines ),
-  geomCreator( 0, nullptr ),
-  state ( StateExpectAction ),
-  normalColor( 51, 0, 51 ),
-  selectedColor( 190, 0, 21 ),
-  accuracy( 0.001 )
+  chart         ( chart             ),
+  printChart    ( chart             ),
+  points        ( 0                 ),
+  selector      ( geomPolylines     ),
+  geomCreator   ( 0, nullptr        ),
+  state         ( StateExpectAction ),
+  normalColor   ( 51, 0, 51         ),
+  selectedColor ( 190, 0, 21        ),
+  accuracy      ( 0.001             )
 {
 }
 
@@ -124,6 +124,7 @@ void MainWindowHandler::CreateCircle()
   geomCreator.creator = new CircleCreator();
 }
 
+
 //-----------------------------------------------------------------------------
 /**
   \ru задается необходимое количество точек - 2
@@ -172,7 +173,7 @@ void MainWindowHandler::SaveFile()
 void MainWindowHandler::CreateCurve()
 {
   std::vector<Point> currentPoints;
-  std::shared_ptr<DisplayedCurve> curve = std::make_shared< DisplayedCurve>();
+  std::shared_ptr<DisplayedCurve> curve = std::make_shared<DisplayedCurve>();
 
   std::shared_ptr<GeometricPrimitive> primitive = geomCreator.creator->Create( points );
   curve->primitive = primitive;
@@ -204,7 +205,7 @@ void MainWindowHandler::StopCreateCurve()
 
 void MainWindowHandler::MouseEvent( QMouseEvent *event )
 {
-  if( event->buttons() == Qt::RightButton )
+  if ( event->buttons() == Qt::RightButton )
     return;
 
 
@@ -213,7 +214,7 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
   double width = rec.width();
   chart->resize( width, height );
   CreateEmptySeries();
-  if ( state == StateCreateCurve  || state == StateCreatePolyline)
+  if ( state == StateCreateCurve  || state == StateCreatePolyline )
   {
     QPointF currentPoint = chart->mapToValue( QPointF(event->x(), event->y() - 30) );
     AddPointFromScreen( Point(currentPoint.x(), currentPoint.y()) );
@@ -250,7 +251,7 @@ void MainWindowHandler::StateExpect( QMouseEvent *event )
     chart->removeAllSeries();
     for ( int i = 0; i < displayedCurves.size(); i++ )
     {
-      if (std::find (selectedIndexes.begin(), selectedIndexes.end(), i ) == selectedIndexes.end() )
+      if ( std::find(selectedIndexes.begin(), selectedIndexes.end(), i ) == selectedIndexes.end() )
         printChart.AddFigure( displayedCurves[i],  normalColor );
       else
         printChart.AddFigure( displayedCurves[i], selectedColor );
@@ -261,8 +262,8 @@ void MainWindowHandler::StateExpect( QMouseEvent *event )
 
 void MainWindowHandler::DoubleSelectionRemoved( int indexSelectedCurve )
 {
-  auto it = std::find (selectedIndexes.begin(), selectedIndexes.end(), indexSelectedCurve );
-    if (it != selectedIndexes.end())
+  auto it = std::find( selectedIndexes.begin(), selectedIndexes.end(), indexSelectedCurve );
+    if ( it != selectedIndexes.end() )
       selectedIndexes.erase( it );
     else
       selectedIndexes.push_back( indexSelectedCurve );

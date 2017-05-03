@@ -34,18 +34,20 @@ private:
   NurbsCurve& NurbsCurve::operator=( NurbsCurve &obj ) = delete;
 public:
   NurbsCurve() = delete;
-  //-------------------------------------------------------------------------------
-  // \ru создание Nurbs - кривой по опорным точкам, весам, узлам и замкнутости
-  // ---
-  NurbsCurve (const std::vector<Point>& poles,
-              const std::vector<double>& weights,
-              const std::vector<int>& nodes,
-              bool isClosed);
+  /**  \brief \ru создать nurbs - кривую по опорным точкам, весам, опорным точкам и замкнутости
+    \param[in] points - опорные точки .\~
+    \param[in] referencePoints - \ru опорные точки .\~
+    \param[in] weights - \ru веса .\~
+     \param[in] isClosed - \ru замкнутость .\~
+  */
+  //---
+  NurbsCurve ( const std::vector<Point>& poles, const std::vector<double>& weights,
+               const std::vector<int>& nodes, bool isClosed );
 
-  virtual Point GetPoint            ( double t ) const;                                             ///< возвращает точку на кривой по параметру t
-  virtual Range GetRange            () const;                                                       ///< возвращает границы параметра
-  virtual Point GetDerivativePoint  ( double t ) const;                                             ///< возвращает производную по параметру t
-  virtual Point Get2DerivativePoint ( double t ) const;                                             ///< возвращает вторую производную по параметру t
+  virtual Point GetPoint            ( double t                                             ) const; ///< возвращает точку на кривой по параметру t                                            ///< возвращает границы параметра
+  virtual Point GetDerivativePoint  ( double t                                             ) const; ///< возвращает производную по параметру t
+  virtual Point Get2DerivativePoint ( double t                                             ) const; ///< возвращает вторую производную по параметру t
+  virtual Range GetRange            (                                                      ) const; ///< возвращает вторую производную по параметру t
   virtual void  GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< возвращает полилинию для Nurbs - кривой с точностью accuracy
   ~NurbsCurve() = delete;
 };

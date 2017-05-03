@@ -11,7 +11,9 @@
 Polyline::Polyline( const GeometricPrimitive* figure, double precision ):
   figure( figure ),
   precision( precision ),
-  displayedPoints(0) {}
+  displayedPoints(0)
+{
+}
 
 
 //-----------------------------------------------------------------------------
@@ -23,15 +25,15 @@ Polyline::Polyline( const GeometricPrimitive* figure, double precision ):
 //-----------------------------------------------------------------------------
 std::vector<Point> Polyline::GetPoints()
 {
-    // если не точка и не прямая, то применяем общий алгоритм
-    double t = figure->GetRange().GetStart();
-    while ( t < figure->GetRange().GetEnd() )
-    {
-      Point point ( figure->GetPoint(t) );
-      displayedPoints.push_back( point );
-      t += CountingStep( t );
-    }
-     return displayedPoints;
+  // если не точка и не прямая, то применяем общий алгоритм
+  double t = figure->GetRange().GetStart();
+  while ( t < figure->GetRange().GetEnd() )
+  {
+    Point point ( figure->GetPoint(t) );
+    displayedPoints.push_back( point );
+    t += CountingStep( t );
+  }
+   return displayedPoints;
 }
 
 //-----------------------------------------------------------------------------

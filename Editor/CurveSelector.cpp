@@ -46,8 +46,8 @@ double Distance( Point first, Point second, Point point )
 }
 
 CurveSelector::CurveSelector( const std::vector<std::vector<Point>>& points ):
-  points( points ),
-  accuracy( 0.1 )
+  points   ( points ),
+  accuracy ( 0.1 )
 {
 }
 
@@ -70,5 +70,5 @@ int CurveSelector::GetCurve( Point point )
        return i;
     }
   }
-return -1;
+  return -1;
 }

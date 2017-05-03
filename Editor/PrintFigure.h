@@ -36,10 +36,10 @@ private:
   PrintFigure& PrintFigure::operator=( PrintFigure &obj ) = delete;
 
 private:
-  QChart * chart;  ///< для отображения графика
-  QValueAxis     *axisX;
-  QValueAxis     *axisY;
-  QScatterSeries *seriesReferenced;
+  QChart         * chart;            ///< для отображения графика
+  QValueAxis     * axisX;            ///< ость х
+  QValueAxis     * axisY;            ///< ость y
+  QScatterSeries * seriesReferenced; ///< для отображения точек, выбранных пользователем
 
 public:
   void AddFigure( std::shared_ptr<DisplayedCurve> curve, QColor color = QColor (51, 0 , 51) );  ///< добавить новую кривую на график

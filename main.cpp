@@ -16,8 +16,8 @@ int main(int argc, char *argv[])
   QApplication a( argc, argv );
 
   QRect rec = QApplication::desktop()->screenGeometry();
-   double height = rec.height();
-   double width = rec.width();
+  double height = rec.height();
+  double width = rec.width();
 
   QChart *chart = new QChart();
   chart->setSizePolicy( QSizePolicy::Policy::Maximum,QSizePolicy::Policy::Maximum );
@@ -26,11 +26,11 @@ int main(int argc, char *argv[])
   w.CreateActions();
   w.CreateMenus();
 
-  QChartView *chartView = new QChartView(chart);
+  QChartView *chartView = new QChartView( chart );
 
-  chartView->setRenderHint(QPainter::Antialiasing);
+  chartView->setRenderHint( QPainter::Antialiasing );
 
-  w.setCentralWidget(chartView);
+  w.setCentralWidget( chartView );
   w.resize( 600, 400 );
   w.show();
 

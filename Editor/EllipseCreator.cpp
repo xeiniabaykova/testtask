@@ -15,9 +15,9 @@ std::shared_ptr<GeometricPrimitive> EllipseCreator::Create( const std::vector<Po
   double r2 = sqrt( (points[0].GetX() - points[2].GetX()) * (points[0].GetX() - points[2].GetX()) +
       (points[0].GetY() - points[2].GetY()) * (points[0].GetY() - points[2].GetY()) );
 
-    Point pointX(center.GetX(), points[1].GetY());
-    double a = sqrt((center.GetX() - pointV.GetX()) * (center.GetX() - pointV.GetX()) + (center.GetY() - pointV.GetY()) *(center.GetY() - pointV.GetY()));
-    double b = sqrt((center.GetX() - pointX.GetX()) * (center.GetX() - pointX.GetX()) + (center.GetY() - pointX.GetY()) *(center.GetY() - pointX.GetY()));
+    Point pointX( center.GetX(), points[1].GetY() );
+    double a = sqrt( (center.GetX() - pointV.GetX()) * (center.GetX() - pointV.GetX()) + (center.GetY() - pointV.GetY()) *(center.GetY() - pointV.GetY()) );
+    double b = sqrt( (center.GetX() - pointX.GetX()) * (center.GetX() - pointX.GetX()) + (center.GetY() - pointX.GetY()) *(center.GetY() - pointX.GetY()) );
     double ab = center.GetX()* center.GetX() + center.GetY() * center.GetY() + pointV.GetX() * pointX.GetX() + pointV.GetY() * pointX.GetY();
     double alpha = acos( ab / a * b );
 

@@ -18,9 +18,6 @@
 class GeomPolylineCreator: public GeometricPrimitiveCreator {
 public:
   GeomPolylineCreator() = default;
-  //-------------------------------------------------------------------------------
-  // \ru создает линию по двум точкам: началу и концу
-  // ---  
  ~GeomPolylineCreator() = default;
 
 private:

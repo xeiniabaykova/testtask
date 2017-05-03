@@ -10,5 +10,5 @@ std::shared_ptr<GeometricPrimitive> LineCreator::Create( const std::vector<Point
 {
   Point startPoint( points[0] );
   Point endPoint( points[1]) ;
-  return std::make_shared <Line>( startPoint, endPoint );
+  return std::make_shared<Line>( startPoint, endPoint );
 }

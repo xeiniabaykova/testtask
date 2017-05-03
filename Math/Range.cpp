@@ -8,7 +8,9 @@
 //-----------------------------------------------------------------------------
 Range::Range( double start, double end ):
   start( start ),
-  end( end ){}
+  end  ( end   )
+{
+}
 
 
 //-----------------------------------------------------------------------------
@@ -16,7 +18,8 @@ Range::Range( double start, double end ):
   Конструктор копирования Point
 */
 //-----------------------------------------------------------------------------
-Range::Range(const Range& range) {
+Range::Range(const Range& range)
+{
   start = range.GetStart();
   end = range.GetEnd();
 }
@@ -27,7 +30,8 @@ Range::Range(const Range& range) {
   возращаем начало интервала
 */
 //-----------------------------------------------------------------------------
-double Range::GetStart() const {
+double Range::GetStart() const
+{
   return start;
 }
 
@@ -37,6 +41,7 @@ double Range::GetStart() const {
   возращаем конец интервала
 */
 //-----------------------------------------------------------------------------
-double Range::GetEnd() const {
+double Range::GetEnd() const
+{
   return end;
 }

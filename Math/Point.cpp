@@ -8,7 +8,9 @@
 //-----------------------------------------------------------------------------
 Point::Point( double x, double y ):
   x( x ),
-  y( y ){}
+  y( y )
+{
+}
 
 
 //-----------------------------------------------------------------------------
@@ -16,7 +18,8 @@ Point::Point( double x, double y ):
   Конструктор копирования Point
 */
 //-----------------------------------------------------------------------------
-Point::Point( const Point& point ) {
+Point::Point( const Point& point )
+{
   x = point.GetX();
   y = point.GetY();
 }
@@ -27,7 +30,8 @@ Point::Point( const Point& point ) {
   возращаем координату x
 */
 //-----------------------------------------------------------------------------
-double Point::GetX() const {
+double Point::GetX() const
+{
   return x;
 }
 
@@ -37,7 +41,8 @@ double Point::GetX() const {
   возращаем координату y
 */
 //-----------------------------------------------------------------------------
-double Point::GetY() const {
+double Point::GetY() const
+{
   return y;
 }
 

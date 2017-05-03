@@ -15,16 +15,23 @@
 */
 // ---
 class Range {
-private:
-  double start; // начало
-  double end; // конец
 public:
-  //-------------------------------------------------------------------------------
-  // \ru создание интервала по началу и концу
-  Range   ( double start, double end );
-  Range   (const Range& range);
-  double GetStart () const; // возвращает начало интервала
-  double GetEnd   () const; // возвращает конец интервала
+  Range() = default;
+  /**  \brief \ru создать интервал по началу и концу интервала
+    \param[in] start - начало интервала .\~
+    \param[in] end - конец интервала .\~
+  */
+  //---
+  Range( double start, double end );
+  Range(const Range& range);
+  ~Range() = default;
+private:
+  double start; ///< начало
+  double end; ///< конец
+
+public:
+  double GetStart () const; ///< получить конец интервала
+  double GetEnd   () const; ///< получить конец интервала
 };
 
 #endif // RANGE_H

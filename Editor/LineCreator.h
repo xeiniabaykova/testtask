@@ -21,16 +21,16 @@ public:
   ~LineCreator() = default;
 
 private:
-   LineCreator( const LineCreator &obj ) = delete;
-   LineCreator& LineCreator::operator=( LineCreator &obj ) = delete;
+  LineCreator( const LineCreator &obj ) = delete;
+  LineCreator& LineCreator::operator=( LineCreator &obj ) = delete;
 
 public:
-   /**  \brief \ru Получить отрезок прямой по массиву из точек.
-     \param[in] points - \ru Вектор из точек: points[0] - точка начала отрезка, points[1] - точка конца отрезка .\~
-     \return \ru Указатель на геометрическое представление отрезка геометрии.\~
-   */
-   //---
-   virtual std::shared_ptr<GeometricPrimitive> Create( const std::vector<Point>& points );
+  /**  \brief \ru Получить отрезок прямой по массиву из точек.
+   \param[in] points - \ru Вектор из точек: points[0] - точка начала отрезка, points[1] - точка конца отрезка .\~
+   \return \ru Указатель на геометрическое представление отрезка геометрии.\~
+  */
+  //---
+  virtual std::shared_ptr<GeometricPrimitive> Create( const std::vector<Point>& points );
 
 };
 
