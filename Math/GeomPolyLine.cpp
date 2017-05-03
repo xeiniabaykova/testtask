@@ -6,7 +6,9 @@
 */
 //-----------------------------------------------------------------------------
 GeomPolyline::GeomPolyline(const std::vector<Point>& referensedPoits ):
-  referencedPoints( referensedPoits ){}
+  referencedPoints( referensedPoits )
+{
+}
 
 
 //-----------------------------------------------------------------------------
@@ -27,7 +29,6 @@ Range GeomPolyline::GetRange() const
 //-----------------------------------------------------------------------------
 Point GeomPolyline::GetPoint( double t ) const
 {
-  int number = t;
   Point startPoint( referencedPoints[t] );
   Point derection( referencedPoints[t+1].GetX() - referencedPoints[t].GetX(),
       referencedPoints[t+1].GetY() - referencedPoints[t].GetY() );
@@ -42,8 +43,6 @@ Point GeomPolyline::GetPoint( double t ) const
 //-----------------------------------------------------------------------------
 Point GeomPolyline::GetDerivativePoint( double t ) const
 {
-  (void)t;
-  int number = t;
   Point direction( referencedPoints[t+1].GetX() - referencedPoints[t].GetX(),
       referencedPoints[t+1].GetY() - referencedPoints[t].GetY() );
   return direction;

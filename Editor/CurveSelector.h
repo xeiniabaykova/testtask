@@ -1,3 +1,11 @@
+////////////////////////////////////////////////////////////////////////////////
+/**
+  \file
+  \brief \ru  селектор полилиний по признаку близости к точке\~
+
+*/
+////////////////////////////////////////////////////////////////////////////////
+
 #ifndef CURVESELECTOR_H
 #define CURVESELECTOR_H
 
@@ -5,16 +13,33 @@
 #include <vector>
 
 //------------------------------------------------------------------------------
-/** \brief \ru Класс для создания селектирования кривых, отображенных на экране. \~
+/** \brief \ru Селектирование кривых, отображенных на экране:
+  расчитывается расстояние от входной точки до каждой из полилиний \~
 */
 // ---
 class CurveSelector
 {
 private:
-  const std::vector<std::vector<Point>>& points;
+  const std::vector<std::vector<Point>>& points; ///< полилинии экранных кривых
+  double accuracy;                               ///< точность селектирования
+
 public:
+  CurveSelector() = default;
   CurveSelector( const std::vector<std::vector<Point>>& points );
-  int GetCurve( Point point ); ///< отдает номер series в chart, у которой расстояние меньше допустимого
+  ~CurveSelector() = default;
+
+private:
+  CurveSelector( const CurveSelector &obj ) = delete;
+  CurveSelector& CurveSelector::operator=( CurveSelector &obj ) = delete;
+
+public:
+  /**  \brief \ru  получить номер кривой, расстояние от которой до point меньше допустимого.
+    \param[in] point - \ru точка, до которой считается расстояние.
+      \return \ru номер кривой, расстояние до которой меньше допустимого. Если такой кривой нет, возвращается -1\~
+  */
+  //---
+  int GetCurve( Point point ) const;
+
 };
 
 #endif // CURVESELECTOR_H

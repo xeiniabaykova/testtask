@@ -7,9 +7,11 @@
 */
 //-----------------------------------------------------------------------------
 Line::Line( Point startPoint, Point endPoint ):
-  startPoint( startPoint ),
+  startPoint( startPoint                                                              ),
   direction( endPoint.GetX() - startPoint.GetX(), endPoint.GetY() - startPoint.GetY() )
-{}
+{
+}
+
 
 //-----------------------------------------------------------------------------
 /**

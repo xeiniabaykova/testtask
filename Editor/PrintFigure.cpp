@@ -9,26 +9,35 @@
 //-----------------------------------------------------------------------------
 /**
   \ru сохранение QChart
+  создаем оси: x[0,10]
+               y[0,10]
+   добавляем пустую серию ( для верной работы mapvalue)
+   легенды, подписи к графикам делаем невидимыми
+
 */
 //-----------------------------------------------------------------------------
 PrintFigure::PrintFigure( QChart * chart ):
   chart( chart ) {
   axisX = new QValueAxis;
   axisX->setRange( 0, 10 );
-  chart->addAxis(axisX, Qt::AlignBottom);
+  chart->addAxis( axisX, Qt::AlignBottom );
 
   axisY = new QValueAxis;
   axisY->setRange( 0, 10 );
-  chart->addAxis(axisY, Qt::AlignLeft);
+  chart->addAxis( axisY, Qt::AlignLeft );
   chart->legend()->setVisible(false);
+
   QLineSeries *series = new QLineSeries;
-  *series<<QPointF( 0, 0 )<<QPointF( 10, 10);
+  *series<< QPointF( 0, 0 ) << QPointF( 10, 10);
   series->setColor( QColor(255,255,255) );
   chart->addSeries( series );
+
   seriesReferenced = new QScatterSeries();
   chart->addSeries( seriesReferenced );
+
   seriesReferenced->attachAxis( axisX );
   seriesReferenced->attachAxis( axisY );
+
   chart->axisX()->setVisible( false );
   chart->axisY()->setVisible( false );
 }
@@ -50,20 +59,19 @@ void PrintFigure::AddFigure( std::shared_ptr<DisplayedCurve> curve, QColor color
   QScatterSeries *seriesRef = new QScatterSeries();
   seriesRef->setColor( color );
   std::vector<Point> polyPoints;
-  curve->primitive->GetAsPolyLine( polyPoints, 0.01 );
+  curve->GetPrimitive()->GetAsPolyLine( polyPoints, 0.01 );
 
   for ( int i = 0; i < polyPoints.size(); i++ )
     *currentseries <<QPointF( polyPoints[i].GetX(), polyPoints[i].GetY() );
 
-  for ( int i = 0; i < curve->referencedPoints.size(); i++ )
-    *seriesRef << QPointF( curve->referencedPoints[i].GetX(), curve->referencedPoints[i].GetY());
+  for ( int i = 0; i < curve->GetReferensedPoints().size(); i++ )
+    *seriesRef << QPointF( curve->GetReferensedPoints()[i].GetX(), curve->GetReferensedPoints()[i].GetY());
 
   seriesRef->setMarkerShape( QScatterSeries::MarkerShapeCircle );
   seriesRef->setMarkerSize( 15.0 );
   chart->addSeries( currentseries );
   chart->addSeries( seriesRef );
-  //seriesReferenced->clear();
-  // seriesReferenced = new QScatterSeries();
+
 
   currentseries->attachAxis( axisX );
   currentseries->attachAxis( axisY );
@@ -72,6 +80,11 @@ void PrintFigure::AddFigure( std::shared_ptr<DisplayedCurve> curve, QColor color
 }
 
 
+//-----------------------------------------------------------------------------
+/**
+  \ru добавляем точку, которую кликнул на экране пользователь
+*/
+//-----------------------------------------------------------------------------
 void PrintFigure::AddReferencedPoint( Point point, QColor color )
 {
   QScatterSeries *seriesRef = new QScatterSeries();

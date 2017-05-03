@@ -1,5 +1,14 @@
+////////////////////////////////////////////////////////////////////////////////
+/**
+  \file
+  \brief \ru рисователь отдельной кривой\~
+
+*/
+////////////////////////////////////////////////////////////////////////////////
+
 #ifndef PRINTFUGURE_H
 #define PRINTFUGURE_H
+
 #include "Math/Point.h"
 #include <QtCharts/QChart>
 #include <QtCharts/QXYSeries>
@@ -18,21 +27,23 @@ QT_CHARTS_USE_NAMESPACE
 // ---
 
 class PrintFigure {
+public:
+   PrintFigure( QChart * chart );
+  ~PrintFigure() = default;
 
 private:
-  QChart * chart;  ///< для отображения графика
-  QValueAxis     *axisX;
-  QValueAxis     *axisY;
-  QScatterSeries *seriesReferenced;
+  PrintFigure( const PrintFigure &obj ) = delete;
+  PrintFigure& PrintFigure::operator=( PrintFigure &obj ) = delete;
+
+private:
+  QChart         * chart;            ///< для отображения графика
+  QValueAxis     * axisX;            ///< ость х
+  QValueAxis     * axisY;            ///< ость y
+  QScatterSeries * seriesReferenced; ///< для отображения точек, выбранных пользователем
+
 public:
-  //-------------------------------------------------------------------------------
-  // \ru chart - на вход передается средство для отбражения графика
-  // ---
-  PrintFigure( QChart * chart );
-  //-------------------------------------------------------------------------------
-  // \ru на вход передается массив точек для отображения
-  // ---
-  void AddFigure( std::shared_ptr<DisplayedCurve> curve, QColor color = QColor (51, 0 , 51) );  ///< добавление новой кривой
-  void AddReferencedPoint( Point point, QColor color = QColor (51, 0 , 51) );
+  void AddFigure( std::shared_ptr<DisplayedCurve> curve, QColor color = QColor (51, 0 , 51) );  ///< добавить новую кривую на график
+  void AddReferencedPoint( Point point, QColor color = QColor (51, 0 , 51) );                   ///< добавить точку, выбранную пользователем на экране
+
 };
 #endif // PRINTFUGURE_H

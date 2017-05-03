@@ -12,27 +12,27 @@
 // \ru Конструктор MainWindow. Создается вспомогательный класс windowHandler  и форма MainWindow
 // ---
 MainWindow::MainWindow( QChart *chart, QWidget *parent ) :
-  windowHandler( chart ),
-  QMainWindow( parent ),
-  ui( new Ui::MainWindow ),
-  importExportMenu(0),
-  createCurveMenu(0),
-  optionsMenu(0),
-  screenMenu(0),
-  createPointAct(0),
-  createLineAct(0),
-  createEllipseAct(0),
-  createCircleAct(0),
-  createPolylineAct(0),
-  createNurbsAct(0),
-  stopCreateCurveAct(0),
-  findIntersectionAct(0),
-  deleteCurveAct(0),
-  saveAct(0),
-  loadAct(0),
-  clearScreenAct(0)
+  windowHandler       ( chart              ),
+  QMainWindow         ( parent             ),
+  ui                  ( new Ui::MainWindow ),
+  importExportMenu    ( 0                  ),
+  createCurveMenu     ( 0                  ),
+  optionsMenu         ( 0                  ),
+  screenMenu          ( 0                  ),
+  createPointAct      ( 0                  ),
+  createLineAct       ( 0                  ),
+  createEllipseAct    ( 0                  ),
+  createCircleAct     ( 0                  ),
+  createPolylineAct   ( 0                  ),
+  createNurbsAct      ( 0                  ),
+  stopCreateCurveAct  ( 0                  ),
+  findIntersectionAct ( 0                  ),
+  deleteCurveAct      ( 0                  ),
+  saveAct             ( 0                  ),
+  loadAct             ( 0                  ),
+  clearScreenAct      ( 0                  )
 {
-  ui->setupUi(this);
+  ui->setupUi( this );
 }
 
 MainWindow::~MainWindow()
@@ -40,9 +40,9 @@ MainWindow::~MainWindow()
   delete ui;
 }
 #ifndef QT_NO_CONTEXTMENU
-void MainWindow::contextMenuEvent(QContextMenuEvent *event)
+void MainWindow::contextMenuEvent( QContextMenuEvent *event )
 {
-    QMenu menu(this);
+    QMenu menu( this );
 
     stopCreateCurveAct = new QAction( tr("&stop create curve"), this );
     //stopCreateCurveAct->setShortcuts( QKeySequence::New );
@@ -59,9 +59,10 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event)
     menu.addAction( stopCreateCurveAct );
     menu.addAction( reColorAct );
     menu.addAction( deleteCurveAct );
-    menu.exec(event->globalPos());
+    menu.exec( event->globalPos() );
 }
 #endif // QT_NO_CONTEXTMENU
+
 //-----------------------------------------------------------------------------
 /**
     \ru создаются меню : "File" с подменю "Open" "Save",
@@ -153,7 +154,7 @@ void MainWindow::CreateActions()
   connect( createCircleAct, &QAction::triggered, this, &MainWindow::OnCreateCircle );
 
 
-  creatorCurves = new QActionGroup(this);
+  creatorCurves = new QActionGroup( this );
 //  creatorCurves->addAction( createPointAct );
 //  creatorCurves->addAction( createLineAct ) ;
 //  creatorCurves->addAction( createEllipseAct );
@@ -226,8 +227,8 @@ void MainWindow::OnCreatePoint()
 void MainWindow::OnCreateLine()
 {
   createLineAct->setCheckable( true );
-   createLineAct->setChecked( true );
-   windowHandler.CreateLine();
+  createLineAct->setChecked( true );
+  windowHandler.CreateLine();
 }
 
 
@@ -286,6 +287,7 @@ void MainWindow::OnStopCreateCurve()
   windowHandler.StopCreateCurve();
 }
 
+
 //-----------------------------------------------------------------------------
 /**
    \ru обработчик события пункта меню "find intersection"
@@ -330,6 +332,7 @@ void MainWindow::OnCreatePolyline()
   windowHandler.CreatePolyline();
 }
 
+
 //-----------------------------------------------------------------------------
 /**
    \ru обработчик события клика мышки
@@ -340,6 +343,7 @@ void MainWindow::mousePressEvent( QMouseEvent *event )
 {
   windowHandler.MouseEvent( event );
 }
+
 
 //-----------------------------------------------------------------------------
 /**
@@ -352,53 +356,61 @@ void MainWindow::OnReColorCurve()
   QDialog * d = new QDialog();
   QVBoxLayout * vbox = new QVBoxLayout();
 
-  QLabel* RLabel = new QLabel("&R:", this);
-  QLabel* GLabel = new QLabel("&G:", this);
-  QLabel* BLabel = new QLabel("&B:", this);
+  QLabel* RLabel = new QLabel( "&R:", this );
+  QLabel* GLabel = new QLabel( "&G:", this );
+  QLabel* BLabel = new QLabel( "&B:", this );
   QLineEdit * r = new QLineEdit();
   QLineEdit * g = new QLineEdit();
   QLineEdit * b = new QLineEdit();
-  QDialogButtonBox * buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
-                                                      | QDialogButtonBox::Cancel);
+  QDialogButtonBox * buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok| QDialogButtonBox::Cancel );
 
   QObject::connect( buttonBox, SIGNAL(accepted()), d, SLOT(accept()) );
   QObject::connect( buttonBox, SIGNAL(rejected()), d, SLOT(reject()) );
-  RLabel->setBuddy(r);
-  GLabel->setBuddy(g);
-  BLabel->setBuddy(b);
+  RLabel->setBuddy( r );
+  GLabel->setBuddy( g );
+  BLabel->setBuddy( b );
 
   vbox->addWidget( RLabel );
-  vbox->addWidget(r);
+  vbox->addWidget( r );
   vbox->addWidget( GLabel );
-  vbox->addWidget(g);
+  vbox->addWidget( g );
   vbox->addWidget( BLabel );
-  vbox->addWidget(b);
+  vbox->addWidget( b );
 
   vbox->addWidget( buttonBox );
 
-  d->setLayout(vbox);
+  d->setLayout( vbox );
 
   int result = d->exec();
 
   QColor newColor;
-  if(result == QDialog::Accepted)
+  if ( result == QDialog::Accepted )
   {
    newColor.setRed( r->text().toInt() );
    newColor.setGreen( g->text().toInt() );
    newColor.setBlue( b->text().toInt() );
-
   }
-  windowHandler.ChangeColor(newColor);
+  windowHandler.ChangeColor( newColor );
 }
 
-void MainWindow::resizeEvent(QResizeEvent *event)
-{
+//-----------------------------------------------------------------------------
+/**
+   \ru обработчик изменения размера окна
 
+*/
+//-----------------------------------------------------------------------------
+void MainWindow::resizeEvent( QResizeEvent *event )
+{
   windowHandler.ResizeEvent ( event );
 }
 
 
-void MainWindow::contextMenuRequested(const QPoint& point)
+//-----------------------------------------------------------------------------
+/**
+   \ru обработчик контекстного меню
+*/
+//-----------------------------------------------------------------------------
+void MainWindow::contextMenuRequested( const QPoint& point )
 {
-    contextMenu->popup(mapToGlobal(point));
+  contextMenu->popup( mapToGlobal(point) );
 }
