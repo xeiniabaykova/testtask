@@ -27,11 +27,12 @@ std::vector<Point> Polyline::GetPoints()
 {
   // если не точка и не прямая, то применяем общий алгоритм
   double t = figure->GetRange().GetStart();
-  while ( t < figure->GetRange().GetEnd() )
+  displayedPoints.push_back( figure->GetPoint(t) );
+  while ( t <= figure->GetRange().GetEnd() )
   {
+    t += CountingStep( t );
     Point point ( figure->GetPoint(t) );
     displayedPoints.push_back( point );
-    t += CountingStep( t );
   }
    return displayedPoints;
 }

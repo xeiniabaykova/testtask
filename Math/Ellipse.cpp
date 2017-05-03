@@ -9,10 +9,11 @@
   \ru Коструктор Ellipse. Вычисляются два радиуса и записывается центральная точка
 */
 //-----------------------------------------------------------------------------
-Ellipse::Ellipse( Point center, double r1, double r2 ):
+Ellipse::Ellipse( Point center, double r1, double r2,double alpha ):
   center( center ),
   r1    ( r1     ),
-  r2    ( r2     )
+  r2    ( r2     ),
+  alpha ( alpha  )
 {
 }
 
@@ -24,7 +25,10 @@ Ellipse::Ellipse( Point center, double r1, double r2 ):
 //-----------------------------------------------------------------------------
 Point Ellipse::GetPoint( double t ) const
 {
-  return Point( center.GetX() + r1 * sin(t), center.GetY() + r2 * cos(t) );
+   Point point( r1 * sin(t), r2 * cos(t) );
+   Point transformPoint( center.GetX() +point.GetX() * cos(alpha) + point.GetY() * sin(alpha),
+                        center.GetY() + point.GetX() * sin(alpha) + point.GetY() * cos(alpha) );
+   return transformPoint;
 }
 
 
@@ -48,7 +52,10 @@ Range Ellipse::GetRange() const
 //-----------------------------------------------------------------------------
 Point Ellipse::GetDerivativePoint( double t ) const
 {
-  return Point( r1 * cos(t), -r2 * sin(t) );
+  Point point( r1 * cos(t), -r2 * sin(t) );
+
+  return point;
+
 }
 
 
@@ -59,7 +66,8 @@ Point Ellipse::GetDerivativePoint( double t ) const
 //-----------------------------------------------------------------------------
 Point Ellipse::Get2DerivativePoint( double t ) const
 {
-  return Point( -r1 * sin(t), -r2 * cos(t) );
+  Point point( -r1 * sin(t), -r2 * cos(t) );
+  return point;
 }
 
 

@@ -25,6 +25,7 @@ private:
   Point center;  ///< центр
   double r1;     ///< первый радиус
   double r2;     ///< второй радиус
+  double alpha;  ///< угол между главной осью и осью х
 public:
   /**  \brief \ru создать эллипс по двум радиусам и центральной точке
     \param[in] center - центр эллипса .\~
@@ -32,7 +33,7 @@ public:
     \param[in] r2 - побочный радиус .\~
   */
   //---
-  Ellipse ( Point center, double r1, double r2 );
+  Ellipse ( Point center, double r1, double r2, double alpha );
   Ellipse () = delete;
   ~Ellipse() = default;
 
