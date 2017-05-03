@@ -26,7 +26,7 @@ public:
   ~PointCreator() = default;
 private:
   PointCreator( const PointCreator &obj ) = default;
-  PointCreator& PointCreator::operator=( PointCreator &obj ) = default;
+  PointCreator& operator=( PointCreator &obj ) = default;
 public:
   virtual std::shared_ptr<GeometricPrimitive> Create( const std::vector<Point>& points ) const;
 

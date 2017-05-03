@@ -29,7 +29,7 @@ public:
   }
 private:
   DisplayedCurve( const DisplayedCurve &obj ) = delete;
-  DisplayedCurve& DisplayedCurve::operator=( DisplayedCurve &obj ) = delete;
+  DisplayedCurve& operator=( DisplayedCurve &obj ) = delete;
 
 private:
   std::vector<Point>                  referencedPoints; ///< геометрический примитив

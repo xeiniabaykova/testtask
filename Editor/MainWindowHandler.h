@@ -37,7 +37,7 @@ public:
 
 private:
   MainWindowHandler( const MainWindowHandler &obj ) = delete;
-  MainWindowHandler& MainWindowHandler::operator=( MainWindowHandler &obj ) = delete;
+  MainWindowHandler& operator=( MainWindowHandler &obj ) = delete;
 public:
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   /** \brief \ru Вспомогательные данные. \~

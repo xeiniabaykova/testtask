@@ -36,7 +36,7 @@ public:
 
 private:
   Circle( const Circle &obj ) = delete;
-  Circle& Circle::operator=( Circle &obj ) = delete;
+  Circle& operator=( Circle &obj ) = delete;
 
 public:
   virtual Point GetPoint            ( double t                                             ) const; ///< вернуть точку на кривой по параметру t

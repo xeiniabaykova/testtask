@@ -23,7 +23,7 @@ public:
   virtual ~GeometricPrimitive  () = default;
 private:
   GeometricPrimitive( const GeometricPrimitive &obj ) = delete;
-  GeometricPrimitive& GeometricPrimitive::operator=( GeometricPrimitive &obj ) = delete;
+  GeometricPrimitive& operator=( GeometricPrimitive &obj ) = delete;
 public:
   virtual Point GetPoint            ( double t                                             ) const = 0; ///< вернуть точку на кривой по параметру t
   virtual Range GetRange            (                                                      ) const = 0; ///< вернуть допустимые границы параметра

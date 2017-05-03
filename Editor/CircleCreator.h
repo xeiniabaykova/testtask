@@ -25,7 +25,7 @@ public:
 
 private:
   CircleCreator( const CircleCreator &obj ) = delete;
-  CircleCreator& CircleCreator::operator=( CircleCreator &obj ) = delete;
+  CircleCreator& operator=( CircleCreator &obj ) = delete;
 
 public:
   /**  \brief \ru Получить окружность по массиву из точек.

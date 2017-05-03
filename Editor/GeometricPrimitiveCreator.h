@@ -28,7 +28,7 @@ public:
 
 private:
   GeometricPrimitiveCreator( const GeometricPrimitiveCreator &obj ) = delete;
-  GeometricPrimitiveCreator& GeometricPrimitiveCreator::operator=( GeometricPrimitiveCreator &obj ) = delete;
+  GeometricPrimitiveCreator& operator=( GeometricPrimitiveCreator &obj ) = delete;
 
 public:
   /**  \brief \ru Получить указатель на геометрический примитив по набору точек.

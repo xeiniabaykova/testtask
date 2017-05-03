@@ -38,7 +38,7 @@ public:
 
 private:
   Ellipse( const Ellipse &obj ) = delete;
-  Ellipse& Ellipse::operator=( Ellipse &obj ) = delete;
+  Ellipse& operator=( Ellipse &obj ) = delete;
 public:
   virtual Point GetPoint            ( double t                                             ) const; ///< вернуть точку на кривой по параметру t
   virtual Range GetRange            (                                                      ) const; ///< вернуть границы параметра для эллипса : [0, 2*pi]

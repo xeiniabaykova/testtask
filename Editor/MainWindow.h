@@ -34,7 +34,7 @@ public:
   ~MainWindow();
 private:
   MainWindow( const MainWindow &obj ) = delete;
-  MainWindow& MainWindow::operator=( MainWindow &obj ) = delete;
+  MainWindow& operator=( MainWindow &obj ) = delete;
 
 private:
   Ui::MainWindow    * ui;                   ///< \ru графический интерфейс главного окна

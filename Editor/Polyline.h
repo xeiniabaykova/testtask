@@ -33,7 +33,7 @@ public:
 
 private:
   Polyline( const Polyline &obj ) = delete;
-  Polyline& Polyline::operator= (Polyline &obj ) = delete;
+  Polyline& operator= (Polyline &obj ) = delete;
 
 private:
   std::vector<Point>          displayedPoints;  ///<  точки для отображения примитива

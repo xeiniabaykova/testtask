@@ -31,7 +31,7 @@ public:
   ~GeomPolyline() = default;
 private:
   GeomPolyline( const GeomPolyline &obj ) = delete;
-  GeomPolyline& GeomPolyline::operator=( GeomPolyline &obj ) = delete;
+  GeomPolyline& operator=( GeomPolyline &obj ) = delete;
 
 public:
   virtual Point GetPoint            ( double t                                             ) const; ///< вернуть точку по параметру t

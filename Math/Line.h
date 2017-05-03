@@ -33,7 +33,7 @@ public:
   ~Line() = default;
 private:
   Line( const Line &obj ) = delete;
-  Line& Line::operator=( Line &obj ) = delete;
+  Line& operator=( Line &obj ) = delete;
 public:
   virtual Point GetPoint            ( double t                                             ) const; ///< вернуть точку по параметру t
   virtual Point GetDerivativePoint  ( double t                                             ) const; ///< вернуть производную линнии по параметру t

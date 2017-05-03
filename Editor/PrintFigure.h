@@ -33,7 +33,7 @@ public:
 
 private:
   PrintFigure( const PrintFigure &obj ) = delete;
-  PrintFigure& PrintFigure::operator=( PrintFigure &obj ) = delete;
+  PrintFigure& operator=( PrintFigure &obj ) = delete;
 
 private:
   QChart         * chart;            ///< для отображения графика

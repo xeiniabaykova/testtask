@@ -25,7 +25,7 @@ public:
 
 private:
   FileIO( const FileIO &obj ) = delete;
-  FileIO& FileIO::operator=( FileIO &obj ) = delete;
+  FileIO& operator=( FileIO &obj ) = delete;
 
 public:
   void Open(); ///< \ru создается диалог открытия файла

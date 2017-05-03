@@ -23,7 +23,7 @@ public:
 
 private:
   EllipseCreator( const EllipseCreator &obj ) = delete;
-  EllipseCreator& EllipseCreator::operator=( EllipseCreator &obj ) = delete;
+  EllipseCreator& operator=( EllipseCreator &obj ) = delete;
 
 public:
   /**  \brief \ru Получить эллипс по массиву из точек.

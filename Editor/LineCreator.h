@@ -22,7 +22,7 @@ public:
 
 private:
   LineCreator( const LineCreator &obj ) = delete;
-  LineCreator& LineCreator::operator=( LineCreator &obj ) = delete;
+  LineCreator& operator=( LineCreator &obj ) = delete;
 
 public:
   /**  \brief \ru Получить отрезок прямой по массиву из точек.

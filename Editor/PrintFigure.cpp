@@ -16,8 +16,9 @@
 
 */
 //-----------------------------------------------------------------------------
-PrintFigure::PrintFigure( QChart * chart ):
-  chart( chart ) {
+PrintFigure::PrintFigure( QChart * chart )
+  : chart( chart )
+{
   axisX = new QValueAxis;
   axisX->setRange( 0, 10 );
   chart->addAxis( axisX, Qt::AlignBottom );

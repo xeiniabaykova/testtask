@@ -30,7 +30,7 @@ public:
 
 private:
   CurveSelector( const CurveSelector &obj ) = delete;
-  CurveSelector& CurveSelector::operator=( CurveSelector &obj ) = delete;
+  CurveSelector& operator=( CurveSelector &obj ) = delete;
 
 public:
   /**  \brief \ru  получить номер кривой, расстояние от которой до point меньше допустимого.

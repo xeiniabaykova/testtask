@@ -22,7 +22,7 @@ public:
 
 private:
   GeomPolylineCreator( const GeomPolylineCreator &obj ) = delete;
-  GeomPolylineCreator& GeomPolylineCreator::operator=( GeomPolylineCreator &obj ) = delete;
+  GeomPolylineCreator& operator=( GeomPolylineCreator &obj ) = delete;
 
 public:
   /**  \brief \ru Получить указатель на геометрическое представление полилинии по набору точек
