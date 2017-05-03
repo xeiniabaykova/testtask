@@ -7,7 +7,7 @@
   \ru создание геометрического представления точки
 */
 //-----------------------------------------------------------------------------
-std::shared_ptr<GeometricPrimitive> PointCreator::Create( const std::vector<Point>& points )
+std::shared_ptr<GeometricPrimitive> PointCreator::Create( const std::vector<Point>& points ) const
 {
   return std::make_shared<GeometricPoint> ( points[0] );
 }

@@ -59,7 +59,7 @@ void MainWindowHandler::AddSufficientNum ( int num )
 
 */
 //-----------------------------------------------------------------------------
-bool MainWindowHandler::IsSufficientNum()
+bool MainWindowHandler::IsSufficientNum() const
 {
   return ( points.size() == geomCreator.numExpectedPoits );
 }
@@ -176,8 +176,8 @@ void MainWindowHandler::CreateCurve()
   std::shared_ptr<DisplayedCurve> curve = std::make_shared<DisplayedCurve>();
 
   std::shared_ptr<GeometricPrimitive> primitive = geomCreator.creator->Create( points );
-  curve->primitive = primitive;
-  curve->referencedPoints = points;
+  curve->GetPrimitive() = primitive;
+  curve->GetReferensedPoints() = points;
   displayedCurves.push_back( curve );
   primitive->GetAsPolyLine( currentPoints, accuracy );
   geomPolylines.push_back( currentPoints );
@@ -207,6 +207,8 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
 {
   if ( event->buttons() == Qt::RightButton )
     return;
+  if ( event->buttons() == Qt::MiddleButton )
+    state = StopCreatePolyline;
 
 
   QRect rec = QApplication::desktop()->screenGeometry();
@@ -229,6 +231,13 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
     if ( state == StateExpectAction )
     {
       StateExpect ( event );
+    }
+  else
+    if (state == StopCreatePolyline)
+    {
+      CreateCurve();
+      points.clear();
+      CreatePolyline();
     }
 }
 
@@ -359,3 +368,6 @@ void MainWindowHandler::ClearScreen()
    geomPolylines.clear();
    state = StateExpectAction;
 }
+
+
+

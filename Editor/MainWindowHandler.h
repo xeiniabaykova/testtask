@@ -62,7 +62,8 @@ public:
     StateExpectAction,
     StateDeleteCurve,
     StateFindIntersecion,
-    StateCreatePolyline
+    StateCreatePolyline,
+    StopCreatePolyline
   };
 
 private:
@@ -82,7 +83,7 @@ private:
 public:
   void AddPointFromScreen     ( Point point );            ///< добавить точку с экрана в массив текущих точек
   void AddSufficientNum       ( int num );                ///< добавить необходимое для отрисовки кривой количество точек
-  bool IsSufficientNum        ();                         ///< проверить, достаточно ли текущее количество точек для создания и отображения выбранной кривой
+  bool IsSufficientNum        () const;                         ///< проверить, достаточно ли текущее количество точек для создания и отображения выбранной кривой
   void CreatePoint            ();                         ///< создать и отобразить точку
   void CreateLine             ();                         ///< создать и отобразить отрезок
   void CreateEllipse          ();                         ///< создать и отобразить эллипс

@@ -70,7 +70,8 @@ protected:
 #endif // QT_NO_CONTEXTMENU
 
 public:
-  void mousePressEvent    ( QMouseEvent *event );  /// \ru обработать событие клика мышкой
+  void mousePressEvent       ( QMouseEvent *event );  /// \ru обработать событие клика мышкой
+
   void resizeEvent        (QResizeEvent *event);   /// \ru обработчик события изменения размера экрана
   void CreateActions      ();                      /// \ru создать события
   void CreateMenus        ();                      /// \ru создать меню

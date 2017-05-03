@@ -60,7 +60,7 @@ CurveSelector::CurveSelector( const std::vector<std::vector<Point>>& points ):
   \ru если ни одна series не подошла, возвращаем -1
 */
 //-----------------------------------------------------------------------------
-int CurveSelector::GetCurve( Point point )
+int CurveSelector::GetCurve( Point point ) const
 {
   for ( int i = 0; i < points.size(); i++ )
   {

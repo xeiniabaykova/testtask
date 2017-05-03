@@ -29,7 +29,7 @@ public:
     \param[in] points - \ru вектор из точек, по которому вычисляется полилиния
     \return \ru Указатель на геометрическое представление полилинии.\~
   */
-   virtual std::shared_ptr<GeometricPrimitive> Create( const std::vector<Point>& points );
+   virtual std::shared_ptr<GeometricPrimitive> Create( const std::vector<Point>& points ) const;
 
 };
 

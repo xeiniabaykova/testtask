@@ -6,7 +6,7 @@
 //------------------------------------------------------------------------------
 // \ru создание линии по двум точкам: началу и концу
 // ---
-std::shared_ptr<GeometricPrimitive> LineCreator::Create( const std::vector<Point>& points )
+std::shared_ptr<GeometricPrimitive> LineCreator::Create( const std::vector<Point>& points ) const
 {
   Point startPoint( points[0] );
   Point endPoint( points[1]) ;

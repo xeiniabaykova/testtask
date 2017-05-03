@@ -33,7 +33,7 @@ public:
   */
   //---
   virtual std::shared_ptr<GeometricPrimitive> Create( const std::vector<Point>& referencePoints, const std::vector<double>& weights,
-                                                      const std::vector<int>& nodes, bool isClosed );
+                                                      const std::vector<int>& nodes, bool isClosed ) const;
 
 };
 

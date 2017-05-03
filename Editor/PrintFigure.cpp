@@ -59,13 +59,13 @@ void PrintFigure::AddFigure( std::shared_ptr<DisplayedCurve> curve, QColor color
   QScatterSeries *seriesRef = new QScatterSeries();
   seriesRef->setColor( color );
   std::vector<Point> polyPoints;
-  curve->primitive->GetAsPolyLine( polyPoints, 0.01 );
+  curve->GetPrimitive()->GetAsPolyLine( polyPoints, 0.01 );
 
   for ( int i = 0; i < polyPoints.size(); i++ )
     *currentseries <<QPointF( polyPoints[i].GetX(), polyPoints[i].GetY() );
 
-  for ( int i = 0; i < curve->referencedPoints.size(); i++ )
-    *seriesRef << QPointF( curve->referencedPoints[i].GetX(), curve->referencedPoints[i].GetY());
+  for ( int i = 0; i < curve->GetReferensedPoints().size(); i++ )
+    *seriesRef << QPointF( curve->GetReferensedPoints()[i].GetX(), curve->GetReferensedPoints()[i].GetY());
 
   seriesRef->setMarkerShape( QScatterSeries::MarkerShapeCircle );
   seriesRef->setMarkerSize( 15.0 );

@@ -38,7 +38,7 @@ public:
       \return \ru номер кривой, расстояние до которой меньше допустимого. Если такой кривой нет, возвращается -1\~
   */
   //---
-  int GetCurve( Point point );
+  int GetCurve( Point point ) const;
 
 };
 

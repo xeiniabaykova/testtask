@@ -22,20 +22,28 @@ struct DisplayedCurve
 public:
   DisplayedCurve() = default;
   ~DisplayedCurve() = default;
-
+  DisplayedCurve( std::vector<Point> referencedPoints, std::shared_ptr<GeometricPrimitive> primitive ):
+    referencedPoints ( referencedPoints ),
+    primitive        ( primitive        )
+  {
+  }
 private:
   DisplayedCurve( const DisplayedCurve &obj ) = delete;
   DisplayedCurve& DisplayedCurve::operator=( DisplayedCurve &obj ) = delete;
 
-public:
+private:
   std::vector<Point>                  referencedPoints; ///< геометрический примитив
   std::shared_ptr<GeometricPrimitive> primitive;        ///< опорные точки
-  DisplayedCurve( std::vector<Point> referencedPoints, std::shared_ptr<GeometricPrimitive> primitive ):
-    referencedPoints ( referencedPoints ),
-    primitive        ( primitive )
+ public:
+  std::vector<Point>&                  GetReferensedPoints() ///< получить опорные точки
   {
+    return referencedPoints;
   }
 
+  std::shared_ptr<GeometricPrimitive>& GetPrimitive()        ///< получить геометрический примитив
+  {
+    return primitive;
+  }
 };
 
 #endif // DISPLAYEDCURVE_H

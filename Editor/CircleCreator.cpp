@@ -5,7 +5,7 @@
 // \ru Создает окружность по центру и граничной точке:
 //  первая точка - центральная, вторая - на окружности
 // ---
-std::shared_ptr<GeometricPrimitive> CircleCreator::Create( const std::vector<Point>& points )
+std::shared_ptr<GeometricPrimitive> CircleCreator::Create( const std::vector<Point>& points ) const
 {
   Point center( points[0] );
   double r = sqrt( (points[0].GetX() - points[1].GetX()) * (points[0].GetX() - points[1].GetX()) +

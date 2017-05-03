@@ -41,9 +41,9 @@ private:
   double                      precision;        ///<  точность для создания полилинии
 
 private:
-  double             CountingStep ( double tCurrent ); /// \ru получить по текущему tCurrent шаг по кривой, удовлятворяющий хордовому отклонению  precision
+  double CountingStep ( double tCurrent ); /// \ru получить по текущему tCurrent шаг по кривой, удовлятворяющий хордовому отклонению  precision
 public:
-  std::vector<Point> GetPoints    ();                  ///<  получить точки полилинии
+  std::vector<Point> GetPoints();          ///<  получить точки полилинии
 
 };
 

@@ -405,6 +405,11 @@ void MainWindow::resizeEvent( QResizeEvent *event )
 }
 
 
+//-----------------------------------------------------------------------------
+/**
+   \ru обработчик контекстного меню
+*/
+//-----------------------------------------------------------------------------
 void MainWindow::contextMenuRequested( const QPoint& point )
 {
   contextMenu->popup( mapToGlobal(point) );

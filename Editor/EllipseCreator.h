@@ -32,7 +32,7 @@ public:
     \return \ru Указатель на базовый класс геометрии.\~
   */
   //---
-  virtual std::shared_ptr<GeometricPrimitive> Create( const std::vector<Point>& points );
+  virtual std::shared_ptr<GeometricPrimitive> Create( const std::vector<Point>& points ) const;
 };
 
 #endif // ELLIPSECREATOR_H
