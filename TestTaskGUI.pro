@@ -42,7 +42,8 @@ SOURCES += main.cpp\
     Math/GeomPolyLine.cpp \
     Editor/GeomPolylineCreator.cpp \
     Math/Circle.cpp \
-    Editor/CircleCreator.cpp
+    Editor/CircleCreator.cpp \
+    Editor/DisplayedCurve.cpp
 
 HEADERS  += Editor/MainWindow.h \
     Editor/FileIO.h \

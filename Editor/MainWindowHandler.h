@@ -72,11 +72,8 @@ private:
   Creator                                      geomCreator;     ///< объект для создания геометрического примитива
   PrintFigure                                  printChart;      ///< объект для отображения геометрического примитива
   CurrentState                                 state;           ///< объект для хранения текущего состояния окна
-  CurveSelector                                selector;        ///< объект для селектирования кривых, отображаемых на экране
-  std::vector<std::vector<Point>>              geomPolylines;   ///< полилиния для геометрии, отображенной на экране
-  std::vector<int>                             selectedIndexes; ///< индексы селектированных кривых
-  QColor                                       selectedColor;   ///< цвет, обозначающий селектированную кривую
-  QColor                                       normalColor;     ///< цвет неселктированной кривой
+ // QColor                                       selectedColor;   ///< цвет, обозначающий селектированную кривую
+ // QColor                                       normalColor;     ///< цвет неселктированной кривой
   double                                       accuracy;        ///< точность отображения создания полилинии
   std::vector<std::shared_ptr<DisplayedCurve>> displayedCurves; ///< набор графиков, отображенных на экране
 
@@ -101,7 +98,6 @@ public:
   void DeleteCurve            ();                         ///< обработать удаление кривой
   void CreateEmptySeries      ();                         ///< КОСТЫЛЬ! необходим для верной работы функции map to value
   void ClearScreen            ();                         ///< обработать очистку экрана
-  void DoubleSelectionRemoved ( int indexSelectedCurve ); ///< обработать случай повтоного клика на кривую
 
 };
 

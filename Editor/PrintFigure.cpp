@@ -67,7 +67,8 @@ void PrintFigure::AddFigure( std::shared_ptr<DisplayedCurve> curve, QColor color
 
   for ( int i = 0; i < curve->GetReferensedPoints().size(); i++ )
     *seriesRef << QPointF( curve->GetReferensedPoints()[i].GetX(), curve->GetReferensedPoints()[i].GetY());
-
+  curve->SetSeries(currentseries,seriesRef );
+  seriesReferenced->clear();
   seriesRef->setMarkerShape( QScatterSeries::MarkerShapeCircle );
   seriesRef->setMarkerSize( 15.0 );
   chart->addSeries( currentseries );
@@ -88,12 +89,11 @@ void PrintFigure::AddFigure( std::shared_ptr<DisplayedCurve> curve, QColor color
 //-----------------------------------------------------------------------------
 void PrintFigure::AddReferencedPoint( Point point, QColor color )
 {
-  QScatterSeries *seriesRef = new QScatterSeries();
-  seriesRef->setColor( color );
-  *seriesRef << QPointF( point.GetX(), point.GetY() );
-  seriesRef->setMarkerShape( QScatterSeries::MarkerShapeCircle );
-  seriesRef->setMarkerSize( 15.0 );
-  chart->addSeries( seriesRef );
-  seriesRef->attachAxis( axisX );
-  seriesRef->attachAxis( axisY );
+  seriesReferenced->setColor( color );
+  *seriesReferenced << QPointF( point.GetX(), point.GetY() );
+  seriesReferenced->setMarkerShape( QScatterSeries::MarkerShapeCircle );
+  seriesReferenced->setMarkerSize( 15.0 );
+ // chart->addSeries( seriesReferenced );
+ // seriesReferenced->attachAxis( axisX );
+ // seriesReferenced->attachAxis( axisY );
 }

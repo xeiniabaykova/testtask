@@ -21,11 +21,11 @@ MainWindowHandler::MainWindowHandler (QChart * chart):
   chart         ( chart             ),
   printChart    ( chart             ),
   points        ( 0                 ),
-  selector      ( geomPolylines     ),
+ // selector      (0 ),
   geomCreator   ( 0, nullptr        ),
   state         ( StateExpectAction ),
-  normalColor   ( 51, 0, 51         ),
-  selectedColor ( 190, 0, 21        ),
+ // normalColor   ( 51, 0, 51         ),
+ // selectedColor ( 190, 0, 21        ),
   accuracy      ( 0.001             )
 {
 }
@@ -173,14 +173,14 @@ void MainWindowHandler::SaveFile()
 void MainWindowHandler::CreateCurve()
 {
   std::vector<Point> currentPoints;
-  std::shared_ptr<DisplayedCurve> curve = std::make_shared<DisplayedCurve>();
+  std::shared_ptr<DisplayedCurve> curve = std::make_shared<DisplayedCurve>(chart);
 
   std::shared_ptr<GeometricPrimitive> primitive = geomCreator.creator->Create( points );
   curve->GetPrimitive() = primitive;
   curve->GetReferensedPoints() = points;
-  displayedCurves.push_back( curve );
   primitive->GetAsPolyLine( currentPoints, accuracy );
-  geomPolylines.push_back( currentPoints );
+  curve->GetPolyline() = currentPoints;
+  displayedCurves.push_back( curve );
   printChart.AddFigure( curve );
 }
 
@@ -252,32 +252,11 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
 void MainWindowHandler::StateExpect( QMouseEvent *event )
 {
   QPointF currentPoint = chart->mapToValue( QPointF(event->pos().x(), event->pos().y() - 30) );
-  int selectedSeries = selector.GetCurve( Point (currentPoint.x(), currentPoint.y()) );
-  // если selectedSeries == -1, то ни одна линия не селектированна
-  if ( selectedSeries != -1 )
-  {
-    DoubleSelectionRemoved( selectedSeries );
-    chart->removeAllSeries();
-    for ( int i = 0; i < displayedCurves.size(); i++ )
-    {
-      if ( std::find(selectedIndexes.begin(), selectedIndexes.end(), i ) == selectedIndexes.end() )
-        printChart.AddFigure( displayedCurves[i],  normalColor );
-      else
-        printChart.AddFigure( displayedCurves[i], selectedColor );
-    }
-  }
+  for ( int i = 0; i < displayedCurves.size(); i++ )
+    displayedCurves[i]->ModifySelectionStatus( Point(currentPoint.x(), currentPoint.y()) );
   state = StateExpectAction;
 }
 
-void MainWindowHandler::DoubleSelectionRemoved( int indexSelectedCurve )
-{
-  auto it = std::find( selectedIndexes.begin(), selectedIndexes.end(), indexSelectedCurve );
-    if ( it != selectedIndexes.end() )
-      selectedIndexes.erase( it );
-    else
-      selectedIndexes.push_back( indexSelectedCurve );
-
-}
 
 //-----------------------------------------------------------------------------
 /**
@@ -286,9 +265,9 @@ void MainWindowHandler::DoubleSelectionRemoved( int indexSelectedCurve )
 //-----------------------------------------------------------------------------
 void MainWindowHandler::ChangeColor( QColor color )
 {
-  for ( int i = 0; i < selectedIndexes.size(); i++ )
-   printChart.AddFigure( displayedCurves[selectedIndexes[i]], color );
-  selectedIndexes.clear();
+  for ( int i = 0; i < displayedCurves.size(); i++ )
+   if ( displayedCurves[i]->GetSelectionStatus() )
+     displayedCurves[i]->SetColor( color );
 }
 
 
@@ -299,17 +278,10 @@ void MainWindowHandler::ChangeColor( QColor color )
 //-----------------------------------------------------------------------------
 void MainWindowHandler::DeleteCurve()
 {
-  std::sort( selectedIndexes.begin(), selectedIndexes.end(), std::greater<int>() );
-  for ( int i = 0; i < selectedIndexes.size(); i++ )
-  {
-    displayedCurves.erase( displayedCurves.begin() + selectedIndexes[i] );
-    geomPolylines.erase( geomPolylines.begin() + selectedIndexes[i] );
-  }
-  chart->removeAllSeries();
   for ( int i = 0; i < displayedCurves.size(); i++ )
-    printChart.AddFigure( displayedCurves[i], normalColor );
+    if ( displayedCurves[i]->GetSelectionStatus() )
+       displayedCurves.erase( displayedCurves.begin() +i );
 
-  selectedIndexes.clear();
   state = StateExpectAction;
 }
 
@@ -363,9 +335,7 @@ void MainWindowHandler::CreateEmptySeries()
 void MainWindowHandler::ClearScreen()
 {
    chart->removeAllSeries();
-   selectedIndexes.clear();
    displayedCurves.clear();
-   geomPolylines.clear();
    state = StateExpectAction;
 }
 

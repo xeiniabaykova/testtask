@@ -45,6 +45,7 @@ public:
   virtual Point Get2DerivativePoint ( double t                                             ) const; ///< вернуть вторую производную на окружности по параметру t
   virtual void  GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< вернуть полилинию для эллипса
 
+
 };
 
 #endif // CIRCLE_H

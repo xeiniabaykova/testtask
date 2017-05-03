@@ -30,7 +30,6 @@ public:
   virtual Point GetDerivativePoint  ( double t                                             ) const = 0; ///< вернуть производную точки точки на кривой по параметру t
   virtual Point Get2DerivativePoint ( double t                                             ) const = 0; ///< вернуть вторую производную точки точки на кривой по параметру t
   virtual void  GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const = 0; ///< возвращает полилинию для геометрического примитива с точностью accuracy
-
 };
 
 #endif // GEOMETRICPRIMITIVE_H
