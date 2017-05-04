@@ -43,7 +43,8 @@ SOURCES += main.cpp\
     Editor/GeomPolylineCreator.cpp \
     Math/Circle.cpp \
     Editor/CircleCreator.cpp \
-    Editor/DisplayedCurve.cpp
+    Editor/DisplayedCurve.cpp \
+    Editor/CreatorHandler.cpp
 
 HEADERS  += Editor/MainWindow.h \
     Editor/FileIO.h \
@@ -69,7 +70,8 @@ HEADERS  += Editor/MainWindow.h \
     Editor/GeomPolylineCreator.h \
     Math/GeomPolyline.h \
     Math/Circle.h \
-    Editor/CircleCreator.h
+    Editor/CircleCreator.h \
+    Editor/CreatorHandler.h
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../Qt/5.8/msvc2015_64/lib/ -lQt5Charts

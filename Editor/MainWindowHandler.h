@@ -49,7 +49,7 @@ public:
     GeometricPrimitiveCreator * creator;
     Creator( int numExpectedPoits, GeometricPrimitiveCreator * creator )
       :numExpectedPoits ( numExpectedPoits ),
-      creator           ( creator ) {}
+       creator           ( creator ) {}
   };
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   /** \brief \ru Вспомогательные данные. \~
@@ -72,9 +72,6 @@ private:
   Creator                                      geomCreator;     ///< объект для создания геометрического примитива
   PrintFigure                                  printChart;      ///< объект для отображения геометрического примитива
   CurrentState                                 state;           ///< объект для хранения текущего состояния окна
- // QColor                                       selectedColor;   ///< цвет, обозначающий селектированную кривую
- // QColor                                       normalColor;     ///< цвет неселктированной кривой
-  double                                       accuracy;        ///< точность отображения создания полилинии
   std::vector<std::shared_ptr<DisplayedCurve>> displayedCurves; ///< набор графиков, отображенных на экране
 
 public:

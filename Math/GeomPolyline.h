@@ -38,7 +38,7 @@ public:
   virtual Point GetDerivativePoint  ( double t                                             ) const; ///< вернуть производную линнии по параметру t
   virtual Point Get2DerivativePoint ( double t                                             ) const; ///< вернуть вторую производную на линии по параметру t
   virtual Range GetRange            (                                                      ) const; ///< вернуть парметризацию  параметризация от [0, 1]
-  virtual void  GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< вернутьт полилинию для линии (это две точки - начало и конец)
+  virtual void  GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< вернуть полилинию для полилинии (это и есть сама полилиния)
 };
 
 #endif // GEOMPOLYLINE_H

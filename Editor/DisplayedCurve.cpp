@@ -46,30 +46,48 @@ double Distance( Point first, Point second, Point point )
 }
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+  \ru вернуть опорные точки кривой
+*/
+//-----------------------------------------------------------------------------
 std::vector<Point>& DisplayedCurve::GetReferensedPoints()
 {
  return referencedPoints;
 }
 
-std::vector<Point>& DisplayedCurve::GetPolyline()
+
+//-----------------------------------------------------------------------------
+/**
+  \ru вернуть отображаемую полилинию
+*/
+//-----------------------------------------------------------------------------
+const GeomPolyline& DisplayedCurve::GetPolyline() const
 {
   return polyline;
 }
 
-std::shared_ptr<GeometricPrimitive>& DisplayedCurve::GetPrimitive()
-{
- return primitive;
-}
 
+//-----------------------------------------------------------------------------
+/**
+  \ru вернуть текущее состояние селекции
+*/
+//-----------------------------------------------------------------------------
 bool DisplayedCurve::GetSelectionStatus()
 {
   return selected;
 }
 
-void DisplayedCurve::ModifySelectionStatus(Point cursor)
+
+//-----------------------------------------------------------------------------
+/**
+  \ru изменить состояние селекции в зависимости от полученной точки
+*/
+//-----------------------------------------------------------------------------
+void DisplayedCurve::ModifySelectionStatus( Point cursor )
 {
-  presision=0.1;
- if ( DistanceToPoint(cursor) < presision )
+ if ( DistanceToPoint(cursor) < precision )
    selected = !selected;
  if (selected)
    SetColor( selectedColor );
@@ -77,32 +95,61 @@ void DisplayedCurve::ModifySelectionStatus(Point cursor)
    SetColor( currentColor );
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+  \ru измерить расстояние от текущей точки до полилинии
+*/
+//-----------------------------------------------------------------------------
 double DisplayedCurve::DistanceToPoint( Point point )
 {
-  double maxDistance = std::numeric_limits<double>::max();
-  for ( int i = 1; i< polyline.size(); i++ )
+  double minDistance = std::numeric_limits<double>::max();
+  std::vector<Point> polylinePoints;
+  polyline.GetAsPolyLine( polylinePoints, precision );
+
+  for ( int i = 1; i< polylinePoints.size(); i++ )
   {
-    if ( Distance(polyline[i-1], polyline[i], point) < maxDistance  )
-      maxDistance = Distance( polyline[i-1], polyline[i], point );
+    if ( Distance(polylinePoints[i-1], polylinePoints[i], point) < minDistance  )
+      minDistance = Distance( polylinePoints[i-1], polylinePoints[i], point );
   }
-  return maxDistance;
+  return minDistance;
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+  \ru установить новый цвет для неселектированной кривой
+*/
+//-----------------------------------------------------------------------------
 void DisplayedCurve::SetColor( QColor color )
 {
   currentseries->setColor( color );
   seriesRef->setColor( color );
- // currentColor = color;
+  currentColor = color;
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+  \ru добавить series к кривой
+*/
+//-----------------------------------------------------------------------------
 void DisplayedCurve::SetSeries( QLineSeries *  current, QScatterSeries *ref )
 {
   currentseries = current;
   seriesRef = ref;
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+  \ru убрать series из графика
+*/
+//-----------------------------------------------------------------------------
  DisplayedCurve::~DisplayedCurve()
 {
   chart->removeSeries( currentseries );
   chart->removeSeries( seriesRef);
+  delete currentseries;
+  delete seriesRef;
 }

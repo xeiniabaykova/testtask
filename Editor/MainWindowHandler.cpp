@@ -21,12 +21,8 @@ MainWindowHandler::MainWindowHandler (QChart * chart):
   chart         ( chart             ),
   printChart    ( chart             ),
   points        ( 0                 ),
- // selector      (0 ),
   geomCreator   ( 0, nullptr        ),
-  state         ( StateExpectAction ),
- // normalColor   ( 51, 0, 51         ),
- // selectedColor ( 190, 0, 21        ),
-  accuracy      ( 0.001             )
+  state         ( StateExpectAction )
 {
 }
 
@@ -172,14 +168,11 @@ void MainWindowHandler::SaveFile()
 //-----------------------------------------------------------------------------
 void MainWindowHandler::CreateCurve()
 {
+  double accuracy = 0.01;
   std::vector<Point> currentPoints;
-  std::shared_ptr<DisplayedCurve> curve = std::make_shared<DisplayedCurve>(chart);
-
   std::shared_ptr<GeometricPrimitive> primitive = geomCreator.creator->Create( points );
-  curve->GetPrimitive() = primitive;
-  curve->GetReferensedPoints() = points;
   primitive->GetAsPolyLine( currentPoints, accuracy );
-  curve->GetPolyline() = currentPoints;
+  std::shared_ptr<DisplayedCurve> curve = std::make_shared<DisplayedCurve>( chart, points, currentPoints );
   displayedCurves.push_back( curve );
   printChart.AddFigure( curve );
 }
