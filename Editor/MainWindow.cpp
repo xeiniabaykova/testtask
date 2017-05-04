@@ -131,7 +131,7 @@ void MainWindow::CreateActions()
   connect( createLineAct, &QAction::triggered, this, &MainWindow::OnCreateLine );
 
   createEllipseAct = new QAction( tr("&Ellipse"), this );
- // createEllipseAct->setDisabled( true );
+  createEllipseAct->setDisabled( true );
  // createEllipseAct->setShortcuts( QKeySequence::New );
   createEllipseAct->setStatusTip( tr("Creating circle") );
   connect( createEllipseAct, &QAction::triggered, this, &MainWindow::OnCreateEllipse );
