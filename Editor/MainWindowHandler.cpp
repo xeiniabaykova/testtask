@@ -268,9 +268,9 @@ void MainWindowHandler::CreateEmptySeries()
 */
 //-----------------------------------------------------------------------------
 void MainWindowHandler::ClearScreen()
-{
-   chart->removeAllSeries();
+{ 
    displayedCurves.clear();
+  // chart->removeAllSeries();
    state = StateExpectAction;
 }
 
