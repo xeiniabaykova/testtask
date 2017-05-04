@@ -26,8 +26,8 @@ Ellipse::Ellipse( Point center, double r1, double r2,double alpha ):
 Point Ellipse::GetPoint( double t ) const
 {
    Point point( r1 * sin(t), r2 * cos(t) );
-   Point transformPoint( center.GetX() +point.GetX() * cos(alpha) + point.GetY() * sin(alpha),
-                        center.GetY() + point.GetX() * sin(alpha) + point.GetY() * cos(alpha) );
+   Point transformPoint( center.GetX() + point.GetX() * cos(alpha) - point.GetY() * sin(alpha),
+                        center.GetY() - point.GetX() * sin(alpha)   + point.GetY() * cos(alpha) );
    return transformPoint;
 }
 
