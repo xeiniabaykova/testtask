@@ -26,8 +26,8 @@ public:
   }
 
 private:
-  CreatorHandler( const CircleCreator &obj ) = delete;
-  CreatorHandler& operator=( CircleCreator &obj ) = delete;
+  CreatorHandler( const CreatorHandler &obj ) = delete;
+  CreatorHandler& operator=( CreatorHandler &obj ) = delete;
 
   int                         numExpectedPoits; ///< количество точек, необходимых для создания геометрического примитива
   GeometricPrimitiveCreator * creator;          ///< создатель геометрического примитива
