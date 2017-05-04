@@ -214,7 +214,7 @@ void MainWindow::OnCreatePoint()
 {
   createPointAct->setCheckable( true );
   createPointAct->setChecked( true );
-  windowHandler.CreatePoint();
+  //windowHandler.CreatePoint();
 }
 
 

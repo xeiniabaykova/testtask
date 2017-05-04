@@ -20,74 +20,15 @@
 MainWindowHandler::MainWindowHandler (QChart * chart):
   chart         ( chart             ),
   printChart    ( chart             ),
-  points        ( 0                 ),
-  geomCreator   ( 0, nullptr        ),
   state         ( StateExpectAction )
 {
 }
 
-
-//-----------------------------------------------------------------------------
-/**
-  \ru добавление точки с экрана в массив точек
-*/
-//-----------------------------------------------------------------------------
-void MainWindowHandler::AddPointFromScreen( Point point )
-{
-  points.push_back( point );
-}
-
-
-//-----------------------------------------------------------------------------
-/**
- \ru  возвращает количество точек, необходимое для отрисовки текущего геометрического примитива
-*/
-//-----------------------------------------------------------------------------
-void MainWindowHandler::AddSufficientNum ( int num )
-{
-  geomCreator.numExpectedPoits = num;
-}
-
-
-//-----------------------------------------------------------------------------
-/**
-   \ru проверка, достаточно точек на экране выбрано для построения кривой
-
-*/
-//-----------------------------------------------------------------------------
-bool MainWindowHandler::IsSufficientNum() const
-{
-  return ( points.size() == geomCreator.numExpectedPoits );
-}
-
-
-//-----------------------------------------------------------------------------
-/**
-  \ru задается необходимое количество точек - 1
-  \ru ruсоздается объект для создания геометрического представления точки
-
-*/
-//-----------------------------------------------------------------------------
-void MainWindowHandler::CreatePoint()
-{
-  state = StateCreateCurve;
-  geomCreator.numExpectedPoits = 1;
- // geomCreator.creator = new PointCreator();
-}
-
-
-//-----------------------------------------------------------------------------
-/**
-  \ru задается необходимое количество точек - 2
-  \ru создается объект для создания геометрического представления линии
-
-*/
-//-----------------------------------------------------------------------------
 void MainWindowHandler::CreateLine()
 {
   state = StateCreateCurve;
-  geomCreator.numExpectedPoits = 2;
-  geomCreator.creator = new LineCreator();
+  GeometricPrimitiveCreator * creator = new LineCreator();
+  geomCreator = new CreatorHandler( 2, creator );
 }
 
 
@@ -101,8 +42,8 @@ void MainWindowHandler::CreateLine()
 void MainWindowHandler::CreateEllipse()
 {
   state = StateCreateCurve;
-  geomCreator.numExpectedPoits = 3;
-  geomCreator.creator = new EllipseCreator();
+  GeometricPrimitiveCreator * creator = new EllipseCreator();
+  geomCreator = new CreatorHandler( 3, creator );
 }
 
 
@@ -116,8 +57,8 @@ void MainWindowHandler::CreateEllipse()
 void MainWindowHandler::CreateCircle()
 {
   state = StateCreateCurve;
-  geomCreator.numExpectedPoits = 2;
-  geomCreator.creator = new CircleCreator();
+  GeometricPrimitiveCreator * creator = new CircleCreator();
+  geomCreator = new CreatorHandler( 2, creator );
 }
 
 
@@ -169,10 +110,11 @@ void MainWindowHandler::SaveFile()
 void MainWindowHandler::CreateCurve()
 {
   double accuracy = 0.01;
-  std::vector<Point> currentPoints;
-  std::shared_ptr<GeometricPrimitive> primitive = geomCreator.creator->Create( points );
-  primitive->GetAsPolyLine( currentPoints, accuracy );
-  std::shared_ptr<DisplayedCurve> curve = std::make_shared<DisplayedCurve>( chart, points, currentPoints );
+  std::vector<Point> currentPolylinePoints;
+  std::shared_ptr<GeometricPrimitive> primitive = geomCreator->Create();
+  primitive->GetAsPolyLine( currentPolylinePoints, accuracy );
+  std::vector<Point> currentRefPoints = geomCreator->RefPoints();
+  std::shared_ptr<DisplayedCurve> curve = std::make_shared<DisplayedCurve>( chart, currentRefPoints, currentPolylinePoints );
   displayedCurves.push_back( curve );
   printChart.AddFigure( curve );
 }
@@ -182,7 +124,7 @@ void MainWindowHandler::StopCreateCurve()
   if ( state == StateCreatePolyline )
   {
     CreateCurve();
-    points.clear();
+    delete geomCreator;
   }
   state = StateExpectAction;
 
@@ -212,12 +154,12 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
   if ( state == StateCreateCurve  || state == StateCreatePolyline )
   {
     QPointF currentPoint = chart->mapToValue( QPointF(event->x(), event->y() - 30) );
-    AddPointFromScreen( Point(currentPoint.x(), currentPoint.y()) );
+    geomCreator->AddPointFromScreen( Point(currentPoint.x(), currentPoint.y()) );
     printChart.AddReferencedPoint( Point(currentPoint.x(), currentPoint.y()) );
-    if ( IsSufficientNum() )
+    if ( geomCreator->IsSufficientNum() )
     {
       CreateCurve();
-      points.clear();
+      geomCreator->ClearPoints();
     }
   }
   else
@@ -229,7 +171,7 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
     if (state == StopCreatePolyline)
     {
       CreateCurve();
-      points.clear();
+      geomCreator->ClearPoints();
       CreatePolyline();
     }
 }
@@ -260,7 +202,7 @@ void MainWindowHandler::ChangeColor( QColor color )
 {
   for ( int i = 0; i < displayedCurves.size(); i++ )
    if ( displayedCurves[i]->GetSelectionStatus() )
-     displayedCurves[i]->SetColor( color );
+     displayedCurves[i]->SetColorUnselectedCurve( color );
 }
 
 
@@ -301,8 +243,8 @@ void MainWindowHandler::ResizeEvent( QResizeEvent *event )
 void MainWindowHandler::CreatePolyline()
 {
   state = StateCreatePolyline;
-  geomCreator.creator = new GeomPolylineCreator();
-  geomCreator.numExpectedPoits = -1;
+  GeometricPrimitiveCreator * creator = new GeomPolylineCreator();
+  geomCreator = new CreatorHandler( -1, creator );
 }
 
 

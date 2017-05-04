@@ -19,6 +19,7 @@
 #include "Polyline.h"
 #include "PrintFigure.h"
 #include <Editor/DisplayedCurve.h>
+#include <Editor/CreatorHandler.h>
 #include <memory>
 
 
@@ -41,18 +42,6 @@ private:
 public:
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   /** \brief \ru Вспомогательные данные. \~
-      \details \ru Количество точек, необходимых для отрисовки текущей кривой, обьект, отрисовывающий текущую кривую \~
-    */
-  // ---
-  struct Creator {
-    int                         numExpectedPoits;
-    GeometricPrimitiveCreator * creator;
-    Creator( int numExpectedPoits, GeometricPrimitiveCreator * creator )
-      :numExpectedPoits ( numExpectedPoits ),
-       creator           ( creator ) {}
-  };
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  /** \brief \ru Вспомогательные данные. \~
       \details \ru текущее состояние приложения: создание, удаление кривой, нахождение пересечения \~
     */
   // ---
@@ -67,18 +56,15 @@ public:
   };
 
 private:
-  std::vector<Point>                           points;          ///< точки, полученные с экрана
-  QChart                                      *chart;           ///< объект для отрисовки графика
-  Creator                                      geomCreator;     ///< объект для создания геометрического примитива
+
+  QChart                                     * chart;           ///< объект для отрисовки графика
+  CreatorHandler                             * geomCreator;     ///< объект для создания геометрического примитива
   PrintFigure                                  printChart;      ///< объект для отображения геометрического примитива
   CurrentState                                 state;           ///< объект для хранения текущего состояния окна
   std::vector<std::shared_ptr<DisplayedCurve>> displayedCurves; ///< набор графиков, отображенных на экране
 
 public:
-  void AddPointFromScreen     ( Point point );            ///< добавить точку с экрана в массив текущих точек
-  void AddSufficientNum       ( int num );                ///< добавить необходимое для отрисовки кривой количество точек
-  bool IsSufficientNum        () const;                         ///< проверить, достаточно ли текущее количество точек для создания и отображения выбранной кривой
-  void CreatePoint            ();                         ///< создать и отобразить точку
+ // void CreatePoint            ();                         ///< создать и отобразить точку
   void CreateLine             ();                         ///< создать и отобразить отрезок
   void CreateEllipse          ();                         ///< создать и отобразить эллипс
   void CreateCircle           ();                         ///< создать и отобразить окружность

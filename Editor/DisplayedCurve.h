@@ -42,7 +42,8 @@ public:
     selectedColor    ( 12, 0, 255       ),
     chart            ( chart            ),
     precision        ( 0.1              ),
-    polyline         ( polylinePoints   )
+    polyline         ( polylinePoints   ),
+    selected         ( false            )
   {
   }
 private:
@@ -50,8 +51,8 @@ private:
   DisplayedCurve& operator=( DisplayedCurve &obj ) = delete;
 
 private:
-  QColor                              currentColor;    ///< цвет неслектированной кривой
-  QColor                              selectedColor;   ///< цвет селектированной кривой
+  QColor                              currentColor;     ///< цвет неслектированной кривой
+  QColor                              selectedColor;    ///< цвет селектированной кривой
   std::vector<Point>                  referencedPoints; ///< опорные точки
   GeomPolyline                        polyline;         ///< полилиния для данной кривой
   bool                                selected;         ///< свойство селектированности кривой
@@ -64,13 +65,13 @@ private:
   double DistanceToPoint( Point point );
 
  public:
-  std::vector<Point>&                  GetReferensedPoints   (                                             );        ///< получить опорные точки
-  const  GeomPolyline&                 GetPolyline           (                                             ) const; ///< получить опорные точки
-  bool                                 GetSelectionStatus    (                                             );       ///< получить информацию о селектированности кривой
-  void                                 ModifySelectionStatus ( Point cursor                                );       ///< изменить информацию о селектированности кривой в зависимости от полученной точки
-  void                                 SetColor              ( QColor color                                );       ///< установить цвет кривой
-  void                                 SetSeries             ( QLineSeries *  current, QScatterSeries *ref );       ///< установить series
-
+  std::vector<Point>&   GetReferensedPoints     ();                                              ///< получить опорные точки
+  const  GeomPolyline&  GetPolyline             () const;                                        ///< получить опорные точки
+  bool                  GetSelectionStatus      ();                                              ///< получить информацию о селектированности кривой
+  void                  ModifySelectionStatus   ( Point cursor );                                ///< изменить информацию о селектированности кривой в зависимости от полученной точки
+  void                  SetColor                ( QColor color );                                ///< установить цвет кривой
+  void                  SetSeries               ( QLineSeries *  current, QScatterSeries *ref ); ///< установить series
+  void                  SetColorUnselectedCurve ( QColor color );
 };
 
 #endif // DISPLAYEDCURVE_H

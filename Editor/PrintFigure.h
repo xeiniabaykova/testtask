@@ -42,8 +42,8 @@ private:
   QScatterSeries * seriesReferenced; ///< для отображения точек, выбранных пользователем
 
 public:
-  void AddFigure( std::shared_ptr<DisplayedCurve> curve, QColor color = QColor (51, 0 , 51) );  ///< добавить новую кривую на график
-  void AddReferencedPoint( Point point, QColor color = QColor (51, 0 , 51) );                   ///< добавить точку, выбранную пользователем на экране
+  void AddFigure          ( std::shared_ptr<DisplayedCurve> curve, QColor color = QColor (51, 0 , 51) );  ///< добавить новую кривую на график
+  void AddReferencedPoint ( Point point, QColor color = QColor (51, 0 , 51) );                            ///< добавить точку, выбранную пользователем на экране
 
 };
 #endif // PRINTFUGURE_H

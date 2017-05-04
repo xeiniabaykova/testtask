@@ -88,7 +88,7 @@ bool DisplayedCurve::GetSelectionStatus()
 void DisplayedCurve::ModifySelectionStatus( Point cursor )
 {
  if ( DistanceToPoint(cursor) < precision )
-   selected = !selected;
+    selected = !selected;
  if (selected)
    SetColor( selectedColor );
  else
@@ -125,9 +125,14 @@ void DisplayedCurve::SetColor( QColor color )
 {
   currentseries->setColor( color );
   seriesRef->setColor( color );
-  currentColor = color;
 }
 
+void DisplayedCurve::SetColorUnselectedCurve( QColor color )
+{
+  currentseries->setColor( color );
+  seriesRef->setColor( color );
+  currentColor = color;
+}
 
 //-----------------------------------------------------------------------------
 /**
