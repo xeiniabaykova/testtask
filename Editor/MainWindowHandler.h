@@ -10,7 +10,6 @@
 #define MAINWINDOWHANDLER_H
 
 #include "GeometricPrimitiveCreator.h"
-#include "CurveSelector.h"
 #include <QtCharts/QChartView>
 #include <QtCharts/QScatterSeries>
 #include <QtCharts/QValueAxis>

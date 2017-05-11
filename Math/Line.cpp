@@ -69,12 +69,6 @@ void Line::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy )
   polyLinePoints.push_back( startPoint );
   polyLinePoints.push_back( GetPoint(GetRange().GetEnd()) );
 }
-
-double Line::DistanceToCurvePolyline ( Point point ) const
-{
-  return 0.0;
-}
-
 void Line::Translation( const std::vector<std::vector<double>>& )
 {
   return;
@@ -88,5 +82,13 @@ void Line::Rotation( const std::vector<std::vector<double>>& )
 void Line::Dilatation( const std::vector<std::vector<double>>& )
 {
   return;
+}
+
+double Line::DistancePointToCurve( Point point ) const
+{
+  double accuracy = 0.01;
+  std::vector<Point> polylinePoints;
+  GetAsPolyLine( polylinePoints, accuracy );
+  return C2Curve::DistancePointToCurve( point, polylinePoints );
 }
 

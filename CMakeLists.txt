@@ -25,8 +25,6 @@ include_directories(
 
 set(SOURCE_FILES
         main.cpp
-        Editor/CurveSelector.cpp
-        Editor/CurveSelector.h
         Editor/EllipseCreator.cpp
         Editor/EllipseCreator.h
         Editor/DisplayedObject.h

@@ -38,13 +38,11 @@ SOURCES += main.cpp\
     Math/GeometricPoint.cpp \
     Editor/PrintFigure.cpp \
     Editor/Polyline.cpp \
-    Editor/CurveSelector.cpp \
     Math/GeomPolyLine.cpp \
     Editor/GeomPolylineCreator.cpp \
-    Math/Circle.cpp \
-    Editor/CircleCreator.cpp \
-    Editor/DisplayedCurve.cpp \
-    Editor/CreatorHandler.cpp
+    Editor/CreatorHandler.cpp \
+    Editor/DisplayedObject.cpp \
+    Math/C2Curve.cpp
 
 HEADERS  += Editor/MainWindow.h \
     Editor/FileIO.h \
@@ -65,13 +63,11 @@ HEADERS  += Editor/MainWindow.h \
     Editor/PrintFigure.h \
     Editor/NurbsCreator.h \
     Editor/Polyline.h \
-    Editor/CurveSelector.h \
-    Editor/DisplayedCurve.h \
     Editor/GeomPolylineCreator.h \
     Math/GeomPolyline.h \
-    Math/Circle.h \
-    Editor/CircleCreator.h \
-    Editor/CreatorHandler.h
+    Editor/CreatorHandler.h \
+    Editor/DisplayedObject.h \
+    Math/C2Curve.h
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../Qt/5.8/msvc2015_64/lib/ -lQt5Charts

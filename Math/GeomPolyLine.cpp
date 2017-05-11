@@ -71,12 +71,6 @@ void GeomPolyline::GetAsPolyLine( std::vector<Point> & polyLinePoints, double ac
   polyLinePoints = referencedPoints;
 }
 
-
-double GeomPolyline::DistanceToCurvePolyline( Point point ) const
-{
-  return SelectedPolyline( referencedPoints, point );
-}
-
 void GeomPolyline::Translation( const std::vector<std::vector<double>>& )
 {
   return;

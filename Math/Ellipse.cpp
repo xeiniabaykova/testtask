@@ -1,7 +1,6 @@
 #include "Ellipse.h"
 #include <vector>
 #include <cmath>
-#include "Editor/CurveSelector.h"
 #include "Editor/Polyline.h"
 
 
@@ -77,16 +76,18 @@ Point Ellipse::Get2DerivativePoint( double t ) const
   \ru позвращается полилилния для эллипса - используется общий алгоритм
 */
 //-----------------------------------------------------------------------------
-void Ellipse::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy ) const
+void Ellipse::GetAsPolyLine( std::vector<Point>& polyLinePoints, double accuracy ) const
 {
   Polyline polyline( this, accuracy );
   polyLinePoints = polyline.GetPoints();
 }
 
-double Ellipse::DistanceToCurvePolyline( Point point ) const
+double Ellipse::DistancePointToCurve( Point point ) const
 {
-  Polyline polyline( this, 0.01 );
-  return SelectedPolyline( polyline.GetPoints(), point );
+  double accuracy = 0.01;
+  std::vector<Point> polylinePoints;
+  GetAsPolyLine( polylinePoints, accuracy );
+  return C2Curve::DistancePointToCurve( point, polylinePoints );
 }
 
 void Ellipse::Translation( const std::vector<std::vector<double>>& )

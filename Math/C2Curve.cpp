@@ -1,5 +1,4 @@
-#include "CurveSelector.h"
-#include <cmath>
+#include "C2Curve.h"
 
 namespace {
 
@@ -45,17 +44,13 @@ double Distance( Point first, Point second, Point point )
 }
 }
 
-//-----------------------------------------------------------------------------
-/**
-  \ru обходим полинию, находим минимальное расстояние от полилинии до текущей точки
-*/
-//-----------------------------------------------------------------------------
-double SelectedPolyline( const std::vector<Point>& polyline, Point point )
+
+double C2Curve::DistancePointToCurve ( Point point, const std::vector<Point>& polylinePoints) const
 {
   double minDistance = std::numeric_limits<double>::max();
-  for ( int j = 1; j < polyline.size(); j++ )
+  for ( int j = 1; j < polylinePoints.size(); j++ )
   {
-    double currentDistance = Distance( polyline[j - 1], polyline[j], point );
+    double currentDistance = Distance( polylinePoints[j - 1], polylinePoints[j], point );
     if ( currentDistance < minDistance )
       minDistance = currentDistance;
   }
