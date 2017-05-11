@@ -22,7 +22,7 @@ class Line: public C2Curve
 {
 private:
   Point startPoint; ///< начальная точка
-  Point direction;  ///< направление
+  Point endPoint;  ///< направление
 public:
    Line() = delete;
    /**  \brief \ru создать отрезок по начальной и конечной точке отрезка

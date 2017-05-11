@@ -15,7 +15,11 @@ Ellipse::Ellipse( Point center, double r1, double r2,double alpha ):
   r2    ( r2     ),
   alpha ( alpha  )
 {
+  std::vector<Point> points;
+  points.push_back( center );
+  SetReferensedPoints( points );
 }
+
 
 
 //-----------------------------------------------------------------------------

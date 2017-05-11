@@ -27,50 +27,29 @@ struct DisplayedCurve
 {
 private:
   QColor                              currentColor;     ///< цвет неслектированной кривой
-  QColor                              selectedColor;    ///< цвет селектированной кривой
-  std::vector<Point>                  referencedPoints; ///< опорные точки
-  GeomPolyline                        polyline;         ///< полилиния для данной кривой
   bool                                selected;         ///< свойство селектированности кривой
-  double                              precision;        ///< точность построения полилнии
   std::shared_ptr<QLineSeries>        currentseries;    ///< series с точками
   std::shared_ptr<QScatterSeries>     seriesRef;        ///< series с опорными точками
-  QChart                            * chart;
+  std::shared_ptr<C2Curve>            curve;
 public:
   DisplayedCurve() = default;
   ~DisplayedCurve();
-  /**  \brief \ru Записать всю информацию о кривой:
-    \param[in] referencedPoints - \ru опорные точки кривой
-     \param[in] currentColor - \ru цвет неселектированной кривой
-    \param[in] selectedColor - \ru цвет селектированной кривой
-     \param[in] precision - \ru точность построения кривой
-     \param[in] polyline - \ru точки, составляющие полилинию
-    .\~
-  */
-  DisplayedCurve( QChart *chart, std::vector<Point> referencedPoints, std::vector<Point> polylinePoints ):
-    referencedPoints ( referencedPoints ),
+  DisplayedCurve(std::shared_ptr<C2Curve> curve):
     currentColor     ( 51, 0, 51        ),
-    selectedColor    ( 12, 0, 255       ),
-    chart            ( chart            ),
-    precision        ( 0.1              ),
-    polyline         ( polylinePoints   ),
-    selected         ( false            )
+    selected         ( false            ),
+    curve( curve )
   {
   }
 private:
   DisplayedCurve( const DisplayedCurve &obj ) = delete;
   DisplayedCurve& operator=( DisplayedCurve &obj ) = delete;
-
-private:
-  double DistanceToPoint( Point point );
-
  public:
-  std::vector<Point>&   GetReferensedPoints     ();                                              ///< получить опорные точки
-  const  GeomPolyline&  GetPolyline             () const;                                        ///< получить опорные точки
-  bool                  GetSelectionStatus      ();                                              ///< получить информацию о селектированности кривой
-  void                  ModifySelectionStatus   ( Point cursor );                                ///< изменить информацию о селектированности кривой в зависимости от полученной точки
-  void                  SetColor                ( QColor color );                                ///< установить цвет кривой
-  void                  SetSeries               ( QLineSeries *  current, QScatterSeries *ref ); ///< установить series
-  void                  SetColorUnselectedCurve ( QColor color );
+  void addCurveToChart         ( QChart * chart, double accuracy );
+  bool GetSelectionStatus      ();                                              ///< получить информацию о селектированности кривой
+  void ModifySelectionStatus   ( Point cursor, double precision, QColor selectedColor );                                ///< изменить информацию о селектированности кривой в зависимости от полученной точки
+  void SetColor                ( QColor color );                                ///< установить цвет кривой
+  void SetSeries               ( QLineSeries *  current, QScatterSeries *ref ); ///< установить series
+  void SetColorUnselectedCurve ( QColor color );
 };
 
 #endif // DISPLAYEDCURVE_H

@@ -43,7 +43,6 @@ public:
   //---
   NurbsCurve ( const std::vector<Point>& poles, const std::vector<double>& weights,
                const std::vector<int>& nodes, bool isClosed );
-
   virtual Point  GetPoint            ( double t ) const;                                             ///< возвращает точку на кривой по параметру t
   virtual Point  GetDerivativePoint  ( double t ) const;                                             ///< возвращает производную по параметру t
   virtual Point  Get2DerivativePoint ( double t ) const;                                             ///< возвращает вторую производную по параметру t

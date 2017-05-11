@@ -56,3 +56,13 @@ double C2Curve::DistancePointToCurve ( Point point, const std::vector<Point>& po
   }
   return minDistance;
 }
+
+std::vector<Point> C2Curve::GetReferensedPoints() const
+{
+  return referencedPoints;
+}
+
+void C2Curve::SetReferensedPoints( const std::vector<Point>& points )
+{
+  referencedPoints = points;
+}

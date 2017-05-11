@@ -36,13 +36,13 @@ SOURCES += main.cpp\
     Math/NurbsCurve.cpp \
     Math/Range.cpp \
     Math/GeometricPoint.cpp \
-    Editor/PrintFigure.cpp \
     Editor/Polyline.cpp \
     Math/GeomPolyLine.cpp \
     Editor/GeomPolylineCreator.cpp \
     Editor/CreatorHandler.cpp \
     Editor/DisplayedObject.cpp \
-    Math/C2Curve.cpp
+    Math/C2Curve.cpp \
+    Math/Vector.cpp
 
 HEADERS  += Editor/MainWindow.h \
     Editor/FileIO.h \
@@ -60,14 +60,14 @@ HEADERS  += Editor/MainWindow.h \
     Serealizer/curveserializer.h \
     Math/Range.h \
     Math/GeometricPoint.h \
-    Editor/PrintFigure.h \
     Editor/NurbsCreator.h \
     Editor/Polyline.h \
     Editor/GeomPolylineCreator.h \
     Math/GeomPolyline.h \
     Editor/CreatorHandler.h \
     Editor/DisplayedObject.h \
-    Math/C2Curve.h
+    Math/C2Curve.h \
+    Math/Vector.h
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../Qt/5.8/msvc2015_64/lib/ -lQt5Charts

@@ -7,9 +7,13 @@
 */
 //-----------------------------------------------------------------------------
 Line::Line( Point startPoint, Point endPoint ):
-  startPoint( startPoint                                                              ),
-  direction( endPoint.GetX() - startPoint.GetX(), endPoint.GetY() - startPoint.GetY() )
+  startPoint( startPoint ),
+  endPoint( endPoint )
 {
+  std::vector<Point> points;
+  points.push_back( startPoint );
+  points.push_back( endPoint );
+  SetReferensedPoints( points );
 }
 
 
@@ -31,6 +35,7 @@ Range Line::GetRange() const
 //-----------------------------------------------------------------------------
 Point Line::GetPoint( double t ) const
 {
+  Point direction( endPoint.GetX() - startPoint.GetX(), endPoint.GetY() - startPoint.GetY());
   return Point( startPoint.GetX() + direction.GetX() * t, startPoint.GetY() + direction.GetY() * t );
 }
 
@@ -40,9 +45,9 @@ Point Line::GetPoint( double t ) const
   \ru возвращает производную линнии по параметру t
 */
 //-----------------------------------------------------------------------------
-Point Line::GetDerivativePoint( double t ) const
+Point Line::GetDerivativePoint( double ) const
 {
-  (void)t;
+  Point direction( endPoint.GetX() - startPoint.GetX(), endPoint.GetY() - startPoint.GetY());
   return direction;
 }
 
@@ -67,7 +72,7 @@ Point Line::Get2DerivativePoint( double t ) const
 void Line::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy ) const
 {
   polyLinePoints.push_back( startPoint );
-  polyLinePoints.push_back( GetPoint(GetRange().GetEnd()) );
+  polyLinePoints.push_back( endPoint );
 }
 void Line::Translation( const std::vector<std::vector<double>>& )
 {

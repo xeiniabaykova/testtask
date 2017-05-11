@@ -47,7 +47,7 @@ public:
   virtual Point  GetDerivativePoint          ( double t ) const;                                               ///< вернуть производную на эллипсе по параметру t
   virtual Point  Get2DerivativePoint         ( double t ) const;                                               ///< вернуть вторую производную на эллипсе по параметру t
   virtual void   GetAsPolyLine               ( std::vector<Point> & polyLinePoints, double accuracy ) const;   ///< вернуть полилинию для эллипса
-  virtual double DistancePointToCurve     ( Point point )                                          const;      ///< возвращает расстояние от точки до полилинии эллипса
+  virtual double DistancePointToCurve        ( Point point ) const;                                            ///< возвращает расстояние от точки до полилинии эллипса
   virtual void   Translation                 ( const std::vector<std::vector<double>>& transformationMatrix );
   virtual void   Rotation                    ( const std::vector<std::vector<double>>& transformationMatrix );
   virtual void   Dilatation                  ( const std::vector<std::vector<double>>& transformationMatrix );

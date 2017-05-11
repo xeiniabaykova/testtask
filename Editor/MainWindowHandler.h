@@ -16,7 +16,6 @@
 #include <QPoint>
 #include <vector>
 #include "Polyline.h"
-#include "PrintFigure.h"
 #include <Editor/DisplayedObject.h>
 #include <Editor/CreatorHandler.h>
 #include <memory>
@@ -38,9 +37,10 @@ class MainWindowHandler {
   };
 
 private:
+  QColor                                      selectedColor;
+  double                                      precision;
   QChart                                     * chart;           ///< объект для отрисовки графика
   CreatorHandler                             * geomCreator;     ///< объект для создания геометрического примитива
-  PrintFigure                                  printChart;      ///< объект для отображения геометрического примитива
   CurrentState                                 state;           ///< объект для хранения текущего состояния окна
   std::vector<std::shared_ptr<DisplayedCurve>> displayedCurves; ///< набор графиков, отображенных на экране
 

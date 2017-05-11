@@ -18,7 +18,6 @@
 //-----------------------------------------------------------------------------
 MainWindowHandler::MainWindowHandler (QChart * chart):
   chart         ( chart             ),
-  printChart    ( chart             ),
   state         ( StateExpectAction )
 {
 }
@@ -113,9 +112,8 @@ void MainWindowHandler::CreateCurve()
   std::shared_ptr<C2Curve> primitive = geomCreator->Create();
   primitive->GetAsPolyLine( currentPolylinePoints, accuracy );
   std::vector<Point> currentRefPoints = geomCreator->RefPoints();
-  std::shared_ptr<DisplayedCurve> curve = std::make_shared<DisplayedCurve>( chart, currentRefPoints, currentPolylinePoints );
+  std::shared_ptr<DisplayedCurve> curve = std::make_shared<DisplayedCurve>( primitive );
   displayedCurves.push_back( curve );
-  printChart.AddFigure( curve );
 }
 
 void MainWindowHandler::StopCreateCurve()
@@ -154,7 +152,7 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
   {
     QPointF currentPoint = chart->mapToValue( QPointF(event->x(), event->y() - 30) );
     geomCreator->AddPointFromScreen( Point(currentPoint.x(), currentPoint.y()) );
-    printChart.AddReferencedPoint( Point(currentPoint.x(), currentPoint.y()) );
+    //printChart.AddReferencedPoint( Point(currentPoint.x(), currentPoint.y()) );
     if ( geomCreator->IsSufficientNum() )
     {
       CreateCurve();
@@ -187,7 +185,7 @@ void MainWindowHandler::StateExpect( QMouseEvent *event )
 {
   QPointF currentPoint = chart->mapToValue( QPointF(event->pos().x(), event->pos().y() - 30) );
   for ( int i = 0; i < displayedCurves.size(); i++ )
-    displayedCurves[i]->ModifySelectionStatus( Point(currentPoint.x(), currentPoint.y()) );
+    displayedCurves[i]->ModifySelectionStatus( Point(currentPoint.x(), currentPoint.y()), precision, selectedColor );
   state = StateExpectAction;
 }
 

@@ -1,6 +1,5 @@
 #include "NurbsCurve.h"
 
-
 double NurbsCurve::DistancePointToCurve( Point point ) const
 {
   double accuracy = 0.01;
