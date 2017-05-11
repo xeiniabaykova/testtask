@@ -14,7 +14,8 @@
 #include <vector>
 
 //------------------------------------------------------------------------------
-/** \brief \ru Абстрактный класс для геометрического объекта \~
+/** \brief \ru Абстрактный класс для базового  геометрического объекта
+ *   \~
 */
 // ---
 class GeometricPrimitive { 
@@ -25,11 +26,9 @@ private:
   GeometricPrimitive( const GeometricPrimitive &obj ) = delete;
   GeometricPrimitive& operator=( GeometricPrimitive &obj ) = delete;
 public:
-  virtual Point GetPoint            ( double t ) const = 0;                                             ///< вернуть точку на кривой по параметру t
-  virtual Range GetRange            () const = 0;                                                       ///< вернуть допустимые границы параметра
-  virtual Point GetDerivativePoint  ( double t ) const = 0;                                             ///< вернуть производную точки точки на кривой по параметру t
-  virtual Point Get2DerivativePoint ( double t ) const = 0;                                             ///< вернуть вторую производную точки точки на кривой по параметру t
-  virtual void  GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const = 0; ///< возвращает полилинию для геометрического примитива с точностью accuracy
+ virtual void Translation( const std::vector<std::vector<double>>& transformationMatrix ) = 0;
+ virtual void Rotation( const std::vector<std::vector<double>>& transformationMatrix ) = 0;
+ virtual void Dilatation( const std::vector<std::vector<double>>& transformationMatrix ) = 0;
 };
 
 #endif // GEOMETRICPRIMITIVE_H

@@ -81,7 +81,7 @@ void MainWindow::CreateMenus()
 
   createCurveMenu = menuBar()->addMenu( tr("&Curves") );
  // createCurveMenu->addAction( createPointAct );
-  createCurveMenu->addAction( createLineAct );
+  createCurveMenu->addAction( createLineAct.get() );
   createCurveMenu->addAction( createEllipseAct );
   createCurveMenu->addAction( createPolylineAct );
   createCurveMenu->addAction( createNurbsAct );
@@ -124,11 +124,11 @@ void MainWindow::CreateActions()
   createPointAct->setShortcut(tr("CTRL+Q"));
   connect( createPointAct, &QAction::triggered, this, &MainWindow::OnCreatePoint );
 
-  createLineAct = new QAction( tr("&Line"), this );
+  createLineAct = std::make_shared<QAction>( tr("&Line"), this );
   createLineAct->setDisabled( true );
  // createLineAct->setShortcuts( QKeySequence::New );
   createLineAct->setStatusTip( tr("Creating line") );
-  connect( createLineAct, &QAction::triggered, this, &MainWindow::OnCreateLine );
+  connect( createLineAct.get(), &QAction::triggered, this, &MainWindow::OnCreateLine );
 
   createEllipseAct = new QAction( tr("&Ellipse"), this );
   createEllipseAct->setDisabled( true );

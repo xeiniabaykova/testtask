@@ -6,7 +6,7 @@
 // \ru создание полилинии по точкам:
 // точки - вершины полинии
 // ---
-std::shared_ptr<GeometricPrimitive> GeomPolylineCreator::Create( const std::vector<Point>& points ) const
+std::shared_ptr<C2Curve> GeomPolylineCreator::Create( const std::vector<Point>& points ) const
 {
   return std::make_shared <GeomPolyline>( points );
 }

@@ -45,30 +45,19 @@ double Distance( Point first, Point second, Point point )
 }
 }
 
-CurveSelector::CurveSelector( const std::vector<std::vector<Point>>& points ):
-  points   ( points ),
-  accuracy ( 0.1 )
-{
-}
-
-
 //-----------------------------------------------------------------------------
 /**
-  \ru обходим все полилинии в chart
-  \ru до каждого отрезка полилинии находим расстояние. Если оно меньше допустимого отклонения, то возвращаем порядковый номер series в chart
-  \ru point - точка, до которой находится расстояние
-  \ru если ни одна series не подошла, возвращаем -1
+  \ru обходим полинию, находим минимальное расстояние от полилинии до текущей точки
 */
 //-----------------------------------------------------------------------------
-int CurveSelector::GetCurve( Point point ) const
+double SelectedPolyline( const std::vector<Point>& polyline, Point point )
 {
-  for ( int i = 0; i < points.size(); i++ )
+  double minDistance = std::numeric_limits<double>::max();
+  for ( int j = 1; j < polyline.size(); j++ )
   {
-    for ( int j = 1; j < points[i].size(); j++ )
-    {
-      if ( Distance(points[i][j - 1], points[i][j], point)  < accuracy )
-       return i;
-    }
+    double currentDistance = Distance( polyline[j - 1], polyline[j], point );
+    if ( currentDistance < minDistance )
+      minDistance = currentDistance;
   }
-  return -1;
+  return minDistance;
 }

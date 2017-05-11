@@ -6,7 +6,7 @@
 //------------------------------------------------------------------------------
 // \ru Создает эллипс по центру и двум граничным точкам
 // ---
-std::shared_ptr<GeometricPrimitive> EllipseCreator::Create( const std::vector<Point>& points ) const
+std::shared_ptr<C2Curve> EllipseCreator::Create( const std::vector<Point>& points ) const
 {
   Point center( points[0] );
   Point pointV( points[1] );

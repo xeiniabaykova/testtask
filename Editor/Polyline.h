@@ -19,13 +19,18 @@
 */
 // ---
 
+#include "Math/C2Curve.h"
 class Polyline {
+private:
+  std::vector<Point>          displayedPoints;  ///<  точки для отображения примитива
+  const  C2Curve * figure;                      ///<  геометрический примитив
+  double                      precision;        ///<  точность для создания полилинии
 public:
   Polyline() = default;
   //-------------------------------------------------------------------------------
   // \ru на вход подается геометрический примитив
   // ---
-  Polyline( const GeometricPrimitive * figure, double precision );
+  Polyline( const C2Curve * figure, double precision );
   //-------------------------------------------------------------------------------
   // \ru расчитываются точки для отображения геометрического примитива, возвращается массив из полученных точек
   // ---
@@ -34,12 +39,6 @@ public:
 private:
   Polyline( const Polyline &obj ) = delete;
   Polyline& operator= (Polyline &obj ) = delete;
-
-private:
-  std::vector<Point>          displayedPoints;  ///<  точки для отображения примитива
-  const  GeometricPrimitive * figure;           ///<  геометрический примитив
-  double                      precision;        ///<  точность для создания полилинии
-
 private:
   double CountingStep ( double tCurrent ); /// \ru получить по текущему tCurrent шаг по кривой, удовлятворяющий хордовому отклонению  precision
 public:

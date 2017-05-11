@@ -25,13 +25,12 @@ include_directories(
 
 set(SOURCE_FILES
         main.cpp
-        Editor/CircleCreator.cpp
-        Editor/CircleCreator.h
         Editor/CurveSelector.cpp
         Editor/CurveSelector.h
         Editor/EllipseCreator.cpp
         Editor/EllipseCreator.h
-        Editor/DisplayedCurve.h
+        Editor/DisplayedObject.h
+		Editor/DisplayedObject.cpp
         Editor/GeometricPrimitiveCreator.cpp
         Editor/GeometricPrimitiveCreator.h
         Editor/GeomPolylineCreator.cpp
@@ -53,8 +52,8 @@ set(SOURCE_FILES
         Editor/PointCreator.h
         Editor/PrintFigure.cpp
         Editor/PrintFigure.h
-        Math/Circle.cpp
-        Math/Circle.h
+		Math/C2Curve.cpp
+        Math/C2Curve.h
         Math/Ellipse.cpp
         Math/Ellipse.h
         Math/GeometricPoint.cpp

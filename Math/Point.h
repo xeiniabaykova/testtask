@@ -15,6 +15,10 @@
 // ---
 class Point
 {
+private:
+  double x; ///< координата x
+  double y; ///< координата y
+
 public:
   Point() = default;
   /**  \brief \ru создать двумерную точку по координатам x, y
@@ -25,11 +29,6 @@ public:
   Point( double x, double y );
   Point( const Point& point );
   ~Point() = default;
-
-private:
-  double x; ///< координата x
-  double y; ///< координата y
-
 public:
   double  GetX() const; ///< получить координату x
   double  GetY() const; ///< получить координату y

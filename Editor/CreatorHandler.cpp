@@ -39,7 +39,7 @@ bool CreatorHandler::IsSufficientNum() const
    \ru создает кривую по точкам
 */
 //-----------------------------------------------------------------------------
-std::shared_ptr<GeometricPrimitive> CreatorHandler::Create()
+std::shared_ptr<C2Curve> CreatorHandler::Create()
 {
  return creator->Create( points );
 }

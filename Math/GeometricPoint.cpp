@@ -10,61 +10,18 @@ GeometricPoint::GeometricPoint( Point point ):
 {
 }
 
-//-----------------------------------------------------------------------------
-/**
-  \ru возращаются границы параметра t для точки. считаем что они нулевые: [0, 0]
-*/
-//-----------------------------------------------------------------------------
-Range GeometricPoint::GetRange() const
+
+void GeometricPoint::Translation( const std::vector<std::vector<double>>& )
 {
-  return Range( 0.0, 0.0 );
+  return;
 }
 
-
-//-----------------------------------------------------------------------------
-/**
-  \ru возвращается точка по параметру t
-*/
-//-----------------------------------------------------------------------------
-Point GeometricPoint::GetPoint( double t ) const
+void GeometricPoint::Rotation( const std::vector<std::vector<double>>& )
 {
-  (void)t;
-  return point;
+  return;
 }
 
-
-
-//-----------------------------------------------------------------------------
-/**
-  \ru возвращается точка по параметру t
-*/
-//-----------------------------------------------------------------------------
-Point GeometricPoint::GetDerivativePoint( double t ) const
+void GeometricPoint::Dilatation( const std::vector<std::vector<double>>& )
 {
-  (void)t;
-  return point;
-}
-
-
-//-----------------------------------------------------------------------------
-/**
-  \ru возвращается точка по параметру t
-*/
-//-----------------------------------------------------------------------------
-Point GeometricPoint::Get2DerivativePoint( double t ) const
-{
-  (void)t;
-  return point;
-
-}
-
-
-//-----------------------------------------------------------------------------
-/**
-  \ru позвращается полилилния для текущей точки
-*/
-//-----------------------------------------------------------------------------
-void GeometricPoint::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy ) const
-{
-  polyLinePoints.push_back( point );
+  return;
 }

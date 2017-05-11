@@ -9,7 +9,7 @@
 #ifndef GEOMETRICPRIMITIVECREATOR_H
 #define GEOMETRICPRIMITIVECREATOR_H
 
-#include <Math/GeometricPrimitive.h>
+#include <Math/C2Curve.h>
 #include <memory>
 #include <Math/Point.h>
 #include <vector>
@@ -36,7 +36,7 @@ public:
     \return \ru Указатель на базовый класс геометрии.\~
   */
   //---
-  virtual std::shared_ptr<GeometricPrimitive> Create( const std::vector<Point>& points ) const = 0;
+  virtual std::shared_ptr<C2Curve> Create( const std::vector<Point>& points ) const = 0;
 
 };
 

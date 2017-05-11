@@ -30,7 +30,7 @@ public:
    \return \ru Указатель на геометрическое представление отрезка геометрии.\~
   */
   //---
-  virtual std::shared_ptr<GeometricPrimitive> Create( const std::vector<Point>& points ) const;
+  virtual std::shared_ptr<C2Curve> Create( const std::vector<Point>& points ) const;
 
 };
 

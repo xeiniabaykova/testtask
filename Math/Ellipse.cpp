@@ -1,6 +1,7 @@
 #include "Ellipse.h"
 #include <vector>
 #include <cmath>
+#include "Editor/CurveSelector.h"
 #include "Editor/Polyline.h"
 
 
@@ -82,4 +83,24 @@ void Ellipse::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accurac
   polyLinePoints = polyline.GetPoints();
 }
 
+double Ellipse::DistanceToCurvePolyline( Point point ) const
+{
+  Polyline polyline( this, 0.01);
+  return SelectedPolyline( polyline.GetPoints(), point );
 
+}
+
+void Ellipse::Translation( const std::vector<std::vector<double>>& )
+{
+  return;
+}
+
+void Ellipse::Rotation( const std::vector<std::vector<double>>& )
+{
+  return;
+}
+
+void Ellipse::Dilatation( const std::vector<std::vector<double>>& )
+{
+  return;
+}

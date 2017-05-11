@@ -15,6 +15,9 @@
 */
 // ---
 class Range {
+private:
+  double start; ///< начало
+  double end; ///< конец
 public:
   Range() = default;
   /**  \brief \ru создать интервал по началу и концу интервала
@@ -25,9 +28,6 @@ public:
   Range( double start, double end );
   Range(const Range& range);
   ~Range() = default;
-private:
-  double start; ///< начало
-  double end; ///< конец
 
 public:
   double GetStart () const; ///< получить конец интервала

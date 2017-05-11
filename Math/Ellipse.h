@@ -9,6 +9,7 @@
 #ifndef ELLIPSE_H
 #define ELLIPSE_H
 
+#include "C2Curve.h"
 #include <Math/Point.h>
 #include <Math/Range.h>
 #include <vector>
@@ -19,7 +20,7 @@
 /** \brief \ru Класс геометрического представления эллипса \~
 */
 // ---
-class Ellipse: public GeometricPrimitive
+class Ellipse: public C2Curve
 {
 private:
   Point center;  ///< центр
@@ -41,11 +42,15 @@ private:
   Ellipse( const Ellipse &obj ) = delete;
   Ellipse& operator=( Ellipse &obj ) = delete;
 public:
-  virtual Point GetPoint            ( double t ) const;                                             ///< вернуть точку на кривой по параметру t
-  virtual Range GetRange            () const;                                                       ///< вернуть границы параметра для эллипса : [0, 2*pi]
-  virtual Point GetDerivativePoint  ( double t ) const;                                             ///< вернуть производную на эллипсе по параметру t
-  virtual Point Get2DerivativePoint ( double t ) const;                                             ///< вернуть вторую производную на эллипсе по параметру t
-  virtual void  GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< вернуть полилинию для эллипса
+  virtual Point  GetPoint                    ( double t ) const;                                              ///< вернуть точку на кривой по параметру t
+  virtual Range  GetRange                    () const;                                                        ///< вернуть границы параметра для эллипса : [0, 2*pi]
+  virtual Point  GetDerivativePoint          ( double t ) const;                                              ///< вернуть производную на эллипсе по параметру t
+  virtual Point  Get2DerivativePoint         ( double t ) const;                                              ///< вернуть вторую производную на эллипсе по параметру t
+  virtual void   GetAsPolyLine               ( std::vector<Point> & polyLinePoints, double accuracy ) const;  ///< вернуть полилинию для эллипса
+  virtual double DistanceToCurvePolyline     ( Point point )                                          const;  ///< возвращает расстояние от точки до полилинии эллипса
+  virtual void   Translation                 ( const std::vector<std::vector<double>>& transformationMatrix );
+  virtual void   Rotation                    ( const std::vector<std::vector<double>>& transformationMatrix );
+  virtual void   Dilatation                  ( const std::vector<std::vector<double>>& transformationMatrix );
 
 };
 

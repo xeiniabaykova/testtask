@@ -17,7 +17,7 @@
 /** \brief \ru Класс создания точки. \~
 */
 // ---
-class PointCreator: public GeometricPrimitiveCreator {
+class PointCreator {
 public:
   //-------------------------------------------------------------------------------
   // \ru создает геометрическое представление точки
@@ -28,7 +28,7 @@ private:
   PointCreator( const PointCreator &obj ) = default;
   PointCreator& operator=( PointCreator &obj ) = default;
 public:
-  virtual std::shared_ptr<GeometricPrimitive> Create( const std::vector<Point>& points ) const;
+  std::shared_ptr<GeometricPrimitive> Create( const std::vector<Point>& points ) const;
 
 };
 

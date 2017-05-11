@@ -1,4 +1,4 @@
-#include "DisplayedCurve.h"
+#include "DisplayedObject.h"
 
 
 
@@ -107,7 +107,7 @@ double DisplayedCurve::DistanceToPoint( Point point )
   std::vector<Point> polylinePoints;
   polyline.GetAsPolyLine( polylinePoints, precision );
 
-  for ( int i = 1; i< polylinePoints.size(); i++ )
+  for ( int i = 1; i < polylinePoints.size(); i++ )
   {
     if ( Distance(polylinePoints[i-1], polylinePoints[i], point) < minDistance  )
       minDistance = Distance( polylinePoints[i-1], polylinePoints[i], point );
@@ -141,8 +141,8 @@ void DisplayedCurve::SetColorUnselectedCurve( QColor color )
 //-----------------------------------------------------------------------------
 void DisplayedCurve::SetSeries( QLineSeries *  current, QScatterSeries *ref )
 {
-  currentseries = current;
-  seriesRef = ref;
+  currentseries = std::make_shared<QLineSeries>( current);
+  seriesRef = std::make_shared<QScatterSeries>(ref);
 }
 
 
@@ -153,8 +153,6 @@ void DisplayedCurve::SetSeries( QLineSeries *  current, QScatterSeries *ref )
 //-----------------------------------------------------------------------------
  DisplayedCurve::~DisplayedCurve()
 {
-  chart->removeSeries( currentseries );
-  chart->removeSeries( seriesRef);
-  delete currentseries;
-  delete seriesRef;
+  chart->removeSeries( currentseries.get() );
+  chart->removeSeries( seriesRef.get() );
 }

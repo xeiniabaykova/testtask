@@ -2,7 +2,6 @@
 #include "PointCreator.h"
 #include "LineCreator.h"
 #include "EllipseCreator.h"
-#include "Editor/CircleCreator.h"
 #include "FileIO.h"
 #include <QtWidgets/QDesktopWidget>
 #include <QInputDialog>
@@ -57,7 +56,7 @@ void MainWindowHandler::CreateEllipse()
 void MainWindowHandler::CreateCircle()
 {
   state = StateCreateCurve;
-  GeometricPrimitiveCreator * creator = new CircleCreator();
+  GeometricPrimitiveCreator * creator = new EllipseCreator();
   geomCreator = new CreatorHandler( 2, creator );
 }
 
@@ -111,7 +110,7 @@ void MainWindowHandler::CreateCurve()
 {
   double accuracy = 0.01;
   std::vector<Point> currentPolylinePoints;
-  std::shared_ptr<GeometricPrimitive> primitive = geomCreator->Create();
+  std::shared_ptr<C2Curve> primitive = geomCreator->Create();
   primitive->GetAsPolyLine( currentPolylinePoints, accuracy );
   std::vector<Point> currentRefPoints = geomCreator->RefPoints();
   std::shared_ptr<DisplayedCurve> curve = std::make_shared<DisplayedCurve>( chart, currentRefPoints, currentPolylinePoints );

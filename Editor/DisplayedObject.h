@@ -25,6 +25,16 @@
 QT_CHARTS_USE_NAMESPACE
 struct DisplayedCurve
 {
+private:
+  QColor                              currentColor;     ///< цвет неслектированной кривой
+  QColor                              selectedColor;    ///< цвет селектированной кривой
+  std::vector<Point>                  referencedPoints; ///< опорные точки
+  GeomPolyline                        polyline;         ///< полилиния для данной кривой
+  bool                                selected;         ///< свойство селектированности кривой
+  double                              precision;        ///< точность построения полилнии
+  std::shared_ptr<QLineSeries>        currentseries;    ///< series с точками
+  std::shared_ptr<QScatterSeries>     seriesRef;        ///< series с опорными точками
+  QChart                            * chart;
 public:
   DisplayedCurve() = default;
   ~DisplayedCurve();
@@ -49,17 +59,6 @@ public:
 private:
   DisplayedCurve( const DisplayedCurve &obj ) = delete;
   DisplayedCurve& operator=( DisplayedCurve &obj ) = delete;
-
-private:
-  QColor                              currentColor;     ///< цвет неслектированной кривой
-  QColor                              selectedColor;    ///< цвет селектированной кривой
-  std::vector<Point>                  referencedPoints; ///< опорные точки
-  GeomPolyline                        polyline;         ///< полилиния для данной кривой
-  bool                                selected;         ///< свойство селектированности кривой
-  double                              precision;        ///< точность построения полилнии
-  QLineSeries                       * currentseries;    ///< series с точками
-  QScatterSeries                    * seriesRef;        ///< series с опорными точками
-  QChart                            * chart;
 
 private:
   double DistanceToPoint( Point point );

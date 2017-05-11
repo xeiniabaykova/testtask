@@ -8,7 +8,7 @@
   \ru На вход отдается геометрический примитив и точность создания полилинии
 */
 //-----------------------------------------------------------------------------
-Polyline::Polyline( const GeometricPrimitive* figure, double precision ):
+Polyline::Polyline( const C2Curve* figure, double precision ):
   figure( figure ),
   precision( precision ),
   displayedPoints(0)

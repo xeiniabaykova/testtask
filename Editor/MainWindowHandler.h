@@ -18,7 +18,7 @@
 #include <vector>
 #include "Polyline.h"
 #include "PrintFigure.h"
-#include <Editor/DisplayedCurve.h>
+#include <Editor/DisplayedObject.h>
 #include <Editor/CreatorHandler.h>
 #include <memory>
 
@@ -28,23 +28,6 @@
 */
 // ---
 class MainWindowHandler {
-public:
-  /**  \brief \ru
-    \param[in] chart - вспомогательный объект для отрисовки графика
-    \return \ru Указатель на геометрическое представление полилинии.\~
-  */
-  explicit MainWindowHandler (QChart * chart);
-  ~MainWindowHandler () = default;
-
-private:
-  MainWindowHandler( const MainWindowHandler &obj ) = delete;
-  MainWindowHandler& operator=( MainWindowHandler &obj ) = delete;
-public:
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  /** \brief \ru Вспомогательные данные. \~
-      \details \ru текущее состояние приложения: создание, удаление кривой, нахождение пересечения \~
-    */
-  // ---
   enum CurrentState
   {
     StateCreateCurve,
@@ -56,12 +39,30 @@ public:
   };
 
 private:
-
   QChart                                     * chart;           ///< объект для отрисовки графика
   CreatorHandler                             * geomCreator;     ///< объект для создания геометрического примитива
   PrintFigure                                  printChart;      ///< объект для отображения геометрического примитива
   CurrentState                                 state;           ///< объект для хранения текущего состояния окна
   std::vector<std::shared_ptr<DisplayedCurve>> displayedCurves; ///< набор графиков, отображенных на экране
+
+public:
+  /**  \brief \ru
+    \param[in] chart - вспомогательный объект для отрисовки графика
+    \return \ru Указатель на геометрическое представление полилинии.\~
+  */
+  explicit MainWindowHandler (QChart * chart);
+  ~MainWindowHandler () = default;
+
+private:
+  MainWindowHandler( const MainWindowHandler &obj ) = delete;
+  MainWindowHandler& operator=( MainWindowHandler &obj ) = delete;
+
+public:
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  /** \brief \ru Вспомогательные данные. \~
+      \details \ru текущее состояние приложения: создание, удаление кривой, нахождение пересечения \~
+    */
+  // ---
 
 public:
  // void CreatePoint            ();                         ///< создать и отобразить точку

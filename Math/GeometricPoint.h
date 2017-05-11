@@ -26,12 +26,10 @@ public:
   //-------------------------------------------------------------------------------
   // \ru Создание точки по точке
   // ---
-  GeometricPoint( Point point );
-  virtual Point GetPoint            ( double t ) const;                                             ///< заплатка для общности: возвращает точку
-  virtual Point GetDerivativePoint  ( double t ) const;                                             ///< заплатка для общности: возвращает точку
-  virtual Point Get2DerivativePoint ( double t ) const;                                             ///< заплатка для общности: возвращает точку
-  virtual Range GetRange            () const;                                                       ///< заплатка для общности: возвращает нулевую парамтризацию
-  virtual void  GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< возвращает полилинию для точки (это сама точка)
+  GeometricPoint ( Point point );
+  virtual void   Translation( const std::vector<std::vector<double>>& transformationMatrix );
+  virtual void   Rotation( const std::vector<std::vector<double>>& transformationMatrix );
+  virtual void   Dilatation( const std::vector<std::vector<double>>& transformationMatrix );
 };
 
 
