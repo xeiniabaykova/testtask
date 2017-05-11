@@ -85,9 +85,8 @@ void Ellipse::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accurac
 
 double Ellipse::DistanceToCurvePolyline( Point point ) const
 {
-  Polyline polyline( this, 0.01);
+  Polyline polyline( this, 0.01 );
   return SelectedPolyline( polyline.GetPoints(), point );
-
 }
 
 void Ellipse::Translation( const std::vector<std::vector<double>>& )

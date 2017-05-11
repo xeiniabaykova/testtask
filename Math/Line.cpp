@@ -73,7 +73,6 @@ void Line::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy )
 double Line::DistanceToCurvePolyline ( Point point ) const
 {
   return 0.0;
-
 }
 
 void Line::Translation( const std::vector<std::vector<double>>& )
