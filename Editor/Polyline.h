@@ -9,7 +9,6 @@
 #ifndef POLYLINE_H
 #define POLYLINE_H
 #include "Math/Point.h"
-#include "GeometricPrimitiveCreator.h"
 
 
 //------------------------------------------------------------------------------
@@ -34,7 +33,7 @@ public:
   //-------------------------------------------------------------------------------
   // \ru расчитываются точки для отображения геометрического примитива, возвращается массив из полученных точек
   // ---
-  ~Polyline() = default;
+  virtual ~Polyline() = default;
 
 private:
   Polyline( const Polyline &obj ) = delete;

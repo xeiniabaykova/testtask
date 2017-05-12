@@ -34,6 +34,7 @@ private:
   NurbsCurve& NurbsCurve::operator=( NurbsCurve &obj ) = delete;
 public:
   NurbsCurve() = delete;
+  virtual ~NurbsCurve() = default;
   /**  \brief \ru создать nurbs - кривую по опорным точкам, весам, опорным точкам и замкнутости
     \param[in] points - опорные точки .\~
     \param[in] referencePoints - \ru опорные точки .\~
@@ -52,7 +53,6 @@ public:
   virtual void   Translation         ( const std::vector<std::vector<double>>& transformationMatrix );
   virtual void   Rotation            ( const std::vector<std::vector<double>>& transformationMatrix );
   virtual void   Dilatation          ( const std::vector<std::vector<double>>& transformationMatrix );
-  ~NurbsCurve() = default;
 };
 
 

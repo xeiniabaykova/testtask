@@ -29,7 +29,7 @@ public:
  //---
   GeomPolyline( const std::vector<Point>& points );
   GeomPolyline() = delete;
-  ~GeomPolyline() = default;
+  virtual ~GeomPolyline() = default;
 private:
   GeomPolyline( const GeomPolyline &obj ) = delete;
   GeomPolyline& operator=( GeomPolyline &obj ) = delete;

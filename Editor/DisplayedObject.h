@@ -36,7 +36,7 @@ private:
   QValueAxis*                         axisY;
 public:
   DisplayedObject() = default;
-  ~DisplayedObject();
+  virtual ~DisplayedObject();
   DisplayedObject( std::shared_ptr<C2Curve> curve,  QValueAxis* axisX,  QValueAxis* axisY ):
     currentColor ( 51, 0, 51 ),
     selected     ( false ),

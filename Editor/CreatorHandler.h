@@ -1,14 +1,17 @@
 ////////////////////////////////////////////////////////////////////////////////
 /**
   \file
-  \brief \ru  создатель окружности в двумерном пространстве по точкам\~
+  \brief \ru  создатель геометрических примитивов\~
 
 */
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef CREATORHANDLER_H
 #define CREATORHANDLER_H
-#include <Editor/GeometricPrimitiveCreator.h>
+#include <vector>
+#include <memory>
+#include "Math/Point.h"
+#include "Math/C2Curve.h"
 
 class CreatorHandler
 {

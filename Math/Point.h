@@ -28,7 +28,7 @@ public:
   //---
   Point( double x, double y );
   Point( const Point& point );
-  ~Point() = default;
+  virtual ~Point() = default;
 public:
   double  GetX() const; ///< получить координату x
   double  GetY() const; ///< получить координату y

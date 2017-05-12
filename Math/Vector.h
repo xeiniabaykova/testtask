@@ -8,13 +8,6 @@
 
 */
 ////////////////////////////////////////////////////////////////////////////////
-
-#include "Point.h"
-
-//------------------------------------------------------------------------------
-/** \brief \ru Класс для двумерного представления точки \~
-*/
-// ---
 class Vector
 {
 private:
@@ -24,8 +17,8 @@ private:
 public:
   Vector() = default;
   Vector( double x1, double x2 );
-  Vector( const Point& point );
-  ~Vector() = default;
+  Vector( const Vector& point );
+  virtual ~Vector() = default;
 public:
   double  GetX1() const;
   double  GetX2() const;

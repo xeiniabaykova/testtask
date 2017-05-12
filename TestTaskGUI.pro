@@ -26,7 +26,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         Editor/MainWindow.cpp \
     Editor/FileIO.cpp \
-    Editor/PointCreator.cpp \
     Math/Line.cpp \
     Math/Point.cpp \
     Math/Ellipse.cpp \
@@ -43,7 +42,6 @@ SOURCES += main.cpp\
 
 HEADERS  += Editor/MainWindow.h \
     Editor/FileIO.h \
-    Editor/PointCreator.h \
     Math/Line.h \
     Math/Point.h \
     Math/Ellipse.h \

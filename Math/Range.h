@@ -27,7 +27,7 @@ public:
   //---
   Range( double start, double end );
   Range(const Range& range);
-  ~Range() = default;
+  virtual ~Range() = default;
 
 public:
   double GetStart () const; ///< получить конец интервала

@@ -32,7 +32,7 @@ public:
    //---
   Line( const std::vector<Point>& points );
   Line( Point startPoint, Point endPoint );
-  ~Line() = default;
+  virtual ~Line() = default;
 private:
   Line( const Line &obj ) = delete;
   Line& operator=( Line &obj ) = delete;

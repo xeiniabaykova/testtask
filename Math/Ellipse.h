@@ -37,7 +37,7 @@ public:
   Ellipse ( const std::vector<Point>& points );
   Ellipse ( Point center, double r1, double r2, double alpha );
   Ellipse () = delete;
-  ~Ellipse() = default;
+  virtual ~Ellipse() = default;
 
 private:
   Ellipse( const Ellipse &obj ) = delete;

@@ -59,7 +59,7 @@ public:
                \param[in] chart  - \ru объект для отрисовки графика.\~
            */
   explicit MainWindow ( QChart *chart, QWidget *parent = 0 );
-  ~MainWindow();
+  virtual ~MainWindow();
 private:
   MainWindow( const MainWindow &obj ) = delete;
   MainWindow& operator=( MainWindow &obj ) = delete;
