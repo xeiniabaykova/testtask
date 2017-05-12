@@ -19,7 +19,8 @@
 MainWindowHandler::MainWindowHandler (QChart * chart):
   chart         ( chart             ),
   state         ( StateExpectAction ),
-  precision     ( 0.01 )
+  precision     ( 0.1 ),
+  selectedColor ( 10, 50, 255 )
 {
   CreateChart();
 }
@@ -123,6 +124,7 @@ void MainWindowHandler::StopCreateCurve()
   if ( state == StateCreatePolyline )
   {
     CreateCurve();
+    seriesReferenced->clear();
     delete geomCreator;
   }
   state = StateExpectAction;
@@ -141,9 +143,9 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
 {
   if ( event->buttons() == Qt::RightButton )
     return;
+
   if ( event->buttons() == Qt::MiddleButton )
     state = StopCreatePolyline;
-
 
   QRect rec = QApplication::desktop()->screenGeometry();
   double height = rec.height();
@@ -214,7 +216,7 @@ void MainWindowHandler::DeleteCurve()
 {
   for ( int i = 0; i < displayedCurves.size(); i++ )
     if ( displayedCurves[i]->GetSelectionStatus() )
-       displayedCurves.erase( displayedCurves.begin() +i );
+       displayedCurves.erase( displayedCurves.begin() + i );
 
   state = StateExpectAction;
 }
@@ -295,9 +297,9 @@ void MainWindowHandler::CreateChart()
 
     seriesReferenced = new QScatterSeries();
     seriesReferenced->setColor( QColor(0, 17, 17) );
-     chart->addSeries( seriesReferenced );
-     seriesReferenced->attachAxis( axisX );
-     seriesReferenced->attachAxis( axisY );
+    chart->addSeries( seriesReferenced );
+    seriesReferenced->attachAxis( axisX );
+    seriesReferenced->attachAxis( axisY );
 
     chart->axisX()->setVisible( false );
     chart->axisY()->setVisible( false );

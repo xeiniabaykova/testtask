@@ -1,50 +1,5 @@
 #include "DisplayedObject.h"
 
-namespace {
-
-double Dot( Point point1, Point point2 )
-{
-  return point1.GetX() * point2.GetX() + point1.GetY() * point2.GetY();
-}
-
-//-----------------------------------------------------------------------------
-/**
-  \ru находим квадрат растояния между двумя точками
-*/
-//-----------------------------------------------------------------------------
-double Distance( Point point1, Point point2 )
-{
-  return sqrt ( (point1.GetX() - point2.GetX()) * (point1.GetX() - point2.GetX()) +
-         (point1.GetY() - point2.GetY()) * (point1.GetY() - point2.GetY()) );
-}
-
-//-----------------------------------------------------------------------------
-/**
-  \ru расстояние от точки до прямой.
-  \ru QPoint first, QPoint second - начальные и конечные точки прямой
-  \ru point - точка, до которой находится расстояние
-*/
-//-----------------------------------------------------------------------------
-double Distance( Point first, Point second, Point point )
-{
-   Point v = second - first;
-   Point w = point - first;
-
-   double c1 = Dot( w, v );
-   if ( c1 <= 0 )
-       return Distance( point, first );
-
-   double c2 = Dot( v, v );
-   if ( c2 <= c1 )
-       return Distance( point, second );
-
-   double b = c1 / c2;
-   Point Pb = first + v * b;
-   return Distance( point, Pb );
-}
-}
-
-
 //-----------------------------------------------------------------------------
 /**
   \ru вернуть текущее состояние селекции
@@ -110,15 +65,15 @@ void DisplayedCurve::SetSeries( QLineSeries *  current, QScatterSeries *ref )
  DisplayedCurve::~DisplayedCurve()
 {
   currentseries->chart()->removeSeries( currentseries.get() );
-  currentseries->chart()->removeSeries( seriesRef.get() );
+  seriesRef->chart()->removeSeries( seriesRef.get() );
 }
 
 void DisplayedCurve::addCurveToChart( QChart * chart, double accuracy )
 {
-  QLineSeries * currentseries = new QLineSeries();
+  currentseries = std::make_shared<QLineSeries>();
   currentseries->setColor( currentColor );
 
-  QScatterSeries *seriesRef = new QScatterSeries();
+  seriesRef = std::make_shared<QScatterSeries>();
   seriesRef->setColor( currentColor );
 
   std::vector<Point> polyPoints;
@@ -130,8 +85,8 @@ void DisplayedCurve::addCurveToChart( QChart * chart, double accuracy )
       *seriesRef << QPointF( curve->GetReferensedPoints()[i].GetX(), curve->GetReferensedPoints()[i].GetY() );
   seriesRef->setMarkerShape( QScatterSeries::MarkerShapeCircle );
   seriesRef->setMarkerSize( 15.0 );
-  chart->addSeries( currentseries );
-  chart->addSeries( seriesRef );
+  chart->addSeries( currentseries.get() );
+  chart->addSeries( seriesRef.get() );
 
 
   currentseries->attachAxis( axisX );

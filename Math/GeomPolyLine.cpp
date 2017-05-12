@@ -8,6 +8,7 @@
 GeomPolyline::GeomPolyline(const std::vector<Point>& referensedPoits ):
   referencedPoints( referensedPoits )
 {
+  SetReferensedPoints( referensedPoits );
 }
 
 

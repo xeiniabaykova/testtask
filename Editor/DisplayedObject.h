@@ -37,12 +37,12 @@ private:
 public:
   DisplayedCurve() = default;
   ~DisplayedCurve();
-  DisplayedCurve(std::shared_ptr<C2Curve> curve,  QValueAxis* axisX,  QValueAxis* axisY ):
-    currentColor     ( 51, 0, 51        ),
-    selected         ( false            ),
-    curve( curve ),
-    axisX( axisX ),
-    axisY( axisY )
+  DisplayedCurve( std::shared_ptr<C2Curve> curve,  QValueAxis* axisX,  QValueAxis* axisY ):
+    currentColor ( 51, 0, 51 ),
+    selected     ( false ),
+    curve        ( curve ),
+    axisX        ( axisX ),
+    axisY        ( axisY )
   {
   }
 private:
