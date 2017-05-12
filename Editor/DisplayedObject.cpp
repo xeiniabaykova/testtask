@@ -5,7 +5,7 @@
   \ru вернуть текущее состояние селекции
 */
 //-----------------------------------------------------------------------------
-bool DisplayedCurve::GetSelectionStatus()
+bool DisplayedObject::GetSelectionStatus()
 {
   return selected;
 }
@@ -16,7 +16,7 @@ bool DisplayedCurve::GetSelectionStatus()
   \ru изменить состояние селекции в зависимости от полученной точки
 */
 //-----------------------------------------------------------------------------
-void DisplayedCurve::ModifySelectionStatus( Point cursor, double precision, QColor selectedColor )
+void DisplayedObject::ModifySelectionStatus( Point cursor, double precision, QColor selectedColor )
 {
  if ( curve->DistancePointToCurve( cursor ) < precision )
     selected = !selected;
@@ -32,13 +32,13 @@ void DisplayedCurve::ModifySelectionStatus( Point cursor, double precision, QCol
   \ru установить новый цвет для неселектированной кривой
 */
 //-----------------------------------------------------------------------------
-void DisplayedCurve::SetColor( QColor color )
+void DisplayedObject::SetColor( QColor color )
 {
   currentseries->setColor( color );
   seriesRef->setColor( color );
 }
 
-void DisplayedCurve::SetColorUnselectedCurve( QColor color )
+void DisplayedObject::SetColorUnselectedCurve( QColor color )
 {
   currentseries->setColor( color );
   seriesRef->setColor( color );
@@ -50,7 +50,7 @@ void DisplayedCurve::SetColorUnselectedCurve( QColor color )
   \ru добавить series к кривой
 */
 //-----------------------------------------------------------------------------
-void DisplayedCurve::SetSeries( QLineSeries *  current, QScatterSeries *ref )
+void DisplayedObject::SetSeries( QLineSeries *  current, QScatterSeries *ref )
 {
   currentseries = std::make_shared<QLineSeries>( current);
   seriesRef = std::make_shared<QScatterSeries>(ref);
@@ -62,13 +62,13 @@ void DisplayedCurve::SetSeries( QLineSeries *  current, QScatterSeries *ref )
   \ru убрать series из графика
 */
 //-----------------------------------------------------------------------------
- DisplayedCurve::~DisplayedCurve()
+ DisplayedObject::~DisplayedObject()
 {
   currentseries->chart()->removeSeries( currentseries.get() );
   seriesRef->chart()->removeSeries( seriesRef.get() );
 }
 
-void DisplayedCurve::addCurveToChart( QChart * chart, double accuracy )
+void DisplayedObject::addCurveToChart( QChart * chart, double accuracy )
 {
   currentseries = std::make_shared<QLineSeries>();
   currentseries->setColor( currentColor );
@@ -78,6 +78,7 @@ void DisplayedCurve::addCurveToChart( QChart * chart, double accuracy )
 
   std::vector<Point> polyPoints;
   curve->GetAsPolyLine( polyPoints,accuracy );
+
   for ( int i = 0; i < polyPoints.size(); i++ )
     *currentseries <<QPointF( polyPoints[i].GetX(), polyPoints[i].GetY() );
 
@@ -93,5 +94,4 @@ void DisplayedCurve::addCurveToChart( QChart * chart, double accuracy )
   currentseries->attachAxis( axisY );
   seriesRef->attachAxis( axisX );
   seriesRef->attachAxis( axisY );
-
 }

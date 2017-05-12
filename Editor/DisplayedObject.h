@@ -24,7 +24,7 @@
 // ---
 
 QT_CHARTS_USE_NAMESPACE
-struct DisplayedCurve
+struct DisplayedObject
 {
 private:
   QColor                              currentColor;     ///< цвет неслектированной кривой
@@ -35,9 +35,9 @@ private:
   QValueAxis*                         axisX;
   QValueAxis*                         axisY;
 public:
-  DisplayedCurve() = default;
-  ~DisplayedCurve();
-  DisplayedCurve( std::shared_ptr<C2Curve> curve,  QValueAxis* axisX,  QValueAxis* axisY ):
+  DisplayedObject() = default;
+  ~DisplayedObject();
+  DisplayedObject( std::shared_ptr<C2Curve> curve,  QValueAxis* axisX,  QValueAxis* axisY ):
     currentColor ( 51, 0, 51 ),
     selected     ( false ),
     curve        ( curve ),
@@ -46,8 +46,8 @@ public:
   {
   }
 private:
-  DisplayedCurve( const DisplayedCurve &obj ) = delete;
-  DisplayedCurve& operator=( DisplayedCurve &obj ) = delete;
+  DisplayedObject( const DisplayedObject &obj ) = delete;
+  DisplayedObject& operator=( DisplayedObject &obj ) = delete;
  public:
   void addCurveToChart         ( QChart * chart, double accuracy );
   bool GetSelectionStatus      ();                                              ///< получить информацию о селектированности кривой

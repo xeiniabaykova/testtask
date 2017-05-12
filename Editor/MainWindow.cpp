@@ -45,12 +45,10 @@ void MainWindow::contextMenuEvent( QContextMenuEvent *event )
     QMenu menu( this );
 
     stopCreateCurveAct = new QAction( tr("&stop create curve"), this );
-    //stopCreateCurveAct->setShortcuts( QKeySequence::New );
     stopCreateCurveAct->setStatusTip( tr("stop sreating curve") );
     connect( stopCreateCurveAct, &QAction::triggered, this, &MainWindow::OnStopCreateCurve );
 
     reColorAct = new QAction( tr("&change color curve"), this );
-    //reColorAct->setShortcuts( QKeySequence::New );
     reColorAct->setStatusTip( tr("stop sreating curve") );
     connect( reColorAct, &QAction::triggered, this, &MainWindow::OnReColorCurve );
 
@@ -108,31 +106,25 @@ void MainWindow::CreateMenus()
 void MainWindow::CreateActions()
 {
   saveAct = new QAction( tr("&Save"), this );
- // saveAct->setShortcuts( QKeySequence::New );
   saveAct->setStatusTip( tr("Save into file") );
   connect( saveAct, &QAction::triggered, this, &MainWindow::OnSaveFile );
 
   loadAct = new QAction ( tr("&Load"), this);
-//  loadAct->setShortcuts( QKeySequence::New );
   loadAct->setStatusTip( tr("Load from file") );
   connect( loadAct, &QAction::triggered, this, &MainWindow::OnLoadFile );
 
 
   createPointAct = new QAction ( tr("&Point"), this );
- // createPointAct->setShortcuts( QKeySequence::New );
   createPointAct->setStatusTip( tr("Creating point") );
   createPointAct->setShortcut(tr("CTRL+Q"));
   connect( createPointAct, &QAction::triggered, this, &MainWindow::OnCreatePoint );
 
   createLineAct = std::make_shared<QAction>( tr("&Line"), this );
-  createLineAct->setDisabled( true );
  // createLineAct->setShortcuts( QKeySequence::New );
   createLineAct->setStatusTip( tr("Creating line") );
   connect( createLineAct.get(), &QAction::triggered, this, &MainWindow::OnCreateLine );
 
   createEllipseAct = new QAction( tr("&Ellipse"), this );
-  createEllipseAct->setDisabled( true );
- // createEllipseAct->setShortcuts( QKeySequence::New );
   createEllipseAct->setStatusTip( tr("Creating circle") );
   connect( createEllipseAct, &QAction::triggered, this, &MainWindow::OnCreateEllipse );
 
@@ -156,8 +148,8 @@ void MainWindow::CreateActions()
 
   creatorCurves = new QActionGroup( this );
 //  creatorCurves->addAction( createPointAct );
-//  creatorCurves->addAction( createLineAct ) ;
-//  creatorCurves->addAction( createEllipseAct );
+  creatorCurves->addAction( createLineAct.get() ) ;
+  creatorCurves->addAction( createEllipseAct );
 //  creatorCurves->addAction( createCircleAct );
   creatorCurves->addAction( createPolylineAct );
  // creatorCurves->addAction( createNurbsAct );

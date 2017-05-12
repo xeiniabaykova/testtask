@@ -1,12 +1,8 @@
 #include "MainWindowHandler.h"
-#include "PointCreator.h"
-#include "LineCreator.h"
-#include "EllipseCreator.h"
 #include "FileIO.h"
 #include <QtWidgets/QDesktopWidget>
 #include <QInputDialog>
 #include <QtCharts/QLineSeries>
-#include "GeomPolylineCreator.h"
 #include <functional>
 
 
@@ -22,14 +18,15 @@ MainWindowHandler::MainWindowHandler (QChart * chart):
   precision     ( 0.1 ),
   selectedColor ( 10, 50, 255 )
 {
+  geomCreator = std::make_shared<CreatorHandler>();
   CreateChart();
 }
 
 void MainWindowHandler::CreateLine()
 {
   state = StateCreateCurve;
-  GeometricPrimitiveCreator * creator = new LineCreator();
-  geomCreator = new CreatorHandler( 2, creator );
+  geomCreator->AddSufficientNum( 2 );
+  geomCreator->type = CreatorHandler::CreateLine;
 }
 
 
@@ -43,8 +40,8 @@ void MainWindowHandler::CreateLine()
 void MainWindowHandler::CreateEllipse()
 {
   state = StateCreateCurve;
-  GeometricPrimitiveCreator * creator = new EllipseCreator();
-  geomCreator = new CreatorHandler( 3, creator );
+  geomCreator->type = CreatorHandler::CreateEllipse;
+  geomCreator->AddSufficientNum( 3 );
 }
 
 
@@ -58,8 +55,8 @@ void MainWindowHandler::CreateEllipse()
 void MainWindowHandler::CreateCircle()
 {
   state = StateCreateCurve;
-  GeometricPrimitiveCreator * creator = new EllipseCreator();
-  geomCreator = new CreatorHandler( 2, creator );
+  geomCreator->type = CreatorHandler::CreateEllipse;
+  geomCreator->AddSufficientNum( 2 );
 }
 
 
@@ -72,7 +69,21 @@ void MainWindowHandler::CreateCircle()
 //-----------------------------------------------------------------------------
 void MainWindowHandler::CreateNurbs()
 {
+  geomCreator->type = CreatorHandler::CreateNURBS;
 // state = CreateCurve;
+}
+
+
+//-----------------------------------------------------------------------------
+/**
+  функции обработки события создания полилнии
+*/
+//-----------------------------------------------------------------------------
+void MainWindowHandler::CreatePolyline()
+{
+  state = StateCreatePolyline;
+  geomCreator->type = CreatorHandler::CreatePolyline;
+  geomCreator->AddSufficientNum( -1 );
 }
 
 
@@ -114,7 +125,7 @@ void MainWindowHandler::CreateCurve()
   std::vector<Point> currentPolylinePoints;
   std::shared_ptr<C2Curve> primitive = geomCreator->Create();
   primitive->GetAsPolyLine( currentPolylinePoints, accuracy );
-  std::shared_ptr<DisplayedCurve> curve = std::make_shared<DisplayedCurve>( primitive, axisX, axisY );
+  std::shared_ptr<DisplayedObject> curve = std::make_shared<DisplayedObject>( primitive, axisX, axisY );
   curve->addCurveToChart( chart, precision );
   displayedCurves.push_back( curve );
 }
@@ -125,10 +136,9 @@ void MainWindowHandler::StopCreateCurve()
   {
     CreateCurve();
     seriesReferenced->clear();
-    delete geomCreator;
+   // geomCreator;
   }
   state = StateExpectAction;
-
 }
 
 //-----------------------------------------------------------------------------
@@ -236,18 +246,6 @@ void MainWindowHandler::ResizeEvent( QResizeEvent *event )
 }
 
 
-//-----------------------------------------------------------------------------
-/**
-  функции обработки события создания полилнии
-*/
-//-----------------------------------------------------------------------------
-void MainWindowHandler::CreatePolyline()
-{
-  state = StateCreatePolyline;
-  GeometricPrimitiveCreator * creator = new GeomPolylineCreator();
-  geomCreator = new CreatorHandler( -1, creator );
-}
-
 
 //-----------------------------------------------------------------------------
 /**
@@ -271,7 +269,6 @@ void MainWindowHandler::CreateEmptySeries()
 void MainWindowHandler::ClearScreen()
 { 
    displayedCurves.clear();
-  // chart->removeAllSeries();
    state = StateExpectAction;
 }
 

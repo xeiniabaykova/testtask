@@ -29,9 +29,9 @@ Ellipse::Ellipse( Point center, double r1, double r2,double alpha ):
 //-----------------------------------------------------------------------------
 Point Ellipse::GetPoint( double t ) const
 {
-   Point point( r1 * sin(t), r2 * cos(t) );
+   Point point( r1 * cos(t), r2 * sin(t) );
    Point transformPoint( center.GetX() + point.GetX() * cos(alpha) - point.GetY() * sin(alpha),
-                        center.GetY() - point.GetX() * sin(alpha)   + point.GetY() * cos(alpha) );
+                        center.GetY() + point.GetX() * sin(alpha)   + point.GetY() * cos(alpha) );
    return transformPoint;
 }
 
@@ -56,7 +56,7 @@ Range Ellipse::GetRange() const
 //-----------------------------------------------------------------------------
 Point Ellipse::GetDerivativePoint( double t ) const
 {
-  Point point( r1 * cos(t), -r2 * sin(t) );
+  Point point( r1 * -sin(t), r2 * cos(t) );
 
   return point;
 
@@ -70,7 +70,7 @@ Point Ellipse::GetDerivativePoint( double t ) const
 //-----------------------------------------------------------------------------
 Point Ellipse::Get2DerivativePoint( double t ) const
 {
-  Point point( -r1 * sin(t), -r2 * cos(t) );
+  Point point( -r1 * cos(t), -r2 * sin(t) );
   return point;
 }
 

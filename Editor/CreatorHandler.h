@@ -12,9 +12,16 @@
 
 class CreatorHandler
 {
+public:
+  enum TypeCurve {
+    CreateLine,
+    CreateEllipse,
+    CreateNURBS,
+    CreatePolyline
+  };
+  TypeCurve      type;
 private:
   int                                          numExpectedPoits; ///< количество точек, необходимых для создания геометрического примитива
-  std::shared_ptr<GeometricPrimitiveCreator>   creator;          ///< создатель геометрического примитива
   std::vector<Point>                           points;           ///< точки, полученные с экрана
 
 public:
@@ -24,23 +31,21 @@ public:
       \param[in]  creator - указатель на создателя геометрического примитива\~
   */
   //---
-  CreatorHandler( int numExpectedPoits, GeometricPrimitiveCreator * creator ):
-    numExpectedPoits ( numExpectedPoits ),
-    creator          ( creator )
+  CreatorHandler( int numExpectedPoits ):
+    numExpectedPoits ( numExpectedPoits )
   {
   }
 
 private:
   CreatorHandler( const CreatorHandler &obj ) = delete;
   CreatorHandler& operator=( CreatorHandler &obj ) = delete;
-
 public:
-  void                                AddPointFromScreen ( Point point ); ///< добавить точку с экрана в массив текущих точек
-  void                                AddSufficientNum   ( int num );     ///< добавить необходимое для отрисовки кривой количество точек
-  bool                                IsSufficientNum    () const;        ///< проверить, достаточно ли текущее количество точек для создания и отображения выбранной кривой
-  std::shared_ptr<C2Curve>            Create             ();              ///< создать геометрический примитив
-  const std::vector<Point>&           RefPoints          () const;        ///< вернуть опорные точки
-  void                                ClearPoints        ();              ///< очистить массив точек, полученных с экрана
+  void                      AddPointFromScreen ( Point point ); ///< добавить точку с экрана в массив текущих точек
+  void                      AddSufficientNum   ( int num );     ///< добавить необходимое для отрисовки кривой количество точек
+  bool                      IsSufficientNum    () const;        ///< проверить, достаточно ли текущее количество точек для создания и отображения выбранной кривой
+  std::shared_ptr<C2Curve>  Create             ();              ///< создать геометрический примитив
+  const std::vector<Point>& RefPoints          () const;        ///< вернуть опорные точки
+  void                      ClearPoints        ();              ///< очистить массив точек, полученных с экрана
 };
 
 #endif // CREATORHANDLER_H

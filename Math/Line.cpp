@@ -16,6 +16,12 @@ Line::Line( Point startPoint, Point endPoint ):
   SetReferensedPoints( points );
 }
 
+Line::Line( const std::vector<Point>& points )
+{
+  startPoint = points[0];
+  endPoint = points[1];
+  SetReferensedPoints( points );
+}
 
 //-----------------------------------------------------------------------------
 /**

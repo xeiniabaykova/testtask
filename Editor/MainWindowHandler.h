@@ -40,9 +40,9 @@ private:
   QColor                                      selectedColor;
   double                                      precision;
   QChart                                     * chart;           ///< объект для отрисовки графика
-  CreatorHandler                             * geomCreator;     ///< объект для создания геометрического примитива
+  std::shared_ptr<CreatorHandler>            geomCreator;     ///< объект для создания геометрического примитива
   CurrentState                                 state;           ///< объект для хранения текущего состояния окна
-  std::vector<std::shared_ptr<DisplayedCurve>> displayedCurves; ///< набор графиков, отображенных на экране
+  std::vector<std::shared_ptr<DisplayedObject>> displayedCurves; ///< набор графиков, отображенных на экране
   QValueAxis*                         axisX;
   QValueAxis*                         axisY;
   QScatterSeries *seriesReferenced;

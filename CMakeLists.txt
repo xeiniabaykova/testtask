@@ -25,32 +25,19 @@ include_directories(
 
 set(SOURCE_FILES
         main.cpp
-        Editor/EllipseCreator.cpp
-        Editor/EllipseCreator.h
         Editor/DisplayedObject.h
-		Editor/DisplayedObject.cpp
-        Editor/GeometricPrimitiveCreator.cpp
-        Editor/GeometricPrimitiveCreator.h
-        Editor/GeomPolylineCreator.cpp
-        Editor/GeomPolylineCreator.h
+	Editor/DisplayedObject.cpp
         Editor/FileIO.cpp
         Editor/FileIO.h
-        Editor/GeometricPrimitiveCreator.cpp
-        Editor/GeometricPrimitiveCreator.h
-        Editor/LineCreator.cpp
-        Editor/LineCreator.h
         Editor/MainWindow.cpp
         Editor/MainWindow.h
         Editor/MainWindowHandler.cpp
         Editor/MainWindowHandler.h
-        Editor/NurbsCreator.h
-        Editor/PointCreator.cpp
-        Editor/PointCreator.h
         Editor/Polyline.cpp
         Editor/PointCreator.h
         Editor/PrintFigure.cpp
         Editor/PrintFigure.h
-		Math/C2Curve.cpp
+	Math/C2Curve.cpp
         Math/C2Curve.h
         Math/Ellipse.cpp
         Math/Ellipse.h

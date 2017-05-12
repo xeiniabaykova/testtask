@@ -30,6 +30,7 @@ public:
      \param[in] endPoint - конечная точка .\~
    */
    //---
+  Line( const std::vector<Point>& points );
   Line( Point startPoint, Point endPoint );
   ~Line() = default;
 private:

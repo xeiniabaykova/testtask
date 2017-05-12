@@ -26,19 +26,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         Editor/MainWindow.cpp \
     Editor/FileIO.cpp \
-    Editor/EllipseCreator.cpp \
     Editor/PointCreator.cpp \
     Math/Line.cpp \
     Math/Point.cpp \
     Math/Ellipse.cpp \
-    Editor/LineCreator.cpp \
     Editor/MainWindowHandler.cpp \
     Math/NurbsCurve.cpp \
     Math/Range.cpp \
     Math/GeometricPoint.cpp \
     Editor/Polyline.cpp \
     Math/GeomPolyLine.cpp \
-    Editor/GeomPolylineCreator.cpp \
     Editor/CreatorHandler.cpp \
     Editor/DisplayedObject.cpp \
     Math/C2Curve.cpp \
@@ -46,10 +43,7 @@ SOURCES += main.cpp\
 
 HEADERS  += Editor/MainWindow.h \
     Editor/FileIO.h \
-    Editor/GeometricPrimitiveCreator.h \
     Editor/PointCreator.h \
-    Editor/LineCreator.h \
-    Editor/EllipseCreator.h \
     Math/Line.h \
     Math/Point.h \
     Math/Ellipse.h \
@@ -60,9 +54,7 @@ HEADERS  += Editor/MainWindow.h \
     Serealizer/curveserializer.h \
     Math/Range.h \
     Math/GeometricPoint.h \
-    Editor/NurbsCreator.h \
     Editor/Polyline.h \
-    Editor/GeomPolylineCreator.h \
     Math/GeomPolyline.h \
     Editor/CreatorHandler.h \
     Editor/DisplayedObject.h \
