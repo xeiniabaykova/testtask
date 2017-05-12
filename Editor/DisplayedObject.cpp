@@ -124,7 +124,7 @@ void DisplayedCurve::addCurveToChart( QChart * chart, double accuracy )
   std::vector<Point> polyPoints;
   curve->GetAsPolyLine( polyPoints,accuracy );
   for ( int i = 0; i < polyPoints.size(); i++ )
-  *currentseries <<QPointF( polyPoints[i].GetX(), polyPoints[i].GetY() );
+    *currentseries <<QPointF( polyPoints[i].GetX(), polyPoints[i].GetY() );
 
   for ( int i = 0; i < curve->GetReferensedPoints().size(); i++ )
       *seriesRef << QPointF( curve->GetReferensedPoints()[i].GetX(), curve->GetReferensedPoints()[i].GetY() );
@@ -134,9 +134,9 @@ void DisplayedCurve::addCurveToChart( QChart * chart, double accuracy )
   chart->addSeries( seriesRef );
 
 
- // currentseries->attachAxis( axisX );
-//  currentseries->attachAxis( axisY );
- // seriesRef->attachAxis( axisX );
-//  seriesRef->attachAxis( axisY );
+  currentseries->attachAxis( axisX );
+  currentseries->attachAxis( axisY );
+  seriesRef->attachAxis( axisX );
+  seriesRef->attachAxis( axisY );
 
 }

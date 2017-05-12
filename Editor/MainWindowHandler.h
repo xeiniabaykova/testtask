@@ -43,6 +43,9 @@ private:
   CreatorHandler                             * geomCreator;     ///< объект для создания геометрического примитива
   CurrentState                                 state;           ///< объект для хранения текущего состояния окна
   std::vector<std::shared_ptr<DisplayedCurve>> displayedCurves; ///< набор графиков, отображенных на экране
+  QValueAxis*                         axisX;
+  QValueAxis*                         axisY;
+  QScatterSeries *seriesReferenced;
 
 public:
   /**  \brief \ru
@@ -81,6 +84,8 @@ public:
   void DeleteCurve            ();                         ///< обработать удаление кривой
   void CreateEmptySeries      ();                         ///< КОСТЫЛЬ! необходим для верной работы функции map to value
   void ClearScreen            ();                         ///< обработать очистку экрана
+  void CreateChart();
+  void CreateRefPoint         ( Point point );
 
 };
 

@@ -14,6 +14,7 @@
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QScatterSeries>
 #include <Math/GeomPolyline.h>
+#include <QtCharts/QValueAxis>
 #include <memory>
 
 //------------------------------------------------------------------------------
@@ -31,13 +32,17 @@ private:
   std::shared_ptr<QLineSeries>        currentseries;    ///< series с точками
   std::shared_ptr<QScatterSeries>     seriesRef;        ///< series с опорными точками
   std::shared_ptr<C2Curve>            curve;
+  QValueAxis*                         axisX;
+  QValueAxis*                         axisY;
 public:
   DisplayedCurve() = default;
   ~DisplayedCurve();
-  DisplayedCurve(std::shared_ptr<C2Curve> curve):
+  DisplayedCurve(std::shared_ptr<C2Curve> curve,  QValueAxis* axisX,  QValueAxis* axisY ):
     currentColor     ( 51, 0, 51        ),
     selected         ( false            ),
-    curve( curve )
+    curve( curve ),
+    axisX( axisX ),
+    axisY( axisY )
   {
   }
 private:

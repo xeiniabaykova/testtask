@@ -18,8 +18,10 @@
 //-----------------------------------------------------------------------------
 MainWindowHandler::MainWindowHandler (QChart * chart):
   chart         ( chart             ),
-  state         ( StateExpectAction )
+  state         ( StateExpectAction ),
+  precision     ( 0.01 )
 {
+  CreateChart();
 }
 
 void MainWindowHandler::CreateLine()
@@ -111,8 +113,8 @@ void MainWindowHandler::CreateCurve()
   std::vector<Point> currentPolylinePoints;
   std::shared_ptr<C2Curve> primitive = geomCreator->Create();
   primitive->GetAsPolyLine( currentPolylinePoints, accuracy );
-  std::vector<Point> currentRefPoints = geomCreator->RefPoints();
-  std::shared_ptr<DisplayedCurve> curve = std::make_shared<DisplayedCurve>( primitive );
+  std::shared_ptr<DisplayedCurve> curve = std::make_shared<DisplayedCurve>( primitive, axisX, axisY );
+  curve->addCurveToChart( chart, precision );
   displayedCurves.push_back( curve );
 }
 
@@ -152,7 +154,7 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
   {
     QPointF currentPoint = chart->mapToValue( QPointF(event->x(), event->y() - 30) );
     geomCreator->AddPointFromScreen( Point(currentPoint.x(), currentPoint.y()) );
-    //printChart.AddReferencedPoint( Point(currentPoint.x(), currentPoint.y()) );
+    CreateRefPoint( Point(currentPoint.x(), currentPoint.y()) );
     if ( geomCreator->IsSufficientNum() )
     {
       CreateCurve();
@@ -272,4 +274,41 @@ void MainWindowHandler::ClearScreen()
 }
 
 
+void MainWindowHandler::CreateChart()
+{
+    axisX = new QValueAxis;
+    axisX->setRange( 0, 10 );
+    chart->addAxis( axisX, Qt::AlignBottom );
 
+    axisY = new QValueAxis;
+    axisY->setRange( 0, 10 );
+    chart->addAxis( axisY, Qt::AlignLeft );
+    chart->legend()->setVisible(false);
+
+    QLineSeries *series = new QLineSeries;
+    *series<< QPointF( 0, 0 ) << QPointF( 10, 10);
+    series->setColor( QColor(255,255,255) );
+    chart->addSeries( series );
+
+    series->attachAxis( axisX );
+    series->attachAxis( axisY );
+
+    seriesReferenced = new QScatterSeries();
+    seriesReferenced->setColor( QColor(0, 17, 17) );
+     chart->addSeries( seriesReferenced );
+     seriesReferenced->attachAxis( axisX );
+     seriesReferenced->attachAxis( axisY );
+
+    chart->axisX()->setVisible( false );
+    chart->axisY()->setVisible( false );
+}
+
+
+void MainWindowHandler::CreateRefPoint( Point point )
+{
+  *seriesReferenced << QPointF( point.GetX(), point.GetY() );
+  seriesReferenced->setMarkerShape( QScatterSeries::MarkerShapeCircle );
+  seriesReferenced->setMarkerSize( 15.0 );
+
+
+}
