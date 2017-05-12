@@ -32,8 +32,8 @@ private:
   std::shared_ptr<QLineSeries>        currentseries;    ///< series с точками
   std::shared_ptr<QScatterSeries>     seriesRef;        ///< series с опорными точками
   std::shared_ptr<C2Curve>            curve;
-  QValueAxis*                         axisX;
-  QValueAxis*                         axisY;
+  std::shared_ptr<QValueAxis>         axisX;
+  std::shared_ptr<QValueAxis>         axisY;
 public:
   DisplayedObject() = default;
   virtual ~DisplayedObject();
@@ -50,10 +50,10 @@ private:
   DisplayedObject& operator=( DisplayedObject &obj ) = delete;
  public:
   void addCurveToChart         ( QChart * chart, double accuracy );
-  bool GetSelectionStatus      ();                                              ///< получить информацию о селектированности кривой
-  void ModifySelectionStatus   ( Point cursor, double precision, QColor selectedColor );                                ///< изменить информацию о селектированности кривой в зависимости от полученной точки
-  void SetColor                ( QColor color );                                ///< установить цвет кривой
-  void SetSeries               ( QLineSeries *  current, QScatterSeries *ref ); ///< установить series
+  bool GetSelectionStatus      ();                                                      ///< получить информацию о селектированности кривой
+  void ModifySelectionStatus   ( Point cursor, double precision, QColor selectedColor ); ///< изменить информацию о селектированности кривой в зависимости от полученной точки
+  void SetColor                ( QColor color );                                         ///< установить цвет кривой
+  void SetSeries               ( QLineSeries *  current, QScatterSeries *ref );          ///< установить series
   void SetColorUnselectedCurve ( QColor color );
 };
 

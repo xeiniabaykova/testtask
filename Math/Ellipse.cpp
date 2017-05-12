@@ -2,6 +2,7 @@
 #include <vector>
 #include <cmath>
 #include "Editor/Polyline.h"
+#include "Editor/CommonConstants.h"
 
 
 //-----------------------------------------------------------------------------
@@ -45,7 +46,7 @@ Point Ellipse::GetPoint( double t ) const
 
 Range Ellipse::GetRange() const
 {
-  return Range( 0.0, 2.0 * 3.14 );
+  return Range( 0.0, 2.0 * Pi );
 }
 
 

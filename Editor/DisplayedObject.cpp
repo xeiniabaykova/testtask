@@ -84,14 +84,15 @@ void DisplayedObject::addCurveToChart( QChart * chart, double accuracy )
 
   for ( int i = 0; i < curve->GetReferensedPoints().size(); i++ )
       *seriesRef << QPointF( curve->GetReferensedPoints()[i].GetX(), curve->GetReferensedPoints()[i].GetY() );
+
   seriesRef->setMarkerShape( QScatterSeries::MarkerShapeCircle );
   seriesRef->setMarkerSize( 15.0 );
   chart->addSeries( currentseries.get() );
   chart->addSeries( seriesRef.get() );
 
 
-  currentseries->attachAxis( axisX );
-  currentseries->attachAxis( axisY );
-  seriesRef->attachAxis( axisX );
-  seriesRef->attachAxis( axisY );
+  currentseries->attachAxis( axisX.get() );
+  currentseries->attachAxis( axisY.get() );
+  seriesRef->attachAxis( axisX.get() );
+  seriesRef->attachAxis( axisY.get() );
 }

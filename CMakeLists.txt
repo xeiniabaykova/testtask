@@ -37,6 +37,7 @@ set(SOURCE_FILES
         Editor/PointCreator.h
         Editor/PrintFigure.cpp
         Editor/PrintFigure.h
+		Editor/CommonConstants.h
 	Math/C2Curve.cpp
         Math/C2Curve.h
         Math/Ellipse.cpp

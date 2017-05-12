@@ -57,7 +57,8 @@ HEADERS  += Editor/MainWindow.h \
     Editor/CreatorHandler.h \
     Editor/DisplayedObject.h \
     Math/C2Curve.h \
-    Math/Vector.h
+    Math/Vector.h \
+    Editor/CommonConstants.h
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../Qt/5.8/msvc2015_64/lib/ -lQt5Charts
