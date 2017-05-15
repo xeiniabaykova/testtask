@@ -1,4 +1,6 @@
 #include "C2Curve.h"
+#include <cmath>
+#include <limits>
 
 namespace {
 

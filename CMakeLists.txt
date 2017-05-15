@@ -25,8 +25,10 @@ include_directories(
 
 set(SOURCE_FILES
         main.cpp
+		Editor/CreatorHandler.cpp
+		Editor/CreatorHandler.h
         Editor/DisplayedObject.h
-	Editor/DisplayedObject.cpp
+	    Editor/DisplayedObject.cpp
         Editor/FileIO.cpp
         Editor/FileIO.h
         Editor/MainWindow.cpp
@@ -34,11 +36,8 @@ set(SOURCE_FILES
         Editor/MainWindowHandler.cpp
         Editor/MainWindowHandler.h
         Editor/Polyline.cpp
-        Editor/PointCreator.h
-        Editor/PrintFigure.cpp
-        Editor/PrintFigure.h
 		Editor/CommonConstants.h
-	Math/C2Curve.cpp
+	    Math/C2Curve.cpp
         Math/C2Curve.h
         Math/Ellipse.cpp
         Math/Ellipse.h
@@ -55,6 +54,8 @@ set(SOURCE_FILES
         Math/GeomPolyline.h
         Math/Range.cpp
         Math/Range.h
+		Math/Vector.cpp
+		Math/Vector.h
         Serealizer/curveserializer.h
         )
 

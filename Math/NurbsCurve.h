@@ -31,7 +31,7 @@ private:
   bool                isClosed;
 private:
   NurbsCurve( const NurbsCurve &obj ) = delete;
-  NurbsCurve& NurbsCurve::operator=( NurbsCurve &obj ) = delete;
+  NurbsCurve& operator=( NurbsCurve &obj ) = delete;
 public:
   NurbsCurve() = delete;
   virtual ~NurbsCurve() = default;
