@@ -22,6 +22,46 @@ Ellipse::Ellipse( Point center, double r1, double r2,double alpha ):
 }
 
 
+Ellipse::Ellipse ( const std::vector<Point>& points )
+{  
+  center = points[0];
+  Point pointV( points[1] );
+
+  Point pointX( center.GetX(), points[1].GetY() );
+
+  double x = pointV.GetX() - center.GetX();
+  double y = pointV.GetY() - center.GetY();
+  double axisA = sqrt( x * x + y * y );
+
+  if ( abs(x) < 0.001 && y <= 0 )
+    alpha = -Pi/2.0;
+
+  if ( abs(x) < 0.001 && y > 0  )
+    alpha = Pi/2.0;
+
+  if ( x > 0 && y >= 0 )
+    alpha = atan( y / x );
+
+  if ( x < 0 && y >= 0 )
+    alpha = Pi + atan( y / x );
+
+  if ( x < 0 && y <= 0 )
+    alpha = Pi + atan( y / x );
+
+  if ( x > 0 && y <= 0 )
+    alpha = - atan( y / x );
+
+  r1 = axisA;
+  Point newCoordPoint( points[2].GetX() - center.GetX(), points[2].GetY() - center.GetY() );
+  Point point2( newCoordPoint.GetX() * cos(alpha) + newCoordPoint.GetY() * sin(alpha),
+                      - newCoordPoint.GetX() * sin(alpha) + newCoordPoint.GetY() * cos(alpha) );
+
+  double axisB = (sqrt( (point2.GetY()) * (point2.GetY()) /
+      ( 1 - ( point2.GetX()) * ( point2.GetX()) / (r1 * r1))) );
+
+  r2 = axisB;
+
+}
 
 //-----------------------------------------------------------------------------
 /**
@@ -30,6 +70,7 @@ Ellipse::Ellipse( Point center, double r1, double r2,double alpha ):
 //-----------------------------------------------------------------------------
 Point Ellipse::GetPoint( double t ) const
 {
+
    Point point( r1 * cos(t), r2 * sin(t) );
    Point transformPoint( center.GetX() + point.GetX() * cos(alpha) - point.GetY() * sin(alpha),
                         center.GetY() + point.GetX() * sin(alpha)   + point.GetY() * cos(alpha) );

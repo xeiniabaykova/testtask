@@ -26,9 +26,9 @@ private:
   GeometricPrimitive( const GeometricPrimitive &obj ) = delete;
   GeometricPrimitive& operator=( GeometricPrimitive &obj ) = delete;
 public:
- virtual void Translation( const std::vector<std::vector<double>>& transformationMatrix ) = 0;
- virtual void Rotation   ( const std::vector<std::vector<double>>& transformationMatrix ) = 0;
- virtual void Dilatation ( const std::vector<std::vector<double>>& transformationMatrix ) = 0;
+ virtual void Translation ( const std::vector<std::vector<double>>& transformationMatrix ) = 0;
+ virtual void Rotation    ( const std::vector<std::vector<double>>& transformationMatrix ) = 0;
+ virtual void Dilatation  ( const std::vector<std::vector<double>>& transformationMatrix ) = 0;
 };
 
 #endif // GEOMETRICPRIMITIVE_H

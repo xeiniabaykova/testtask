@@ -1,5 +1,8 @@
 #include "CreatorHandler.h"
 #include "Math/GeomPolyline.h"
+#include "Math/Line.h"
+
+#include "Math/Ellipse.h"
 
 
 //-----------------------------------------------------------------------------
@@ -43,9 +46,13 @@ bool CreatorHandler::IsSufficientNum() const
 std::shared_ptr<C2Curve> CreatorHandler::Create()
 {
   switch( type ){
-  case CreateLine:
+  case CreateLine:{
+    return std::make_shared<Line>( points );
+  }
     break;
-  case CreateEllipse:
+  case CreateEllipse:{
+    return std::make_shared<Ellipse>( points );
+  }
     break;
   case CreatePolyline:{
     return std::make_shared<GeomPolyline>( points );

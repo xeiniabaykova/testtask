@@ -15,7 +15,7 @@
 MainWindowHandler::MainWindowHandler (QChart * chart):
   chart         ( chart             ),
   state         ( StateExpectAction ),
-  precision     ( 0.1 ),
+  precision     ( 0.01 ),
   selectedColor ( 10, 50, 255 )
 {
   geomCreator = std::make_shared<CreatorHandler>();
@@ -276,16 +276,16 @@ void MainWindowHandler::ClearScreen()
 void MainWindowHandler::CreateChart()
 {
     axisX = new QValueAxis;
-    axisX->setRange( 0, 10 );
+    axisX->setRange( -5, 3 );
     chart->addAxis( axisX, Qt::AlignBottom );
 
     axisY = new QValueAxis;
-    axisY->setRange( 0, 10 );
+    axisY->setRange( -5, 5 );
     chart->addAxis( axisY, Qt::AlignLeft );
     chart->legend()->setVisible(false);
 
     QLineSeries *series = new QLineSeries;
-    *series<< QPointF( 0, 0 ) << QPointF( 10, 10);
+    *series<< QPointF( -5, -5 ) << QPointF( 5, 5);
     series->setColor( QColor(255,255,255) );
     chart->addSeries( series );
 
@@ -298,8 +298,8 @@ void MainWindowHandler::CreateChart()
     seriesReferenced->attachAxis( axisX );
     seriesReferenced->attachAxis( axisY );
 
-    chart->axisX()->setVisible( false );
-    chart->axisY()->setVisible( false );
+   // chart->axisX()->setVisible( false );
+  //  chart->axisY()->setVisible( false );
 }
 
 

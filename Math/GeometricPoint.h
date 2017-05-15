@@ -27,9 +27,9 @@ public:
   // \ru Создание точки по точке
   // ---
   GeometricPoint ( Point point );
-  virtual void   Translation( const std::vector<std::vector<double>>& transformationMatrix );
-  virtual void   Rotation( const std::vector<std::vector<double>>& transformationMatrix );
-  virtual void   Dilatation( const std::vector<std::vector<double>>& transformationMatrix );
+  virtual void   Translation ( const std::vector<std::vector<double>>& transformationMatrix );
+  virtual void   Rotation    ( const std::vector<std::vector<double>>& transformationMatrix );
+  virtual void   Dilatation  ( const std::vector<std::vector<double>>& transformationMatrix );
 };
 
 
