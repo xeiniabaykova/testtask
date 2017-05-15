@@ -18,15 +18,14 @@ MainWindowHandler::MainWindowHandler (QChart * chart):
   precision     ( 0.01 ),
   selectedColor ( 10, 50, 255 )
 {
-  geomCreator = std::make_shared<CreatorHandler>();
+
   CreateChart();
 }
 
 void MainWindowHandler::CreateLine()
 {
   state = StateCreateCurve;
-  geomCreator->AddSufficientNum( 2 );
-  geomCreator->type = CreatorHandler::CreateLine;
+  geomCreator = std::make_shared<CreatorHandler>( 2, CreatorHandler::CreateLine );
 }
 
 
@@ -39,9 +38,8 @@ void MainWindowHandler::CreateLine()
 //-----------------------------------------------------------------------------
 void MainWindowHandler::CreateEllipse()
 {
+  geomCreator = std::make_shared<CreatorHandler>( 3, CreatorHandler::CreateEllipse );
   state = StateCreateCurve;
-  geomCreator->type = CreatorHandler::CreateEllipse;
-  geomCreator->AddSufficientNum( 3 );
 }
 
 
@@ -55,8 +53,7 @@ void MainWindowHandler::CreateEllipse()
 void MainWindowHandler::CreateCircle()
 {
   state = StateCreateCurve;
-  geomCreator->type = CreatorHandler::CreateEllipse;
-  geomCreator->AddSufficientNum( 2 );
+  geomCreator = std::make_shared<CreatorHandler>( 2, CreatorHandler::CreateEllipse );
 }
 
 
@@ -82,8 +79,7 @@ void MainWindowHandler::CreateNurbs()
 void MainWindowHandler::CreatePolyline()
 {
   state = StateCreatePolyline;
-  geomCreator->type = CreatorHandler::CreatePolyline;
-  geomCreator->AddSufficientNum( -1 );
+  geomCreator = std::make_shared<CreatorHandler>( -1, CreatorHandler::CreatePolyline );
 }
 
 
@@ -237,7 +233,7 @@ void MainWindowHandler::DeleteCurve()
   функции обработки события изменения размера окна
 */
 //-----------------------------------------------------------------------------
-void MainWindowHandler::ResizeEvent( QResizeEvent *event )
+void MainWindowHandler::ResizeEvent( QResizeEvent* )
 {
   QRect rec = QApplication::desktop()->screenGeometry();
   double height = rec.height();
@@ -298,8 +294,8 @@ void MainWindowHandler::CreateChart()
     seriesReferenced->attachAxis( axisX );
     seriesReferenced->attachAxis( axisY );
 
-   // chart->axisX()->setVisible( false );
-  //  chart->axisY()->setVisible( false );
+    chart->axisX()->setVisible( false );
+    chart->axisY()->setVisible( false );
 }
 
 

@@ -67,7 +67,7 @@ Point  GeomPolyline::Get2DerivativePoint( double t ) const
   \ru позвращается полилилния для полилинии - это полилиния
 */
 //-----------------------------------------------------------------------------
-void GeomPolyline::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy ) const
+void GeomPolyline::GetAsPolyLine( std::vector<Point> & polyLinePoints, double ) const
 {
   polyLinePoints = referencedPoints;
 }
