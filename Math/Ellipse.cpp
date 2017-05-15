@@ -10,7 +10,7 @@
   \ru Коструктор Ellipse. Вычисляются два радиуса и записывается центральная точка
 */
 //-----------------------------------------------------------------------------
-Ellipse::Ellipse( Point center, double r1, double r2,double alpha ):
+Ellipse::Ellipse( Point center, double r1, double r2, double alpha ):
   center( center ),
   r1    ( r1     ),
   r2    ( r2     ),
@@ -128,7 +128,7 @@ void Ellipse::GetAsPolyLine( std::vector<Point>& polyLinePoints, double accuracy
   polyLinePoints = polyline.GetPoints();
 }
 
-double Ellipse::DistancePointToCurve( Point point ) const
+double Ellipse::DistanceToPoint( Point point ) const
 {
   double accuracy = 0.01;
   std::vector<Point> polylinePoints;
@@ -136,17 +136,17 @@ double Ellipse::DistancePointToCurve( Point point ) const
   return C2Curve::DistancePointToCurve( point, polylinePoints );
 }
 
-void Ellipse::Translation( const std::vector<std::vector<double>>& )
+void Ellipse::Translation( double xShift, double yShift )
 {
-  return;
+  center = Point( center.GetX() + xShift, center.GetY() + yShift );
 }
 
-void Ellipse::Rotation( const std::vector<std::vector<double>>& )
+void Ellipse::Rotation( double alphaAng )
 {
-  return;
+  alpha += alphaAng;
 }
 
-void Ellipse::Dilatation( const std::vector<std::vector<double>>& )
+void Ellipse::Dilatation( double XScaling, double YScaling )
 {
-  return;
+
 }

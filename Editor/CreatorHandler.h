@@ -47,7 +47,6 @@ public:
   void                      AddSufficientNum   ( int num );     ///< добавить необходимое для отрисовки кривой количество точек
   bool                      IsSufficientNum    () const;        ///< проверить, достаточно ли текущее количество точек для создания и отображения выбранной кривой
   std::shared_ptr<C2Curve>  Create             ();              ///< создать геометрический примитив
-  const std::vector<Point>& RefPoints          () const;        ///< вернуть опорные точки
   void                      ClearPoints        ();              ///< очистить массив точек, полученных с экрана
 };
 

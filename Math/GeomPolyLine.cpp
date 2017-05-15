@@ -72,22 +72,27 @@ void GeomPolyline::GetAsPolyLine( std::vector<Point> & polyLinePoints, double ac
   polyLinePoints = referencedPoints;
 }
 
-void GeomPolyline::Translation( const std::vector<std::vector<double>>& )
+void GeomPolyline::Translation ( double xShift, double yShift )
 {
-  return;
+  Point pointShift( xShift, yShift );
+  for (int i = 0; i < referencedPoints.size(); i++ )
+    referencedPoints[i] = referencedPoints[i] + pointShift;
 }
 
-void GeomPolyline::Rotation( const std::vector<std::vector<double>>& transformationMatrix )
+void GeomPolyline::Rotation( double alpha )
 {
-  return;
+  for (int i = 0; i < referencedPoints.size(); i++ )
+    referencedPoints[i] = Point( referencedPoints[i].GetX() * cos(alpha) - referencedPoints[i].GetY() * sin(alpha),
+                                 referencedPoints[i].GetX() * sin(alpha) + referencedPoints[i].GetY() * cos(alpha) );
 }
 
-void GeomPolyline::Dilatation( const std::vector<std::vector<double>>& transformationMatrix )
+void GeomPolyline::Dilatation( double xScaling, double yScaling )
 {
-  return;
+  for (int i = 0; i < referencedPoints.size(); i++ )
+    referencedPoints[i] = Point( referencedPoints[i].GetX() * xScaling, referencedPoints[i].GetY() * yScaling );
 }
 
-double GeomPolyline::DistancePointToCurve( Point point ) const
+double GeomPolyline::DistanceToPoint ( Point point ) const
 {
   double accuracy = 0.01;
   std::vector<Point> polylinePoints;

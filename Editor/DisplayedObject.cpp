@@ -18,7 +18,7 @@ bool DisplayedObject::GetSelectionStatus()
 //-----------------------------------------------------------------------------
 void DisplayedObject::ModifySelectionStatus( Point cursor, double precision, QColor selectedColor )
 {
- if ( curve->DistancePointToCurve( cursor ) < precision )
+ if ( curve->DistanceToPoint( cursor ) < precision )
     selected = !selected;
  if (selected)
    SetColor( selectedColor );

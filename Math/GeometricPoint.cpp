@@ -11,17 +11,17 @@ GeometricPoint::GeometricPoint( Point point ):
 }
 
 
-void GeometricPoint::Translation( const std::vector<std::vector<double>>& )
+void GeometricPoint::Translation(  double xShift, double yShift )
+{
+  point = point + Point( xShift, yShift );
+}
+
+void GeometricPoint::Rotation( double )
 {
   return;
 }
 
-void GeometricPoint::Rotation( const std::vector<std::vector<double>>& )
-{
-  return;
-}
-
-void GeometricPoint::Dilatation( const std::vector<std::vector<double>>& )
+void GeometricPoint::Dilatation(  double, double  )
 {
   return;
 }

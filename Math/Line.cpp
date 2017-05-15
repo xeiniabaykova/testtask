@@ -80,22 +80,27 @@ void Line::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy )
   polyLinePoints.push_back( startPoint );
   polyLinePoints.push_back( endPoint );
 }
-void Line::Translation( const std::vector<std::vector<double>>& )
+void Line::Translation( double xShift, double yShift )
 {
-  return;
+  startPoint = Point( startPoint.GetX() + xShift, startPoint.GetY() + yShift );
+  endPoint = Point( endPoint.GetX() + xShift, endPoint.GetY() + yShift );
 }
 
-void Line::Rotation( const std::vector<std::vector<double>>& )
+void Line::Rotation( double alpha )
 {
-  return;
+  startPoint = Point( startPoint.GetX() * cos(alpha) - startPoint.GetY() * sin(alpha),
+                      startPoint.GetX() * sin(alpha) + startPoint.GetY() * cos(alpha) );
+  endPoint = Point( endPoint.GetX() * cos(alpha) - endPoint.GetY() * sin(alpha),
+                      endPoint.GetX() * sin(alpha) + endPoint.GetY() * cos(alpha) );
 }
 
-void Line::Dilatation( const std::vector<std::vector<double>>& )
+void Line::Dilatation( double xScaling, double yScaling )
 {
-  return;
+  startPoint = Point( startPoint.GetX() * xScaling, startPoint.GetY() * yScaling );
+  endPoint = Point( endPoint.GetX() * xScaling, endPoint.GetY() * yScaling );
 }
 
-double Line::DistancePointToCurve( Point point ) const
+double Line::DistanceToPoint( Point point ) const
 {
   double accuracy = 0.01;
   std::vector<Point> polylinePoints;
