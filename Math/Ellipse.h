@@ -27,6 +27,7 @@ private:
   double r1;     ///< первый радиус
   double r2;     ///< второй радиус
   double alpha;  ///< угол между главной осью и осью х
+  bool isValid;
 public:
   /**  \brief \ru создать эллипс по двум радиусам и центральной точке
     \param[in] center - центр эллипса .\~
@@ -53,6 +54,7 @@ public:
   virtual void Translation ( double xShift, double yShift );
   virtual void Rotation    ( double alpha );
   virtual void Dilatation  ( double XScaling, double YScaling );
+  bool IsValid() const;
 };
 
 #endif // ELLIPSE_H

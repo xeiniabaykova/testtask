@@ -1,5 +1,18 @@
 #include "Line.h"
+#include "Editor/CommonConstants.h"
 #include <cmath>
+
+namespace {
+
+bool IsEqualPoint(Point point1, Point point2)
+{
+  if (fabs(point1.GetX() - point2.GetX()) < CommonConstants::NULL_TOL
+    && fabs(point1.GetY() - point2.GetY()) < CommonConstants::NULL_TOL )
+    return true;
+  return false;
+}
+}
+
 
 
 //-----------------------------------------------------------------------------
@@ -19,9 +32,15 @@ Line::Line( Point startPoint, Point endPoint ):
 
 Line::Line( const std::vector<Point>& points )
 {
+  isValid = false;
+  if (points.size() == 0)
+    return;
+  if ( IsEqualPoint(points[0], points[1]) )
+    return;
   startPoint = points[0];
   endPoint = points[1];
   SetReferensedPoints( points );
+  isValid = true;
 }
 
 //-----------------------------------------------------------------------------
@@ -64,9 +83,8 @@ Point Line::GetDerivativePoint( double ) const
   \ru возвращает вторую производную линнии по параметру t
 */
 //-----------------------------------------------------------------------------
-Point Line::Get2DerivativePoint( double t ) const
+Point Line::Get2DerivativePoint( double ) const
 {
-  (void)t;
   return Point ( 0.0, 0.0 );
 }
 
@@ -103,9 +121,8 @@ void Line::Dilatation( double xScaling, double yScaling )
 
 double Line::DistanceToPoint( Point point ) const
 {
-  double accuracy = 0.01;
   std::vector<Point> polylinePoints;
-  GetAsPolyLine( polylinePoints, accuracy );
+  GetAsPolyLine( polylinePoints, CommonConstants::PRECISION_POLYLINE );
   return C2Curve::DistancePointToCurve( point, polylinePoints );
 }
 

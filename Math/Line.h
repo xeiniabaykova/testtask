@@ -23,6 +23,7 @@ class Line: public C2Curve
 private:
   Point startPoint; ///< начальная точка
   Point endPoint;  ///< направление
+  bool isValid;
 public:
    Line() = delete;
    /**  \brief \ru создать отрезок по начальной и конечной точке отрезка
@@ -46,6 +47,7 @@ public:
   virtual void Translation           ( double xShift, double yShift );                                ///< сдвиг по осям x, y
   virtual void Rotation              ( double alpha );                                                ///< поворот на угол alpha
   virtual void Dilatation            ( double XScaling, double YScaling );                            ///< матрица растяжения
+  bool IsValid();
 
 };
 

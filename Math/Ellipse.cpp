@@ -5,6 +5,46 @@
 #include "Editor/CommonConstants.h"
 
 
+
+namespace {
+
+bool IsEqualPoint( Point point1, Point point2 ) 
+{
+  if ( fabs(point1.GetX() - point2.GetX()) < CommonConstants::NULL_TOL
+    && fabs(point1.GetY() - point2.GetY()) < CommonConstants::NULL_TOL )
+		return true;
+	return false;
+}
+
+bool PointsOneLine( Point point1, Point point2, Point point3 )
+{
+	if ( fabs((point3.GetX() - point1.GetX()) /
+    (point2.GetX() - point1.GetX()) - (point3.GetY() - point1.GetY()) / (point2.GetY() - point1.GetY())) < CommonConstants::NULL_TOL)
+		return true;
+	return false;
+}
+
+// данные в эллипсе правильные, если: точки не совпадают, не лежат на одно линии
+bool CorrectEllipseData( Point point1, Point point2, Point point3 )
+{
+	if ( PointsOneLine(point1, point2, point3) )
+		return false;
+	if ( IsEqualPoint(point1, point2) ||
+		IsEqualPoint(point2, point3) ||
+		IsEqualPoint(point1, point3) )
+		return false;
+	return true;
+}
+// если обе точки не совпадают, то считаем, что все верно
+bool CorrectCircleData( Point point1, Point point2 )
+{
+	if (IsEqualPoint(point1, point2))
+		return false;
+	return true;
+}
+}
+
+
 //-----------------------------------------------------------------------------
 /**
   \ru Коструктор Ellipse. Вычисляются два радиуса и записывается центральная точка
@@ -24,6 +64,25 @@ Ellipse::Ellipse( Point center, double r1, double r2, double alpha ):
 
 Ellipse::Ellipse ( const std::vector<Point>& points )
 {  
+	isValid = false;
+	// если точки 2, то это - окружность, создаем окружность
+	if (points.size() == 2) {
+
+		if ( !CorrectCircleData(points[0], points[1]) )
+			return;
+
+		center = points[0];
+		Point pointV(points[1]);
+		double x = pointV.GetX() - center.GetX();
+		double y = pointV.GetY() - center.GetY();
+		double r = sqrt(x * x + y * y);
+		r1 = r;
+		r2 = r;
+		alpha = 0;
+	}
+	if ( !CorrectEllipseData(points[0], points[1], points[2]) )
+		return;
+	
   center = points[0];
   Point pointV( points[1] );
 
@@ -60,6 +119,7 @@ Ellipse::Ellipse ( const std::vector<Point>& points )
       ( 1 - ( point2.GetX()) * ( point2.GetX()) / (r1 * r1))) );
 
   r2 = axisB;
+  isValid = true;
 
 }
 
@@ -149,4 +209,9 @@ void Ellipse::Rotation( double alphaAng )
 void Ellipse::Dilatation( double XScaling, double YScaling )
 {
 
+}
+
+bool Ellipse::IsValid() const
+{
+	return isValid;
 }

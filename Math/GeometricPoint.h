@@ -22,6 +22,7 @@ class GeometricPoint: public GeometricPrimitive
 {
 private:
   Point point; ///< точка
+  bool isValid;
 public:
   //-------------------------------------------------------------------------------
   // \ru Создание точки по точке
@@ -30,6 +31,7 @@ public:
   virtual void Translation ( double xShift, double yShift ); // сдвиг по осям x, y
   virtual void Rotation    ( double alpha ); // поворот на угол alpha
   virtual void Dilatation  ( double XScaling, double YScaling ); // матрица растяжения
+  bool IsValid();
 };
 
 

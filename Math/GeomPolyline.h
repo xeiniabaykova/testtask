@@ -22,6 +22,7 @@ class GeomPolyline: public C2Curve
 {
 private:
  std::vector<Point> referencedPoints;
+ bool isValid;
 public:
  /**  \brief \ru создать полилинию по опорным точкам
    \param[in] points - опорные точки .\~
@@ -44,6 +45,7 @@ public:
   virtual void   Translation         ( double xShift, double yShift ); // сдвиг по осям x, y
   virtual void   Rotation            ( double alpha ); // поворот на угол alpha
   virtual void   Dilatation          ( double XScaling, double YScaling ); // матрица растяжения
+  bool IsValid();
 };
 
 #endif // GEOMPOLYLINE_H

@@ -4,7 +4,7 @@
 double NurbsCurve::DistancePointToCurve( Point point ) const
 {
   std::vector<Point> polylinePoints;
-  GetAsPolyLine( polylinePoints, accuracy );
+  GetAsPolyLine( polylinePoints, CommonConstants::PRECISION_POLYLINE );
  // return C2Curve::DistancePointToCurve( point, polylinePoints );
   return 0.0;
 }

@@ -2,6 +2,34 @@
 #include "Editor/CommonConstants.h"
 #include <cmath>
 
+namespace {
+bool IsEqualPoint(Point point1, Point point2)
+{
+  if ( fabs(point1.GetX() - point2.GetX()) < CommonConstants::NULL_TOL
+    && fabs(point1.GetY() - point2.GetY()) < CommonConstants::NULL_TOL )
+    return true;
+  return false;
+}
+
+// данные в эллипсе правильные, если: точки не совпадают, не лежат на одно линии
+bool CorrectPolylineData( const std::vector<Point>& points )
+{
+  if (points.size() == 0)
+    return false;
+
+  for ( int i = 0; i < points.size(); i++ )
+  for ( int j = 0; j < points.size(); j++ )
+    {
+      if ( i == j )
+          continue;
+       if ( IsEqualPoint(points[i], points[j]) )
+          return false;
+     }
+return true;
+}
+
+}
+
 //-----------------------------------------------------------------------------
 /**
   Конструктор полилинии
@@ -10,7 +38,11 @@
 GeomPolyline::GeomPolyline(const std::vector<Point>& referensedPoits ):
   referencedPoints( referensedPoits )
 {
+  isValid = false;
+  if ( !CorrectPolylineData(referencedPoints) )
+    return;
   SetReferensedPoints( referensedPoits );
+  isValid = true;
 }
 
 

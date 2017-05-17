@@ -29,6 +29,7 @@ private:
   std::vector<double> weights;
   std::vector<int>    nodes;
   bool                isClosed;
+  bool isValid;
 private:
   NurbsCurve( const NurbsCurve &obj ) = delete;
   NurbsCurve& operator=( NurbsCurve &obj ) = delete;
@@ -53,6 +54,7 @@ public:
   virtual void   Translation         ( const std::vector<std::vector<double>>& transformationMatrix );
   virtual void   Rotation            ( const std::vector<std::vector<double>>& transformationMatrix );
   virtual void   Dilatation          ( const std::vector<std::vector<double>>& transformationMatrix );
+  bool IsValid();
 };
 
 
