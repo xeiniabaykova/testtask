@@ -58,7 +58,10 @@ set(SOURCE_FILES
 		Math/Vector.cpp
 		Math/Vector.h
 		Tests.cpp
-        Serealizer/curveserializer.h
+        Serealizer/CurveSerializer.h
+		Serealizer/CurveSerializer.cpp
+		Serealizer/LineSerializer.h
+		Serealizer/LineSerializer.cpp
         )
 
 add_executable(TestTask1 ${SOURCE_FILES})

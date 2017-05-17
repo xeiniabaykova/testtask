@@ -94,7 +94,7 @@ Point Line::Get2DerivativePoint( double ) const
   \ru позвращается полилилния для текущей линии - это начало конец
 */
 //-----------------------------------------------------------------------------
-void Line::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy ) const
+void Line::GetAsPolyLine( std::vector<Point> & polyLinePoints, double ) const
 {
   polyLinePoints.push_back( startPoint );
   polyLinePoints.push_back( endPoint );
@@ -126,3 +126,7 @@ double Line::DistanceToPoint( Point point ) const
   return C2Curve::DistancePointToCurve( point, polylinePoints );
 }
 
+std::string Line::GetName() const
+{
+  return "Line";
+}
