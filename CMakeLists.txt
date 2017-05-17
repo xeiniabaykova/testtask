@@ -57,6 +57,7 @@ set(SOURCE_FILES
         Math/Range.h
 		Math/Vector.cpp
 		Math/Vector.h
+		Tests.cpp
         Serealizer/curveserializer.h
         )
 
