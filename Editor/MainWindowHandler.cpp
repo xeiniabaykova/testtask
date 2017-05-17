@@ -4,6 +4,7 @@
 #include <QInputDialog>
 #include <QtCharts/QLineSeries>
 #include <functional>
+#include "CommonConstants.h"
 
 
 
@@ -15,7 +16,6 @@
 MainWindowHandler::MainWindowHandler (QChart * chart):
   chart         ( chart             ),
   state         ( StateExpectAction ),
-  precision     ( 0.01 ),
   selectedColor ( 10, 50, 255 )
 {
 
@@ -117,12 +117,9 @@ void MainWindowHandler::SaveFile()
 //-----------------------------------------------------------------------------
 void MainWindowHandler::CreateCurve()
 {
-  double accuracy = 0.01;
-  std::vector<Point> currentPolylinePoints;
   std::shared_ptr<C2Curve> primitive = geomCreator->Create();
-  primitive->GetAsPolyLine( currentPolylinePoints, accuracy );
   std::shared_ptr<DisplayedObject> curve = std::make_shared<DisplayedObject>( primitive, axisX, axisY );
-  curve->addCurveToChart( chart, precision );
+  curve->addCurveToChart( chart );
   displayedCurves.push_back( curve );
 }
 
@@ -195,7 +192,7 @@ void MainWindowHandler::StateExpect( QMouseEvent *event )
 {
   QPointF currentPoint = chart->mapToValue( QPointF(event->pos().x(), event->pos().y() - 30) );
   for ( int i = 0; i < displayedCurves.size(); i++ )
-    displayedCurves[i]->ModifySelectionStatus( Point(currentPoint.x(), currentPoint.y()), precision, selectedColor );
+    displayedCurves[i]->ModifySelectionStatus( Point(currentPoint.x(), currentPoint.y()), CommonConstants::PRECISION_SELECT, selectedColor );
   state = StateExpectAction;
 }
 

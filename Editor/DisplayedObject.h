@@ -27,13 +27,13 @@ QT_CHARTS_USE_NAMESPACE
 struct DisplayedObject
 {
 private:
-  QColor                              currentColor;     ///< цвет неслектированной кривой
-  bool                                selected;         ///< свойство селектированности кривой
-  std::shared_ptr<QLineSeries>        currentseries;    ///< series с точками
-  std::shared_ptr<QScatterSeries>     seriesRef;        ///< series с опорными точками
-  std::shared_ptr<C2Curve>            curve;
-  std::shared_ptr<QValueAxis>         axisX;
-  std::shared_ptr<QValueAxis>         axisY;
+  QColor                          currentColor;     ///< цвет неслектированной кривой
+  bool                            selected;         ///< свойство селектированности кривой
+  std::shared_ptr<QLineSeries>    currentseries;    ///< series с точками
+  std::shared_ptr<QScatterSeries> seriesRef;        ///< series с опорными точками
+  std::shared_ptr<C2Curve>        curve;
+  std::shared_ptr<QValueAxis>     axisX;
+  std::shared_ptr<QValueAxis>     axisY;
 public:
   DisplayedObject() = default;
   virtual ~DisplayedObject();
@@ -49,7 +49,7 @@ private:
   DisplayedObject( const DisplayedObject &obj ) = delete;
   DisplayedObject& operator=( DisplayedObject &obj ) = delete;
  public:
-  void addCurveToChart         ( QChart * chart, double accuracy );
+  void addCurveToChart         ( QChart * chart );
   bool GetSelectionStatus      ();                                                      ///< получить информацию о селектированности кривой
   void ModifySelectionStatus   ( Point cursor, double precision, QColor selectedColor ); ///< изменить информацию о селектированности кривой в зависимости от полученной точки
   void SetColor                ( QColor color );                                         ///< установить цвет кривой

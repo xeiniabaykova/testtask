@@ -37,7 +37,6 @@ class MainWindowHandler {
 
 private:
   QColor                                        selectedColor;
-  double                                        precision;
   QChart                                        * chart;           ///< объект для отрисовки графика
   std::shared_ptr<CreatorHandler>               geomCreator;     ///< объект для создания геометрического примитива
   CurrentState                                  state;           ///< объект для хранения текущего состояния окна

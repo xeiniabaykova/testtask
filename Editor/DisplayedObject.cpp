@@ -1,4 +1,5 @@
 #include "DisplayedObject.h"
+#include "CommonConstants.h"
 
 //-----------------------------------------------------------------------------
 /**
@@ -68,7 +69,7 @@ void DisplayedObject::SetSeries( QLineSeries *  current, QScatterSeries *ref )
   seriesRef->chart()->removeSeries( seriesRef.get() );
 }
 
-void DisplayedObject::addCurveToChart( QChart * chart, double accuracy )
+void DisplayedObject::addCurveToChart( QChart * chart)
 {
   currentseries = std::make_shared<QLineSeries>();
   currentseries->setColor( currentColor );
@@ -77,7 +78,7 @@ void DisplayedObject::addCurveToChart( QChart * chart, double accuracy )
   seriesRef->setColor( currentColor );
 
   std::vector<Point> polyPoints;
-  curve->GetAsPolyLine( polyPoints,accuracy );
+  curve->GetAsPolyLine( polyPoints,CommonConstants::PRECISION_POLYLINE );
 
   for ( int i = 0; i < polyPoints.size(); i++ )
     *currentseries <<QPointF( polyPoints[i].GetX(), polyPoints[i].GetY() );

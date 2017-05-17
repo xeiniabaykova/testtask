@@ -38,7 +38,8 @@ SOURCES += main.cpp\
     Editor/CreatorHandler.cpp \
     Editor/DisplayedObject.cpp \
     Math/C2Curve.cpp \
-    Math/Vector.cpp
+    Math/Vector.cpp \
+    Editor/CommonConstants.cpp
 
 HEADERS  += Editor/MainWindow.h \
     Editor/FileIO.h \

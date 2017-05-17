@@ -37,6 +37,7 @@ set(SOURCE_FILES
         Editor/MainWindowHandler.h
         Editor/Polyline.cpp
 		Editor/CommonConstants.h
+		Editor/CommonConstants.cpp
 	    Math/C2Curve.cpp
         Math/C2Curve.h
         Math/Ellipse.cpp

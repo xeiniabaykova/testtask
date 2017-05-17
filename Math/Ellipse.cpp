@@ -33,20 +33,20 @@ Ellipse::Ellipse ( const std::vector<Point>& points )
   double y = pointV.GetY() - center.GetY();
   double axisA = sqrt( x * x + y * y );
 
-  if ( abs(x) < 0.001 && y <= 0 )
-    alpha = -Pi/2.0;
+  if ( abs(x) < CommonConstants::NULL_TOL && y <= 0 )
+    alpha = -CommonConstants::PI / 2.0;
 
-  if ( abs(x) < 0.001 && y > 0  )
-    alpha = Pi/2.0;
+  if ( abs(x) < CommonConstants::NULL_TOL && y > 0  )
+    alpha = CommonConstants::PI / 2.0;
 
   if ( x > 0 && y >= 0 )
-    alpha = atan( y / x );
+    alpha = atan2( y,  x );
 
   if ( x < 0 && y >= 0 )
-    alpha = Pi + atan( y / x );
+    alpha = CommonConstants::PI + atan( y / x );
 
   if ( x < 0 && y <= 0 )
-    alpha = Pi + atan( y / x );
+    alpha = CommonConstants::PI + atan( y / x );
 
   if ( x > 0 && y <= 0 )
     alpha = - atan( y / x );
@@ -87,7 +87,7 @@ Point Ellipse::GetPoint( double t ) const
 
 Range Ellipse::GetRange() const
 {
-  return Range( 0.0, 2.0 * Pi );
+  return Range( 0.0, 2.0 * CommonConstants::PI );
 }
 
 

@@ -1,4 +1,5 @@
 #include <Math/GeomPolyline.h>
+#include "Editor/CommonConstants.h"
 #include <cmath>
 
 //-----------------------------------------------------------------------------
@@ -56,7 +57,7 @@ Point GeomPolyline::GetDerivativePoint( double t ) const
   \ru возвращает вторую производную линнии по параметру t
 */
 //-----------------------------------------------------------------------------
-Point  GeomPolyline::Get2DerivativePoint( double t ) const
+Point GeomPolyline::Get2DerivativePoint( double t ) const
 {
   (void)t;
   return Point ( 0.0, 0.0 );
@@ -95,8 +96,7 @@ void GeomPolyline::Dilatation( double xScaling, double yScaling )
 
 double GeomPolyline::DistanceToPoint ( Point point ) const
 {
-  double accuracy = 0.01;
   std::vector<Point> polylinePoints;
-  GetAsPolyLine( polylinePoints, accuracy );
+  GetAsPolyLine( polylinePoints, CommonConstants::PRECISION_POLYLINE );
   return C2Curve::DistancePointToCurve( point, polylinePoints );
 }

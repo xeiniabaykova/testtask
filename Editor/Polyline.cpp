@@ -2,6 +2,7 @@
 #include "Math/GeometricPoint.h"
 #include "Math/Line.h"
 #include <cmath>
+#include "CommonConstants.h"
 
 //-----------------------------------------------------------------------------
 /**
@@ -44,14 +45,14 @@ std::vector<Point> Polyline::GetPoints()
 //-----------------------------------------------------------------------------
 double Polyline::CountingStep( double tCurrent )
 {
-  precision = 0.01;
+
   Point firstDerivative = figure->GetDerivativePoint( tCurrent );
   Point secondDerivative = figure->Get2DerivativePoint( tCurrent );
   double vectorMult = firstDerivative.GetX() * secondDerivative.GetY() - firstDerivative.GetY() * secondDerivative.GetX();
   double normVectorMult = sqrt( vectorMult * vectorMult );
   double normFirstDerivative = sqrt( firstDerivative.GetX() * firstDerivative.GetX() +  firstDerivative.GetY() * firstDerivative.GetY() );
   double multiplicationFirstDerivative = firstDerivative.GetX() * firstDerivative.GetX() +  firstDerivative.GetY() * firstDerivative.GetY();
-  double deltaT = 2 * sqrt ( precision * (2 * normFirstDerivative / normVectorMult - precision / multiplicationFirstDerivative) );
+  double deltaT = 2 * sqrt ( CommonConstants::PRECISION_POLYLINE * (2 * normFirstDerivative / normVectorMult - CommonConstants::PRECISION_POLYLINE / multiplicationFirstDerivative) );
   return deltaT;
 }
 

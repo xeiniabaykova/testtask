@@ -2,6 +2,13 @@
 #define COMMONCONSTANTS_H
 #include <QtCharts/QChartView>
 
-const double Pi =  3.14159265358979323846;
+struct CommonConstants {
+  static double PI;
+  static double NULL_TOL;
+  static double PRECISION_POLYLINE;
+  static double PRECISION_SELECT;
+};
+
+
 
 #endif // COMMONCONSTANTS_H

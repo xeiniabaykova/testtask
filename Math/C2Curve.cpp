@@ -16,7 +16,7 @@ double Dot( Point point1, Point point2 )
 //-----------------------------------------------------------------------------
 double Distance( Point point1, Point point2 )
 {
-  return sqrt ( (point1.GetX() - point2.GetX()) * (point1.GetX() - point2.GetX()) +
+  return sqrt( (point1.GetX() - point2.GetX()) * (point1.GetX() - point2.GetX()) +
          (point1.GetY() - point2.GetY()) * (point1.GetY() - point2.GetY()) );
 }
 
