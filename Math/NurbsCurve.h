@@ -25,6 +25,7 @@
 class NurbsCurve: public GeometricPrimitive
 {
 private:
+  int deg;
   std::vector<Point>  poles;
   std::vector<double> weights;
   std::vector<int>    nodes;
@@ -46,15 +47,20 @@ public:
   NurbsCurve ( const std::vector<Point>& poles, const std::vector<double>& weights,
                const std::vector<int>& nodes, bool isClosed );
   virtual Point  GetPoint            ( double t ) const;                                             ///< возвращает точку на кривой по параметру t
-  virtual Point  GetDerivativePoint  ( double t ) const;                                             ///< возвращает производную по параметру t
-  virtual Point  Get2DerivativePoint ( double t ) const;                                             ///< возвращает вторую производную по параметру t
-  virtual Range  GetRange            () const;                                                       ///< возвращает вторую производную по параметру t
-  virtual void   GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< возвращает полилинию для Nurbs - кривой с точностью accuracy
+  virtual Point GetDerivativePoint   ( double t ) const;                                             ///< возвращает производную по параметру t
+  virtual Point Get2DerivativePoint  ( double t ) const;                                             ///< возвращает вторую производную по параметру t
+  virtual Range GetRange             () const;                                                       ///< возвращает вторую производную по параметру t
+  virtual void  GetAsPolyLine        ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< возвращает полилинию для Nurbs - кривой с точностью accuracy
          double DistancePointToCurve ( Point point ) const;
-  virtual void   Translation         ( const std::vector<std::vector<double>>& transformationMatrix );
-  virtual void   Rotation            ( const std::vector<std::vector<double>>& transformationMatrix );
-  virtual void   Dilatation          ( const std::vector<std::vector<double>>& transformationMatrix );
-  bool IsValid();
+  virtual void  Translation          ( const std::vector<std::vector<double>>& transformationMatrix );
+  virtual void  Rotation             ( const std::vector<std::vector<double>>& transformationMatrix );
+  virtual void  Dilatation           ( const std::vector<std::vector<double>>& transformationMatrix );
+  bool          IsValid();
+private:
+  void ComputeBasicFunctions(  double x,int i, std::vector<std::vector<double>>& basicFunctions );
+  void ComputeBasicFunctionsD( double X, const std::vector<std::vector<double>>& basicFunctions, std::vector<std::vector<double>>& basicFunctionsD );
+  double BasicFunction();
+
 };
 
 
