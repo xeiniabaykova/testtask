@@ -134,8 +134,6 @@ void MainWindow::CreateActions()
   connect( createPolylineAct, &QAction::triggered, this, &MainWindow::OnCreatePolyline );
 
   createNurbsAct = new QAction( tr("&Nurbs"), this );
-  createNurbsAct->setDisabled( true );
- // createNurbsAct->setShortcuts( QKeySequence::New );
   createNurbsAct->setStatusTip( tr("Creating nurbs") );
   connect( createNurbsAct, &QAction::triggered, this, &MainWindow::OnCreateNurbs );
 
@@ -152,7 +150,7 @@ void MainWindow::CreateActions()
   creatorCurves->addAction( createEllipseAct );
 //  creatorCurves->addAction( createCircleAct );
   creatorCurves->addAction( createPolylineAct );
- // creatorCurves->addAction( createNurbsAct );
+  creatorCurves->addAction( createNurbsAct );
 
 
   deleteCurveAct = new QAction( tr("&delete curve"), this );
@@ -260,8 +258,10 @@ void MainWindow::OnCreateCircle()
 //-----------------------------------------------------------------------------
 void MainWindow::OnCreateNurbs()
 {
+
   createNurbsAct->setCheckable( true );
   createNurbsAct->setChecked( true );
+  windowHandler.CreateNurbs();
 }
 
 

@@ -66,8 +66,8 @@ void MainWindowHandler::CreateCircle()
 //-----------------------------------------------------------------------------
 void MainWindowHandler::CreateNurbs()
 {
-  geomCreator->type = CreatorHandler::CreateNURBS;
-// state = CreateCurve;
+  state = StateCreatePolyline;
+  geomCreator = std::make_shared<CreatorHandler>( -1, CreatorHandler::CreateNURBS );
 }
 
 
@@ -291,8 +291,8 @@ void MainWindowHandler::CreateChart()
     seriesReferenced->attachAxis( axisX );
     seriesReferenced->attachAxis( axisY );
 
-    chart->axisX()->setVisible( false );
-    chart->axisY()->setVisible( false );
+  //  chart->axisX()->setVisible( false );
+  //  chart->axisY()->setVisible( false );
 }
 
 

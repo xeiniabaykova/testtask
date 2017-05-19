@@ -22,7 +22,7 @@
 // ---
 
 
-class NurbsCurve : public GeometricPrimitive
+class NurbsCurve : public C2Curve
 {
 private:
   std::vector<Point>  poles;
@@ -54,24 +54,25 @@ public:
   {
   }
 
-  virtual Point  GetPoint               ( double t ) const;                                             ///< возвращает точку на кривой по параметру t
-  virtual Point  GetDerivativePoint     ( double t ) const;                                             ///< возвращает производную по параметру t
-  virtual Point  Get2DerivativePoint    ( double t ) const;                                             ///< возвращает вторую производную по параметру t
-  virtual Range  GetRange               ()         const;                                                       ///< возвращает вторую производную по параметру t
-  virtual void   GetAsPolyLine          ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< возвращает полилинию для Nurbs - кривой с точностью accuracy
-  double         DistancePointToCurve   ( Point point ) const;
-  virtual void   Translation            ( double xShift, double yShift );
-  virtual void   Rotation               ( double alpha );
-  virtual void   Dilatation             ( double XScaling, double YScaling );
+  virtual Point  GetPoint                    ( double t ) const;                                               ///< вернуть точку на кривой по параметру t
+  virtual Range  GetRange                    () const;                                                         ///< вернуть границы параметра для эллипса : [0, 2*pi]
+  virtual Point  GetDerivativePoint          ( double t ) const;                                               ///< вернуть производную на эллипсе по параметру t
+  virtual Point  Get2DerivativePoint         ( double t ) const;                                               ///< вернуть вторую производную на эллипсе по параметру t
+  virtual void   GetAsPolyLine               ( std::vector<Point> & polyLinePoints, double accuracy ) const;   ///< вернуть полилинию для эллипса
+  virtual double DistanceToPoint              ( Point point ) const;                                            ///< возвращает расстояние от точки до полилинии эллипса
 
-  double         CountWeight             ( double x ) const;
-  double         CountWeightD            ( double x )  const;
-  double         CountWeightD2           ( double x )  const;
-  double         FindSpan                ( double x ) const;
-  void           ComputeBasicFunction    ( double x, int i, double & result ) const;
-  void           ComputeBasicFunctionsD  ( double X, const std::vector<std::vector<double>>& basicFunctions, std::vector<std::vector<double>>& basicFunctionsD );
-  void           ComputeBasicFunctionD   ( double x, int i, double& result, int derivativeOrder ) const;
-  double         BasicFunction           ();
+  virtual void Translation ( double xShift, double yShift );
+  virtual void Rotation    ( double alpha );
+  virtual void Dilatation  ( double XScaling, double YScaling );
+private:
+  double         CountWeight            ( double x ) const;
+  double         CountWeightD           ( double x )  const;
+  double         CountWeightD2          ( double x )  const;
+  double         FindSpan               ( double x ) const;
+  void           ComputeBasicFunction   ( double x, int i, double & result ) const;
+  void           ComputeBasicFunctionsD ( double X, const std::vector<std::vector<double>>& basicFunctions, std::vector<std::vector<double>>& basicFunctionsD );
+  void           ComputeBasicFunctionD  ( double x, int i, double& result, int derivativeOrder ) const;
+  double         BasicFunction          ();
 };
 
 

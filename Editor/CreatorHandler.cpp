@@ -1,6 +1,7 @@
 #include "CreatorHandler.h"
 #include "Math/GeomPolyline.h"
 #include "Math/Line.h"
+#include "Math/NurbsCurve.h"
 
 #include "Math/Ellipse.h"
 
@@ -44,10 +45,26 @@ std::shared_ptr<C2Curve> CreatorHandler::Create()
   }
     break;
   case CreatePolyline:{
+
     return std::make_shared<GeomPolyline>( points );
   }
     break;
-  case CreateNURBS:
+  case CreateNURBS:{
+    std::vector<double> weights;
+    for ( int i = 0; i < points.size(); i++ )
+      weights.push_back( 1.0 );
+
+    std::vector<double> nodes;
+    for ( int i = 0; i < 3; i++ )
+      nodes.push_back( 1.0 );
+    for ( int i = 3; i < points.size() - 3; i++ )
+      nodes.push_back( i );
+    for ( int i = points.size() - 3; i < points.size(); i++ )
+      nodes.push_back( points.size() - 3 );
+    bool isClosed = false;
+    double degree = 2;
+    return std::make_shared<NurbsCurve>( points, weights, nodes, isClosed, degree );
+  }
     break;
   }
   return 0;
