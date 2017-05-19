@@ -1,5 +1,4 @@
 #include "NurbsCurve.h"
-#include <QtWidgets/QMessageBox>
 
 void NurbsCurve::ComputeBasicFunction(double x, int i, double& result) const
 {
@@ -52,12 +51,14 @@ void NurbsCurve::ComputeBasicFunction(double x, int i, double& result) const
   result = N[0];
 }
 
-double NurbsCurve::FindSpan(double x) const
+int NurbsCurve::FindSpan(double x) const
 {
-  if (x == nodes[nodes.size() -1]) return nodes.size() -1;
-  double low = degree;
-  double hight = nodes.size();
-  double mid = (low + hight) / 2;
+  int n = nodes.size() - degree - 1;
+  if (x == nodes[n]) return n;
+  int low = degree;
+
+  int hight = n + 1;
+  int mid  = (low + hight) / 2;
   while ((x < nodes[mid]) || (x >= nodes[mid + 1]))
   {
     if (x < nodes[mid])
@@ -131,7 +132,7 @@ void NurbsCurve::ComputeBasicFunctionD(double x, int i, double& result, int deri
         double uRight = nodes[i + j + degree + m + 1];
         if (derivative[j + 1] == 0.0)
         {
-          derivative[j] = ( degree - k + m ) * saved;
+          derivative[j] = (degree - k + m) * saved;
           saved = 0.0;
         }
         else
@@ -201,14 +202,14 @@ double NurbsCurve::CountWeightD2(double t)  const
 }
 Point NurbsCurve::GetPoint(double t) const
 {
-  double span = FindSpan(t);
+  int span = FindSpan(t);
   double weightNurbs = CountWeight(t);
-  Point resultPoint(0.0,0.0);
+  Point resultPoint(0.0, 0.0);
   for (int i = 0; i <= degree; i++)
   {
     double result;
 
-    ComputeBasicFunction(t, span, result);
+    ComputeBasicFunction(t, i, result);
 
     resultPoint = resultPoint + poles[span - degree + i] * result * weights[i];
   }
@@ -239,24 +240,24 @@ Point  NurbsCurve::Get2DerivativePoint(double t) const
     ComputeBasicFunctionD(t, span, result, 2);
     resultPoint = resultPoint + poles[i] * result * weights[i];
   }
-  return resultPoint *( 1 / weightNurbsD2 );
+  return resultPoint *(1 / weightNurbsD2);
 }
 Range  NurbsCurve::GetRange() const
 {
-  return Range( nodes[0], nodes[nodes.size() - 1 ] );
+  return Range(nodes[0], nodes[nodes.size() - 1]);
 }
 void  NurbsCurve::GetAsPolyLine(std::vector<Point>& polyLinePoints, double accuracy) const
 {
   double t = GetRange().GetStart() + 0.1;
-  while ( t<=GetRange().GetEnd() )
+  while (t <= GetRange().GetEnd())
   {
-    polyLinePoints.push_back(GetPoint(t) );
-    t= t + 0.1;
+    polyLinePoints.push_back(GetPoint(t));
+    t = t + 0.1;
   }
 }
 
 
-double NurbsCurve::DistanceToPoint( Point point ) const
+double NurbsCurve::DistanceToPoint(Point point) const
 {
 
   double accuracy = 0.01;

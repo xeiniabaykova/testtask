@@ -291,8 +291,8 @@ void MainWindowHandler::CreateChart()
     seriesReferenced->attachAxis( axisX );
     seriesReferenced->attachAxis( axisY );
 
-  //  chart->axisX()->setVisible( false );
-  //  chart->axisY()->setVisible( false );
+    chart->axisX()->setVisible( false );
+    chart->axisY()->setVisible( false );
 }
 
 

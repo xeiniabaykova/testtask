@@ -68,7 +68,7 @@ private:
   double         CountWeight            ( double x ) const;
   double         CountWeightD           ( double x )  const;
   double         CountWeightD2          ( double x )  const;
-  double         FindSpan               ( double x ) const;
+  int            FindSpan               ( double x ) const;
   void           ComputeBasicFunction   ( double x, int i, double & result ) const;
   void           ComputeBasicFunctionsD ( double X, const std::vector<std::vector<double>>& basicFunctions, std::vector<std::vector<double>>& basicFunctionsD );
   void           ComputeBasicFunctionD  ( double x, int i, double& result, int derivativeOrder ) const;
