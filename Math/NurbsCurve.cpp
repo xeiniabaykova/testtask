@@ -129,7 +129,7 @@ void NurbsCurve::ComputeBasicFunctionD( double x, int i, double& result, int der
     {
       if ( derivative[0] == 0.0 ) saved = 0.0;
       else
-        saved = derivative[0] / ( nodes[i + p - k + m] / nodes[i] );
+        saved = derivative[0] / ( nodes[i + degree - k + m] / nodes[i] );
       for ( int j = 0; j < k - m + 1; j++ )
       {
         double uLeft = nodes[i + j + 1];
@@ -215,7 +215,7 @@ Point NurbsCurve::GetPoint( double t ) const
     ComputeBasicFunction( t, span, result );
     resultPoint = resultPoint + poles[i] * result * weights[i];
   }
-  return resultPoint / weightNurbs;
+  return resultPoint *(1/ weightNurbs);
 }
 Point  NurbsCurve::GetDerivativePoint( double t ) const
 {
@@ -228,7 +228,7 @@ Point  NurbsCurve::GetDerivativePoint( double t ) const
     ComputeBasicFunctionD( t, span, result, 1);
     resultPoint = resultPoint + poles[i] * result * weights[i];
   }
-  return resultPoint /weightNurbsD ;
+  return resultPoint * (1 /weightNurbsD) ;
 
 }
 Point  NurbsCurve::Get2DerivativePoint( double t ) const
@@ -242,7 +242,7 @@ Point  NurbsCurve::Get2DerivativePoint( double t ) const
     ComputeBasicFunctionD( t, span, result, 2 );
     resultPoint = resultPoint + poles[i] * result * weights[i];
   }
-  return resultPoint / weightNurbsD2;
+  return resultPoint *(1/ weightNurbsD2);
 }
 Range  NurbsCurve::GetRange() const
 {
