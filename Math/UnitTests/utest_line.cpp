@@ -23,7 +23,7 @@ TEST(Line, ConstructOnePoint)
   EXPECT_FALSE( line.IsValid() );
 }
 
-TEST(Line, DISABLED_Construct0Points)
+TEST(Line, Construct0Points)
 {
   std::vector<Point> samePoints;
   const Line line( samePoints );

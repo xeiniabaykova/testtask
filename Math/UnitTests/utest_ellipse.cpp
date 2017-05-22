@@ -63,7 +63,7 @@ TEST(Circle, Construct2SamePoints)
   EXPECT_FALSE( ellipse.IsValid() );
 }
 
-TEST(Circle, DISABLED_Construct0Point)
+TEST(Circle, Construct0Point)
 {
   std::vector<Point> wrongNumberPoints;
   const Ellipse ellipse( wrongNumberPoints );
