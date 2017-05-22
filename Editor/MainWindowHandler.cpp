@@ -269,16 +269,16 @@ void MainWindowHandler::ClearScreen()
 void MainWindowHandler::CreateChart()
 {
     axisX = new QValueAxis;
-    axisX->setRange( -5, 3 );
+    axisX->setRange( 0, 10 );
     chart->addAxis( axisX, Qt::AlignBottom );
 
     axisY = new QValueAxis;
-    axisY->setRange( -5, 5 );
+    axisY->setRange( 0, 10 );
     chart->addAxis( axisY, Qt::AlignLeft );
     chart->legend()->setVisible(false);
 
     QLineSeries *series = new QLineSeries;
-    *series<< QPointF( -5, -5 ) << QPointF( 5, 5);
+    *series<< QPointF( 0, 0 ) << QPointF( 10, 10);
     series->setColor( QColor(255,255,255) );
     chart->addSeries( series );
 

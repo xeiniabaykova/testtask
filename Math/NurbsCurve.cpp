@@ -58,7 +58,7 @@ int NurbsCurve::FindSpan(double x) const
   int low = degree;
 
   int hight = n + 1;
-  int mid  = (low + hight) / 2;
+  int mid = (low + hight) / 2;
   while ((x < nodes[mid]) || (x >= nodes[mid + 1]))
   {
     if (x < nodes[mid])
@@ -205,16 +205,39 @@ Point NurbsCurve::GetPoint(double t) const
   int span = FindSpan(t);
   double weightNurbs = CountWeight(t);
   Point resultPoint(0.0, 0.0);
+  std::vector<double> node = BasicFunctions(span, t);
   for (int i = 0; i <= degree; i++)
   {
-    double result;
-
-    ComputeBasicFunction(t, i, result);
-
-    resultPoint = resultPoint + poles[span - degree + i] * result * weights[i];
+    resultPoint = resultPoint + poles[span - degree + i] * node[i] * weights[i];
   }
   return resultPoint *(1 / weightNurbs);
 }
+std::vector<double> NurbsCurve::BasicFunctions( int i, double x) const
+{
+  std::vector<double> Nodes;
+    Nodes.resize(degree + 1);
+    std::vector<double> left;
+    left.resize(degree + 1);
+    std::vector<double> right;
+    right.resize(degree + 1);
+    Nodes[0] = 1.0;
+    for (int j = 1; j <= degree; j++)
+    {
+      left[j] = x - nodes[i + 1 - j];
+      right[j] = nodes[i + j] - x;
+      double saved = 0.0;
+      for (int k = 0; k<j; k++)
+      {
+        double temp = Nodes[k] / (right[k + 1] + left[j - k]);
+        Nodes[k] = saved + right[k + 1] * temp;
+        saved = left[j - k] * temp;
+      }
+      Nodes[j] = saved;
+    }
+    return Nodes;
+}
+
+
 Point  NurbsCurve::GetDerivativePoint(double t) const
 {
   double span = FindSpan(t);
