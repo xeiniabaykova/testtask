@@ -1,11 +1,9 @@
 //
 // Created by alakhverdyants on 22.05.17.
 //
-#include "gtest/gtest.h"
-#include "../Point.h"
-#include "../Ellipse.h"
-#include <vector>
-
+#include <gtest/gtest.h>
+#include <Point.h>
+#include <Ellipse.h>
 
 
 TEST( EllipseTest, CheckPerimeter )
@@ -57,19 +55,34 @@ delete ellipse4;
 }
 
 
-TEST(CircleTest, CheckPerimeter)
+TEST(Circle, Construct2SamePoints)
 {
-Point samePoint(0.0, 0.0);
-std::vector<Point> samePoints;
-samePoints.push_back(samePoint);
-samePoints.push_back(samePoint);
-Ellipse* ellipse2 = new Ellipse(samePoints);
-ASSERT_FALSE(ellipse2->IsValid());
-delete ellipse2;
-
-std::vector<Point> wrongNumberPoints;
-Ellipse* ellipse3 = new Ellipse(samePoints);
-ASSERT_FALSE(ellipse3->IsValid());
-delete ellipse3;
-
+  Point samePoint(0.0, 0.0);
+  std::vector<Point> samePoints{samePoint, samePoint};
+  const Ellipse ellipse( samePoints );
+  EXPECT_FALSE( ellipse.IsValid() );
 }
+
+TEST(Circle, DISABLED_Construct0Point)
+{
+  std::vector<Point> wrongNumberPoints;
+  const Ellipse ellipse( wrongNumberPoints );
+  EXPECT_FALSE( ellipse.IsValid() );
+}
+
+TEST(Circle, Construct1Point)
+{
+  std::vector<Point> wrongNumberPoints {Point(0., 0.)};
+  const Ellipse ellipse( wrongNumberPoints );
+  EXPECT_FALSE( ellipse.IsValid() );
+}
+
+
+TEST(Circle, Construct3Points)
+{
+  Point samePoint(0.0, 0.0);
+  std::vector<Point> samePoints{samePoint, Point(2.2, 3.7), samePoint};
+  const Ellipse ellipse( samePoints );
+  EXPECT_TRUE( ellipse.IsValid() );
+}
+

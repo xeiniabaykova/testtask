@@ -13,61 +13,99 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-include_directories(
-        Editor
-        Math
-        ${Qt5Core_INCLUDE_DIRS}
-        ${Qt5Charts_INCLUDE_DIRS}
-        ${Qt5Gui_INCLUDE_DIRS}
-        ${Qt5OpenGL_INCLUDE_DIRS}
-        ${Qt5Widgets_INCLUDE_DIRS}
-        )
+option(UTESTS "Build with Utests" OFF)
+if (UTESTS)
+	set(UTestSrc $ENV{GTEST_ROOT}/src/gtest-all.cc
+			Math/UnitTests/utest_main.cpp
+			Math/UnitTests/utest_line.cpp
+			Math/UnitTests/utest_ellipse.cpp
+			#			Math/UnitTests/utest_nurbs.cpp
+			#			Math/UnitTests/utest_polyline.cpp
+			)
+	include_directories($ENV{GTEST_ROOT}
+			$ENV{GTEST_ROOT}/include
+			Math/UnitTests
+			)
+else ()
+	set(UTestSrc)
+endif(UTESTS)
 
+option(EDITOR "Compile Editor" OFF)
+if (EDITOR)
+	set(EditorSrc
+			#			main.cpp
+			#			Editor/CreatorHandler.cpp
+			#			Editor/CreatorHandler.h
+			#			Editor/DisplayedObject.h
+			#			Editor/DisplayedObject.cpp
+			#			Editor/FileIO.cpp
+			#			Editor/FileIO.h
+			#			Editor/MainWindow.cpp
+			#			Editor/MainWindow.h
+			#			Editor/MainWindowHandler.cpp
+			#			Editor/MainWindowHandler.h
+			Editor/Polyline.cpp
+			Editor/Polyline.h
+			Editor/CommonConstantsEditor.cpp
+			Editor/CommonConstantsEditor.h
+			)
+
+	include_directories(${Qt5Core_INCLUDE_DIRS}
+			${Qt5Charts_INCLUDE_DIRS}
+			${Qt5Gui_INCLUDE_DIRS}
+			${Qt5OpenGL_INCLUDE_DIRS}
+			${Qt5Widgets_INCLUDE_DIRS})
+else(EDITOR)
+	set(EditorSrc)
+endif(EDITOR)
+
+include_directories(
+		Editor
+		Math
+)
+
+message("UTEST: " ${UTestSrc})
+message("EDITOR: " ${EditorSrc})
 set(SOURCE_FILES
-        main.cpp
-		Editor/CreatorHandler.cpp
-		Editor/CreatorHandler.h
-        Editor/DisplayedObject.h
-	    Editor/DisplayedObject.cpp
-        Editor/FileIO.cpp
-        Editor/FileIO.h
-        Editor/MainWindow.cpp
-        Editor/MainWindow.h
-        Editor/MainWindowHandler.cpp
-        Editor/MainWindowHandler.h
-        Editor/Polyline.cpp
-		Math/CommonConstantsMath.h
+		${EditorSrc}
+		${UTestSrc}
+		Math/C2Curve.cpp
+		Math/C2Curve.h
 		Math/CommonConstantsMath.cpp
-		Editor/CommonConstantsEditor.h
-		Editor/CommonConstantsEditor.cpp
-	    Math/C2Curve.cpp
-        Math/C2Curve.h
-        Math/Ellipse.cpp
-        Math/Ellipse.h
-        Math/GeometricPoint.cpp
-        Math/GeometricPoint.h
-        Math/GeometricPrimitive.h
-        Math/Line.cpp
-        Math/Line.h
-        Math/NurbsCurve.cpp
-        Math/NurbsCurve.h
-        Math/Point.cpp
-        Math/Point.h
-        Math/GeomPolyLine.cpp
-        Math/GeomPolyline.h
-        Math/Range.cpp
-        Math/Range.h
+		Math/CommonConstantsMath.h
+		Math/Ellipse.cpp
+		Math/Ellipse.h
+		Math/GeometricPoint.cpp
+		Math/GeometricPoint.h
+		Math/GeometricPrimitive.h
+		Math/Line.cpp
+		Math/Line.h
+		Math/NurbsCurve.cpp
+		Math/NurbsCurve.h
+		Math/Point.cpp
+		Math/Point.h
+		Math/GeomPolyLine.cpp
+		Math/GeomPolyline.h
+		Math/Range.cpp
+		Math/Range.h
 		Math/Vector.cpp
 		Math/Vector.h
-		Tests.cpp
-        Serealizer/CurveSerializer.h
+		Serealizer/CurveSerializer.h
 		Serealizer/CurveSerializer.cpp
 		Serealizer/LineSerializer.h
 		Serealizer/LineSerializer.cpp
-        )
+		)
 
 add_executable(TestTask1 ${SOURCE_FILES})
 
-qt5_use_modules(TestTask1 Core Charts Gui OpenGL Widgets)
+
+if (UTESTS)
+	target_link_libraries(TestTask1 pthread)
+endif (UTESTS)
+
+if (EDITOR)
+	qt5_use_modules(TestTask1 Core Charts Gui OpenGL Widgets)
+endif (EDITOR)
+
 #find_package(OpenGL REQUIRED)
 #target_link_libraries(TestTask1 ${OPENGL_LIBRARIES} ${GLU_LIBRARY})

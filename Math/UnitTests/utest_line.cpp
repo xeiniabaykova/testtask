@@ -12,7 +12,7 @@ TEST(Line, ConstructSamePoints)
   Point samePoint(0.0, 0.0);
   std::vector<Point> samePoints {samePoint, samePoint};
   const Line line( samePoints );
-  ASSERT_FALSE( line.IsValid() );
+  EXPECT_FALSE( line.IsValid() );
 }
 
 TEST(Line, ConstructOnePoint)
@@ -20,15 +20,23 @@ TEST(Line, ConstructOnePoint)
   Point samePoint(0.0, 0.0);
   std::vector<Point> samePoints {samePoint};
   const Line line( samePoints );
-  ASSERT_FALSE( line.IsValid() );
+  EXPECT_FALSE( line.IsValid() );
 }
 
-TEST(Line, ConstructThreePoint)
+TEST(Line, DISABLED_Construct0Points)
+{
+  std::vector<Point> samePoints;
+  const Line line( samePoints );
+  EXPECT_FALSE( line.IsValid() );
+}
+
+
+TEST(Line, Construct4Point)
 {
   Point samePoint(0.0, 0.0);
-  std::vector<Point> samePoints {samePoint, Point(1.0, 0), samePoint};
+  std::vector<Point> samePoints {samePoint, Point(1.0, 0), samePoint, samePoint};
   const Line line( samePoints );
-  ASSERT_TRUE( line.IsValid() );
+  EXPECT_TRUE( line.IsValid() );
 }
 
 TEST(Line, GetPoint)
@@ -174,10 +182,10 @@ TEST(Line, Rotation)
   EXPECT_NEAR( point.GetY(), 0., 1.e-7 );
 }
 
-TEST(Line, Dilatation)
+TEST(Line, Scaling)
 {
   Line line( Point(2., 1.), Point(6., 5.) );
-  line.Dilatation( 2., 0.5 );
+  line.Scaling( 2., 0.5 );
   auto point = line.GetPoint( 0. );
   EXPECT_NEAR( point.GetX(), 4., 1.e-7 );
   EXPECT_NEAR( point.GetY(), 0.5, 1.e-7 );
@@ -185,4 +193,29 @@ TEST(Line, Dilatation)
   point = line.GetPoint( 1. );
   EXPECT_NEAR( point.GetX(), 12., 1.e-7 );
   EXPECT_NEAR( point.GetY(), 2.5, 1.e-7 );
+}
+
+TEST(Line, IsValid)
+{
+  Line line( Point(2., 1.), Point(2., -3.) );
+  EXPECT_TRUE( line.IsValid() );
+  line.Scaling( 1., 0.);
+  auto point = line.GetPoint( 0. );
+  EXPECT_NEAR( point.GetX(), 2., 1.e-7 );
+  EXPECT_NEAR( point.GetY(), 0., 1.e-7 );
+
+  point = line.GetPoint( 1. );
+  EXPECT_NEAR( point.GetX(), 2., 1.e-7 );
+  EXPECT_NEAR( point.GetY(), 0., 1.e-7 );
+
+  EXPECT_FALSE( line.IsValid() );
+}
+
+TEST(Line, IsValid2)
+{
+  Line line1( Point(2., 1.), Point(2., 1.) );
+  EXPECT_FALSE( line1.IsValid() );
+
+  Line line2( Point(2., 1.), Point(3., 1.) );
+  EXPECT_TRUE( line2.IsValid() );
 }
