@@ -39,9 +39,10 @@ SOURCES += main.cpp\
     Editor/DisplayedObject.cpp \
     Math/C2Curve.cpp \
     Math/Vector.cpp \
-    Editor/CommonConstants.cpp \
     Serealizer/LineSerializer.cpp \
-    Serealizer/CurveSerializer.cpp
+    Serealizer/CurveSerializer.cpp \
+    Editor/CommonConstantsEditor.cpp \
+    Math/CommonConstantsMath.cpp
 
 HEADERS  += Editor/MainWindow.h \
     Editor/FileIO.h \
@@ -60,9 +61,10 @@ HEADERS  += Editor/MainWindow.h \
     Editor/DisplayedObject.h \
     Math/C2Curve.h \
     Math/Vector.h \
-    Editor/CommonConstants.h \
     Serealizer/CurveSerializer.h \
-    Serealizer/LineSerializer.h
+    Serealizer/LineSerializer.h \
+    Editor/CommonConstantsEditor.h \
+    Math/CommonConstantsMath.h
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../Qt/5.8/msvc2015_64/lib/ -lQt5Charts

@@ -29,9 +29,8 @@ class MainWindowHandler {
   {
     StateCreateCurve,
     StateExpectAction,
-    StateDeleteCurve,
     StateFindIntersecion,
-    StateCreatePolyline,
+    StateCreateLine,
     StopCreatePolyline
   };
 

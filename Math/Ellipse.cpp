@@ -2,7 +2,7 @@
 #include <vector>
 #include <cmath>
 #include "Editor/Polyline.h"
-#include "Editor/CommonConstants.h"
+#include "Math/CommonConstantsMath.h"
 
 
 
@@ -10,8 +10,8 @@ namespace {
 
 bool IsEqualPoint( Point point1, Point point2 ) 
 {
-  if ( fabs(point1.GetX() - point2.GetX()) < CommonConstants::NULL_TOL
-    && fabs(point1.GetY() - point2.GetY()) < CommonConstants::NULL_TOL )
+  if ( fabs(point1.GetX() - point2.GetX()) < CommonConstantsMath::NULL_TOL
+    && fabs(point1.GetY() - point2.GetY()) < CommonConstantsMath::NULL_TOL )
 		return true;
 	return false;
 }
@@ -19,7 +19,7 @@ bool IsEqualPoint( Point point1, Point point2 )
 bool PointsOneLine( Point point1, Point point2, Point point3 )
 {
 	if ( fabs((point3.GetX() - point1.GetX()) /
-    (point2.GetX() - point1.GetX()) - (point3.GetY() - point1.GetY()) / (point2.GetY() - point1.GetY())) < CommonConstants::NULL_TOL)
+    (point2.GetX() - point1.GetX()) - (point3.GetY() - point1.GetY()) / (point2.GetY() - point1.GetY())) < CommonConstantsMath::NULL_TOL)
 		return true;
 	return false;
 }
@@ -66,61 +66,64 @@ Ellipse::Ellipse ( const std::vector<Point>& points )
 {  
 	isValid = false;
 	// если точки 2, то это - окружность, создаем окружность
-	if (points.size() == 2) {
-
-		if ( !CorrectCircleData(points[0], points[1]) )
-			return;
-
+  if (points.size() == 2)
+  {
+    if ( CorrectCircleData(points[0], points[1]) )
+    {
 		center = points[0];
-		Point pointV(points[1]);
+    Point pointV( points[1] );
 		double x = pointV.GetX() - center.GetX();
 		double y = pointV.GetY() - center.GetY();
 		double r = sqrt(x * x + y * y);
 		r1 = r;
 		r2 = r;
 		alpha = 0;
-	}
-	if ( !CorrectEllipseData(points[0], points[1], points[2]) )
-		return;
-	
-  center = points[0];
-  Point pointV( points[1] );
+    isValid = true;
+    }
+  } else {
+  if ( CorrectEllipseData(points[0], points[1], points[2]) )
+  {
+    center = points[0];
+    Point pointV( points[1] );
 
-  Point pointX( center.GetX(), points[1].GetY() );
+    Point pointX( center.GetX(), points[1].GetY() );
 
-  double x = pointV.GetX() - center.GetX();
-  double y = pointV.GetY() - center.GetY();
-  double axisA = sqrt( x * x + y * y );
+    double x = pointV.GetX() - center.GetX();
+    double y = pointV.GetY() - center.GetY();
+    double axisA = sqrt( x * x + y * y );
+    alpha = atan2( y, x );
 
-  if ( abs(x) < CommonConstants::NULL_TOL && y <= 0 )
-    alpha = -CommonConstants::PI / 2.0;
+  //  double alpha;
+//    if ( abs(x) < CommonConstantsMath::NULL_TOL && y <= 0 )
+//      alpha = -CommonConstantsMath::PI / 2.0;
 
-  if ( abs(x) < CommonConstants::NULL_TOL && y > 0  )
-    alpha = CommonConstants::PI / 2.0;
+//    if ( abs(x) < CommonConstantsMath::NULL_TOL && y > 0  )
+//      alpha = CommonConstantsMath::PI / 2.0;
 
-  if ( x > 0 && y >= 0 )
-    alpha = atan2( y,  x );
+//    if ( x > 0 && y >= 0 )
+//      alpha = atan2( y,  x );
 
-  if ( x < 0 && y >= 0 )
-    alpha = CommonConstants::PI + atan( y / x );
+//    if ( x < 0 && y >= 0 )
+//      alpha = CommonConstantsMath::PI + atan( y / x );
 
-  if ( x < 0 && y <= 0 )
-    alpha = CommonConstants::PI + atan( y / x );
+//    if ( x < 0 && y <= 0 )
+//      alpha = CommonConstantsMath::PI + atan( y / x );
 
-  if ( x > 0 && y <= 0 )
-    alpha = - atan( y / x );
+//    if ( x > 0 && y <= 0 )
+//      alpha = - atan( y / x );
 
-  r1 = axisA;
-  Point newCoordPoint( points[2].GetX() - center.GetX(), points[2].GetY() - center.GetY() );
-  Point point2( newCoordPoint.GetX() * cos(alpha) + newCoordPoint.GetY() * sin(alpha),
-                      - newCoordPoint.GetX() * sin(alpha) + newCoordPoint.GetY() * cos(alpha) );
+    r1 = axisA;
+    Point newCoordPoint( points[2].GetX() - center.GetX(), points[2].GetY() - center.GetY() );
+    Point point2( newCoordPoint.GetX() * cos(alpha) + newCoordPoint.GetY() * sin(alpha),
+                        - newCoordPoint.GetX() * sin(alpha) + newCoordPoint.GetY() * cos(alpha) );
 
-  double axisB = (sqrt( (point2.GetY()) * (point2.GetY()) /
-      ( 1 - ( point2.GetX()) * ( point2.GetX()) / (r1 * r1))) );
+    double axisB = (sqrt (abs( (point2.GetY()) * (point2.GetY()) /
+        ( 1 - ( point2.GetX()) * ( point2.GetX()) / (r1 * r1))) ));
 
-  r2 = axisB;
-  isValid = true;
-
+    r2 = axisB;
+    isValid = true;
+  }
+}
 }
 
 //-----------------------------------------------------------------------------
@@ -147,7 +150,7 @@ Point Ellipse::GetPoint( double t ) const
 
 Range Ellipse::GetRange() const
 {
-  return Range( 0.0, 2.0 * CommonConstants::PI );
+  return Range( 0.0, 2.0 * CommonConstantsMath::PI );
 }
 
 
@@ -206,7 +209,7 @@ void Ellipse::Rotation( double alphaAng )
   alpha += alphaAng;
 }
 
-void Ellipse::Dilatation( double XScaling, double YScaling )
+void Ellipse::Scaling( double XScaling, double YScaling )
 {
 
 }

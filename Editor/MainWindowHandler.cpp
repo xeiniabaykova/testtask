@@ -4,7 +4,7 @@
 #include <QInputDialog>
 #include <QtCharts/QLineSeries>
 #include <functional>
-#include "CommonConstants.h"
+#include "CommonConstantsEditor.h"
 
 
 
@@ -66,7 +66,7 @@ void MainWindowHandler::CreateCircle()
 //-----------------------------------------------------------------------------
 void MainWindowHandler::CreateNurbs()
 {
-  state = StateCreatePolyline;
+  state = StateCreateLine;
   geomCreator = std::make_shared<CreatorHandler>( -1, CreatorHandler::CreateNURBS );
 }
 
@@ -78,7 +78,7 @@ void MainWindowHandler::CreateNurbs()
 //-----------------------------------------------------------------------------
 void MainWindowHandler::CreatePolyline()
 {
-  state = StateCreatePolyline;
+  state = StateCreateLine;
   geomCreator = std::make_shared<CreatorHandler>( -1, CreatorHandler::CreatePolyline );
 }
 
@@ -125,7 +125,7 @@ void MainWindowHandler::CreateCurve()
 
 void MainWindowHandler::StopCreateCurve()
 {
-  if ( state == StateCreatePolyline )
+  if ( state == StateCreateLine )
   {
     CreateCurve();
     seriesReferenced->clear();
@@ -155,7 +155,7 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
   double width = rec.width();
   chart->resize( width, height );
   CreateEmptySeries();
-  if ( state == StateCreateCurve  || state == StateCreatePolyline )
+  if ( state == StateCreateCurve  || state == StateCreateLine )
   {
     QPointF currentPoint = chart->mapToValue( QPointF(event->x(), event->y() - 30) );
     geomCreator->AddPointFromScreen( Point(currentPoint.x(), currentPoint.y()) );
@@ -192,7 +192,7 @@ void MainWindowHandler::StateExpect( QMouseEvent *event )
 {
   QPointF currentPoint = chart->mapToValue( QPointF(event->pos().x(), event->pos().y() - 30) );
   for ( int i = 0; i < displayedCurves.size(); i++ )
-    displayedCurves[i]->ModifySelectionStatus( Point(currentPoint.x(), currentPoint.y()), CommonConstants::PRECISION_SELECT, selectedColor );
+    displayedCurves[i]->ModifySelectionStatus( Point(currentPoint.x(), currentPoint.y()), CommonConstantsEditor::PRECISION_SELECT, selectedColor );
   state = StateExpectAction;
 }
 

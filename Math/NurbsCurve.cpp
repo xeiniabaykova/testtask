@@ -160,7 +160,7 @@ void NurbsCurve::Rotation(double alpha)
 {
 
 }
-void NurbsCurve::Dilatation(double XScaling, double YScaling)
+void NurbsCurve::Scaling(double XScaling, double YScaling)
 {
 
 }

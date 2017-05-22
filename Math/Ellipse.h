@@ -53,7 +53,7 @@ public:
 
   virtual void Translation ( double xShift, double yShift );
   virtual void Rotation    ( double alpha );
-  virtual void Dilatation  ( double XScaling, double YScaling );
+  virtual void Scaling  ( double XScaling, double YScaling );
   bool IsValid() const;
 };
 

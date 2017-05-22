@@ -21,7 +21,7 @@ void GeometricPoint::Rotation( double )
   return;
 }
 
-void GeometricPoint::Dilatation(  double, double  )
+void GeometricPoint::Scaling(  double, double  )
 {
   return;
 }

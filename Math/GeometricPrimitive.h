@@ -28,7 +28,7 @@ private:
 public:
   virtual void Translation ( double xShift, double yShift ) = 0;
   virtual void Rotation    ( double alpha ) = 0;
-  virtual void Dilatation  ( double XScaling, double YScaling ) = 0;
+  virtual void Scaling  ( double XScaling, double YScaling ) = 0;
 };
 
 #endif // GEOMETRICPRIMITIVE_H

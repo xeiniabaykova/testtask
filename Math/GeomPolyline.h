@@ -44,7 +44,7 @@ public:
   virtual double DistanceToPoint     ( Point point ) const;
   virtual void   Translation         ( double xShift, double yShift ); // сдвиг по осям x, y
   virtual void   Rotation            ( double alpha ); // поворот на угол alpha
-  virtual void   Dilatation          ( double XScaling, double YScaling ); // матрица растяжения
+  virtual void   Scaling          ( double XScaling, double YScaling ); // матрица растяжения
   bool IsValid();
 };
 

@@ -2,7 +2,7 @@
 #include "Math/GeometricPoint.h"
 #include "Math/Line.h"
 #include <cmath>
-#include "CommonConstants.h"
+#include "CommonConstantsEditor.h"
 
 //-----------------------------------------------------------------------------
 /**
@@ -52,7 +52,7 @@ double Polyline::CountingStep( double tCurrent )
   double normVectorMult = sqrt( vectorMult * vectorMult );
   double normFirstDerivative = sqrt( firstDerivative.GetX() * firstDerivative.GetX() +  firstDerivative.GetY() * firstDerivative.GetY() );
   double multiplicationFirstDerivative = firstDerivative.GetX() * firstDerivative.GetX() +  firstDerivative.GetY() * firstDerivative.GetY();
-  double deltaT = 2 * sqrt ( CommonConstants::PRECISION_POLYLINE * (2 * normFirstDerivative / normVectorMult - CommonConstants::PRECISION_POLYLINE / multiplicationFirstDerivative) );
+  double deltaT = 2 * sqrt ( CommonConstantsEditor::PRECISION_POLYLINE * (2 * normFirstDerivative / normVectorMult - CommonConstantsEditor::PRECISION_POLYLINE / multiplicationFirstDerivative) );
   return deltaT;
 }
 
