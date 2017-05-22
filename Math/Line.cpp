@@ -130,3 +130,12 @@ std::string Line::GetName() const
 {
   return "Line";
 }
+
+
+//------------------------------------------------------------------------------
+//
+// ---
+bool Line::IsValid() const
+{
+  return isValid;
+}
