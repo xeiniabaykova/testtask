@@ -15,10 +15,31 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 option(UTESTS "Build with Utests" OFF)
 if (UTESTS)
-	set(UTestSrc Tests.cpp)
+	set(UTestSrc Math/UnitTests/Tests.cpp)
+	include_directories(Math/UnitTests)
 else ()
 	set(UTestSrc)
 endif(UTESTS)
+
+option(EDITOR "Compile Editor" ON)
+if (EDITOR)
+	set(EditorSrc main.cpp
+		Editor/CreatorHandler.cpp
+		Editor/CreatorHandler.h
+		Editor/DisplayedObject.h
+		Editor/DisplayedObject.cpp
+		Editor/FileIO.cpp
+		Editor/FileIO.h
+		Editor/MainWindow.cpp
+		Editor/MainWindow.h
+		Editor/MainWindowHandler.cpp
+		Editor/MainWindowHandler.h
+		Editor/Polyline.cpp
+		Editor/CommonConstants.h
+		Editor/CommonConstants.cpp)
+else(EDITOR)
+	set(EditorSrc)
+endif(EDITOR)
 
 include_directories(
         Editor
@@ -31,20 +52,7 @@ include_directories(
         )
 
 set(SOURCE_FILES
-        main.cpp
-		Editor/CreatorHandler.cpp
-		Editor/CreatorHandler.h
-        Editor/DisplayedObject.h
-	    Editor/DisplayedObject.cpp
-        Editor/FileIO.cpp
-        Editor/FileIO.h
-        Editor/MainWindow.cpp
-        Editor/MainWindow.h
-        Editor/MainWindowHandler.cpp
-        Editor/MainWindowHandler.h
-        Editor/Polyline.cpp
-		Editor/CommonConstants.h
-		Editor/CommonConstants.cpp
+		${EditorSrc}
 	    Math/C2Curve.cpp
         Math/C2Curve.h
         Math/Ellipse.cpp
