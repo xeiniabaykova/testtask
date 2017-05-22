@@ -13,6 +13,13 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+option(UTESTS "Build with Utests" OFF)
+if (UTESTS)
+	set(UTestSrc Tests.cpp)
+else ()
+	set(UTestSrc)
+endif(UTESTS)
+
 include_directories(
         Editor
         Math
@@ -57,11 +64,11 @@ set(SOURCE_FILES
         Math/Range.h
 		Math/Vector.cpp
 		Math/Vector.h
-		Tests.cpp
         Serealizer/CurveSerializer.h
 		Serealizer/CurveSerializer.cpp
 		Serealizer/LineSerializer.h
 		Serealizer/LineSerializer.cpp
+		${UtestSrc}
         )
 
 add_executable(TestTask1 ${SOURCE_FILES})

@@ -11,6 +11,7 @@
 #include "C2Curve.h"
 #include <Math/Point.h>
 #include <vector>
+#include <string>
 #include "GeometricPrimitive.h"
 
 
