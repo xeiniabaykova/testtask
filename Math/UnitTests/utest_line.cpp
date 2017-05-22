@@ -163,6 +163,15 @@ TEST(Line, Rotation)
   point = line.GetPoint( 1. );
   EXPECT_NEAR( point.GetX(), -5., 1.e-7 );
   EXPECT_NEAR( point.GetY(), -5., 1.e-7 );
+
+  line.Rotation( -3.14159265358979323846/4. );
+  point = line.GetPoint( 0. );
+  EXPECT_NEAR( point.GetX(), -::sqrt(2.), 1.e-7 );
+  EXPECT_NEAR( point.GetY(), 0., 1.e-7 );
+
+  point = line.GetPoint( 1. );
+  EXPECT_NEAR( point.GetX(), -::sqrt(50.), 1.e-7 );
+  EXPECT_NEAR( point.GetY(), 0., 1.e-7 );
 }
 
 TEST(Line, Dilatation)
