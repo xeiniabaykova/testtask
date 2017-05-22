@@ -2,8 +2,8 @@
 // Created by alakhverdyants on 22.05.17.
 //
 #include <gtest/gtest.h>
-#include <Point.h>
-#include <Line.h>
+#include "../Point.h"
+#include "../Line.h"
 #include <memory>
 
 TEST(Line, ConstructSamePoints)

@@ -132,3 +132,7 @@ double GeomPolyline::DistanceToPoint ( Point point ) const
   //GetAsPolyLine( polylinePoints, CommonConstants::PRECISION_POLYLINE );
   return C2Curve::DistancePointToCurve( point, polylinePoints );
 }
+bool GeomPolyline::IsValid()
+{
+	return isValid;
+}

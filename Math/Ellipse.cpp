@@ -85,39 +85,16 @@ Ellipse::Ellipse ( const std::vector<Point>& points )
   {
     center = points[0];
     Point pointV( points[1] );
-
-    Point pointX( center.GetX(), points[1].GetY() );
-
     double x = pointV.GetX() - center.GetX();
     double y = pointV.GetY() - center.GetY();
     double axisA = sqrt( x * x + y * y );
     alpha = atan2( y, x );
-
-  //  double alpha;
-//    if ( abs(x) < CommonConstantsMath::NULL_TOL && y <= 0 )
-//      alpha = -CommonConstantsMath::PI / 2.0;
-
-//    if ( abs(x) < CommonConstantsMath::NULL_TOL && y > 0  )
-//      alpha = CommonConstantsMath::PI / 2.0;
-
-//    if ( x > 0 && y >= 0 )
-//      alpha = atan2( y,  x );
-
-//    if ( x < 0 && y >= 0 )
-//      alpha = CommonConstantsMath::PI + atan( y / x );
-
-//    if ( x < 0 && y <= 0 )
-//      alpha = CommonConstantsMath::PI + atan( y / x );
-
-//    if ( x > 0 && y <= 0 )
-//      alpha = - atan( y / x );
-
     r1 = axisA;
     Point newCoordPoint( points[2].GetX() - center.GetX(), points[2].GetY() - center.GetY() );
     Point point2( newCoordPoint.GetX() * cos(alpha) + newCoordPoint.GetY() * sin(alpha),
                         - newCoordPoint.GetX() * sin(alpha) + newCoordPoint.GetY() * cos(alpha) );
 
-    double axisB = (sqrt (abs( (point2.GetY()) * (point2.GetY()) /
+    double axisB = (sqrt (fabs( (point2.GetY()) * (point2.GetY()) /
         ( 1 - ( point2.GetX()) * ( point2.GetX()) / (r1 * r1))) ));
 
     r2 = axisB;

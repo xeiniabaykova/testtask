@@ -3,6 +3,9 @@
 //
 
 
+#include "gtest/gtest.h"
+#include "../NurbsCurve.h"
+
 TEST(NURBSTest, CheckPerimeter)
 {
 	std::vector<Point> poles;

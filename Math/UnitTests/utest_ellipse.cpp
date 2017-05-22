@@ -1,6 +1,11 @@
 //
 // Created by alakhverdyants on 22.05.17.
 //
+#include "gtest/gtest.h"
+#include "../Point.h"
+#include "../Ellipse.h"
+#include <vector>
+
 
 
 TEST( EllipseTest, CheckPerimeter )

@@ -1,7 +1,8 @@
 //
 // Created by alakhverdyants on 22.05.17.
 //
-
+#include "../GeomPolyline.h"
+#include "gtest/gtest.h"
 
 TEST(PolylineTest, CheckPerimeter)
 {

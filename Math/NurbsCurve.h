@@ -64,7 +64,6 @@ public:
   virtual void Translation ( double xShift, double yShift );
   virtual void Rotation    ( double alpha );
   virtual void Scaling  ( double XScaling, double YScaling );
-private:
   std::vector<double> BasicFunctions( int i, double x) const;
   double         CountWeight            ( double x ) const;
   double         CountWeightD           ( double x )  const;
