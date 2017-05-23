@@ -2,57 +2,14 @@
 // Created by alakhverdyants on 22.05.17.
 //
 #include <gtest/gtest.h>
-#include "../Point.h"
-#include "../Ellipse.h""
+#include <Point.h>
+#include <Ellipse.h>
 #include <CommonConstantsMath.h>
 
 
 static bool IsEqualPoints( const Point & p1, const Point & p2, double eps=CommonConstantsMath::NULL_TOL )
 {
-Point point( 0.0, 0.0 );
-Point point1( 1.0, 1.0 );
-Point point2( 3.0, 3.0 );
-std::vector<Point> PointsOnLine;
-PointsOnLine.push_back( point );
-PointsOnLine.push_back( point1 );
-PointsOnLine.push_back( point2 );
-
-Ellipse* ellipse = new Ellipse( PointsOnLine );
-ASSERT_FALSE(ellipse->IsValid());
-delete ellipse;
-
-Point samePoint( 0.0, 0.0 );
-std::vector<Point> samePoints;
-samePoints.push_back( samePoint );
-samePoints.push_back( samePoint );
-samePoints.push_back( samePoint );
-Ellipse* ellipse2 = new Ellipse( samePoints );
-ASSERT_FALSE( ellipse2->IsValid() );
-delete ellipse2;
-
-std::vector<Point> wrongNumberPoints;
-Ellipse* ellipse3 = new Ellipse(samePoints);
-ASSERT_FALSE(ellipse3->IsValid());
-delete ellipse3;
-
-std::vector<Point> points;
-Point pointCenter( 0.0, 0.0 );
-Point pointr1( 1.2, 2.5 );
-Point pointOnEllipse( 0.5, 1.7 );
-points.push_back( pointCenter );
-points.push_back( pointr1 );
-points.push_back(pointOnEllipse);
-Ellipse* ellipse4 = new Ellipse( points );
-ASSERT_TRUE( ellipse4->IsValid() );
-EXPECT_NEAR(ellipse4->GetPoint(0).GetX(), 1.1999999999999995, 1e-7);
-EXPECT_NEAR(ellipse4->GetPoint(0).GetY(), 2.5000000000000000, 1e-7);
-
-EXPECT_NEAR(ellipse4->GetDerivativePoint(0).GetX(), 0.0 , 1e-7);
-EXPECT_NEAR(ellipse4->GetDerivativePoint(0).GetY(), 0.36709825739075547, 1e-7);
-
-EXPECT_NEAR(ellipse4->Get2DerivativePoint(0).GetX(), -2.7730849247724092, 1e-7);
-EXPECT_NEAR(ellipse4->Get2DerivativePoint(0).GetY(), 0.0, 1e-7);
-delete ellipse4;
+  return fabs( p1.GetX() - p2.GetX() ) < eps && fabs( p1.GetY() - p2.GetY() ) < eps;
 }
 
 double DistancePointPoint( const Point & p1, const Point & p2 )
@@ -257,5 +214,155 @@ TEST(Ellipse, ConstructCRRA)
 TEST(Ellipse, ConstructCRRA2)
 {
   const Ellipse ellipse( Point(1., 1.), 2., 3., 0. );
+  EXPECT_TRUE( ellipse.IsValid() );
+}
+
+TEST(Ellipse, GetPoint)
+{
+  const Ellipse ellipse( Point(2., 1.), 1., 4., CommonConstantsMath::PI/4. );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(0.),
+                             Point(2.7071067811865475, 1.7071067811865475)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*2.),
+                             Point(2.7071067811865475, 1.7071067811865475)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI/4.), Point(0.5, 3.5)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*9./4.), Point(0.5, 3.5)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI), Point(1.292893218813452, 0.29289321881345287)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*5./4.), Point(3.5, -1.5)) );
+}
+
+TEST(Ellipse, GetPoint2)
+{
+  std::vector<Point> points = { Point(2., 1.), Point(2.7071067811865475, 1.7071067811865475), Point(0.5, 3.5) };
+  const Ellipse ellipse( points );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(0.),
+                             Point(2.7071067811865475, 1.7071067811865475)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*2.),
+                             Point(2.7071067811865475, 1.7071067811865475)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI/4.), Point(0.5, 3.5)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*9./4.), Point(0.5, 3.5)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI), Point(1.292893218813452, 0.29289321881345287)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*5./4.), Point(3.5, -1.5)) );
+}
+
+TEST(Ellipse, GetRange)
+{
+  const Ellipse ellipse( Point(2., 1.), 1., 4., CommonConstantsMath::PI/4. );
+  const auto range = ellipse.GetRange();
+  EXPECT_NEAR( range.GetStart(), 0., CommonConstantsMath::NULL_TOL );
+  EXPECT_NEAR( range.GetEnd(), CommonConstantsMath::PI*2., CommonConstantsMath::NULL_TOL );
+}
+
+TEST(Ellipse, GetDerivativePoint)
+{
+  const Ellipse ellipse( Point(2., 1.), 1., 4., CommonConstantsMath::PI/4. );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetDerivativePoint(0.), Point(-2.82842712474619, 2.8284271247461903)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetDerivativePoint(CommonConstantsMath::PI*2.),
+                             Point(-2.82842712474619, 2.8284271247461903)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetDerivativePoint(CommonConstantsMath::PI/4.), Point(-2.5, 1.5)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetDerivativePoint(CommonConstantsMath::PI*9./4.), Point(-2.5, 1.5)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetDerivativePoint(CommonConstantsMath::PI),
+                             Point(2.82842712474619, -2.8284271247461903)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetDerivativePoint(CommonConstantsMath::PI*5./4.), Point(2.5, -1.5)) );
+}
+
+TEST(Ellipse, Get2DerivativePoint)
+{
+  const Ellipse ellipse( Point(2., 1.), 1., 4., CommonConstantsMath::PI/4. );
+  EXPECT_TRUE( IsEqualPoints(ellipse.Get2DerivativePoint(0.), Point(-0.7071067811865476, -0.7071067811865475)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.Get2DerivativePoint(CommonConstantsMath::PI*2.),
+                             Point(-0.7071067811865476, -0.7071067811865475)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.Get2DerivativePoint(CommonConstantsMath::PI/4.), Point(1.5, -2.5)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.Get2DerivativePoint(CommonConstantsMath::PI*9./4.), Point(1.5, -2.5)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.Get2DerivativePoint(CommonConstantsMath::PI),
+                             Point(0.7071067811865479, 0.7071067811865471)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.Get2DerivativePoint(CommonConstantsMath::PI*5./4.), Point(-1.5, 2.5)) );
+}
+
+TEST(Ellipse, GetAsPolyLine)
+{
+  const Ellipse ellipse( Point(2., 1.), 1., 4., CommonConstantsMath::PI/4. );
+  std::vector<Point> points1, points2;
+  ellipse.GetAsPolyLine( points1, 1.e-4 );
+  ellipse.GetAsPolyLine( points2, CommonConstantsMath::PI/60. );
+  EXPECT_TRUE( points1.size() > points2.size() );
+  // Примитивная проверка, что расстояние между соседними точками зависит от кривизны участка кривой, к которому они
+  // относятся.
+  const  auto dist1 = DistancePointPoint(points1[0], points1[1]);
+  const  auto dist2 = DistancePointPoint(points1[points1.size()/4], points1[points1.size()/4 + 1]);
+  EXPECT_TRUE( 1.1 * dist1 < dist2 );
+}
+
+TEST(Ellipse, DistanceToPoint)
+{
+  // Проверка, что для окружности работает частный случай, когда расстояние может быть найдено точно.
+  const Ellipse ellipse( Point(2., 1.), 1., 3., 0. );
+  Point p( 0., 1. );
+  EXPECT_NEAR( ellipse.DistanceToPoint(p), 1., 1.e-3 );
+  p = Point( 2., 1. );
+  EXPECT_NEAR( ellipse.DistanceToPoint(p), 1., 1.e-3 );
+  p = Point( 2., 4. );
+  EXPECT_NEAR( ellipse.DistanceToPoint(p), 0., 1.e-3 );
+  p = Point( 2., 3.99 );
+  EXPECT_NEAR( ellipse.DistanceToPoint(p), 0.01, 1.e-3 );
+}
+
+TEST(Ellipse, Translation)
+{
+  Ellipse ellipse( Point(2., 1.), 1., 4., CommonConstantsMath::PI/4. );
+  ellipse.Translation( 2., -1. );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(0.),
+                             Point(4.7071067811865475, 0.7071067811865475)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*2.),
+                             Point(4.7071067811865475, 0.7071067811865475)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI/4.), Point(2.5, 2.5)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*9./4.), Point(2.5, 2.5)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI),
+                             Point(3.292893218813452, 0.29289321881345287-1.)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*5./4.), Point(5.5, -2.5)) );
+}
+
+TEST(Ellipse, Rotation)
+{
+  Ellipse ellipse( Point(0., 0.), 1., 4., CommonConstantsMath::PI/4. );
+  ellipse.Rotation( -CommonConstantsMath::PI/4. );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(0.), Point(1., 0.)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*2.), Point(1., 0.)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI/4.),
+                             Point(0.7071067811865476, 2.82842712474619)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*9./4.),
+                             Point(0.7071067811865476, 2.82842712474619)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI), Point(-1., 0.)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*5./4.),
+                             Point(-0.7071067811865477, -2.82842712474619)) );
+}
+
+TEST(Ellipse, Scaling)
+{
+  Ellipse ellipse( Point(2., 1.), 1., 4., 0. );
+  ellipse.Scaling( 2., 0.5 );
+  auto diam = DistancePointPoint( ellipse.GetPoint(0.), ellipse.GetPoint(CommonConstantsMath::PI) );
+  EXPECT_NEAR( diam, 4., CommonConstantsMath::NULL_TOL );
+  diam = DistancePointPoint( ellipse.GetPoint(CommonConstantsMath::PI/2.),
+                             ellipse.GetPoint(CommonConstantsMath::PI*3./2.) );
+  EXPECT_NEAR( diam, 4., CommonConstantsMath::NULL_TOL );
+  EXPECT_NEAR( ellipse.GetMajorRadius(), 2., CommonConstantsMath::NULL_TOL );
+  EXPECT_NEAR( ellipse.GetMinorRadius(), 2., CommonConstantsMath::NULL_TOL );
+}
+
+TEST(Ellipse, IsValid)
+{
+  Ellipse ellipse(Point(2., 1.), 1., 4., 0.);
+  EXPECT_TRUE( ellipse.IsValid() );
+  ellipse.Scaling( 2., 0.2 );
+  EXPECT_TRUE( ellipse.IsValid() );
+  ellipse.Scaling( 1., 0 );
+  EXPECT_FALSE( ellipse.IsValid() );
+}
+
+TEST(Ellipse, IsValid2)
+{
+  Ellipse ellipse(Point(2., 1.), 1., 0., 0.);
+  EXPECT_FALSE( ellipse.IsValid() );
+  Ellipse ellipse2(Point(2., 1.), 1., 1., 0.);
   EXPECT_TRUE( ellipse.IsValid() );
 }

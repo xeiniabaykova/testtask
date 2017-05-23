@@ -35,9 +35,9 @@ bool IsCirclePoints( Point point1, Point point2, Point point3 )
 	if (IsEqualPoint(point1, point2, point3))
 		return false;
 
-	if ((abs(Distance(point1, point2) - Distance(point2, point3)) < CommonConstantsMath::NULL_TOL) ||
-		(abs(Distance(point2, point3) - Distance(point3, point1)) < CommonConstantsMath::NULL_TOL) ||
-		(abs(Distance(point2, point1) - Distance(point1, point3)) < CommonConstantsMath::NULL_TOL))
+	if ((fabs(Distance(point1, point2) - Distance(point2, point3)) < CommonConstantsMath::NULL_TOL) ||
+		(fabs(Distance(point2, point3) - Distance(point3, point1)) < CommonConstantsMath::NULL_TOL) ||
+		(fabs(Distance(point2, point1) - Distance(point1, point3)) < CommonConstantsMath::NULL_TOL))
 		return true;
 	return false;
 }
