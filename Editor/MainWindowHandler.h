@@ -14,7 +14,6 @@
 #include <QtCharts/QValueAxis>
 #include <QPoint>
 #include <vector>
-#include "Polyline.h"
 #include <Editor/DisplayedObject.h>
 #include <Editor/CreatorHandler.h>
 #include <memory>

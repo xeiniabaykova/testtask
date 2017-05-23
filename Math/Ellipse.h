@@ -10,8 +10,8 @@
 #define ELLIPSE_H
 
 #include "C2Curve.h"
-#include <Math/Point.h>
-#include <Math/Range.h>
+#include "Point.h"
+#include "Range.h"
 #include <vector>
 #include "GeometricPrimitive.h"
 
@@ -27,7 +27,6 @@ private:
   double r1;     ///< первый радиус
   double r2;     ///< второй радиус
   double alpha;  ///< угол между главной осью и осью х
-  bool isValid;
 public:
   /**  \brief \ru создать эллипс по двум радиусам и центральной точке
     \param[in] center - центр эллипса .\~
@@ -44,16 +43,14 @@ private:
   Ellipse( const Ellipse &obj ) = delete;
   Ellipse& operator=( Ellipse &obj ) = delete;
 public:
-  virtual Point  GetPoint                    ( double t ) const;                                               ///< вернуть точку на кривой по параметру t
-  virtual Range  GetRange                    () const;                                                         ///< вернуть границы параметра для эллипса : [0, 2*pi]
-  virtual Point  GetDerivativePoint          ( double t ) const;                                               ///< вернуть производную на эллипсе по параметру t
-  virtual Point  Get2DerivativePoint         ( double t ) const;                                               ///< вернуть вторую производную на эллипсе по параметру t
-  virtual void   GetAsPolyLine               ( std::vector<Point> & polyLinePoints, double accuracy ) const;   ///< вернуть полилинию для эллипса
-  virtual double DistanceToPoint              ( Point point ) const;                                            ///< возвращает расстояние от точки до полилинии эллипса
-
-  virtual void Translation ( double xShift, double yShift );
-  virtual void Rotation    ( double alpha );
-  virtual void Scaling  ( double XScaling, double YScaling );
+  virtual Point  GetPoint            ( double t ) const;                                               ///< вернуть точку на кривой по параметру t
+  virtual Range  GetRange            () const;                                                         ///< вернуть границы параметра для эллипса : [0, 2*pi]
+  virtual Point  GetDerivativePoint  ( double t ) const;                                               ///< вернуть производную на эллипсе по параметру t
+  virtual Point  Get2DerivativePoint ( double t ) const;                                               ///< вернуть вторую производную на эллипсе по параметру t
+  virtual double DistanceToPoint     ( Point point ) const;                                            ///< возвращает расстояние от точки до полилинии эллипса
+  virtual void   Translation         ( double xShift, double yShift );
+  virtual void   Rotation            ( double alpha );
+  virtual void   Scaling             ( double XScaling, double YScaling );
 
   bool   IsValid() const;
   double GetMajorRadius() const { return r1; }

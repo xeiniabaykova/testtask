@@ -1,9 +1,10 @@
-#ifndef COMMONCONSTANTS_H
-#define COMMONCONSTANTS_H
+#ifndef COMMONCONSTANTSMATH_H
+#define COMMONCONSTANTSMATH_H
 
 struct CommonConstantsMath {
   static double PI;
   static double NULL_TOL;
+  static double PRECISION_POLYLINE;
 };
 
 

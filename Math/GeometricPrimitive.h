@@ -9,8 +9,8 @@
 #ifndef GEOMETRICPRIMITIVE_H
 #define GEOMETRICPRIMITIVE_H
 
-#include <Math/Point.h>
-#include <Math/Range.h>
+#include "Point.h"
+#include "Range.h"
 #include <vector>
 
 //------------------------------------------------------------------------------

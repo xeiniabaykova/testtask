@@ -78,7 +78,7 @@ void DisplayedObject::addCurveToChart( QChart * chart)
   seriesRef->setColor( currentColor );
 
   std::vector<Point> polyPoints;
-  curve->GetAsPolyLine( polyPoints,CommonConstantsEditor::PRECISION_POLYLINE );
+  curve->GetAsPolyLine( polyPoints,CommonConstantsMath::PRECISION_POLYLINE );
 
   for ( int i = 0; i < polyPoints.size(); i++ )
     *currentseries <<QPointF( polyPoints[i].GetX(), polyPoints[i].GetY() );

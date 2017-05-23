@@ -59,20 +59,20 @@ public:
   virtual Point  GetDerivativePoint          ( double t ) const;                                               ///< вернуть производную на эллипсе по параметру t
   virtual Point  Get2DerivativePoint         ( double t ) const;                                               ///< вернуть вторую производную на эллипсе по параметру t
   virtual void   GetAsPolyLine               ( std::vector<Point> & polyLinePoints, double accuracy ) const;   ///< вернуть полилинию для эллипса
-  virtual double DistanceToPoint              ( Point point ) const;                                            ///< возвращает расстояние от точки до полилинии эллипса
+  virtual double DistanceToPoint             ( Point point ) const;                                            ///< возвращает расстояние от точки до полилинии эллипса
 
-  virtual void Translation ( double xShift, double yShift );
-  virtual void Rotation    ( double alpha );
-  virtual void Scaling  ( double XScaling, double YScaling );
-  std::vector<double> BasicFunctions( int i, double x) const;
-  double         CountWeight            ( double x ) const;
-  double         CountWeightD           ( double x )  const;
-  double         CountWeightD2          ( double x )  const;
-  int            FindSpan               ( double x ) const;
-  void           ComputeBasicFunction   ( double x, int i, double & result ) const;
-  void           ComputeBasicFunctionsD ( double X, const std::vector<std::vector<double>>& basicFunctions, std::vector<std::vector<double>>& basicFunctionsD );
-  void           ComputeBasicFunctionD  ( double x, int i, double& result, int derivativeOrder ) const;
-  double         BasicFunction          ();
+  virtual void        Translation            ( double xShift, double yShift );
+  virtual void        Rotation               ( double alpha );
+  virtual void        Scaling                ( double XScaling, double YScaling );
+  std::vector<double> BasicFunctions         ( int i, double x) const;
+  double              CountWeight            ( double x ) const;
+  double              CountWeightD           ( double x )  const;
+  double              CountWeightD2          ( double x )  const;
+  int                 FindSpan               ( double x ) const;
+  void                ComputeBasicFunction   ( double x, int i, double & result ) const;
+  void                ComputeBasicFunctionsD ( double X, const std::vector<std::vector<double>>& basicFunctions, std::vector<std::vector<double>>& basicFunctionsD );
+  void               ComputeBasicFunctionD   ( double x, int i, double& result, int derivativeOrder ) const;
+  double             BasicFunction           ();
 };
 
 

@@ -33,7 +33,6 @@ SOURCES += main.cpp\
     Math/NurbsCurve.cpp \
     Math/Range.cpp \
     Math/GeometricPoint.cpp \
-    Editor/Polyline.cpp \
     Math/GeomPolyLine.cpp \
     Editor/CreatorHandler.cpp \
     Editor/DisplayedObject.cpp \
@@ -55,7 +54,6 @@ HEADERS  += Editor/MainWindow.h \
     Math/NurbsCurve.h \
     Math/Range.h \
     Math/GeometricPoint.h \
-    Editor/Polyline.h \
     Math/GeomPolyline.h \
     Editor/CreatorHandler.h \
     Editor/DisplayedObject.h \

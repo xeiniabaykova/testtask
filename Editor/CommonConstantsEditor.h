@@ -1,8 +1,7 @@
-#ifndef COMMONCONSTANTS_H
-#define COMMONCONSTANTS_H
+#ifndef COMMONCONSTANTSEDITOR_H
+#define COMMONCONSTANTSEDITOR_H
 
 struct CommonConstantsEditor {
-  static double PRECISION_POLYLINE;
   static double PRECISION_SELECT;
 };
 

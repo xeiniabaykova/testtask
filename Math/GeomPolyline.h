@@ -9,7 +9,7 @@
 #ifndef GEOMPOLYLINE_H
 #define GEOMPOLYLINE_H
 #include "C2Curve.h"
-#include <Math/Point.h>
+#include "Point.h"
 #include <vector>
 #include "GeometricPrimitive.h"
 

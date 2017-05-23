@@ -9,7 +9,7 @@
 #ifndef LINE_H
 #define LINE_H
 #include "C2Curve.h"
-#include <Math/Point.h>
+#include "Point.h"
 #include <vector>
 #include <string>
 #include "GeometricPrimitive.h"
@@ -24,8 +24,6 @@ class Line: public C2Curve
 private:
   Point startPoint; ///< начальная точка
   Point endPoint;  ///< направление
-  bool  isValid;
-
 public:
    Line() = delete;
    /**  \brief \ru создать отрезок по начальной и конечной точке отрезка

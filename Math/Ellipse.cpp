@@ -1,8 +1,7 @@
 #include "Ellipse.h"
 #include <vector>
 #include <cmath>
-#include "Editor/Polyline.h"
-#include "Math/CommonConstantsMath.h"
+#include "CommonConstantsMath.h"
 
 
 
@@ -15,7 +14,54 @@ bool IsEqualPoint( Point point1, Point point2 )
 		return true;
 	return false;
 }
+bool IsEqualPoint(Point point1, Point point2, Point point3 )
+{
+	if (fabs(point1.GetX() - point2.GetX()) < CommonConstantsMath::NULL_TOL
+		&& fabs(point1.GetY() - point2.GetY()) < CommonConstantsMath::NULL_TOL
+		&& fabs(point2.GetX() - point3.GetX()) < CommonConstantsMath::NULL_TOL
+		&& fabs(point2.GetY() - point3.GetY()) < CommonConstantsMath::NULL_TOL)
+		return true;
+	return false;
+}
 
+double Distance(Point point1, Point point2)
+{
+	return sqrt((point1.GetX() - point2.GetX()) * (point1.GetX() - point2.GetX()) +
+		(point1.GetY() - point2.GetY()) * (point1.GetY() - point2.GetY()));
+}
+
+bool IsCirclePoints( Point point1, Point point2, Point point3 )
+{
+	if (IsEqualPoint(point1, point2, point3))
+		return false;
+
+	if ((abs(Distance(point1, point2) - Distance(point2, point3)) < CommonConstantsMath::NULL_TOL) ||
+		(abs(Distance(point2, point3) - Distance(point3, point1)) < CommonConstantsMath::NULL_TOL) ||
+		(abs(Distance(point2, point1) - Distance(point1, point3)) < CommonConstantsMath::NULL_TOL))
+		return true;
+	return false;
+}
+
+void FindRadiusCenter(Point point1, Point point2, Point point3, double& radius, Point& center )
+{ 
+	if ((Distance(point1, point2) - Distance(point2, point3)) < CommonConstantsMath::NULL_TOL)
+	{
+		radius = Distance(point1, point2);
+		center = point2;
+	}
+	else if ((Distance(point2, point3) - Distance(point3, point1)) < CommonConstantsMath::NULL_TOL)
+	{
+		radius = Distance(point2, point3);
+		center = point3;
+
+	}
+	else if ((Distance(point2, point1) - Distance(point1, point3)) < CommonConstantsMath::NULL_TOL)
+	{
+		radius = Distance(point2, point1);
+		center = point1;
+	}
+
+}
 bool PointsOneLine( Point point1, Point point2, Point point3 )
 {
 	if ( fabs((point3.GetX() - point1.GetX()) /
@@ -24,14 +70,14 @@ bool PointsOneLine( Point point1, Point point2, Point point3 )
 	return false;
 }
 
-// данные в эллипсе правильные, если: точки не совпадают, не лежат на одно линии
+// данные в эллипсе правильные, если: точки не совпадают, не лежат на одной
 bool CorrectEllipseData( Point point1, Point point2, Point point3 )
 {
-	if ( PointsOneLine(point1, point2, point3) )
-		return false;
 	if ( IsEqualPoint(point1, point2) ||
 		IsEqualPoint(point2, point3) ||
 		IsEqualPoint(point1, point3) )
+		return false;
+	if (PointsOneLine(point1, point2, point3))
 		return false;
 	return true;
 }
@@ -64,9 +110,11 @@ Ellipse::Ellipse( Point center, double r1, double r2, double alpha ):
 
 Ellipse::Ellipse ( const std::vector<Point>& points )
 {  
-	isValid = false;
+	r1 = 0;
+	r2 = 0;
+	center = Point(0.0, 0.0);
 	// если точки 2, то это - окружность, создаем окружность
-  if (points.size() == 2)
+  if ( points.size() == 2 )
   {
     if ( CorrectCircleData(points[0], points[1]) )
     {
@@ -78,29 +126,36 @@ Ellipse::Ellipse ( const std::vector<Point>& points )
 		r1 = r;
 		r2 = r;
 		alpha = 0;
-    isValid = true;
     }
-  } else {
-  if ( CorrectEllipseData(points[0], points[1], points[2]) )
-  {
-    center = points[0];
-    Point pointV( points[1] );
-    double x = pointV.GetX() - center.GetX();
-    double y = pointV.GetY() - center.GetY();
-    double axisA = sqrt( x * x + y * y );
-    alpha = atan2( y, x );
-    r1 = axisA;
-    Point newCoordPoint( points[2].GetX() - center.GetX(), points[2].GetY() - center.GetY() );
-    Point point2( newCoordPoint.GetX() * cos(alpha) + newCoordPoint.GetY() * sin(alpha),
-                        - newCoordPoint.GetX() * sin(alpha) + newCoordPoint.GetY() * cos(alpha) );
-
-    double axisB = (sqrt (fabs( (point2.GetY()) * (point2.GetY()) /
-        ( 1 - ( point2.GetX()) * ( point2.GetX()) / (r1 * r1))) ));
-
-    r2 = axisB;
-    isValid = true;
   }
-}
+  else if ( points.size() == 3 )
+  {
+    if ( CorrectEllipseData(points[0], points[1], points[2]) )
+	  {
+		  center = points[0];
+      Point pointV( points[1] );
+		  double x = pointV.GetX() - center.GetX();
+		  double y = pointV.GetY() - center.GetY();
+      double axisA = sqrt( x * x + y * y );
+      alpha = atan2( y, x );
+		  r1 = axisA;
+      Point newCoordPoint( points[2].GetX() - center.GetX(), points[2].GetY() - center.GetY() );
+      Point point2( newCoordPoint.GetX() * cos(alpha) + newCoordPoint.GetY() * sin(alpha),
+        -newCoordPoint.GetX() * sin(alpha) + newCoordPoint.GetY() * cos(alpha) );
+
+      double axisB = ( sqrt(fabs((point2.GetY()) * (point2.GetY()) /
+        (1 - (point2.GetX()) * (point2.GetX()) / (r1 * r1)))) );
+		  r2 = axisB;
+	  }
+    else if ( IsCirclePoints(points[0], points[1], points[2]) )
+	  {
+		  double r;
+      FindRadiusCenter( points[0], points[1], points[2], r, center );
+		  alpha = 0;
+		  r1 = r2 = r;
+	  }
+  
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -156,18 +211,6 @@ Point Ellipse::Get2DerivativePoint( double t ) const
   return point;
 }
 
-
-//-----------------------------------------------------------------------------
-/**
-  \ru позвращается полилилния для эллипса - используется общий алгоритм
-*/
-//-----------------------------------------------------------------------------
-void Ellipse::GetAsPolyLine( std::vector<Point>& polyLinePoints, double accuracy ) const
-{
-  Polyline polyline( this, accuracy );
-  polyLinePoints = polyline.GetPoints();
-}
-
 double Ellipse::DistanceToPoint( Point point ) const
 {
   double accuracy = 0.01;
@@ -193,5 +236,7 @@ void Ellipse::Scaling( double XScaling, double YScaling )
 
 bool Ellipse::IsValid() const
 {
-	return isValid;
+	if (r1 < CommonConstantsMath::NULL_TOL || r2 < CommonConstantsMath::NULL_TOL)
+		return false;
+
 }

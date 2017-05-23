@@ -1,5 +1,5 @@
-#include <Math/GeomPolyline.h>
-#include "Math/CommonConstantsMath.h"
+#include "GeomPolyline.h"
+#include "CommonConstantsMath.h"
 #include <cmath>
 
 namespace {

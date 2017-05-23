@@ -44,8 +44,6 @@ if (EDITOR)
 			#			Editor/MainWindow.h
 			#			Editor/MainWindowHandler.cpp
 			#			Editor/MainWindowHandler.h
-			Editor/Polyline.cpp
-			Editor/Polyline.h
 			Editor/CommonConstantsEditor.cpp
 			Editor/CommonConstantsEditor.h
 			)

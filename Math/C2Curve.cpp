@@ -68,3 +68,29 @@ void C2Curve::SetReferensedPoints( const std::vector<Point>& points )
 {
   referencedPoints = points;
 }
+
+double C2Curve::CountingStep( double tCurrent ) const
+{
+
+  Point firstDerivative = GetDerivativePoint( tCurrent );
+  Point secondDerivative = Get2DerivativePoint( tCurrent );
+  double vectorMult = firstDerivative.GetX() * secondDerivative.GetY() - firstDerivative.GetY() * secondDerivative.GetX();
+  double normVectorMult = sqrt( vectorMult * vectorMult );
+  double normFirstDerivative = sqrt( firstDerivative.GetX() * firstDerivative.GetX() +  firstDerivative.GetY() * firstDerivative.GetY() );
+  double multiplicationFirstDerivative = firstDerivative.GetX() * firstDerivative.GetX() +  firstDerivative.GetY() * firstDerivative.GetY();
+  double deltaT = 2 * sqrt ( CommonConstantsMath::PRECISION_POLYLINE * (2 * normFirstDerivative / normVectorMult - CommonConstantsMath::PRECISION_POLYLINE / multiplicationFirstDerivative) );
+  return deltaT;
+}
+
+
+ void C2Curve::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy ) const
+{
+  double t = GetRange().GetStart();
+  polyLinePoints.push_back( GetPoint(t) );
+  while ( t <= GetRange().GetEnd() )
+  {
+    t += CountingStep( t );
+    Point point ( GetPoint(t) );
+    polyLinePoints.push_back( point );
+  }
+}

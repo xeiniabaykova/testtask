@@ -1,12 +1,12 @@
 #include "Line.h"
-#include "Math/CommonConstantsMath.h"
+#include "CommonConstantsMath.h"
 #include <cmath>
 
 namespace {
 
 bool IsEqualPoint(Point point1, Point point2)
 {
-  if (fabs(point1.GetX() - point2.GetX()) < CommonConstantsMath::NULL_TOL
+  if ( fabs(point1.GetX() - point2.GetX()) < CommonConstantsMath::NULL_TOL
     && fabs(point1.GetY() - point2.GetY()) < CommonConstantsMath::NULL_TOL )
     return true;
   return false;
@@ -22,23 +22,24 @@ bool IsEqualPoint(Point point1, Point point2)
 //-----------------------------------------------------------------------------
 Line::Line( Point startPoint, Point endPoint ):
   startPoint( startPoint ),
-  endPoint( endPoint )
+  endPoint  ( endPoint )
 {
-  std::vector<Point> points;
-  points.push_back( startPoint );
-  points.push_back( endPoint );
-  SetReferensedPoints( points );
+  if ( !IsEqualPoint(startPoint, endPoint) )
+	{
+		std::vector<Point> points;
+		points.push_back(startPoint);
+		points.push_back(endPoint);
+		SetReferensedPoints(points);
+	}
 }
 
 Line::Line( const std::vector<Point>& points )
 {
-  isValid = false;
-  if ( points.size() == 0 && !IsEqualPoint(points[0], points[1]) )
+  if ( points.size() >= 2 && !IsEqualPoint(points[0], points[1]) )
   {
     startPoint = points[0];
     endPoint = points[1];
     SetReferensedPoints( points );
-    isValid = true;
   }
 }
 
@@ -95,9 +96,11 @@ Point Line::Get2DerivativePoint( double ) const
 //-----------------------------------------------------------------------------
 void Line::GetAsPolyLine( std::vector<Point> & polyLinePoints, double ) const
 {
+  polyLinePoints.clear();
   polyLinePoints.push_back( startPoint );
   polyLinePoints.push_back( endPoint );
 }
+
 void Line::Translation( double xShift, double yShift )
 {
   startPoint = Point( startPoint.GetX() + xShift, startPoint.GetY() + yShift );
@@ -106,10 +109,13 @@ void Line::Translation( double xShift, double yShift )
 
 void Line::Rotation( double alpha )
 {
-  startPoint = Point( startPoint.GetX() * cos(alpha) - startPoint.GetY() * sin(alpha),
-                      startPoint.GetX() * sin(alpha) + startPoint.GetY() * cos(alpha) );
-  endPoint = Point( endPoint.GetX() * cos(alpha) - endPoint.GetY() * sin(alpha),
-                      endPoint.GetX() * sin(alpha) + endPoint.GetY() * cos(alpha) );
+  double cosAlpha = cos( alpha );
+  double sinAlpha = sin( alpha );
+  startPoint = Point( startPoint.GetX() * cosAlpha - startPoint.GetY() *sinAlpha,
+                      startPoint.GetX() * sinAlpha + startPoint.GetY() * cosAlpha );
+
+  endPoint = Point( endPoint.GetX() * cosAlpha - endPoint.GetY() * sinAlpha,
+                      endPoint.GetX() * sinAlpha + endPoint.GetY() * cosAlpha );
 }
 
 void Line::Scaling( double xScaling, double yScaling )
@@ -121,7 +127,7 @@ void Line::Scaling( double xScaling, double yScaling )
 double Line::DistanceToPoint( Point point ) const
 {
   std::vector<Point> polylinePoints;
- // GetAsPolyLine( polylinePoints, CommonConstants::PRECISION_POLYLINE );
+  GetAsPolyLine( polylinePoints, CommonConstantsMath::PRECISION_POLYLINE );
   return C2Curve::DistancePointToCurve( point, polylinePoints );
 }
 
@@ -131,10 +137,7 @@ std::string Line::GetName() const
 }
 
 
-//------------------------------------------------------------------------------
-//
-// ---
 bool Line::IsValid() const
 {
-  return isValid;
+  return ( !IsEqualPoint(startPoint, endPoint) );
 }
