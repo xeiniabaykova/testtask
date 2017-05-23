@@ -2,9 +2,9 @@
 // Created by alakhverdyants on 22.05.17.
 //
 #include <gtest/gtest.h>
-#include <Point.h>
-#include <Ellipse.h>
-#include <CommonConstantsMath.h>
+#include "../Point.h"
+#include "../Ellipse.h"
+#include "../CommonConstantsMath.h"
 
 
 static bool IsEqualPoints( const Point & p1, const Point & p2, double eps=CommonConstantsMath::NULL_TOL )
@@ -193,7 +193,7 @@ TEST(Ellipse, Construct5SamePoints)
 
 TEST(Ellipse, Construct5PointsOnLine)
 {
-  std::vector<Point> points { Point(0.0, 0.0), Point(1.0, 1.0), Point(2.0, 2.0), Point(3.0, 3.0), Point(1.1, 2.4) };
+  std::vector<Point> points { Point(0.0, 0.0), Point(1.0, 1.0), Point(4.0, 4.0), Point(3.0, 3.0), Point(1.1, 2.4) };
   const Ellipse ellipse( points );
   EXPECT_FALSE( ellipse.IsValid() );
 }
@@ -364,5 +364,5 @@ TEST(Ellipse, IsValid2)
   Ellipse ellipse(Point(2., 1.), 1., 0., 0.);
   EXPECT_FALSE( ellipse.IsValid() );
   Ellipse ellipse2(Point(2., 1.), 1., 1., 0.);
-  EXPECT_TRUE( ellipse.IsValid() );
+  EXPECT_TRUE( ellipse2.IsValid() );
 }

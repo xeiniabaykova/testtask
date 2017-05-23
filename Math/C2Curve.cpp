@@ -83,11 +83,12 @@ double C2Curve::CountingStep( double tCurrent ) const
 }
 
 
- void C2Curve::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy ) const
+void C2Curve::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy ) const
 {
+  polyLinePoints.clear();
   double t = GetRange().GetStart();
   polyLinePoints.push_back( GetPoint(t) );
-  while ( t <= GetRange().GetEnd() )
+  while ( t < GetRange().GetEnd() )
   {
     t += CountingStep( t );
     Point point ( GetPoint(t) );

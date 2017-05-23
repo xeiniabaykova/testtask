@@ -110,8 +110,8 @@ Ellipse::Ellipse( Point center, double r1, double r2, double alpha ):
 
 Ellipse::Ellipse ( const std::vector<Point>& points )
 {  
-	r1 = 0;
-	r2 = 0;
+	r1 = 0.0;
+	r2 = 0.0;
 	center = Point(0.0, 0.0);
 	// если точки 2, то это - окружность, создаем окружность
   if ( points.size() == 2 )
@@ -128,7 +128,7 @@ Ellipse::Ellipse ( const std::vector<Point>& points )
 		alpha = 0;
     }
   }
-  else if ( points.size() == 3 )
+  else if ( points.size() >= 3 )
   {
     if ( CorrectEllipseData(points[0], points[1], points[2]) )
 	  {
@@ -194,8 +194,10 @@ Range Ellipse::GetRange() const
 Point Ellipse::GetDerivativePoint( double t ) const
 {
   Point point( r1 * -sin(t), r2 * cos(t) );
+  Point transformPoint( point.GetX() * cos(alpha) - point.GetY() * sin(alpha),
+	  point.GetX() * sin(alpha) + point.GetY() * cos(alpha));
 
-  return point;
+  return transformPoint;
 
 }
 
@@ -208,7 +210,10 @@ Point Ellipse::GetDerivativePoint( double t ) const
 Point Ellipse::Get2DerivativePoint( double t ) const
 {
   Point point( -r1 * cos(t), -r2 * sin(t) );
-  return point;
+  Point transformPoint(point.GetX() * cos(alpha) - point.GetY() * sin(alpha),
+	  point.GetX() * sin(alpha) + point.GetY() * cos(alpha));
+
+  return transformPoint;
 }
 
 double Ellipse::DistanceToPoint( Point point ) const
@@ -231,12 +236,13 @@ void Ellipse::Rotation( double alphaAng )
 
 void Ellipse::Scaling( double XScaling, double YScaling )
 {
-
+	r1 *= XScaling;
+	r2 *= YScaling;
 }
 
 bool Ellipse::IsValid() const
 {
 	if (r1 < CommonConstantsMath::NULL_TOL || r2 < CommonConstantsMath::NULL_TOL)
 		return false;
-
+	return true;
 }
