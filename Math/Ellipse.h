@@ -54,7 +54,11 @@ public:
   virtual void Translation ( double xShift, double yShift );
   virtual void Rotation    ( double alpha );
   virtual void Scaling  ( double XScaling, double YScaling );
-  bool IsValid() const;
+
+  bool   IsValid() const;
+  double GetMajorRadius() const { return r1; }
+  double GetMinorRadius() const { return r2; }
+  Point  GetCenter() const { return center; }
 };
 
 #endif // ELLIPSE_H
