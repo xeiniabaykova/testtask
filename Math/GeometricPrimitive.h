@@ -9,7 +9,6 @@
 #ifndef GEOMETRICPRIMITIVE_H
 #define GEOMETRICPRIMITIVE_H
 
-#include "Point.h"
 #include "Range.h"
 #include <vector>
 
@@ -26,9 +25,9 @@ private:
   GeometricPrimitive( const GeometricPrimitive &obj ) = delete;
   GeometricPrimitive& operator=( GeometricPrimitive &obj ) = delete;
 public:
-  virtual void Translation ( double xShift, double yShift ) = 0;
-  virtual void Rotation    ( double alpha ) = 0;
-  virtual void Scaling  ( double XScaling, double YScaling ) = 0;
+  virtual void Translate ( double xShift, double yShift ) = 0;
+  virtual void Rotate    ( double alpha ) = 0;
+  virtual void Scale ( double XScaling, double YScaling ) = 0;
 };
 
 #endif // GEOMETRICPRIMITIVE_H

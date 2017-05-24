@@ -73,8 +73,6 @@ set(SOURCE_FILES
 		Math/CommonConstantsMath.h
 		Math/Ellipse.cpp
 		Math/Ellipse.h
-		Math/GeometricPoint.cpp
-		Math/GeometricPoint.h
 		Math/GeometricPrimitive.h
 		Math/Line.cpp
 		Math/Line.h
@@ -92,6 +90,10 @@ set(SOURCE_FILES
 		Serealizer/CurveSerializer.cpp
 		Serealizer/LineSerializer.h
 		Serealizer/LineSerializer.cpp
+        Serealizer/EllipseSerializer.h
+		Serealizer/EllipseSerializer.cpp
+        Serealizer/NURBSSerializer.h
+		Serealizer/NURBSSerializer.cpp
 		)
 
 add_executable(TestTask1 ${SOURCE_FILES})

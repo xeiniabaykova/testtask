@@ -1,4 +1,6 @@
 #include "CurveSerializer.h"
+#include <cinttypes>
+#include <cstdio>
 
 Point CurveSerializer::ReadPoint(std::istream& input) const
 {
@@ -19,9 +21,14 @@ double CurveSerializer::ReadDouble( std::istream& input ) const
   return value;
 }
 
-double CurveSerializer::ReadInt( std::istream& input ) const
+int CurveSerializer::ReadInt( std::istream& input ) const
 {
-  int value;
+
+#if ENVIRONMENT32
+  std::int32_t value;
+#else
+  std::int64_t value;
+#endif
   input.read( (char*)&value, sizeof value );
   return value;
 }
@@ -32,5 +39,10 @@ void CurveSerializer::WriteDouble( std::ostream& output, double value ) const
 
 void CurveSerializer::WriteInt( std::ostream& output, int value ) const
 {
-  output.write( (char*)&value, sizeof value );
+#if ENVIRONMENT32
+  std::int32_t size;
+#else
+  std::int64_t size;
+#endif
+  output.write( (char*)&value, sizeof(size) );
 }

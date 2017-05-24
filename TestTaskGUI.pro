@@ -32,7 +32,6 @@ SOURCES += main.cpp\
     Editor/MainWindowHandler.cpp \
     Math/NurbsCurve.cpp \
     Math/Range.cpp \
-    Math/GeometricPoint.cpp \
     Math/GeomPolyLine.cpp \
     Editor/CreatorHandler.cpp \
     Editor/DisplayedObject.cpp \
@@ -41,7 +40,9 @@ SOURCES += main.cpp\
     Serealizer/LineSerializer.cpp \
     Serealizer/CurveSerializer.cpp \
     Editor/CommonConstantsEditor.cpp \
-    Math/CommonConstantsMath.cpp
+    Math/CommonConstantsMath.cpp \
+    Serealizer/NURBSCurveSerializer.cxx \
+    Serealizer/EllipseCurveSerializer.cxx
 
 HEADERS  += Editor/MainWindow.h \
     Editor/FileIO.h \
@@ -53,7 +54,6 @@ HEADERS  += Editor/MainWindow.h \
 	Editor/ui_mainwindow.h \
     Math/NurbsCurve.h \
     Math/Range.h \
-    Math/GeometricPoint.h \
     Math/GeomPolyline.h \
     Editor/CreatorHandler.h \
     Editor/DisplayedObject.h \
@@ -62,7 +62,9 @@ HEADERS  += Editor/MainWindow.h \
     Serealizer/CurveSerializer.h \
     Serealizer/LineSerializer.h \
     Editor/CommonConstantsEditor.h \
-    Math/CommonConstantsMath.h
+    Math/CommonConstantsMath.h \
+    Serealizer/NURBSCurveSerializer.hxx \
+    Serealizer/EllipseCurveSerializer.hxx
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../Qt/5.8/msvc2015_64/lib/ -lQt5Charts

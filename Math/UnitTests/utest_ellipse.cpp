@@ -2,7 +2,7 @@
 // Created by alakhverdyants on 22.05.17.
 //
 #include <gtest/gtest.h>
-#include "../Point.h"
+#include "../GeometricPoint.h"
 #include "../Ellipse.h"
 
 
@@ -43,7 +43,7 @@ TEST(Circle, Construct3Points)
   Point samePoint(0.0, 0.0);
   std::vector<Point> samePoints{samePoint, Point(2.2, 3.7), samePoint};
   const Ellipse ellipse( samePoints );
-  EXPECT_TRUE( ellipse.IsValid() );
+  EXPECT_FALSE( ellipse.IsValid() );
 }
 
 TEST(Circle, ConstructCRRA)
@@ -126,7 +126,7 @@ TEST(Circle, DistanceToPoint)
 TEST(Circle, Translation)
 {
   Ellipse circle( Point(1., 1.), 2., 2., 0. );
-  circle.Translation( 2., -1. );
+  circle.Translate( 2., -1. );
   EXPECT_TRUE( IsEqualPoints(circle.GetPoint(0.), Point(5., 0.)) );
   EXPECT_TRUE( IsEqualPoints(circle.GetPoint(CommonConstantsMath::PI*2.), Point(5., 0.)) );
   EXPECT_TRUE( IsEqualPoints(circle.GetPoint(CommonConstantsMath::PI/4.), Point(3.+sqrt(2.), sqrt(2.))) );
@@ -138,7 +138,7 @@ TEST(Circle, Translation)
 TEST(Circle, Rotation)
 {
   Ellipse circle(Point(1., 1.), 2., 2., 0.);
-  circle.Rotation( CommonConstantsMath::PI/4. );
+  circle.Rotate( CommonConstantsMath::PI/4. );
   EXPECT_TRUE( IsEqualPoints(circle.GetPoint(0.), Point(1.+sqrt(2.), 1.+sqrt(2.))) );
   EXPECT_TRUE( IsEqualPoints(circle.GetPoint(CommonConstantsMath::PI*2.), Point(1.+sqrt(2.), 1.+sqrt(2.))) );
   EXPECT_TRUE( IsEqualPoints(circle.GetPoint(CommonConstantsMath::PI/4.), Point(1., 3.)) );
@@ -150,7 +150,7 @@ TEST(Circle, Rotation)
 TEST(Circle, Scaling)
 {
   Ellipse circle(Point(1., 1.), 2., 2., 0.);
-  circle.Scaling( 2., 0.5 );
+  circle.Scale( 2., 0.5 );
   auto diam = DistancePointPoint( circle.GetPoint(0.), circle.GetPoint(CommonConstantsMath::PI) );
   EXPECT_NEAR( diam, 8., CommonConstantsMath::NULL_TOL );
   diam = DistancePointPoint( circle.GetPoint(CommonConstantsMath::PI/2.),
@@ -308,7 +308,7 @@ TEST(Ellipse, DistanceToPoint)
 TEST(Ellipse, Translation)
 {
   Ellipse ellipse( Point(2., 1.), 1., 4., CommonConstantsMath::PI/4. );
-  ellipse.Translation( 2., -1. );
+  ellipse.Translate( 2., -1. );
   EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(0.),
                              Point(4.7071067811865475, 0.7071067811865475)) );
   EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*2.),
@@ -323,7 +323,7 @@ TEST(Ellipse, Translation)
 TEST(Ellipse, Rotation)
 {
   Ellipse ellipse( Point(0., 0.), 1., 4., CommonConstantsMath::PI/4. );
-  ellipse.Rotation( -CommonConstantsMath::PI/4. );
+  ellipse.Rotate( -CommonConstantsMath::PI/4. );
   EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(0.), Point(1., 0.)) );
   EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*2.), Point(1., 0.)) );
   EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI/4.),
@@ -338,7 +338,7 @@ TEST(Ellipse, Rotation)
 TEST(Ellipse, Scaling)
 {
   Ellipse ellipse( Point(2., 1.), 1., 4., 0. );
-  ellipse.Scaling( 2., 0.5 );
+  ellipse.Scale( 2., 0.5 );
   auto diam = DistancePointPoint( ellipse.GetPoint(0.), ellipse.GetPoint(CommonConstantsMath::PI) );
   EXPECT_NEAR( diam, 4., CommonConstantsMath::NULL_TOL );
   diam = DistancePointPoint( ellipse.GetPoint(CommonConstantsMath::PI/2.),
@@ -352,9 +352,9 @@ TEST(Ellipse, IsValid)
 {
   Ellipse ellipse(Point(2., 1.), 1., 4., 0.);
   EXPECT_TRUE( ellipse.IsValid() );
-  ellipse.Scaling( 2., 0.2 );
+  ellipse.Scale( 2., 0.2 );
   EXPECT_TRUE( ellipse.IsValid() );
-  ellipse.Scaling( 1., 0 );
+  ellipse.Scale( 1., 0 );
   EXPECT_FALSE( ellipse.IsValid() );
 }
 

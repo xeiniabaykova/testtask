@@ -1,50 +1,51 @@
 ////////////////////////////////////////////////////////////////////////////////
 /**
   \file
-  \brief \ru двумерное представление точки\~
+  \brief \ru  точка в двумерном пространстве (возможно, больше не нужно)\~
 
 */
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef POINT_H
-#define POINT_H
+#ifndef GEOMETRICPOINT_H
+#define GEOMETRICPOINT_H
+#include <vector>
+#include "Point.h"
+#include "GeometricPrimitive.h"
+
 
 //------------------------------------------------------------------------------
-/** \brief \ru Класс для двумерного представления точки \~
-*/
+/** \brief \ru Класс- заплатка для точки.
+ * Используется для упрощения создания и отображения геометрических объектов  \~
+**/
 // ---
-class Point
+class Point: public GeometricPrimitive
 {
 private:
-  double x; ///< координата x
-  double y; ///< координата y
-
+private:
+	double x; ///< координата x
+	double y; ///< координата y
+  bool isValid;
 public:
-  Point() = default;
-  /**  \brief \ru создать двумерную точку по координатам x, y
-    \param[in] x  - координата .\~
-    \param[in] y - координата .\~
-  */
-  //---
-  Point( double x, double y );
-  Point( const Point& point );
-  virtual ~Point() = default;
-public:
+  //-------------------------------------------------------------------------------
+  // \ru Создание точки по точке
+  // ---
+  Point():
+    x(0),
+    y(0){}
+  Point ( double x, double y );
+  Point(const Point& point);
+  virtual void Translate ( double xShift, double yShift ); // сдвиг по осям x, y
+  virtual void Rotate   ( double alpha ); // поворот на угол alpha
+  virtual void Scale       ( double XScaling, double YScaling ); // матрица растяжения
   double  GetX() const; ///< получить координату x
   double  GetY() const; ///< получить координату y
 
-  Point operator * ( double param ) const ///< умножить точку на скаляр
-  {
-    return Point( x * param, y * param );
-  }
-  Point operator - ( Point point ) const ///< вычесть из одной точки другую точку
-  {
-    return Point( x - point.GetX(), y - point.GetY() );
-  }
-  Point operator + ( Point point ) const ///< прибавить к одной точке другую точку
-  {
-    return Point( x + point.GetX(), y + point.GetY() );
-  }
+  Point operator * ( double param ) const;
+  Point operator - ( Point point ) const;
+  Point operator + ( Point point ) const;
+  Point operator = ( Point point );
+  bool IsValid();
 };
 
-#endif // POINT_H
+
+#endif // GEOMETRICPOINT_H

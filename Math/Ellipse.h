@@ -14,6 +14,7 @@
 #include "Range.h"
 #include <vector>
 #include "GeometricPrimitive.h"
+#include "Vector.h"
 
 
 //------------------------------------------------------------------------------
@@ -36,7 +37,7 @@ public:
   //---
   Ellipse ( const std::vector<Point>& points );
   Ellipse ( Point center, double r1, double r2, double alpha );
-  Ellipse () = delete;
+  Ellipse () = default;
   virtual ~Ellipse() = default;
 
 private:
@@ -45,17 +46,19 @@ private:
 public:
   virtual Point  GetPoint            ( double t ) const;                                               ///< вернуть точку на кривой по параметру t
   virtual Range  GetRange            () const;                                                         ///< вернуть границы параметра для эллипса : [0, 2*pi]
-  virtual Point  GetDerivativePoint  ( double t ) const;                                               ///< вернуть производную на эллипсе по параметру t
-  virtual Point  Get2DerivativePoint ( double t ) const;                                               ///< вернуть вторую производную на эллипсе по параметру t
+  virtual Vector  GetDerivativePoint  ( double t ) const;                                               ///< вернуть производную на эллипсе по параметру t
+  virtual Vector  Get2DerivativePoint ( double t ) const;                                               ///< вернуть вторую производную на эллипсе по параметру t
   virtual double DistanceToPoint     ( Point point ) const;                                            ///< возвращает расстояние от точки до полилинии эллипса
-  virtual void   Translation         ( double xShift, double yShift );
-  virtual void   Rotation            ( double alpha );
-  virtual void   Scaling             ( double XScaling, double YScaling );
+  virtual void   Translate         ( double xShift, double yShift );
+  virtual void   Rotate            ( double alpha );
+  virtual void   Scale             ( double XScaling, double YScaling );
 
   bool   IsValid() const;
   double GetMajorRadius() const { return r1; }
   double GetMinorRadius() const { return r2; }
+  double GetAlpha() const { return alpha; }
   Point  GetCenter() const { return center; }
+  std::string GetName() const;
 };
 
 #endif // ELLIPSE_H

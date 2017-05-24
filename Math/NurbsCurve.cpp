@@ -152,15 +152,15 @@ double NurbsCurveBasicFunction()
   return 0.0;
 }
 
-void NurbsCurve::Translation(double xShift, double yShift)
+void NurbsCurve::Translate(double xShift, double yShift)
 {
 
 }
-void NurbsCurve::Rotation(double alpha)
+void NurbsCurve::Rotate(double alpha)
 {
 
 }
-void NurbsCurve::Scaling(double XScaling, double YScaling)
+void NurbsCurve::Scale(double XScaling, double YScaling)
 {
 
 }
@@ -210,7 +210,7 @@ Point NurbsCurve::GetPoint(double t) const
   {
     resultPoint = resultPoint + poles[span - degree + i] * node[i] * weights[i];
   }
-  return resultPoint *(1 / weightNurbs);
+  return Point(resultPoint *(1 / weightNurbs) );
 }
 std::vector<double> NurbsCurve::BasicFunctions( int i, double x) const
 {
@@ -238,7 +238,7 @@ std::vector<double> NurbsCurve::BasicFunctions( int i, double x) const
 }
 
 
-Point  NurbsCurve::GetDerivativePoint(double t) const
+Vector  NurbsCurve::GetDerivativePoint(double t) const
 {
   double span = FindSpan(t);
   double weightNurbsD = CountWeightD(t);
@@ -249,10 +249,9 @@ Point  NurbsCurve::GetDerivativePoint(double t) const
     ComputeBasicFunctionD(t, span, result, 1);
     resultPoint = resultPoint + poles[i] * result * weights[i];
   }
-  return resultPoint * (1 / weightNurbsD);
-
+  return Vector( (resultPoint *(1 / weightNurbsD)).GetX(), (resultPoint *(1 / weightNurbsD)).GetY() );
 }
-Point  NurbsCurve::Get2DerivativePoint(double t) const
+Vector  NurbsCurve::Get2DerivativePoint(double t) const
 {
   double span = FindSpan(t);
   double weightNurbsD2 = CountWeightD2(t);
@@ -263,7 +262,7 @@ Point  NurbsCurve::Get2DerivativePoint(double t) const
     ComputeBasicFunctionD(t, span, result, 2);
     resultPoint = resultPoint + poles[i] * result * weights[i];
   }
-  return resultPoint *(1 / weightNurbsD2);
+  return Vector( (resultPoint *(1 / weightNurbsD2)).GetX(), (resultPoint *(1 / weightNurbsD2)).GetY() );
 }
 Range  NurbsCurve::GetRange() const
 {
@@ -274,7 +273,7 @@ void  NurbsCurve::GetAsPolyLine(std::vector<Point>& polyLinePoints, double accur
   double t = GetRange().GetStart() + 0.1;
   while (t <= GetRange().GetEnd())
   {
-    polyLinePoints.push_back(GetPoint(t));
+    polyLinePoints.push_back( GetPoint(t) );
     t = t + 0.1;
   }
 }
@@ -286,6 +285,10 @@ double NurbsCurve::DistanceToPoint(Point point) const
   double accuracy = 0.01;
   std::vector<Point> polylinePoints;
   GetAsPolyLine(polylinePoints, accuracy);
-  // return C2Curve::DistancePointToCurve( point, polylinePoints );
-  return 0.0;
+  return C2Curve::DistancePointToCurve( point, polylinePoints );
+}
+
+std::string NurbsCurve::GetName() const
+{
+  return "Nurbs";
 }
