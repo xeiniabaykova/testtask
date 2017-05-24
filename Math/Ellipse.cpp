@@ -104,6 +104,7 @@ bool CorrectCircleData( Point point1, Point point2 )
 */
 //-----------------------------------------------------------------------------
 Ellipse::Ellipse( Point center, double r1, double r2, double alpha ):
+  C2Curve(),
   center( center ),
   r1    ( r1     ),
   r2    ( r2     ),
@@ -115,11 +116,13 @@ Ellipse::Ellipse( Point center, double r1, double r2, double alpha ):
 }
 
 
-Ellipse::Ellipse ( const std::vector<Point>& points )
+Ellipse::Ellipse ( const std::vector<Point>& points ):
+  C2Curve(),
+  center( Point(0.0,0.0) ),
+  r1    ( 0.0   ),
+  r2    ( 0.0    ),
+  alpha ( 0.0  )
 {  
-	r1 = 0.0;
-	r2 = 0.0;
-	center = Point(0.0, 0.0);
 	// если точки 2, то это - окружность, создаем окружность
   if ( points.size() == 2 )
   {

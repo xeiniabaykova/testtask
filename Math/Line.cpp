@@ -21,6 +21,7 @@ bool IsEqualPoint(Point point1, Point point2)
 */
 //-----------------------------------------------------------------------------
 Line::Line( Point startPoint, Point endPoint ):
+  C2Curve(),
   startPoint( startPoint ),
   endPoint  ( endPoint )
 {
@@ -33,7 +34,10 @@ Line::Line( Point startPoint, Point endPoint ):
 	}
 }
 
-Line::Line( const std::vector<Point>& points )
+Line::Line( const std::vector<Point>& points ):
+  C2Curve(),
+  startPoint( Point(0.0, 0.0) ),
+  endPoint  ( Point(0.0, 0.0) )
 {
   if ( points.size() >= 2 && !IsEqualPoint(points[0], points[1]) )
   {

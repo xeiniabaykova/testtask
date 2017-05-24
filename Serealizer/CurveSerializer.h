@@ -2,6 +2,7 @@
 #define CURVESERIALIZER_H
 #include "Math/GeometricPrimitive.h"#include "Math/Point.h"
 #include <istream>
+#include "Math/Point.h"
 #include <memory>
 
 // Check windows
