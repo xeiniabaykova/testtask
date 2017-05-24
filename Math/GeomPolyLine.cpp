@@ -77,9 +77,9 @@ Point GeomPolyline::GetPoint( double t ) const
   \ru возвращает производную полилиннии по параметру t
 */
 //-----------------------------------------------------------------------------
-Point GeomPolyline::GetDerivativePoint( double t ) const
+Vector GeomPolyline::GetDerivativePoint( double t ) const
 {
-  Point direction( referencedPoints[t+1].GetX() - referencedPoints[t].GetX(),
+  Vector direction( referencedPoints[t+1].GetX() - referencedPoints[t].GetX(),
       referencedPoints[t+1].GetY() - referencedPoints[t].GetY() );
   return direction;
 }
@@ -90,9 +90,9 @@ Point GeomPolyline::GetDerivativePoint( double t ) const
   \ru возвращает вторую производную линнии по параметру t
 */
 //-----------------------------------------------------------------------------
-Point GeomPolyline::Get2DerivativePoint( double ) const
+Vector GeomPolyline::Get2DerivativePoint( double ) const
 {
-  return Point ( 0.0, 0.0 );
+  return Vector ( 0.0, 0.0 );
 }
 
 

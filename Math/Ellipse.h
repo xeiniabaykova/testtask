@@ -14,6 +14,7 @@
 #include "Range.h"
 #include <vector>
 #include "GeometricPrimitive.h"
+#include "Vector.h"
 
 
 //------------------------------------------------------------------------------
@@ -45,8 +46,8 @@ private:
 public:
   virtual Point  GetPoint            ( double t ) const;                                               ///< вернуть точку на кривой по параметру t
   virtual Range  GetRange            () const;                                                         ///< вернуть границы параметра для эллипса : [0, 2*pi]
-  virtual Point  GetDerivativePoint  ( double t ) const;                                               ///< вернуть производную на эллипсе по параметру t
-  virtual Point  Get2DerivativePoint ( double t ) const;                                               ///< вернуть вторую производную на эллипсе по параметру t
+  virtual Vector  GetDerivativePoint  ( double t ) const;                                               ///< вернуть производную на эллипсе по параметру t
+  virtual Vector  Get2DerivativePoint ( double t ) const;                                               ///< вернуть вторую производную на эллипсе по параметру t
   virtual double DistanceToPoint     ( Point point ) const;                                            ///< возвращает расстояние от точки до полилинии эллипса
   virtual void   Translate         ( double xShift, double yShift );
   virtual void   Rotate            ( double alpha );

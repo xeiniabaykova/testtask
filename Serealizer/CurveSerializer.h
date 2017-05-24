@@ -31,7 +31,7 @@ public:
   Point ReadPoint   ( std::istream& input ) const;
   void WritePoint   ( std::ostream& output, const Point& point ) const;
   double ReadDouble ( std::istream& input ) const;
-  int ReadInt    ( std::istream& input ) const;
+  int ReadInt       ( std::istream& input ) const;
   void WriteInt     ( std::ostream& output, int value ) const;
   void WriteDouble  ( std::ostream& otutput, double value ) const;
 };

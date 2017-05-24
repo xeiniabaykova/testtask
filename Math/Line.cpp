@@ -71,9 +71,9 @@ Point Line::GetPoint( double t ) const
   \ru возвращает производную линнии по параметру t
 */
 //-----------------------------------------------------------------------------
-Point Line::GetDerivativePoint( double ) const
+Vector Line::GetDerivativePoint( double ) const
 {
-  Point direction( endPoint.GetX() - startPoint.GetX(), endPoint.GetY() - startPoint.GetY());
+  Vector direction( endPoint.GetX() - startPoint.GetX(), endPoint.GetY() - startPoint.GetY());
   return direction;
 }
 
@@ -83,9 +83,9 @@ Point Line::GetDerivativePoint( double ) const
   \ru возвращает вторую производную линнии по параметру t
 */
 //-----------------------------------------------------------------------------
-Point Line::Get2DerivativePoint( double ) const
+Vector Line::Get2DerivativePoint( double ) const
 {
-  return Point ( 0.0, 0.0 );
+  return Vector( 0.0, 0.0 );
 }
 
 

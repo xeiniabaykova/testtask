@@ -6,10 +6,9 @@
 class NURBSCurveSerializer :public CurveSerializer {
 public:
   NURBSCurveSerializer() = default;
-  virtual std::unique_ptr<GeometricPrimitive> Read(std::istream& theInput);
-  virtual void Write (std::ostream& theOutput, const GeometricPrimitive& theCurve);
-
-	virtual std::string GetHeaderName();
+  virtual std::unique_ptr<GeometricPrimitive> Read          ( std::istream& theInput );
+  virtual void                                Write         ( std::ostream& theOutput, const GeometricPrimitive& theCurve );
+  virtual std::string                         GetHeaderName ();
 
   virtual ~NURBSCurveSerializer() = default;
 };

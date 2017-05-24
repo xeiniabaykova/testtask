@@ -56,8 +56,8 @@ public:
 
   virtual Point  GetPoint                    ( double t ) const;                                               ///< вернуть точку на кривой по параметру t
   virtual Range  GetRange                    () const;                                                         ///< вернуть границы параметра для эллипса : [0, 2*pi]
-  virtual Point  GetDerivativePoint          ( double t ) const;                                               ///< вернуть производную на эллипсе по параметру t
-  virtual Point  Get2DerivativePoint         ( double t ) const;                                               ///< вернуть вторую производную на эллипсе по параметру t
+  virtual Vector  GetDerivativePoint          ( double t ) const;                                               ///< вернуть производную на эллипсе по параметру t
+  virtual Vector  Get2DerivativePoint         ( double t ) const;                                               ///< вернуть вторую производную на эллипсе по параметру t
   virtual void   GetAsPolyLine               ( std::vector<Point> & polyLinePoints, double accuracy ) const;   ///< вернуть полилинию для эллипса
   virtual double DistanceToPoint             ( Point point ) const;                                            ///< возвращает расстояние от точки до полилинии эллипса
 

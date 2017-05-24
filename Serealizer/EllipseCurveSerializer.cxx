@@ -1,10 +1,12 @@
 #include "EllipseCurveSerializer.hxx"
 
-std::string EllipseCurveSerializer::GetHeaderName() {
-  return Ellipse ().GetName();
+std::string EllipseCurveSerializer::GetHeaderName()
+{
+  return Ellipse().GetName();
 }
 
-std::unique_ptr<GeometricPrimitive> EllipseCurveSerializer::Read( std::istream& theInput ) {
+std::unique_ptr<GeometricPrimitive> EllipseCurveSerializer::Read( std::istream& theInput )
+{
   Point aCenter = ReadPoint( theInput );
   double aRadius1 = ReadDouble( theInput );
   double aRadius2 = ReadDouble( theInput );
@@ -12,7 +14,8 @@ std::unique_ptr<GeometricPrimitive> EllipseCurveSerializer::Read( std::istream& 
   return std::make_unique<Ellipse>( aCenter, aRadius1, aRadius2, alpha );
 }
 
-void EllipseCurveSerializer::Write( std::ostream& theOutput, const GeometricPrimitive& theCurve ) {
+void EllipseCurveSerializer::Write( std::ostream& theOutput, const GeometricPrimitive& theCurve )
+{
   WritePoint( theOutput, dynamic_cast<const Ellipse&>(theCurve).GetCenter() );
   WriteDouble( theOutput, dynamic_cast<const Ellipse&>(theCurve).GetMajorRadius() );
   WriteDouble( theOutput, dynamic_cast<const Ellipse&>(theCurve).GetMinorRadius() );

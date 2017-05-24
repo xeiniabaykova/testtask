@@ -198,11 +198,11 @@ Range Ellipse::GetRange() const
   \ru возвращает производную элипса по параметру t
 */
 //-----------------------------------------------------------------------------
-Point Ellipse::GetDerivativePoint( double t ) const
+Vector Ellipse::GetDerivativePoint( double t ) const
 {
   Point point( r1 * -sin(t), r2 * cos(t) );
 
-  Point transformPoint( point.GetX() * cos(alpha) - point.GetY() * sin(alpha),
+  Vector transformPoint( point.GetX() * cos(alpha) - point.GetY() * sin(alpha),
 	  point.GetX() * sin(alpha) + point.GetY() * cos(alpha));
 
   return transformPoint;
@@ -215,11 +215,11 @@ Point Ellipse::GetDerivativePoint( double t ) const
   \ru возвращает вторую эллипса по параметру t
 */
 //-----------------------------------------------------------------------------
-Point Ellipse::Get2DerivativePoint( double t ) const
+Vector Ellipse::Get2DerivativePoint( double t ) const
 {
   Point point( -r1 * cos(t), -r2 * sin(t) );
 
-  Point transformPoint(point.GetX() * cos(alpha) - point.GetY() * sin(alpha),
+  Vector transformPoint(point.GetX() * cos(alpha) - point.GetY() * sin(alpha),
 	  point.GetX() * sin(alpha) + point.GetY() * cos(alpha));
 
   return transformPoint;

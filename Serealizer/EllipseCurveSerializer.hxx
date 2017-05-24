@@ -8,11 +8,9 @@ class EllipseCurveSerializer :public CurveSerializer {
 	
 public:
   EllipseCurveSerializer() = default;
-  virtual std::unique_ptr<GeometricPrimitive> Read (std::istream& theInput);
-  virtual void Write (std::ostream& theOutput, const GeometricPrimitive& theCurve);
-
+  virtual std::unique_ptr<GeometricPrimitive>Read( std::istream& theInput );
+  virtual void Write( std::ostream& theOutput, const GeometricPrimitive& theCurve );
 	virtual std::string GetHeaderName();
-
   virtual ~EllipseCurveSerializer() = default;
 };
 
