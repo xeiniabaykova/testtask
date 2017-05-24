@@ -101,13 +101,13 @@ void Line::GetAsPolyLine( std::vector<Point> & polyLinePoints, double ) const
   polyLinePoints.push_back( endPoint );
 }
 
-void Line::Translation( double xShift, double yShift )
+void Line::Translate( double xShift, double yShift )
 {
   startPoint = Point( startPoint.GetX() + xShift, startPoint.GetY() + yShift );
   endPoint = Point( endPoint.GetX() + xShift, endPoint.GetY() + yShift );
 }
 
-void Line::Rotation( double alpha )
+void Line::Rotate( double alpha )
 {
   double cosAlpha = cos( alpha );
   double sinAlpha = sin( alpha );
@@ -118,7 +118,7 @@ void Line::Rotation( double alpha )
                       endPoint.GetX() * sinAlpha + endPoint.GetY() * cosAlpha );
 }
 
-void Line::Scaling( double xScaling, double yScaling )
+void Line::Scale( double xScaling, double yScaling )
 {
   startPoint = Point( startPoint.GetX() * xScaling, startPoint.GetY() * yScaling );
   endPoint = Point( endPoint.GetX() * xScaling, endPoint.GetY() * yScaling );

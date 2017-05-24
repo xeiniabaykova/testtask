@@ -42,9 +42,9 @@ public:
   virtual Range  GetRange            () const;                                                       ///< вернуть парметризацию  параметризация от [0, 1]
   virtual void   GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< вернуть полилинию для полилинии (это и есть сама полилиния)
   virtual double DistanceToPoint     ( Point point ) const;
-  virtual void   Translation         ( double xShift, double yShift ); // сдвиг по осям x, y
-  virtual void   Rotation            ( double alpha ); // поворот на угол alpha
-  virtual void   Scaling          ( double XScaling, double YScaling ); // матрица растяжения
+  virtual void   Translate         ( double xShift, double yShift ); // сдвиг по осям x, y
+  virtual void   Rotate            ( double alpha ); // поворот на угол alpha
+  virtual void   Scale         ( double XScaling, double YScaling ); // матрица растяжения
   bool IsValid();
 };
 

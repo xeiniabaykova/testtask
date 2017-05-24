@@ -35,7 +35,7 @@ private:
   NurbsCurve(const NurbsCurve &obj) = delete;
   NurbsCurve& operator=(NurbsCurve &obj) = delete;
 public:
-  NurbsCurve() = delete;
+  NurbsCurve() = default;
   virtual ~NurbsCurve() = default;
   /**  \brief \ru создать nurbs - кривую по опорным точкам, весам, опорным точкам и замкнутости
   \param[in] points - опорные точки .\~
@@ -61,9 +61,9 @@ public:
   virtual void   GetAsPolyLine               ( std::vector<Point> & polyLinePoints, double accuracy ) const;   ///< вернуть полилинию для эллипса
   virtual double DistanceToPoint             ( Point point ) const;                                            ///< возвращает расстояние от точки до полилинии эллипса
 
-  virtual void        Translation            ( double xShift, double yShift );
-  virtual void        Rotation               ( double alpha );
-  virtual void        Scaling                ( double XScaling, double YScaling );
+  virtual void        Translate           ( double xShift, double yShift );
+  virtual void        Rotate              ( double alpha );
+  virtual void        Scale                ( double XScaling, double YScaling );
   std::vector<double> BasicFunctions         ( int i, double x) const;
   double              CountWeight            ( double x ) const;
   double              CountWeightD           ( double x )  const;
@@ -73,6 +73,12 @@ public:
   void                ComputeBasicFunctionsD ( double X, const std::vector<std::vector<double>>& basicFunctions, std::vector<std::vector<double>>& basicFunctionsD );
   void               ComputeBasicFunctionD   ( double x, int i, double& result, int derivativeOrder ) const;
   double             BasicFunction           ();
+  std::vector<Point> GetPoles() const { return poles; }
+  std::vector<double> GetWeights() const { return weights; }
+  std::vector<double> GetNodes() const { return nodes; }
+  bool IsClosed() const { return isClosed; }
+  double Degree() const { return degree; }
+  std::string GetName() const;
 };
 
 

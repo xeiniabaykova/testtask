@@ -106,21 +106,21 @@ void GeomPolyline::GetAsPolyLine( std::vector<Point> & polyLinePoints, double ) 
   polyLinePoints = referencedPoints;
 }
 
-void GeomPolyline::Translation ( double xShift, double yShift )
+void GeomPolyline::Translate ( double xShift, double yShift )
 {
   Point pointShift( xShift, yShift );
   for (int i = 0; i < referencedPoints.size(); i++ )
     referencedPoints[i] = referencedPoints[i] + pointShift;
 }
 
-void GeomPolyline::Rotation( double alpha )
+void GeomPolyline::Rotate( double alpha )
 {
   for (int i = 0; i < referencedPoints.size(); i++ )
     referencedPoints[i] = Point( referencedPoints[i].GetX() * cos(alpha) - referencedPoints[i].GetY() * sin(alpha),
                                  referencedPoints[i].GetX() * sin(alpha) + referencedPoints[i].GetY() * cos(alpha) );
 }
 
-void GeomPolyline::Scaling( double xScaling, double yScaling )
+void GeomPolyline::Scale( double xScaling, double yScaling )
 {
   for (int i = 0; i < referencedPoints.size(); i++ )
     referencedPoints[i] = Point( referencedPoints[i].GetX() * xScaling, referencedPoints[i].GetY() * yScaling );

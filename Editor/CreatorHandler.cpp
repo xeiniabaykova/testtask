@@ -54,7 +54,7 @@ std::shared_ptr<C2Curve> CreatorHandler::Create()
     for ( int i = 0; i < points.size(); i++ )
       weights.push_back(1.0 );
 
-    double degree = 3;
+    int degree = 3;
     std::vector<double> nodes;
     for ( int i = 0; i < degree + 1; i++ )
       nodes.push_back( 0.0 );
@@ -66,7 +66,7 @@ std::shared_ptr<C2Curve> CreatorHandler::Create()
     }
 
     for ( int i = points.size() - degree -1; i < points.size(); i++ )
-      nodes.push_back( (points.size() - 2*(degree +1) +1));
+      nodes.push_back( (points.size() - 2 * (degree +1) +1));
     bool isClosed = false;
 
     return std::make_shared<NurbsCurve>( points, weights, nodes, isClosed, degree );

@@ -7,6 +7,8 @@
 
 namespace {
 
+
+
 bool IsEqualPoint( Point point1, Point point2 ) 
 {
   if ( fabs(point1.GetX() - point2.GetX()) < CommonConstantsMath::NULL_TOL
@@ -30,14 +32,19 @@ double Distance(Point point1, Point point2)
 		(point1.GetY() - point2.GetY()) * (point1.GetY() - point2.GetY()));
 }
 
+double DistanceCircleToPoint(Point center, double r, Point point)
+{
+	if (Distance(point, center) < r) 
+		return r - Distance(point, center);
+	else 
+		return Distance(point, center) - r;
+}
 bool IsCirclePoints( Point point1, Point point2, Point point3 )
 {
 	if (IsEqualPoint(point1, point2, point3))
 		return false;
 
-	if ((fabs(Distance(point1, point2) - Distance(point2, point3)) < CommonConstantsMath::NULL_TOL) ||
-		(fabs(Distance(point2, point3) - Distance(point3, point1)) < CommonConstantsMath::NULL_TOL) ||
-		(fabs(Distance(point2, point1) - Distance(point1, point3)) < CommonConstantsMath::NULL_TOL))
+	if ( fabs(Distance(point1, point2) - Distance(point1, point3)) < CommonConstantsMath::NULL_TOL ) 
 		return true;
 	return false;
 }
@@ -149,8 +156,8 @@ Ellipse::Ellipse ( const std::vector<Point>& points )
 	  }
     else if ( IsCirclePoints(points[0], points[1], points[2]) )
 	  {
-		  double r;
-      FindRadiusCenter( points[0], points[1], points[2], r, center );
+		  double r = Distance(points[0], points[1]);
+		  center = points[0];
 		  alpha = 0;
 		  r1 = r2 = r;
 	  }
@@ -194,6 +201,7 @@ Range Ellipse::GetRange() const
 Point Ellipse::GetDerivativePoint( double t ) const
 {
   Point point( r1 * -sin(t), r2 * cos(t) );
+
   Point transformPoint( point.GetX() * cos(alpha) - point.GetY() * sin(alpha),
 	  point.GetX() * sin(alpha) + point.GetY() * cos(alpha));
 
@@ -210,6 +218,7 @@ Point Ellipse::GetDerivativePoint( double t ) const
 Point Ellipse::Get2DerivativePoint( double t ) const
 {
   Point point( -r1 * cos(t), -r2 * sin(t) );
+
   Point transformPoint(point.GetX() * cos(alpha) - point.GetY() * sin(alpha),
 	  point.GetX() * sin(alpha) + point.GetY() * cos(alpha));
 
@@ -218,23 +227,24 @@ Point Ellipse::Get2DerivativePoint( double t ) const
 
 double Ellipse::DistanceToPoint( Point point ) const
 {
-  double accuracy = 0.01;
   std::vector<Point> polylinePoints;
-  GetAsPolyLine( polylinePoints, accuracy );
+  if (abs(r1 - r2) < CommonConstantsMath::NULL_TOL)
+	  return DistanceCircleToPoint(center, r1, point);
+  GetAsPolyLine( polylinePoints, CommonConstantsMath::PRECISION_POLYLINE );
   return C2Curve::DistancePointToCurve( point, polylinePoints );
 }
 
-void Ellipse::Translation( double xShift, double yShift )
+void Ellipse::Translate( double xShift, double yShift )
 {
   center = Point( center.GetX() + xShift, center.GetY() + yShift );
 }
 
-void Ellipse::Rotation( double alphaAng )
+void Ellipse::Rotate( double alphaAng )
 {
   alpha += alphaAng;
 }
 
-void Ellipse::Scaling( double XScaling, double YScaling )
+void Ellipse::Scale( double XScaling, double YScaling )
 {
 	r1 *= XScaling;
 	r2 *= YScaling;
@@ -245,4 +255,9 @@ bool Ellipse::IsValid() const
 	if (r1 < CommonConstantsMath::NULL_TOL || r2 < CommonConstantsMath::NULL_TOL)
 		return false;
 	return true;
+}
+
+std::string Ellipse::GetName() const
+{
+  return "Ellipse";
 }

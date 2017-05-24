@@ -152,15 +152,15 @@ double NurbsCurveBasicFunction()
   return 0.0;
 }
 
-void NurbsCurve::Translation(double xShift, double yShift)
+void NurbsCurve::Translate(double xShift, double yShift)
 {
 
 }
-void NurbsCurve::Rotation(double alpha)
+void NurbsCurve::Rotate(double alpha)
 {
 
 }
-void NurbsCurve::Scaling(double XScaling, double YScaling)
+void NurbsCurve::Scale(double XScaling, double YScaling)
 {
 
 }
@@ -286,6 +286,10 @@ double NurbsCurve::DistanceToPoint(Point point) const
   double accuracy = 0.01;
   std::vector<Point> polylinePoints;
   GetAsPolyLine(polylinePoints, accuracy);
-  // return C2Curve::DistancePointToCurve( point, polylinePoints );
-  return 0.0;
+  return C2Curve::DistancePointToCurve( point, polylinePoints );
+}
+
+std::string NurbsCurve::GetName() const
+{
+  return "Nurbs";
 }

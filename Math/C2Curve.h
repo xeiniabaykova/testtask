@@ -27,10 +27,10 @@ public:
   virtual Range  GetRange            () const = 0;                                                       ///< вернуть допустимые границы параметра
   virtual Point  GetDerivativePoint  ( double t ) const = 0;                                             ///< вернуть производную точки точки на кривой по параметру t
   virtual Point  Get2DerivativePoint ( double t ) const = 0;                                             ///< вернуть вторую производную точки точки на кривой по параметру t
-  virtual void   GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< возвращает полилинию для геометрического примитива с точностью accuracy
+  virtual void   GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy = CommonConstantsMath::PRECISION_POLYLINE) const; ///< возвращает полилинию для геометрического примитива с точностью accuracy
   virtual double DistanceToPoint     ( Point point) const = 0;
   double DistancePointToCurve        ( Point point, const std::vector<Point>& polylinePoints ) const;  ///< возвращает расстояние от точки до полилилинии геометрического примитива
-  double CountingStep                ( double tCurrent ) const;
+  double CountingStep                ( double tCurrent , double accuracy = CommonConstantsMath::PRECISION_POLYLINE) const;
 
 };
 

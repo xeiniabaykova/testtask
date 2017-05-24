@@ -2,7 +2,7 @@
 // Created by alakhverdyants on 22.05.17.
 //
 #include <gtest/gtest.h>
-#include "../Point.h"
+#include "../GeometricPoint.h"
 #include "../Line.h"
 #include <memory>
 
@@ -150,7 +150,7 @@ TEST(Line, DistanceToPoint)
 TEST(Line, Translation)
 {
   Line line( Point(0., 0.), Point(5., 5.) );
-  line.Translation( 2.3, -1.7 );
+  line.Translate( 2.3, -1.7 );
   auto point = line.GetPoint( 0. );
   EXPECT_NEAR( point.GetX(), 2.3, 1.e-7 );
   EXPECT_NEAR( point.GetY(), -1.7, 1.e-7 );
@@ -163,7 +163,7 @@ TEST(Line, Translation)
 TEST(Line, Rotation)
 {
   Line line( Point(1., 1.), Point(5., 5.) );
-  line.Rotation( 3.14159265358979323846 );
+  line.Rotate( 3.14159265358979323846 );
   auto point = line.GetPoint( 0. );
   EXPECT_NEAR( point.GetX(), -1., 1.e-7 );
   EXPECT_NEAR( point.GetY(), -1., 1.e-7 );
@@ -172,7 +172,7 @@ TEST(Line, Rotation)
   EXPECT_NEAR( point.GetX(), -5., 1.e-7 );
   EXPECT_NEAR( point.GetY(), -5., 1.e-7 );
 
-  line.Rotation( -3.14159265358979323846/4. );
+  line.Rotate( -3.14159265358979323846/4. );
   point = line.GetPoint( 0. );
   EXPECT_NEAR( point.GetX(), -::sqrt(2.), 1.e-7 );
   EXPECT_NEAR( point.GetY(), 0., 1.e-7 );
@@ -185,7 +185,7 @@ TEST(Line, Rotation)
 TEST(Line, Scaling)
 {
   Line line( Point(2., 1.), Point(6., 5.) );
-  line.Scaling( 2., 0.5 );
+  line.Scale( 2., 0.5 );
   auto point = line.GetPoint( 0. );
   EXPECT_NEAR( point.GetX(), 4., 1.e-7 );
   EXPECT_NEAR( point.GetY(), 0.5, 1.e-7 );
@@ -199,7 +199,7 @@ TEST(Line, IsValid)
 {
   Line line( Point(2., 1.), Point(2., -3.) );
   EXPECT_TRUE( line.IsValid() );
-  line.Scaling( 1., 0.);
+  line.Scale( 1., 0.);
   auto point = line.GetPoint( 0. );
   EXPECT_NEAR( point.GetX(), 2., 1.e-7 );
   EXPECT_NEAR( point.GetY(), 0., 1.e-7 );

@@ -1,48 +1,62 @@
 #include "Point.h"
 
-
 //-----------------------------------------------------------------------------
 /**
-  Конструктор Point
+  \ru Коструктор Point
 */
 //-----------------------------------------------------------------------------
-Point::Point( double x, double y ):
-  x( x ),
-  y( y )
+Point::Point( double x, double y):
+  x(x),
+  y(y)
 {
 }
 
-
-//-----------------------------------------------------------------------------
-/**
-  Конструктор копирования Point
-*/
-//-----------------------------------------------------------------------------
-Point::Point( const Point& point )
+Point::Point(const Point& point)
 {
-  x = point.GetX();
-  y = point.GetY();
+	x = point.GetX();
+	y = point.GetY();
 }
 
+void Point::Translate(  double xShift, double yShift )
+{
+	x += xShift;
+	y += yShift;
+}
 
-//-----------------------------------------------------------------------------
-/**
-  возращаем координату x
-*/
-//-----------------------------------------------------------------------------
+void Point::Rotate( double )
+{
+  return;
+}
+
+void Point::Scale(  double, double  )
+{
+  return;
+}
+
 double Point::GetX() const
 {
-  return x;
+	return x;
 }
-
-
-//-----------------------------------------------------------------------------
-/**
-  возращаем координату y
-*/
-//-----------------------------------------------------------------------------
 double Point::GetY() const
 {
-  return y;
+	return y;
 }
 
+Point Point::operator * (double param) const
+{
+  return Point(x * param, y * param);
+}
+Point Point::operator - (Point point) const
+{
+  return Point( x - point.GetX(), y -point.GetY() );
+}
+Point Point::operator + (Point point) const
+{
+  return Point(x + point.GetX(), y + point.GetY());
+}
+Point Point::operator = ( Point point )
+{
+  x +=point.GetX();
+  y += point.GetY();
+  return *this;
+}
