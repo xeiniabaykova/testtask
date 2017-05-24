@@ -1,7 +1,7 @@
 #ifndef LINESERIALIZER_H
 #define LINESERIALIZER_H
 
-#include "Math/Line.h"
+#include "Line.h"
 #include "CurveSerializer.h"
 
 

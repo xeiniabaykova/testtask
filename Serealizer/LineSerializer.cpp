@@ -1,5 +1,5 @@
 #include "LineSerializer.h"
-#include "Math/Line.h"
+
 
 std::string LineSerializer::GetHeaderName() {
   return Line( Point(), Point() ).GetName();

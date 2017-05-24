@@ -1,7 +1,6 @@
 #ifndef CURVESERIALIZER_H
 #define CURVESERIALIZER_H
-#pragma once
-#include "Math/GeometricPrimitive.h"
+#include "GeometricPrimitive.h"
 #include <istream>
 #include <memory>
 
