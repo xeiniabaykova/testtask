@@ -11,17 +11,17 @@
 class Vector
 {
 private:
-  double x1; ///< координата x
-  double x2; ///< координата y
+  double x; ///< координата x
+  double y; ///< координата y
 
 public:
   Vector() = default;
-  Vector( double x1, double x2 );
+  Vector( double x, double y );
   Vector( const Vector& point );
   virtual ~Vector() = default;
 public:
-  double  GetX1() const;
-  double  GetX2() const;
+  double  GetX() const;
+  double  GetY() const;
 };
 
 #endif // VECTOR_H

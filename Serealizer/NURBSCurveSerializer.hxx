@@ -1,6 +1,6 @@
 #ifndef NURBSCURVESERIALIZER_H
 #define NURBSCURVESERIALIZER_H
-#include "Math/NurbsCurve.h"
+#include <NurbsCurve.h>
 #include "CurveSerializer.h"
 
 class NURBSCurveSerializer :public CurveSerializer {

@@ -2,20 +2,20 @@
 
 
 Vector::Vector(double x1, double x2):
-  x1(x1),
-  x2(x2)
+  x(x1),
+  y(x2)
 {
 }
 Vector::Vector(const Vector& vector)
 {
-  x1 = vector.GetX1();
-  x2 = vector.GetX2();
+  x = vector.x;
+  y = vector.y;
 }
-double Vector::GetX1() const
+double Vector::GetX() const
 {
-  return x1;
+  return x;
 }
-double Vector::GetX2() const
+double Vector::GetY() const
 {
-  return x2;
+  return y;
 }

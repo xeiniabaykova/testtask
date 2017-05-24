@@ -13,6 +13,7 @@
 #include "Point.h"
 #include "Range.h"
 #include <vector>
+#include <string>
 #include "GeometricPrimitive.h"
 #include "Vector.h"
 

@@ -74,10 +74,10 @@ double C2Curve::CountingStep( double tCurrent, double accuracy) const
 
   Vector firstDerivative = GetDerivativePoint( tCurrent );
   Vector secondDerivative = Get2DerivativePoint( tCurrent );
-  double vectorMult = firstDerivative.GetX1() * secondDerivative.GetX2() - firstDerivative.GetX2() * secondDerivative.GetX1();
+  double vectorMult = firstDerivative.GetX() * secondDerivative.GetY() - firstDerivative.GetY() * secondDerivative.GetX();
   double normVectorMult = sqrt( vectorMult * vectorMult );
-  double normFirstDerivative = sqrt( firstDerivative.GetX1() * firstDerivative.GetX1() +  firstDerivative.GetX2() * firstDerivative.GetX2() );
-  double multiplicationFirstDerivative = firstDerivative.GetX1() * firstDerivative.GetX1() +  firstDerivative.GetX2() * firstDerivative.GetX2();
+  double normFirstDerivative = sqrt( firstDerivative.GetX() * firstDerivative.GetX() +  firstDerivative.GetY() * firstDerivative.GetY() );
+  double multiplicationFirstDerivative = firstDerivative.GetX() * firstDerivative.GetX() +  firstDerivative.GetY() * firstDerivative.GetY();
   double deltaT = 2 * sqrt (accuracy * (2 * normFirstDerivative / normVectorMult - accuracy / multiplicationFirstDerivative) );
   return deltaT;
 }

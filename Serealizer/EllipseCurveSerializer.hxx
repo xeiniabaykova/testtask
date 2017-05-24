@@ -1,6 +1,6 @@
 #ifndef ELLIPSECURVESERIALIZER_H
 #define ELLIPSECURVESERIALIZER_H
-#include "Math/Ellipse.h"
+#include <Ellipse.h>
 #include "CurveSerializer.h"
 #include <ostream>
 

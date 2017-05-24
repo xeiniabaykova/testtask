@@ -90,10 +90,10 @@ set(SOURCE_FILES
 		Serealizer/CurveSerializer.cpp
 		Serealizer/LineSerializer.h
 		Serealizer/LineSerializer.cpp
-        Serealizer/EllipseSerializer.h
-		Serealizer/EllipseSerializer.cpp
-        Serealizer/NURBSSerializer.h
-		Serealizer/NURBSSerializer.cpp
+        Serealizer/EllipseCurveSerializer.cxx
+		Serealizer/EllipseCurveSerializer.hxx
+        Serealizer/NURBSCurveSerializer.cxx
+		Serealizer/NURBSCurveSerializer.hxx
 		)
 
 add_executable(TestTask1 ${SOURCE_FILES})
