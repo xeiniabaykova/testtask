@@ -9,7 +9,7 @@ if (UTESTS)
 			Math/UnitTests/utest_main.cpp
 			Math/UnitTests/utest_line.cpp
 			Math/UnitTests/utest_ellipse.cpp
-			#			Math/UnitTests/utest_nurbs.cpp
+			Math/UnitTests/utest_nurbs.cpp
 			#			Math/UnitTests/utest_polyline.cpp
 			)
 	include_directories($ENV{GTEST_ROOT}
