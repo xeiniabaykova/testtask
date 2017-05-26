@@ -45,14 +45,22 @@ public:
   \param[in] isClosed - \ru замкнутость .\~
   */
   //---
-  NurbsCurve( const std::vector<Point>& poles, const std::vector<double>& weights,
-    const std::vector<double>& nodes, bool isClosed, int degree ):
-    poles(poles),
-    weights(weights),
-    nodes(nodes),
-    isClosed(isClosed),
-    degree(degree)
+  NurbsCurve( const std::vector<Point>& ppoles, const std::vector<double>& wweights,
+    const std::vector<double>& nnodes, bool iisClosed, int ddegree ):
+    poles(ppoles),
+    weights(wweights),
+    nodes(nnodes),
+    isClosed(iisClosed),
+    degree(ddegree)
   {
+    if ( isClosed )
+    {
+      for ( size_t i=0; i<degree; ++i )
+      {
+        weights.push_back( weights[i] );
+        poles.push_back( poles[i] );
+      }
+    }
   }
 
   virtual Point  GetPoint                    ( double t ) const;                                               ///< вернуть точку на кривой по параметру t

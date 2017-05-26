@@ -33,19 +33,19 @@ endif(UTESTS)
 option(EDITOR "Compile Editor" OFF)
 if (EDITOR)
 	set(EditorSrc
-			#			main.cpp
-			#			Editor/CreatorHandler.cpp
-			#			Editor/CreatorHandler.h
-			#			Editor/DisplayedObject.h
-			#			Editor/DisplayedObject.cpp
-			#			Editor/FileIO.cpp
-			#			Editor/FileIO.h
-			#			Editor/MainWindow.cpp
-			#			Editor/MainWindow.h
-			#			Editor/MainWindowHandler.cpp
-			#			Editor/MainWindowHandler.h
-			#           Editor/CommonConstantsEditor.cpp
-			#           Editor/CommonConstantsEditor.h
+			main.cpp
+			Editor/CreatorHandler.cpp
+			Editor/CreatorHandler.h
+			Editor/DisplayedObject.h
+			Editor/DisplayedObject.cpp
+			Editor/FileIO.cpp
+			Editor/FileIO.h
+			Editor/MainWindow.cpp
+			Editor/MainWindow.h
+			Editor/MainWindowHandler.cpp
+	    	Editor/MainWindowHandler.h
+     	    Editor/CommonConstantsEditor.cpp
+		    Editor/CommonConstantsEditor.h
 			)
 
 	include_directories(${Qt5Core_INCLUDE_DIRS}
