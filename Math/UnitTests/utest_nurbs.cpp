@@ -29,7 +29,7 @@ static std::shared_ptr<NurbsCurve> NurbsWithEqualWeights( bool isClosed )
 									: std::make_shared<NurbsCurve>( poles, weights, nodes, false, 3 );
 }
 
-static std::shared_ptr<NurbsCurve> NurbsWithNonEqWeights( bool isClosed )
+static std::shared_ptr<NurbsCurve> NurbsWithNonEqualWeights( bool isClosed )
 {
 	std::vector<Point> poles {Point(-15., 4.), Point(-7.5, -7.), Point(-1.5, -4.), Point(4., -2.), Point(9.5, 5.3),
 														Point(19., 5.), Point(24.1, 10.), Point(21., -3.), Point(14.3, -0.7), Point(11., 2.)};
@@ -128,7 +128,7 @@ TEST(NurbsEqualWeightsClosed, GetRange)
 
 TEST(NurbsEqualWeights, GetPoint)
 {
-	auto nurbs = NurbsWithEqualWeights( true );
+	auto nurbs = NurbsWithNonEqualWeights( true );
 	EXPECT_TRUE( IsEqualPoints(nurbs->GetPoint(-1.5), Point(-15., 4.), 1.e-4) );
 	EXPECT_TRUE( IsEqualPoints(nurbs->GetPoint(0.), Point(-15., 4.), 1.e-4) );
 	EXPECT_TRUE( IsEqualPoints(nurbs->GetPoint(1.5), Point(3.18243, -1.91391), 1.e-4) );
@@ -140,7 +140,7 @@ TEST(NurbsEqualWeights, GetPoint)
 
 TEST(NurbsNonEqualWeights, GetDerivativePoint)
 {
-	auto nurbs = NurbsWithEqualWeights( true );
+	auto nurbs = NurbsWithNonEqualWeights( true );
 	EXPECT_TRUE( IsEqualVectors(nurbs->GetDerivativePoint(-1.5), Vector(90., -132.), 1.e-4) );
 	EXPECT_TRUE( IsEqualVectors(nurbs->GetDerivativePoint(0.), Vector(90., -132.), 1.e-4) );
 	EXPECT_TRUE( IsEqualVectors(nurbs->GetDerivativePoint(1.5), Vector(4.783, 2.82014), 1.e-4) );
@@ -153,7 +153,7 @@ TEST(NurbsNonEqualWeights, GetDerivativePoint)
 
 TEST(NurbsNonEqualWeights, Get2DerivativePoint)
 {
-	auto nurbs = NurbsWithEqualWeights( true );
+	auto nurbs = NurbsWithNonEqualWeights( true );
 	EXPECT_TRUE( IsEqualVectors(nurbs->Get2DerivativePoint(-1.5), Vector(-1723.5, 2634), 1.e-4) );
 	EXPECT_TRUE( IsEqualVectors(nurbs->Get2DerivativePoint(0.), Vector(-1723.5, 2634), 1.e-4) );
 	EXPECT_TRUE( IsEqualVectors(nurbs->Get2DerivativePoint(1.5), Vector(-4.15674, -0.215099), 1.e-4) );
@@ -165,7 +165,7 @@ TEST(NurbsNonEqualWeights, Get2DerivativePoint)
 
 TEST(NurbsNonEqualWeights, GetRange)
 {
-	auto nurbs = NurbsWithEqualWeights( true );
+	auto nurbs = NurbsWithNonEqualWeights( true );
 	const auto range = nurbs->GetRange();
 	EXPECT_NEAR( range.GetStart(), 0., CommonConstantsMath::NULL_TOL );
 	EXPECT_NEAR( range.GetEnd(), 6., CommonConstantsMath::NULL_TOL );
