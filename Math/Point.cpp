@@ -56,7 +56,7 @@ Point Point::operator + (Point point) const
 }
 Point Point::operator = ( Point point )
 {
-  x +=point.GetX();
-  y += point.GetY();
+  x = point.GetX();
+  y = point.GetY();
   return *this;
 }

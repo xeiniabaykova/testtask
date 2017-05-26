@@ -2,8 +2,8 @@
 // Created by alakhverdyants on 22.05.17.
 //
 #include <gtest/gtest.h>
-#include <Point.h>
-#include <Ellipse.h>
+#include "../Point.h"
+#include "../Ellipse.h"
 
 
 static bool IsEqualPoints( const Point & p1, const Point & p2, double eps=CommonConstantsMath::NULL_TOL )

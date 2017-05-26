@@ -3,13 +3,23 @@ project(TestTask1)
 
 set(CMAKE_CXX_STANDARD 14)
 
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Charts REQUIRED)
+find_package(Qt5Gui REQUIRED)
+find_package(Qt5OpenGL REQUIRED)
+find_package(Qt5Widgets REQUIRED)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 option(UTESTS "Build with Utests" OFF)
 if (UTESTS)
 	set(UTestSrc $ENV{GTEST_ROOT}/src/gtest-all.cc
 			Math/UnitTests/utest_main.cpp
 			Math/UnitTests/utest_line.cpp
 			Math/UnitTests/utest_ellipse.cpp
-			Math/UnitTests/utest_nurbs.cpp
+			#			Math/UnitTests/utest_nurbs.cpp
 			#			Math/UnitTests/utest_polyline.cpp
 			)
 	include_directories($ENV{GTEST_ROOT}
@@ -22,28 +32,18 @@ endif(UTESTS)
 
 option(EDITOR "Compile Editor" OFF)
 if (EDITOR)
-	find_package(Qt5Core REQUIRED)
-	find_package(Qt5Charts REQUIRED)
-	find_package(Qt5Gui REQUIRED)
-	find_package(Qt5OpenGL REQUIRED)
-	find_package(Qt5Widgets REQUIRED)
-
-	set(CMAKE_AUTOMOC ON)
-	set(CMAKE_AUTOUIC ON)
-	set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 	set(EditorSrc
-			main.cpp
-			Editor/CreatorHandler.cpp
-			Editor/CreatorHandler.h
-			Editor/DisplayedObject.h
-			Editor/DisplayedObject.cpp
-			Editor/FileIO.cpp
-			Editor/FileIO.h
-			Editor/MainWindow.cpp
-			Editor/MainWindow.h
-			Editor/MainWindowHandler.cpp
-			Editor/MainWindowHandler.h
+			#			main.cpp
+			#			Editor/CreatorHandler.cpp
+			#			Editor/CreatorHandler.h
+			#			Editor/DisplayedObject.h
+			#			Editor/DisplayedObject.cpp
+			#			Editor/FileIO.cpp
+			#			Editor/FileIO.h
+			#			Editor/MainWindow.cpp
+			#			Editor/MainWindow.h
+			#			Editor/MainWindowHandler.cpp
+			#			Editor/MainWindowHandler.h
 			Editor/CommonConstantsEditor.cpp
 			Editor/CommonConstantsEditor.h
 			)
@@ -73,6 +73,8 @@ set(SOURCE_FILES
 		Math/CommonConstantsMath.h
 		Math/Ellipse.cpp
 		Math/Ellipse.h
+		Math/GeometricPoint.cpp
+		Math/GeometricPoint.h
 		Math/GeometricPrimitive.h
 		Math/Line.cpp
 		Math/Line.h
@@ -90,10 +92,6 @@ set(SOURCE_FILES
 		Serealizer/CurveSerializer.cpp
 		Serealizer/LineSerializer.h
 		Serealizer/LineSerializer.cpp
-        Serealizer/EllipseCurveSerializer.cxx
-		Serealizer/EllipseCurveSerializer.hxx
-        Serealizer/NURBSCurveSerializer.cxx
-		Serealizer/NURBSCurveSerializer.hxx
 		)
 
 add_executable(TestTask1 ${SOURCE_FILES})

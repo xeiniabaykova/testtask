@@ -34,10 +34,10 @@ double Distance(Point point1, Point point2)
 
 double DistanceCircleToPoint(Point center, double r, Point point)
 {
-	if (Distance(point, center) < r) 
-		return r - Distance(point, center);
+	if ( Distance(point, center) < r ) 
+		return r - Distance( point, center );
 	else 
-		return Distance(point, center) - r;
+		return Distance( point, center ) - r;
 }
 bool IsCirclePoints( Point point1, Point point2, Point point3 )
 {
@@ -231,7 +231,7 @@ Vector Ellipse::Get2DerivativePoint( double t ) const
 double Ellipse::DistanceToPoint( Point point ) const
 {
   std::vector<Point> polylinePoints;
-  if (abs(r1 - r2) < CommonConstantsMath::NULL_TOL)
+  if ( fabs(r1 - r2) < CommonConstantsMath::NULL_TOL )
 	  return DistanceCircleToPoint(center, r1, point);
   GetAsPolyLine( polylinePoints, CommonConstantsMath::PRECISION_POLYLINE );
   return C2Curve::DistancePointToCurve( point, polylinePoints );

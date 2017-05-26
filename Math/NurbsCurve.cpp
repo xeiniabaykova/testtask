@@ -51,10 +51,12 @@ void NurbsCurve::ComputeBasicFunction(double x, int i, double& result) const
   result = N[0];
 }
 
-int NurbsCurve::FindSpan(double x) const
+int NurbsCurve::FindSpan( double x ) const
 {
   int n = nodes.size() - degree - 1;
   if (x == nodes[n]) return n;
+  if (x < nodes[0] || x> nodes[nodes.size() - 1])
+	return degree;
   int low = degree;
 
   int hight = n + 1;
@@ -165,14 +167,13 @@ void NurbsCurve::Scale(double XScaling, double YScaling)
 
 }
 
-double NurbsCurve::CountWeight(double x)  const
+double NurbsCurve::CountWeight(int k, double x)  const
 {
   double w = 0.0;
-  for (int i = 0; i < weights.size(); i++)
+  std::vector<double> node = BasicFunctions(k, x);
+  for (int i = 0; i <= degree; i++)
   {
-    double result;
-    ComputeBasicFunction(x, i, result);
-    w += result * weights[i];
+    w = w + node[i] * weights[k - degree + i];
   }
   return w;
 }
@@ -200,41 +201,45 @@ double NurbsCurve::CountWeightD2(double t)  const
   }
   return w;
 }
+
+
 Point NurbsCurve::GetPoint(double t) const
 {
   int span = FindSpan(t);
-  double weightNurbs = CountWeight(t);
+  double weightNurbs = CountWeight(span, t);
   Point resultPoint(0.0, 0.0);
   std::vector<double> node = BasicFunctions(span, t);
   for (int i = 0; i <= degree; i++)
   {
-    resultPoint = resultPoint + poles[span - degree + i] * node[i] * weights[i];
+    resultPoint = resultPoint + poles[span - degree + i] * node[i] * weights[span - degree + i];
   }
   return Point(resultPoint *(1 / weightNurbs) );
 }
+
+
 std::vector<double> NurbsCurve::BasicFunctions( int i, double x) const
 {
-  std::vector<double> Nodes;
-    Nodes.resize(degree + 1);
+  std::vector<double> N;
+    N.resize(degree + 1);
     std::vector<double> left;
     left.resize(degree + 1);
     std::vector<double> right;
     right.resize(degree + 1);
-    Nodes[0] = 1.0;
+    N[0] = 1.0;
     for (int j = 1; j <= degree; j++)
     {
       left[j] = x - nodes[i + 1 - j];
       right[j] = nodes[i + j] - x;
       double saved = 0.0;
-      for (int k = 0; k<j; k++)
+      for (int k = 0; k < j; k++)
       {
-        double temp = Nodes[k] / (right[k + 1] + left[j - k]);
-        Nodes[k] = saved + right[k + 1] * temp;
+        double temp = N[k] / (right[k + 1] + left[j - k]);
+        N[k] = saved + right[k + 1] * temp;
         saved = left[j - k] * temp;
       }
-      Nodes[j] = saved;
+      N[j] = saved;
     }
-    return Nodes;
+    return N;
 }
 
 
@@ -249,7 +254,7 @@ Vector  NurbsCurve::GetDerivativePoint(double t) const
     ComputeBasicFunctionD(t, span, result, 1);
     resultPoint = resultPoint + poles[i] * result * weights[i];
   }
-  return Vector( (resultPoint *(1 / weightNurbsD)).GetX(), (resultPoint *(1 / weightNurbsD)).GetY() );
+  return Vector( ( resultPoint * ( 1 / weightNurbsD )).GetX(), (resultPoint * ( 1 / weightNurbsD)).GetY() );
 }
 Vector  NurbsCurve::Get2DerivativePoint(double t) const
 {
