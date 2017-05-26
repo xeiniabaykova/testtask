@@ -84,7 +84,7 @@ TEST(NurbsEqualWeightsNotClosed, GetRange)
 }
 
 
-TEST(NurbsEqualWeightsClosed, DISABLED_GetPoint)
+TEST(NurbsEqualWeightsClosed, GetPoint)
 {
 	auto nurbs = NurbsWithEqualWeights( true );
 	EXPECT_TRUE( IsEqualPoints(nurbs->GetPoint(-2.66667), Point(16.5247, 7.90741), 1.e-4) );
@@ -117,7 +117,7 @@ TEST(NurbsEqualWeightsClosed, DISABLED_Get2DerivativePoint)
 	EXPECT_TRUE( IsEqualVectors(nurbs->Get2DerivativePoint(10.6667), Vector(0.2, 5.8), 1.e-4) );
 }
 
-TEST(NurbsEqualWeightsClosed, DISABLED_GetRange)
+TEST(NurbsEqualWeightsClosed, GetRange)
 {
 	auto nurbs = NurbsWithEqualWeights( true );
 	const auto range = nurbs->GetRange();
@@ -128,7 +128,8 @@ TEST(NurbsEqualWeightsClosed, DISABLED_GetRange)
 
 TEST(NurbsNonEqualWeights, GetPoint)
 {
-	/*auto nurbs = NurbsWithNonEqualWeights( true );	EXPECT_TRUE( IsEqualPoints(nurbs->GetPoint(-1.5), Point(-15., 4.), 1.e-4) );
+	auto nurbs = NurbsWithNonEqualWeights( true );	
+	EXPECT_TRUE( IsEqualPoints(nurbs->GetPoint(-1.5), Point(-15., 4.), 1.e-4) );
 	EXPECT_TRUE( IsEqualPoints(nurbs->GetPoint(0.), Point(-15., 4.), 1.e-4) );
 	EXPECT_TRUE( IsEqualPoints(nurbs->GetPoint(1.5), Point(3.18243, -1.91391), 1.e-4) );
 	EXPECT_TRUE( IsEqualPoints(nurbs->GetPoint(3.), Point(15.952, 4.6176), 1.e-4) );
@@ -139,15 +140,15 @@ TEST(NurbsNonEqualWeights, GetPoint)
 
 TEST(NurbsNonEqualWeights, DISABLED_GetDerivativePoint)
 {
-	auto nurbs = NurbsWithNonEqualWeights( false );
-	EXPECT_TRUE( IsEqualVectors(nurbs->GetDerivativePoint(-1.5), Vector(90., -132.), 1.e-4) );
-	EXPECT_TRUE( IsEqualVectors(nurbs->GetDerivativePoint(0.), Vector(90., -132.), 1.e-4) );
-	EXPECT_TRUE( IsEqualVectors(nurbs->GetDerivativePoint(1.5), Vector(4.783, 2.82014), 1.e-4) );
-	EXPECT_TRUE( IsEqualVectors(nurbs->GetDerivativePoint(3.), Vector(7.47541, 2.1636), 1.e-4) );
-	EXPECT_TRUE( IsEqualVectors(nurbs->GetDerivativePoint(4.5), Vector(1.12762, -8.11618), 1.e-4) );
-	EXPECT_TRUE( IsEqualVectors(nurbs->GetDerivativePoint(6.), Vector(-8.54118, 6.98824), 1.e-4) );
-	EXPECT_TRUE( IsEqualVectors(nurbs->GetDerivativePoint(7.5), Vector(-8.54118, 6.98824), 1.e-4) );
-
+	auto nurbs = NurbsWithNonEqualWeights(false);
+	EXPECT_TRUE(IsEqualVectors(nurbs->GetDerivativePoint(-1.5), Vector(90., -132.), 1.e-4));
+	EXPECT_TRUE(IsEqualVectors(nurbs->GetDerivativePoint(0.), Vector(90., -132.), 1.e-4));
+	EXPECT_TRUE(IsEqualVectors(nurbs->GetDerivativePoint(1.5), Vector(4.783, 2.82014), 1.e-4));
+	EXPECT_TRUE(IsEqualVectors(nurbs->GetDerivativePoint(3.), Vector(7.47541, 2.1636), 1.e-4));
+	EXPECT_TRUE(IsEqualVectors(nurbs->GetDerivativePoint(4.5), Vector(1.12762, -8.11618), 1.e-4));
+	EXPECT_TRUE(IsEqualVectors(nurbs->GetDerivativePoint(6.), Vector(-8.54118, 6.98824), 1.e-4));
+	EXPECT_TRUE(IsEqualVectors(nurbs->GetDerivativePoint(7.5), Vector(-8.54118, 6.98824), 1.e-4));
+}
 TEST(NurbsNonEqualWeights, DISABLED_Get2DerivativePoint)
 {
 	auto nurbs = NurbsWithNonEqualWeights( false );

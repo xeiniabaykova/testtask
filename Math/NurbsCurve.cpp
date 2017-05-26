@@ -237,10 +237,12 @@ Point NurbsCurve::GetPoint(double t) const
 	}
 	if (isClosed) 
 	{
+		Range range = GetRange();
+
 		if (t < nodes[degree])
-			t = nodes[nodes.size() - 1 - degree]  - fabs(nodes[0]) - fabs (fabs(t));
-		if (t > nodes[nodes.size() - 1 - degree])
-			t =  t - nodes[nodes.size() - 1 - degree];
+			while (t < range.GetStart()) t += range.GetEnd() - range.GetStart();
+		while (t > range.GetEnd())
+			t -= range.GetEnd() - range.GetStart();			
 	}
   int span = FindSpan(t);
   double weightNurbs = CountWeight(span, t);
@@ -252,7 +254,7 @@ Point NurbsCurve::GetPoint(double t) const
 
 	  for (int i = degree; i > 0; i--)
 		  weightsclosed.push_back(weights[weights.size() - degree - i]);
-	  for (int i = degree; i < weights.size(); i++)
+	  for (int i = 0; i < weights.size(); i++)
 		  weightsclosed.push_back(weights[i]);
 	  for (int i = 0; i < degree; i++)
 		  weightsclosed.push_back(weights[degree + i]);
@@ -260,7 +262,7 @@ Point NurbsCurve::GetPoint(double t) const
 	  std::vector<Point> polesclosed;
 	  for (int i = degree; i > 0; i--)
 		  polesclosed.push_back(poles[poles.size() - degree - i]);
-	  for (int i = degree; i < poles.size(); i++)
+	  for (int i = 0; i < poles.size(); i++)
 		  polesclosed.push_back(poles[i]);
 	  for (int i = 0; i < degree; i++)
 		  polesclosed.push_back(poles[degree + i]);
