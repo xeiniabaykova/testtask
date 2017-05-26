@@ -179,22 +179,19 @@ double NurbsCurve::CountWeight(int k, double x)  const
 
   /*if (isClosed)
   {
-	  std::vector<double> weightsclosed;
-	
-	for (int i = degree; i > 0; i--)
-		weightsclosed.push_back(weights[weights.size() - degree - i]);
-	for (int i = degree; i < weights.size(); i++)
-		weightsclosed.push_back(weights[i]);
-	for (int i = 0; i < degree; i++)
-		weightsclosed.push_back(weights[degree + i]);
-	for (int i = 0; i <= degree; i++)
-	{
-		w = w + node[i] * weightsclosed[k - degree - n + i];
-	}
-	return w;	
+	  
+	  for (int i = 0; i <= degree; i++)
+	  {
+		  int n = k - degree + i;
+		  if (n >= (int)poles.size())
+			  n = n - (poles.size());
+		  if (n < 0)
+			  n = n + (poles.size() );;
+		  w = w + node[i] * weights[n];
+	  }
+	  return w;
+
   }*/
-
-
   for (int i = 0; i <= degree; i++)
   {
     w = w + node[i] * weights[k - degree -n + i];
@@ -277,9 +274,24 @@ Point NurbsCurve::GetPoint(double t) const
 //  }
 
 
+	  for (int i = 0; i <= degree; i++)
+	  {
+		  n = span - degree - i;
+		  if (n > (int)poles.size()) {
+			  n = n - (poles.size());
+		  }
+		  if (n < 0) {
+			  n = n + (poles.size());
+		  }
+
+		  resultPoint = resultPoint + poles[n] * node[i] * weights[n];
+	  }
+	  return Point(resultPoint *(1 / weightNurbs));
+
+  }
   for (int i = 0; i <= degree; i++)
   {
-    resultPoint = resultPoint + poles[span - degree - n + i] * node[i] * weights[span - degree - n + i];
+    resultPoint = resultPoint + poles[span - degree + i] * node[i] * weights[span - degree + i];
   }
   return Point(resultPoint *(1 / weightNurbs) );
 }

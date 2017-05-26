@@ -4,7 +4,7 @@
 
 
 #include <gtest/gtest.h>
-#include <NurbsCurve.h>
+#include "../NurbsCurve.h"
 #include <memory>
 
 
