@@ -54,9 +54,8 @@ void NurbsCurve::ComputeBasicFunction(double x, int i, double& result) const
 int NurbsCurve::FindSpan( double x ) const
 {
   int n = nodes.size() - degree - 1;
-  if (x == nodes[n]) return n;
-  if (x < nodes[0] || x> nodes[nodes.size() - 1])
-	return degree;
+  if (x == nodes[n]) return n - 1;
+
   int low = degree;
 
   int hight = n + 1;
@@ -205,6 +204,20 @@ double NurbsCurve::CountWeightD2(double t)  const
 
 Point NurbsCurve::GetPoint(double t) const
 {
+	if (!isClosed) 
+	{
+		if (t < nodes[0])
+			t = nodes[0];
+		if (t > nodes[nodes.size() - 1])
+			t = nodes[nodes.size() - 1];
+	}
+	if (isClosed) 
+	{
+		if (t < nodes[degree])
+			t = nodes[nodes.size() - 1 - degree] + t;
+		if (t > nodes[nodes.size() - 1 - degree])
+			t =  t - nodes[nodes.size() - 1 - degree];
+	}
   int span = FindSpan(t);
   double weightNurbs = CountWeight(span, t);
   Point resultPoint(0.0, 0.0);
@@ -271,6 +284,9 @@ Vector  NurbsCurve::Get2DerivativePoint(double t) const
 }
 Range  NurbsCurve::GetRange() const
 {
+	if (isClosed)
+		return Range(nodes[degree], nodes[nodes.size() - 1 - degree]);
+
   return Range(nodes[0], nodes[nodes.size() - 1]);
 }
 void  NurbsCurve::GetAsPolyLine(std::vector<Point>& polyLinePoints, double accuracy) const
