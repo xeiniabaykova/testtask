@@ -19,7 +19,7 @@ if (UTESTS)
 			Math/UnitTests/utest_main.cpp
 			Math/UnitTests/utest_line.cpp
 			Math/UnitTests/utest_ellipse.cpp
-			#			Math/UnitTests/utest_nurbs.cpp
+			Math/UnitTests/utest_nurbs.cpp
 			#			Math/UnitTests/utest_polyline.cpp
 			)
 	include_directories($ENV{GTEST_ROOT}
@@ -44,8 +44,8 @@ if (EDITOR)
 			#			Editor/MainWindow.h
 			#			Editor/MainWindowHandler.cpp
 			#			Editor/MainWindowHandler.h
-			Editor/CommonConstantsEditor.cpp
-			Editor/CommonConstantsEditor.h
+			#           Editor/CommonConstantsEditor.cpp
+			#           Editor/CommonConstantsEditor.h
 			)
 
 	include_directories(${Qt5Core_INCLUDE_DIRS}
@@ -73,8 +73,6 @@ set(SOURCE_FILES
 		Math/CommonConstantsMath.h
 		Math/Ellipse.cpp
 		Math/Ellipse.h
-		Math/GeometricPoint.cpp
-		Math/GeometricPoint.h
 		Math/GeometricPrimitive.h
 		Math/Line.cpp
 		Math/Line.h
