@@ -38,7 +38,7 @@ private:
   QAction           * createPointAct;       ///< \ru событие создания точки
   std::shared_ptr<QAction>          createLineAct;        ///< \ru событие создания линии
   QAction           * createEllipseAct;     ///< \ru событие создания эллипса
-  QAction           * createCircleAct;      ///< \ru событие создания окружности
+  //QAction           * createCircleAct;      ///< \ru событие создания окружности
   QAction           * createPolylineAct;    ///< \ru событие создания окружности
   QAction           * createNurbsAct;       ///< \ru событие создания nurbs - кривой
   QAction           * stopCreateCurveAct;   ///< \ru событие прекращения создания кривых
@@ -82,7 +82,7 @@ private slots:
   void OnCreatePoint       ();                      /// \ru обработать событие создания точки
   void OnCreateLine        ();                      /// \ru обработать событие создания линии
   void OnCreateEllipse     ();                      /// \ru обработать событие создания эллипса
-  void OnCreateCircle      ();                      /// \ru обработать событие создания окружности
+  // void OnCreateCircle      ();                      /// \ru обработать событие создания окружности
   void OnCreateNurbs       ();                      /// \ru обработать событие создания nurbs
   void OnStopCreateCurve   ();                      /// \ru обработать событие прекращения создания кривых
   void OnFindIntersection  ();                      /// \ru обработать событие нахождения пересечения

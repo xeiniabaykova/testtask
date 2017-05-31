@@ -17,9 +17,9 @@ bool DisplayedObject::GetSelectionStatus()
   \ru изменить состояние селекции в зависимости от полученной точки
 */
 //-----------------------------------------------------------------------------
-void DisplayedObject::ModifySelectionStatus( Point cursor, double precision, QColor selectedColor )
+void DisplayedObject::ModifySelectionStatus( Math::Point cursor, double precision, QColor selectedColor )
 {
- if ( curve->DistanceToPoint( cursor ) < precision )
+ //if ( curve->DistanceToPoint( cursor ) < precision )
     selected = !selected;
  if (selected)
    SetColor( selectedColor );
@@ -53,8 +53,8 @@ void DisplayedObject::SetColorUnselectedCurve( QColor color )
 //-----------------------------------------------------------------------------
 void DisplayedObject::SetSeries( QLineSeries *  current, QScatterSeries *ref )
 {
-  currentseries = std::make_shared<QLineSeries>( current);
-  seriesRef = std::make_shared<QScatterSeries>(ref);
+  currentseries = current;
+  seriesRef = ref;
 }
 
 
@@ -65,35 +65,35 @@ void DisplayedObject::SetSeries( QLineSeries *  current, QScatterSeries *ref )
 //-----------------------------------------------------------------------------
  DisplayedObject::~DisplayedObject()
 {
-  currentseries->chart()->removeSeries( currentseries.get() );
-  seriesRef->chart()->removeSeries( seriesRef.get() );
+  currentseries->chart()->removeSeries( currentseries );
+  seriesRef->chart()->removeSeries( seriesRef );
 }
 
 void DisplayedObject::addCurveToChart( QChart * chart)
 {
-  currentseries = std::make_shared<QLineSeries>();
+  currentseries = new QLineSeries;
   currentseries->setColor( currentColor );
 
-  seriesRef = std::make_shared<QScatterSeries>();
+  seriesRef = new QScatterSeries;
   seriesRef->setColor( currentColor );
 
-  std::vector<Point> polyPoints;
-  curve->GetAsPolyLine( polyPoints,CommonConstantsMath::PRECISION_POLYLINE );
+  std::vector<Math::Point> polyPoints;
+  curve->GetAsPolyLine( polyPoints,Math::CommonConstantsMath::PRECISION_POLYLINE );
 
   for ( int i = 0; i < polyPoints.size(); i++ )
     *currentseries <<QPointF( polyPoints[i].GetX(), polyPoints[i].GetY() );
 
-  for ( int i = 0; i < curve->GetReferensedPoints().size(); i++ )
-      *seriesRef << QPointF( curve->GetReferensedPoints()[i].GetX(), curve->GetReferensedPoints()[i].GetY() );
+  //for ( int i = 0; i < curve->GetReferensedPoints().size(); i++ )
+   //   *seriesRef << QPointF( curve->GetReferensedPoints()[i].GetX(), curve->GetReferensedPoints()[i].GetY() );
 
   seriesRef->setMarkerShape( QScatterSeries::MarkerShapeCircle );
   seriesRef->setMarkerSize( 15.0 );
-  chart->addSeries( currentseries.get() );
-  chart->addSeries( seriesRef.get() );
+  chart->addSeries( currentseries );
+  chart->addSeries( seriesRef );
 
 
-  currentseries->attachAxis( axisX.get() );
-  currentseries->attachAxis( axisY.get() );
-  seriesRef->attachAxis( axisX.get() );
-  seriesRef->attachAxis( axisY.get() );
+  currentseries->attachAxis( axisX );
+  currentseries->attachAxis( axisY );
+  seriesRef->attachAxis( axisX );
+  seriesRef->attachAxis( axisY );
 }

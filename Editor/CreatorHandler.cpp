@@ -11,7 +11,7 @@
   \ru добавление точки с экрана в массив точек
 */
 //-----------------------------------------------------------------------------
-void CreatorHandler::AddPointFromScreen( Point point )
+void CreatorHandler::AddPointFromScreen( Math::Point point )
 {
   points.push_back( point );
 }
@@ -33,20 +33,20 @@ bool CreatorHandler::IsSufficientNum() const
    \ru создает кривую по точкам
 */
 //-----------------------------------------------------------------------------
-std::shared_ptr<C2Curve> CreatorHandler::Create()
+std::shared_ptr<Math::Curve> CreatorHandler::Create()
 {
   switch( type ){
   case CreateLine:{
-    return std::make_shared<Line>( points );
+    return std::make_shared<Math::Line>( points );
   }
     break;
   case CreateEllipse:{
-    return std::make_shared<Ellipse>( points );
+    return std::make_shared<Math::Ellipse>( points );
   }
     break;
   case CreatePolyline:{
 
-    return std::make_shared<GeomPolyline>( points );
+    return std::make_shared<Math::GeomPolyline>( points );
   }
     break;
   case CreateNURBS:{
@@ -56,20 +56,20 @@ std::shared_ptr<C2Curve> CreatorHandler::Create()
 
     int degree = 3;
     std::vector<double> nodes;
-    for ( int i = 0; i < degree + 1; i++ )
-      nodes.push_back( 0.0 );
-    int k = 0;
-    for ( int i = degree + 1; i < points.size() - degree -1; i++ )
-    {
-      nodes.push_back( (i - 2) );
-      k++;
+    for ( size_t i=0; i<degree+1; ++i ) {
+      nodes.push_back( 0. );
     }
-
-    for ( int i = points.size() - degree -1; i < points.size(); i++ )
-      nodes.push_back( (points.size() - 2 * (degree +1) +1));
+    double node = 1.;
+    for ( size_t i=0; i< points.size()-degree-1; ++i ) {
+      nodes.push_back( node );
+      node += 1.;
+    }
+    for ( size_t i=0; i<degree+1; ++i ) {
+      nodes.push_back( node );
+    }
     bool isClosed = false;
 
-    return std::make_shared<NurbsCurve>( points, weights, nodes, isClosed, degree );
+    return std::make_shared<Math::NurbsCurve>( points, weights, nodes, isClosed, degree );
   }
     break;
   }

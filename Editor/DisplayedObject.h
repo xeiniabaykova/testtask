@@ -29,15 +29,15 @@ struct DisplayedObject
 private:
   QColor                          currentColor;     ///< цвет неслектированной кривой
   bool                            selected;         ///< свойство селектированности кривой
-  std::shared_ptr<QLineSeries>    currentseries;    ///< series с точками
-  std::shared_ptr<QScatterSeries> seriesRef;        ///< series с опорными точками
-  std::shared_ptr<C2Curve>        curve;
-  std::shared_ptr<QValueAxis>     axisX;
-  std::shared_ptr<QValueAxis>     axisY;
+  QLineSeries*    currentseries;    ///< series с точками
+  QScatterSeries* seriesRef;        ///< series с опорными точками
+  std::shared_ptr<Math::Curve>        curve;
+  QValueAxis*     axisX;
+  QValueAxis*     axisY;
 public:
   DisplayedObject() = default;
   virtual ~DisplayedObject();
-  DisplayedObject( std::shared_ptr<C2Curve> curve,  QValueAxis* axisX,  QValueAxis* axisY ):
+  DisplayedObject( std::shared_ptr<Math::Curve> curve,  QValueAxis* axisX,  QValueAxis* axisY ):
     currentColor ( 51, 0, 51 ),
     selected     ( false ),
     curve        ( curve ),
@@ -51,7 +51,7 @@ private:
  public:
   void addCurveToChart         ( QChart * chart );
   bool GetSelectionStatus      ();                                                      ///< получить информацию о селектированности кривой
-  void ModifySelectionStatus   ( Point cursor, double precision, QColor selectedColor ); ///< изменить информацию о селектированности кривой в зависимости от полученной точки
+  void ModifySelectionStatus   ( Math::Point cursor, double precision, QColor selectedColor ); ///< изменить информацию о селектированности кривой в зависимости от полученной точки
   void SetColor                ( QColor color );                                         ///< установить цвет кривой
   void SetSeries               ( QLineSeries *  current, QScatterSeries *ref );          ///< установить series
   void SetColorUnselectedCurve ( QColor color );

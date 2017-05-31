@@ -11,6 +11,8 @@
 
 #include <QApplication>
 #include <QFileDialog>
+#include "Editor/DisplayedObject.h"
+#include <memory>
 
 
 //------------------------------------------------------------------------------
@@ -29,7 +31,7 @@ private:
 
 public:
   void Open(); ///< \ru создается диалог открытия файла
-  void Save(); ///< \ru создается диалог сохранения файла
+  void Save(const std::vector<std::shared_ptr<DisplayedObject>>& savedObj); ///< \ru создается диалог сохранения файла
 
 };
 

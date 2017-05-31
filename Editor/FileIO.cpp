@@ -1,4 +1,5 @@
 #include "FileIO.h"
+#include "Editor/DisplayedObject.h"
 
 
 
@@ -23,14 +24,10 @@ void FileIO::Open()
 //------------------------------------------------------------------------------
 // \ru создается диалоговое окно сохранения файла
 // ---
-void FileIO::Save()
+void FileIO::Save(const std::vector<std::shared_ptr<DisplayedObject>>& savedObj)
 {
-  QString filename = QFileDialog::getSaveFileName( this, tr("Save Document"), QDir::currentPath(),
-    tr("Documents (*.txt)") );
+  QString fileName = QFileDialog::getSaveFileName( this, tr("Save Document"), QDir::currentPath(),
+    tr("Documents (*.bin)") );
 
-  if( !filename.isNull() )
-  {
-    qDebug( filename.toUtf8() );
-  }
-
+ //  std::istream stream(fileName);
 }

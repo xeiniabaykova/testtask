@@ -1,7 +1,7 @@
 #ifndef CURVESERIALIZER_H
 #define CURVESERIALIZER_H
-#include <GeometricPrimitive.h>
-#include <Point.h>
+#include <Math/GeometricPrimitive.h>
+#include <Math/Point.h>
 #include <istream>
 #include <memory>
 
@@ -25,12 +25,12 @@
 
 class CurveSerializer {
 public:
-  virtual std::unique_ptr<GeometricPrimitive> Read (std::istream& theInput) = 0;
-  virtual void Write (std::ostream& theOutput, const GeometricPrimitive& theCurve) = 0;
+  virtual std::unique_ptr<Math::GeometricPrimitive> Read (std::istream& theInput) = 0;
+  virtual void Write (std::ostream& theOutput, const Math::GeometricPrimitive& theCurve) = 0;
   virtual ~CurveSerializer() = default;
 
-  Point ReadPoint   ( std::istream& input ) const;
-  void WritePoint   ( std::ostream& output, const Point& point ) const;
+  Math::Point ReadPoint   ( std::istream& input ) const;
+  void WritePoint   ( std::ostream& output, const Math::Point& point ) const;
   double ReadDouble ( std::istream& input ) const;
   int ReadInt       ( std::istream& input ) const;
   void WriteInt     ( std::ostream& output, int value ) const;

@@ -39,9 +39,9 @@ private:
   std::shared_ptr<CreatorHandler>               geomCreator;     ///< объект для создания геометрического примитива
   CurrentState                                  state;           ///< объект для хранения текущего состояния окна
   std::vector<std::shared_ptr<DisplayedObject>> displayedCurves; ///< набор графиков, отображенных на экране
-  QValueAxis                                   *axisX;
-  QValueAxis                                   *axisY;
-  QScatterSeries                               *seriesReferenced;
+  QValueAxis                                    *axisX;
+  QValueAxis                                    *axisY;
+  QScatterSeries                                *tempSeriesReferenced;
 
 public:
   /**  \brief \ru
@@ -69,7 +69,7 @@ public:
   void CreateCircle           ();                         ///< создать и отобразить окружность
   void CreateNurbs            ();                         ///< создать и отобразить nurbs
   void LoadFile               ();                         ///< загрузить кривые из файла
-  void SaveFile               ();                         ///< сохранить кривые в файл
+  void SaveFile               ( const std::vector<std::shared_ptr<DisplayedObject>>& savedObj );                         ///< сохранить кривые в файл
   void CreatePolyline         ();                         ///< создать и отобразить полилинию
   void CreateCurve            ();                         ///< создать кривую
   void MouseEvent             ( QMouseEvent *event );     ///< обработать событие клика мышкой
@@ -81,7 +81,7 @@ public:
   void CreateEmptySeries      ();                         ///< КОСТЫЛЬ! необходим для верной работы функции map to value
   void ClearScreen            ();                         ///< обработать очистку экрана
   void CreateChart            ();
-  void CreateRefPoint         ( Point point );
+  void CreateRefPoint         ( Math::Point point );
 
 };
 

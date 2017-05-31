@@ -11,7 +11,7 @@
 #include <vector>
 #include <memory>
 #include "Math/Point.h"
-#include "Math/C2Curve.h"
+#include "Math/Curve.h"
 
 class CreatorHandler
 {
@@ -25,7 +25,7 @@ public:
   TypeCurve      type;
 private:
   int                                          numExpectedPoits; ///< количество точек, необходимых для создания геометрического примитива
-  std::vector<Point>                           points;           ///< точки, полученные с экрана
+  std::vector<Math::Point>                           points;           ///< точки, полученные с экрана
 
 public:
   /**  \brief \ru получить примитив по точкам, полученным с экрана.
@@ -35,7 +35,7 @@ public:
   //---
   CreatorHandler( int numExpectedPoits, TypeCurve type ):
     numExpectedPoits ( numExpectedPoits ),
-    type( type )
+    type             ( type )
   {
   }
 
@@ -43,9 +43,9 @@ private:
   CreatorHandler( const CreatorHandler &obj ) = delete;
   CreatorHandler& operator=( CreatorHandler &obj ) = delete;
 public:
-  void                      AddPointFromScreen ( Point point ); ///< добавить точку с экрана в массив текущих точек
+  void                      AddPointFromScreen ( Math::Point point ); ///< добавить точку с экрана в массив текущих точек
   bool                      IsSufficientNum    () const;        ///< проверить, достаточно ли текущее количество точек для создания и отображения выбранной кривой
-  std::shared_ptr<C2Curve>  Create             ();              ///< создать геометрический примитив
+  std::shared_ptr<Math::Curve>    Create             ();              ///< создать геометрический примитив
   void                      ClearPoints        ();              ///< очистить массив точек, полученных с экрана
 };
 

@@ -2,7 +2,7 @@
 #include "FileIO.h"
 #include <QLabel>
 #include <QtWidgets/QMainWindow>
-#include <ui_MainWindow.h>
+#include <Editor/ui_MainWindow.h>
 #include <QInputDialog>
 #include <QtWidgets/QVBoxLayout>
 #include <QComboBox>
@@ -22,7 +22,6 @@ MainWindow::MainWindow( QChart *chart, QWidget *parent ) :
   createPointAct      ( 0                  ),
   createLineAct       ( 0                  ),
   createEllipseAct    ( 0                  ),
-  createCircleAct     ( 0                  ),
   createPolylineAct   ( 0                  ),
   createNurbsAct      ( 0                  ),
   stopCreateCurveAct  ( 0                  ),
@@ -83,7 +82,6 @@ void MainWindow::CreateMenus()
   createCurveMenu->addAction( createEllipseAct );
   createCurveMenu->addAction( createPolylineAct );
   createCurveMenu->addAction( createNurbsAct );
-  createCurveMenu->addAction( createCircleAct );
 
 
   optionsMenu = menuBar()->addMenu( tr("&Options") );
@@ -128,43 +126,26 @@ void MainWindow::CreateActions()
   createEllipseAct->setStatusTip( tr("Creating circle") );
   connect( createEllipseAct, &QAction::triggered, this, &MainWindow::OnCreateEllipse );
 
-  createPolylineAct = new QAction( tr("&Polyline"), this );
- // createPolylineAct->setShortcuts( QKeySequence::New );
-  createPolylineAct->setStatusTip( tr("Creating circle") );
-  connect( createPolylineAct, &QAction::triggered, this, &MainWindow::OnCreatePolyline );
-
   createNurbsAct = new QAction( tr("&Nurbs"), this );
   createNurbsAct->setStatusTip( tr("Creating nurbs") );
   connect( createNurbsAct, &QAction::triggered, this, &MainWindow::OnCreateNurbs );
 
-  createCircleAct = new QAction( tr("&Circle"), this );
-  createCircleAct->setDisabled( true );
- // createCircleAct->setShortcuts( QKeySequence::New );
-  createCircleAct->setStatusTip( tr("Creating Circle") );
-  connect( createCircleAct, &QAction::triggered, this, &MainWindow::OnCreateCircle );
-
-
   creatorCurves = new QActionGroup( this );
-//  creatorCurves->addAction( createPointAct );
   creatorCurves->addAction( createLineAct.get() ) ;
   creatorCurves->addAction( createEllipseAct );
-//  creatorCurves->addAction( createCircleAct );
   creatorCurves->addAction( createPolylineAct );
   creatorCurves->addAction( createNurbsAct );
 
 
   deleteCurveAct = new QAction( tr("&delete curve"), this );
- // deleteCurveAct->setShortcuts( QKeySequence::New );
   deleteCurveAct->setStatusTip( tr("delete curve") );
   connect( deleteCurveAct, &QAction::triggered, this, &MainWindow::OnDeleteCurve );
 
   findIntersectionAct = new QAction( tr("&Find Intersection"), this );
- // findIntersectionAct->setShortcuts( QKeySequence::New );
   findIntersectionAct->setStatusTip( tr("Find Intersection") );
   connect( findIntersectionAct, &QAction::triggered, this, &MainWindow::OnFindIntersection );
 
   clearScreenAct = new QAction( tr("&Clear Screen"), this );
- // clearScreenAct->setShortcuts( QKeySequence::New );
   clearScreenAct->setStatusTip( tr("Clear Screen") );
   connect( clearScreenAct, &QAction::triggered, this, &MainWindow::OnClearScreen );
 }
@@ -178,7 +159,7 @@ void MainWindow::CreateActions()
 //-----------------------------------------------------------------------------
 void MainWindow::OnSaveFile()
 {
-  windowHandler.SaveFile();
+  //windowHandler.SaveFile();
 }
 
 
@@ -204,7 +185,6 @@ void MainWindow::OnCreatePoint()
 {
   createPointAct->setCheckable( true );
   createPointAct->setChecked( true );
-  //windowHandler.CreatePoint();
 }
 
 
@@ -242,12 +222,14 @@ void MainWindow::OnCreateEllipse()
 
 */
 //-----------------------------------------------------------------------------
+/*
 void MainWindow::OnCreateCircle()
 {
   createCircleAct->setCheckable( true );
   createCircleAct->setChecked( true );
   windowHandler.CreateCircle();
 }
+*/
 
 
 //-----------------------------------------------------------------------------

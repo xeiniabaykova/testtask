@@ -102,10 +102,10 @@ void MainWindowHandler::LoadFile()
   \ru запускается окно сохранения файла
 */
 //-----------------------------------------------------------------------------
-void MainWindowHandler::SaveFile()
+void MainWindowHandler::SaveFile( const std::vector<std::shared_ptr<DisplayedObject>>& savedObj )
 {
   FileIO save;
-  save.Save();
+  //save.Save();
 }
 
 
@@ -117,10 +117,11 @@ void MainWindowHandler::SaveFile()
 //-----------------------------------------------------------------------------
 void MainWindowHandler::CreateCurve()
 {
-  std::shared_ptr<C2Curve> primitive = geomCreator->Create();
+  std::shared_ptr<Math::Curve> primitive = geomCreator->Create();
   std::shared_ptr<DisplayedObject> curve = std::make_shared<DisplayedObject>( primitive, axisX, axisY );
   curve->addCurveToChart( chart );
   displayedCurves.push_back( curve );
+  tempSeriesReferenced->clear();
 }
 
 void MainWindowHandler::StopCreateCurve()
@@ -128,7 +129,6 @@ void MainWindowHandler::StopCreateCurve()
   if ( state == StateCreateLine )
   {
     CreateCurve();
-    seriesReferenced->clear();
    // geomCreator;
   }
   state = StateExpectAction;
@@ -158,8 +158,8 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
   if ( state == StateCreateCurve  || state == StateCreateLine )
   {
     QPointF currentPoint = chart->mapToValue( QPointF(event->x(), event->y() - 30) );
-    geomCreator->AddPointFromScreen( Point(currentPoint.x(), currentPoint.y()) );
-    CreateRefPoint( Point(currentPoint.x(), currentPoint.y()) );
+    geomCreator->AddPointFromScreen( Math::Point(currentPoint.x(), currentPoint.y()) );
+    CreateRefPoint( Math::Point(currentPoint.x(), currentPoint.y()) );
     if ( geomCreator->IsSufficientNum() )
     {
       CreateCurve();
@@ -192,7 +192,7 @@ void MainWindowHandler::StateExpect( QMouseEvent *event )
 {
   QPointF currentPoint = chart->mapToValue( QPointF(event->pos().x(), event->pos().y() - 30) );
   for ( int i = 0; i < displayedCurves.size(); i++ )
-    displayedCurves[i]->ModifySelectionStatus( Point(currentPoint.x(), currentPoint.y()), CommonConstantsEditor::PRECISION_SELECT, selectedColor );
+    displayedCurves[i]->ModifySelectionStatus( Math::Point(currentPoint.x(), currentPoint.y()), CommonConstantsEditor::PRECISION_SELECT, selectedColor );
   state = StateExpectAction;
 }
 
@@ -285,22 +285,28 @@ void MainWindowHandler::CreateChart()
     series->attachAxis( axisX );
     series->attachAxis( axisY );
 
-    seriesReferenced = new QScatterSeries();
-    seriesReferenced->setColor( QColor(0, 17, 17) );
-    chart->addSeries( seriesReferenced );
-    seriesReferenced->attachAxis( axisX );
-    seriesReferenced->attachAxis( axisY );
+//    seriesReferenced = new QScatterSeries();
+//    seriesReferenced->setColor( QColor(0, 17, 17) );
+//    chart->addSeries( seriesReferenced );
+//    seriesReferenced->attachAxis( axisX );
+//    seriesReferenced->attachAxis( axisY );
 
+    tempSeriesReferenced = new QScatterSeries();
+    tempSeriesReferenced->setColor( QColor(0, 17, 17) );
+    chart->addSeries( tempSeriesReferenced );
+    tempSeriesReferenced->attachAxis( axisX );
+    tempSeriesReferenced->attachAxis( axisY );
+    tempSeriesReferenced->clear();
     chart->axisX()->setVisible( false );
     chart->axisY()->setVisible( false );
 }
 
 
-void MainWindowHandler::CreateRefPoint( Point point )
+void MainWindowHandler::CreateRefPoint( Math::Point point )
 {
-  *seriesReferenced << QPointF( point.GetX(), point.GetY() );
-  seriesReferenced->setMarkerShape( QScatterSeries::MarkerShapeCircle );
-  seriesReferenced->setMarkerSize( 15.0 );
+  *tempSeriesReferenced << QPointF( point.GetX(), point.GetY() );
+  tempSeriesReferenced->setMarkerShape( QScatterSeries::MarkerShapeCircle );
+  tempSeriesReferenced->setMarkerSize( 15.0 );
 
 
 }
