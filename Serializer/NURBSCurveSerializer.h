@@ -3,6 +3,7 @@
 #include <Math/NurbsCurve.h>
 #include "CurveSerializer.h"
 
+namespace Serializer {
 class NURBSCurveSerializer :public CurveSerializer {
 public:
   NURBSCurveSerializer() = default;
@@ -12,4 +13,5 @@ public:
 
   virtual ~NURBSCurveSerializer() = default;
 };
+}
 #endif

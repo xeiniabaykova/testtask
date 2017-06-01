@@ -1,6 +1,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include "Math/GeometricPrimitive.h"
 ////////////////////////////////////////////////////////////////////////////////
 /**
   \file
@@ -8,7 +9,9 @@
 
 */
 ////////////////////////////////////////////////////////////////////////////////
-class Vector
+
+namespace Math {
+class Vector: public GeometricPrimitive
 {
 private:
   double x; ///< координата x
@@ -20,8 +23,17 @@ public:
   Vector( const Vector& point );
   virtual ~Vector() = default;
 public:
+  virtual void Translate ( double xShift, double yShift );
+  virtual void Rotate    ( double alpha );
+  virtual void Scale ( double XScaling, double YScaling );
   double  GetX() const;
   double  GetY() const;
+  Vector operator * ( double param  ) const;
+  double operator * ( Vector param ) const;
+  Vector operator - ( Vector point ) const;
+  Vector operator + ( Vector point ) const;
+  Vector operator = ( Vector point );
+  bool IsValid() const;
 };
-
+}
 #endif // VECTOR_H

@@ -5,7 +5,7 @@
 //#include <memory>
 //#include <string>
 //#include <vector>
-
+//namespace Serializer {
 //class Serializer {
 //public:
 //	Serializer();
@@ -23,5 +23,5 @@
 
 
 //};
-
+//}
 //#endif // SERIALIZER_H

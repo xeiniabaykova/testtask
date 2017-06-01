@@ -35,14 +35,17 @@ SOURCES += main.cpp\
     Math/GeomPolyLine.cpp \
     Editor/CreatorHandler.cpp \
     Editor/DisplayedObject.cpp \
-    Math/C2Curve.cpp \
     Math/Vector.cpp \
-    Serealizer/LineSerializer.cpp \
-    Serealizer/CurveSerializer.cpp \
+    Serializer/LineSerializer.cpp \
+    Serializer/CurveSerializer.cpp \
     Editor/CommonConstantsEditor.cpp \
     Math/CommonConstantsMath.cpp \
-    Serealizer/NURBSCurveSerializer.cxx \
-    Serealizer/EllipseCurveSerializer.cxx
+    Serializer/NURBSCurveSerializer.cpp \
+    Serializer/EllipseCurveSerializer.cpp \
+    Math/Curve.cpp \
+    Serializer/Serializer.cpp \
+    Serializer/EllipseCurveSerializer.cpp \
+    Serializer/NURBSCurveSerializer.cpp
 
 HEADERS  += Editor/MainWindow.h \
     Editor/FileIO.h \
@@ -57,14 +60,17 @@ HEADERS  += Editor/MainWindow.h \
     Math/GeomPolyline.h \
     Editor/CreatorHandler.h \
     Editor/DisplayedObject.h \
-    Math/C2Curve.h \
     Math/Vector.h \
-    Serealizer/CurveSerializer.h \
-    Serealizer/LineSerializer.h \
+    Serializer/CurveSerializer.h \
+    Serializer/LineSerializer.h \
     Editor/CommonConstantsEditor.h \
     Math/CommonConstantsMath.h \
-    Serealizer/NURBSCurveSerializer.hxx \
-    Serealizer/EllipseCurveSerializer.hxx
+    Serializer/NURBSCurveSerializer.h \
+    Serializer/EllipseCurveSerializer.h \
+    Math/Curve.h \
+    Serializer/Serializer.h \
+    Serializer/EllipseCurveSerializer.h \
+    Serializer/NURBSCurveSerializer.h
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../Qt/5.8/msvc2015_64/lib/ -lQt5Charts

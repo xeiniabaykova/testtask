@@ -1,5 +1,6 @@
 #include "NURBSCurveSerializer.h"
 
+namespace Serializer {
 std::string NURBSCurveSerializer::GetHeaderName()
 {
   return Math::NurbsCurve().GetName();
@@ -65,4 +66,5 @@ std::string NURBSCurveSerializer::GetHeaderName()
 
   WriteInt( theOutput,static_cast<const Math::NurbsCurve&> (theCurve).Degree() );
   WriteInt( theOutput,static_cast<const Math::NurbsCurve&> (theCurve).IsClosed() );
+}
 }

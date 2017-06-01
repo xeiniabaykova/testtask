@@ -1,24 +1,9 @@
-#include "C2Curve.h"
+#include "Curve.h"
 #include <cmath>
 #include <limits>
-
+namespace Math {
 namespace {
 
-double Dot( Point point1, Point point2 )
-{
-  return point1.GetX() * point2.GetX() + point1.GetY() * point2.GetY();
-}
-
-//-----------------------------------------------------------------------------
-/**
-  \ru находим квадрат растояния между двумя точками
-*/
-//-----------------------------------------------------------------------------
-double Distance( Point point1, Point point2 )
-{
-  return sqrt( (point1.GetX() - point2.GetX()) * (point1.GetX() - point2.GetX()) +
-         (point1.GetY() - point2.GetY()) * (point1.GetY() - point2.GetY()) );
-}
 
 //-----------------------------------------------------------------------------
 /**
@@ -29,14 +14,14 @@ double Distance( Point point1, Point point2 )
 //-----------------------------------------------------------------------------
 double Distance( Point first, Point second, Point point )
 {
-   Point v = second - first;
-   Point w = point - first;
+   Vector v = second - first;
+   Vector w = point - first;
 
-   double c1 = Dot( w, v );
+   double c1 = v * w;
    if ( c1 <= 0 )
        return Distance( point, first );
 
-   double c2 = Dot( v, v );
+   double c2 = v * v;
    if ( c2 <= c1 )
        return Distance( point, second );
 
@@ -47,7 +32,7 @@ double Distance( Point first, Point second, Point point )
 }
 
 
-double C2Curve::DistancePointToCurve ( Point point, const std::vector<Point>& polylinePoints) const
+double Curve::DistancePointToCurve ( Point point, const std::vector<Point>& polylinePoints) const
 {
   double minDistance = std::numeric_limits<double>::max();
   for ( int j = 1; j < polylinePoints.size(); j++ )
@@ -59,17 +44,17 @@ double C2Curve::DistancePointToCurve ( Point point, const std::vector<Point>& po
   return minDistance;
 }
 
-std::vector<Point> C2Curve::GetReferensedPoints() const
+std::vector<Point> Curve::GetReferensedPoints() const
 {
   return referencedPoints;
 }
 
-void C2Curve::SetReferensedPoints( const std::vector<Point>& points )
+void Curve::SetReferensedPoints( const std::vector<Point>& points )
 {
   referencedPoints = points;
 }
 
-double C2Curve::CountingStep( double tCurrent, double accuracy) const
+double Curve::CountingStep( double tCurrent, double accuracy) const
 {
 
   Vector firstDerivative = GetDerivativePoint( tCurrent );
@@ -83,7 +68,7 @@ double C2Curve::CountingStep( double tCurrent, double accuracy) const
 }
 
 
-void C2Curve::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy ) const
+void Curve::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy ) const
 {
   polyLinePoints.clear();
   double t = GetRange().GetStart();
@@ -94,4 +79,5 @@ void C2Curve::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accurac
     Point point ( GetPoint(t) );
     polyLinePoints.push_back( point );
   }
+}
 }

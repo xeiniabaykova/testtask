@@ -2,7 +2,7 @@
 #include "Editor/DisplayedObject.h"
 
 
-
+namespace Editor {
 //------------------------------------------------------------------------------
 // \ru создается диалоговое окно открытия файла
 // ---
@@ -30,4 +30,5 @@ void FileIO::Save(const std::vector<std::shared_ptr<DisplayedObject>>& savedObj)
     tr("Documents (*.bin)") );
 
  //  std::istream stream(fileName);
+}
 }

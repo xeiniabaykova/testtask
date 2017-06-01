@@ -2,19 +2,17 @@
 #include "CommonConstantsMath.h"
 #include <cmath>
 
+namespace Math {
 namespace {
-bool IsEqualPoint(Point point1, Point point2)
-{
-  if ( fabs(point1.GetX() - point2.GetX()) < CommonConstantsMath::NULL_TOL
-    && fabs(point1.GetY() - point2.GetY()) < CommonConstantsMath::NULL_TOL )
-    return true;
-  return false;
-}
 
-// данные в эллипсе правильные, если: точки не совпадают, не лежат на одно линии
-bool CorrectPolylineData( const std::vector<Point>& points )
+//-----------------------------------------------------------------------------
+/**
+  Полилиния валидна, если количество точек не равно нулю, если точки не совпадают.
+*/
+//---
+static bool CorrectPolylineData( const std::vector<Point>& points )
 {
-  if (points.size() == 0)
+  if ( points.size() == 0 )
     return false;
 
   for ( int i = 0; i < points.size(); i++ )
@@ -22,27 +20,33 @@ bool CorrectPolylineData( const std::vector<Point>& points )
     {
       if ( i == j )
           continue;
-       if ( IsEqualPoint(points[i], points[j]) )
+       if ( IsEqual(points[i], points[j]) )
           return false;
      }
-return true;
+  return true;
 }
 
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+//
+/// Класс геометрического представления полилинии.
+/**
+  Представлет функции для хранения и проведения опраций над полилинией.
+*/
+///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
 /**
-  Конструктор полилинии
+  Конструктор полилинии по опорным точкам.
 */
-//-----------------------------------------------------------------------------
-GeomPolyline::GeomPolyline(const std::vector<Point>& referensedPoits ):
+//---
+GeomPolyline::GeomPolyline( const std::vector<Point>& referensedPoits ):
   referencedPoints( referensedPoits )
 {
-  isValid = false;
   if ( CorrectPolylineData(referencedPoints) )
   {
     SetReferensedPoints( referensedPoits );
-    isValid = true;
   }
 }
 
@@ -98,9 +102,9 @@ Vector GeomPolyline::Get2DerivativePoint( double ) const
 
 //-----------------------------------------------------------------------------
 /**
-  \ru позвращается полилилния для полилинии - это полилиния
+  \ru Возвращается полилилния для полилинии - это полилиния.
 */
-//-----------------------------------------------------------------------------
+//---
 void GeomPolyline::GetAsPolyLine( std::vector<Point> & polyLinePoints, double ) const
 {
   polyLinePoints = referencedPoints;
@@ -130,9 +134,10 @@ double GeomPolyline::DistanceToPoint ( Point point ) const
 {
   std::vector<Point> polylinePoints;
   //GetAsPolyLine( polylinePoints, CommonConstants::PRECISION_POLYLINE );
-  return C2Curve::DistancePointToCurve( point, polylinePoints );
+  return Curve::DistancePointToCurve( point, polylinePoints );
 }
-bool GeomPolyline::IsValid()
+bool GeomPolyline::IsValid() const
 {
-	return isValid;
+  return referencedPoints.size();
+}
 }

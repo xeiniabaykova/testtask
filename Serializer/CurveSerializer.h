@@ -23,6 +23,7 @@
 #endif
 #endif
 
+namespace Serializer {
 class CurveSerializer {
 public:
   virtual std::unique_ptr<Math::GeometricPrimitive> Read (std::istream& theInput) = 0;
@@ -36,5 +37,5 @@ public:
   void WriteInt     ( std::ostream& output, int value ) const;
   void WriteDouble  ( std::ostream& otutput, double value ) const;
 };
-
+}
 #endif // CURVESERIALIZER_H

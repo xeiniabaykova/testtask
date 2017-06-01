@@ -1,15 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 /**
   \file
-  \brief \ru  двумерный эллипс\~
+  \brief Геометрическое представление эллипса.\~
 
 */
 ////////////////////////////////////////////////////////////////////////////////
-
 #ifndef ELLIPSE_H
 #define ELLIPSE_H
 
-#include "C2Curve.h"
+#include "Curve.h"
 #include "Point.h"
 #include "Range.h"
 #include <vector>
@@ -18,11 +17,15 @@
 #include "Vector.h"
 
 
-//------------------------------------------------------------------------------
-/** \brief \ru Класс геометрического представления эллипса \~
+///////////////////////////////////////////////////////////////////////////////
+//
+/// Класс геометрического представления эллипса.
+/**
+  Представлет функции для хранения и проведения опраций над эллипсом.
 */
-// ---
-class Ellipse: public C2Curve
+///////////////////////////////////////////////////////////////////////////////
+namespace Math {
+class Ellipse: public Curve
 {
 private:
   Point center;  ///< центр
@@ -30,13 +33,19 @@ private:
   double r2;     ///< второй радиус
   double alpha;  ///< угол между главной осью и осью х
 public:
-  /**  \brief \ru создать эллипс по двум радиусам и центральной точке
-    \param[in] center - центр эллипса .\~
+  /**  \brief  Создать эллипс по массиву точек.
+    \param[in] points[0] - Центр эллипса .\~
+    \param[in] points[1] - Главная ось эллипса .\~
+    \param[in] points[1] - Точка, лежащая на границе эллипса .\~
+  */
+  //---
+  Ellipse ( const std::vector<Point>& points );
+  /**  \brief \ru Создать эллипс по двум радиусам и центральной точке.
+    \param[in] center - ентр эллипса .\~
     \param[in] r1 - главный радиус .\~
     \param[in] r2 - побочный радиус .\~
   */
   //---
-  Ellipse ( const std::vector<Point>& points );
   Ellipse ( Point center, double r1, double r2, double alpha );
   Ellipse () = default;
   virtual ~Ellipse() = default;
@@ -45,21 +54,19 @@ private:
   Ellipse( const Ellipse &obj ) = delete;
   Ellipse& operator=( Ellipse &obj ) = delete;
 public:
-  virtual Point  GetPoint            ( double t ) const;                                               ///< вернуть точку на кривой по параметру t
-  virtual Range  GetRange            () const;                                                         ///< вернуть границы параметра для эллипса : [0, 2*pi]
-  virtual Vector  GetDerivativePoint  ( double t ) const;                                               ///< вернуть производную на эллипсе по параметру t
-  virtual Vector  Get2DerivativePoint ( double t ) const;                                               ///< вернуть вторую производную на эллипсе по параметру t
-  virtual double DistanceToPoint     ( Point point ) const;                                            ///< возвращает расстояние от точки до полилинии эллипса
-  virtual void   Translate         ( double xShift, double yShift );
-  virtual void   Rotate            ( double alpha );
-  virtual void   Scale             ( double XScaling, double YScaling );
-
-  bool   IsValid() const;
-  double GetMajorRadius() const { return r1; }
-  double GetMinorRadius() const { return r2; }
-  double GetAlpha() const { return alpha; }
-  Point  GetCenter() const { return center; }
-  std::string GetName() const;
+  virtual Point  GetPoint            ( double t ) const;                   ///< Вернуть точку на кривой по параметру t.
+  virtual Range  GetRange            () const;                             ///< Вернуть границы параметра для эллипса : [0, 2 * pi].
+  virtual Vector GetDerivativePoint  ( double t ) const;                   ///< Вернуть производную на эллипсе по параметру t.
+  virtual Vector Get2DerivativePoint ( double t ) const;                   ///< Вернуть вторую производную на эллипсе по параметру t.
+  virtual void   Translate           ( double xShift, double yShift );     ///< Сдвиг по оси x на xShift, по оси y на yShift.
+  virtual void   Rotate              ( double alpha );                     ///< Повернуть относительно начала координат на угол alpha.
+  virtual void   Scale               ( double xScaling, double yScaling ); ///< Масштабировать на xScaling по оси x, на yScaling по оси у.
+  bool           IsValid             () const;                             ///< Проверить корректность эллипса: считаем, что если оба радиуса не равны нулю, то эллипс корректен.
+  double         GetMajorRadius      () const;                             ///< Вернуть гравный радиус.
+  double         GetMinorRadius      () const;                             ///< Вернуть побочный радиус.
+  double         GetAlpha            () const;                             ///< Вернуть угол наклона относительно оси ох.
+  Point          GetCenter           () const;                             ///< Вернуть центр эллипса.
+  std::string    GetName             () const;                             ///< Вернуть имя, используемое при записи эллипса в файл.
 };
-
+}
 #endif // ELLIPSE_H

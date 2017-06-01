@@ -7,7 +7,7 @@
 #include "CommonConstantsEditor.h"
 
 
-
+namespace Editor {
 //-----------------------------------------------------------------------------
 /**
   \ru Конструктор MainWindowHandler
@@ -309,4 +309,5 @@ void MainWindowHandler::CreateRefPoint( Math::Point point )
   tempSeriesReferenced->setMarkerSize( 15.0 );
 
 
+}
 }

@@ -8,7 +8,7 @@
 
 #ifndef LINE_H
 #define LINE_H
-#include "C2Curve.h"
+#include "Curve.h"
 #include "Point.h"
 #include <vector>
 #include <string>
@@ -19,7 +19,8 @@
 /** \brief \ru Класс геометрического представления линии \~
 */
 // ---
-class Line: public C2Curve
+namespace Math {
+class Line: public Curve
 {
 private:
   Point startPoint; ///< начальная точка
@@ -53,5 +54,5 @@ private:
   Line& operator=( Line &obj ) = delete;
 
 };
-
+}
 #endif // LINE_H

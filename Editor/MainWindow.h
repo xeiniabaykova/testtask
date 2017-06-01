@@ -23,36 +23,36 @@ class MainWindow;
 /** \brief \ru Класс главной формы. \~
 */
 // ---
-
+namespace Editor {
 class MainWindow : public QMainWindow {
   Q_OBJECT
 private:
-  Ui::MainWindow    * ui;                   ///< \ru графический интерфейс главного окна
+  Ui::MainWindow    * ui;                   ///< Графический интерфейс главного окна.
 
-  QMenu             * importExportMenu;     ///< \ru меню записи и загрузки файла
-  QMenu             * createCurveMenu;      ///< \ru меню создания кривых
-  QMenu             * optionsMenu;          ///< \ru меню настроек
-  QMenu             * screenMenu;
-  QMenu             * contextMenu;
+  QMenu             * importExportMenu;     ///< Меню записи и загрузки файла.
+  QMenu             * createCurveMenu;      ///< Меню создания кривых.
+  QMenu             * optionsMenu;          ///< Меню настроек.
+  QMenu             * screenMenu;           ///< Меню состояния экрана.
+  QMenu             * contextMenu;          ///< Контеткстное меню.
 
-  QAction           * createPointAct;       ///< \ru событие создания точки
-  std::shared_ptr<QAction>          createLineAct;        ///< \ru событие создания линии
-  QAction           * createEllipseAct;     ///< \ru событие создания эллипса
-  //QAction           * createCircleAct;      ///< \ru событие создания окружности
-  QAction           * createPolylineAct;    ///< \ru событие создания окружности
-  QAction           * createNurbsAct;       ///< \ru событие создания nurbs - кривой
-  QAction           * stopCreateCurveAct;   ///< \ru событие прекращения создания кривых
-  QAction           * reColorAct;           ///< \ru событие изменение цвета кривой
-  QAction           * findIntersectionAct;  ///< \ru событие нахождения пересечения
+  QAction           * createPointAct;       ///< Событие создания точки.
+  QAction           * createLineAct;        ///< Событие создания линии.
+  QAction           * createEllipseAct;     ///< Событие создания эллипса.
+  QAction           * createCircleAct;      ///< Событие создания окружности.
+  QAction           * createPolylineAct;    ///< Событие создания окружности.
+  QAction           * createNurbsAct;       ///< Событие создания nurbs - кривой.
+  QAction           * stopCreateCurveAct;   ///< Событие прекращения создания кривых.
+  QAction           * reColorAct;           ///< Событие изменение цвета кривой.
+  QAction           * findIntersectionAct;  ///< Событие нахождения пересечения.
 
-  QAction           * deleteCurveAct;       ///< \ru событие удаления кривой
+  QAction           * deleteCurveAct;       ///< Событие удаления кривой.
 
-  QAction           * saveAct;              ///< \ru событие сохранения в файл
-  QAction           * loadAct;              ///< \ru событие загрузки из файла
+  QAction           * saveAct;              ///< Событие сохранения в файл.
+  QAction           * loadAct;              ///< Событие загрузки из файла.
 
-  QAction           * clearScreenAct;       ///< \ru событие очистки экрана
-  MainWindowHandler   windowHandler;        ///< \ru вспомогательный класс для обработки событий
-  QActionGroup      * creatorCurves;        ///< \ru группа для меню создания кривых
+  QAction           * clearScreenAct;       ///< Событие очистки экрана.
+  MainWindowHandler   windowHandler;        ///< Вспомогательный класс для обработки событий.
+  QActionGroup      * creatorCurves;        ///< Группа для меню создания кривых.
 
 public:
   /** \brief \ru Инициализация.
@@ -70,28 +70,28 @@ protected:
 #endif // QT_NO_CONTEXTMENU
 
 public:
-  void mousePressEvent     ( QMouseEvent *event );  /// \ru обработать событие клика мышкой
+  void mousePressEvent     ( QMouseEvent *event );  /// Обработать событие клика мышкой.
 
-  void resizeEvent         (QResizeEvent *event);   /// \ru обработчик события изменения размера экрана
-  void CreateActions       ();                      /// \ru создать события
-  void CreateMenus         ();                      /// \ru создать меню
+  void resizeEvent         (QResizeEvent *event);   /// Обработчик события изменения размера экрана.
+  void CreateActions       ();                      /// Создать события.
+  void CreateMenus         ();                      /// Создать меню
 
 private slots:
-  void OnSaveFile          ();                      /// \ru обработать событие открытия файла
-  void OnLoadFile          ();                      /// \ru обработать событие сохранения файла
-  void OnCreatePoint       ();                      /// \ru обработать событие создания точки
-  void OnCreateLine        ();                      /// \ru обработать событие создания линии
-  void OnCreateEllipse     ();                      /// \ru обработать событие создания эллипса
-  // void OnCreateCircle      ();                      /// \ru обработать событие создания окружности
-  void OnCreateNurbs       ();                      /// \ru обработать событие создания nurbs
-  void OnStopCreateCurve   ();                      /// \ru обработать событие прекращения создания кривых
-  void OnFindIntersection  ();                      /// \ru обработать событие нахождения пересечения
-  void OnDeleteCurve       ();                      /// \ru обработать событие удаления кривой
-  void OnClearScreen       ();                      /// \ru обработать событие очистки экрана
-  void OnCreatePolyline    ();                      /// \ru обработать событие создания полилинии
-  void OnReColorCurve      ();                      /// \ru обработать событие изменения цвета кривой
-  void contextMenuRequested( const QPoint& point ); /// \ru создать контекстное меню
+  void OnSaveFile          ();                      /// Обработать событие открытия файла.
+  void OnLoadFile          ();                      /// Обработать событие сохранения файла.
+  void OnCreatePoint       ();                      /// Обработать событие создания точки.
+  void OnCreateLine        ();                      /// Обработать событие создания линии.
+  void OnCreateEllipse     ();                      /// Обработать событие создания эллипса.
+   void OnCreateCircle     ();                      /// Обработать событие создания окружности
+  void OnCreateNurbs       ();                      /// Обработать событие создания nurbs.
+  void OnStopCreateCurve   ();                      /// Обработать событие прекращения создания кривых.
+  void OnFindIntersection  ();                      /// Обработать событие нахождения пересечения.
+  void OnDeleteCurve       ();                      /// Обработать событие удаления кривой.
+  void OnClearScreen       ();                      /// Обработать событие очистки экрана.
+  void OnCreatePolyline    ();                      /// Обработать событие создания полилинии.
+  void OnReColorCurve      ();                      /// Обработать событие изменения цвета кривой.
+  void contextMenuRequested( const QPoint& point ); /// Создать контекстное меню.
 
 };
-
+}
 #endif // MAINWINDOW_H

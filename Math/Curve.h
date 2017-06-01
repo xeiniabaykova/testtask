@@ -1,5 +1,5 @@
-#ifndef C2CURVE_H
-#define C2CURVE_H
+#ifndef CURVE_H
+#define CURVE_H
 #include "GeometricPrimitive.h"
 #include "CommonConstantsMath.h"
 #include "Vector.h"
@@ -9,18 +9,23 @@
 #include "Range.h"
 #include <vector>
 
-//------------------------------------------------------------------------------
-/** \brief \ru Абстрактный класс для дважды дифференцируемой кривой  \~
+///////////////////////////////////////////////////////////////////////////////
+//
+/// Класс геометрического представления эллипса.
+/**
+  Абстрактный класс для кривой.
 */
-// ---
-class C2Curve: public GeometricPrimitive {
-  std::vector<Point> referencedPoints;
+///////////////////////////////////////////////////////////////////////////////
+///
+///
+namespace Math {
+class Curve: public GeometricPrimitive {
 public:
-  C2Curve() = default;
-  virtual ~C2Curve() = default;
+  Curve() = default;
+  virtual ~Curve() = default;
 private:
-  C2Curve( const C2Curve &obj ) = delete;
-  C2Curve& operator=( C2Curve &obj ) = delete;
+  Curve( const Curve &obj ) = delete;
+  Curve& operator=( Curve &obj ) = delete;
 public:
   std::vector<Point> GetReferensedPoints() const;
   void SetReferensedPoints           ( const std::vector<Point>& points );
@@ -29,10 +34,8 @@ public:
   virtual Vector  GetDerivativePoint  ( double t ) const = 0;                                             ///< вернуть производную точки точки на кривой по параметру t
   virtual Vector  Get2DerivativePoint ( double t ) const = 0;                                             ///< вернуть вторую производную точки точки на кривой по параметру t
   virtual void    GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy = CommonConstantsMath::PRECISION_POLYLINE) const; ///< возвращает полилинию для геометрического примитива с точностью accuracy
-  virtual double  DistanceToPoint     ( Point point) const = 0;
-  double         DistancePointToCurve        ( Point point, const std::vector<Point>& polylinePoints ) const;  ///< возвращает расстояние от точки до полилилинии геометрического примитива
   double CountingStep                ( double tCurrent , double accuracy = CommonConstantsMath::PRECISION_POLYLINE) const;
 
 };
-
+}
 #endif // C2CURVS_H

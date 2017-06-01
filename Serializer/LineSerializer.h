@@ -4,7 +4,7 @@
 #include <Math/Line.h>
 #include "CurveSerializer.h"
 
-
+namespace Serializer {
 class LineSerializer :public CurveSerializer {
 public:
   LineSerializer() = default;
@@ -13,5 +13,5 @@ public:
   virtual std::string                         GetHeaderName ();
   virtual ~LineSerializer() = default;
 };
-
+}
 #endif // LINESERIALIZER_H

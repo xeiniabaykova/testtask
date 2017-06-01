@@ -1,7 +1,26 @@
 #include "NurbsCurve.h"
 #include <cmath>
 
+namespace Math {
 
+
+NurbsCurve::NurbsCurve( const std::vector<Point>& ppoles, const std::vector<double>& wweights,
+  const std::vector<double>& nnodes, bool iisClosed, int ddegree ):
+        poles(ppoles),
+        weights(wweights),
+        nodes(nnodes),
+        isClosed(iisClosed),
+        degree(ddegree)
+{
+if ( isClosed )
+{
+  for ( size_t i=0; i<degree; ++i )
+  {
+    weights.push_back( weights[i] );
+    poles.push_back( poles[i] );
+  }
+}
+}
 void NurbsCurve::ComputeBasicFunction(double x, int i, double& result) const
 {
   double p = degree;
@@ -247,33 +266,6 @@ Point NurbsCurve::GetPoint(double t) const
   double weightNurbs = CountWeight(span, t);
   Point resultPoint(0.0, 0.0);
   std::vector<double> node = BasicFunctions(span, t);
-//  if (isClosed)
-//  {
-//	  std::vector<double> weightsclosed;
-//
-//	  for (int i = degree; i > 0; i--)
-//		  weightsclosed.push_back(weights[weights.size() - degree - i]);
-//	  for (int i = 0; i < weights.size(); i++)
-//		  weightsclosed.push_back(weights[i]);
-//	  for (int i = 0; i < degree; i++)
-//		  weightsclosed.push_back(weights[degree + i]);
-//
-//	  std::vector<Point> polesclosed;
-//	  for (int i = degree; i > 0; i--)
-//		  polesclosed.push_back(poles[poles.size() - degree - i]);
-//	  for (int i = 0; i < poles.size(); i++)
-//		  polesclosed.push_back(poles[i]);
-//	  for (int i = 0; i < degree; i++)
-//		  polesclosed.push_back(poles[degree + i]);
-//	  for (int i = 0; i <= degree; i++)
-//	  {
-//		  resultPoint = resultPoint + polesclosed[span - degree - n + i] * node[i] * weightsclosed[span - degree - n + i];
-//	  }
-//	  return Point(resultPoint *(1 / weightNurbs));
-//
-//  }
-
-
 	  for (int i = 0; i <= degree; i++)
 	  {
 		  n = span - degree - i;
@@ -288,7 +280,6 @@ Point NurbsCurve::GetPoint(double t) const
 	  }
 	  return Point(resultPoint *(1 / weightNurbs));
 
-  }
   for (int i = 0; i <= degree; i++)
   {
     resultPoint = resultPoint + poles[span - degree + i] * node[i] * weights[span - degree + i];
@@ -361,6 +352,7 @@ Vector  NurbsCurve::GetDerivativePoint(double t) const
   }
   return Vector( ( resultPoint * ( 1 / weightNurbsD )).GetX(), (resultPoint * ( 1 / weightNurbsD)).GetY() );
 }
+
 Vector  NurbsCurve::Get2DerivativePoint(double t) const
 {
   double span = FindSpan(t);
@@ -374,6 +366,7 @@ Vector  NurbsCurve::Get2DerivativePoint(double t) const
   }
   return Vector( (resultPoint *(1 / weightNurbsD2)).GetX(), (resultPoint *(1 / weightNurbsD2)).GetY() );
 }
+
 Range  NurbsCurve::GetRange() const
 {
 	if (isClosed)
@@ -381,7 +374,8 @@ Range  NurbsCurve::GetRange() const
 
   return Range(nodes[0], nodes[nodes.size() - 1]);
 }
-void  NurbsCurve::GetAsPolyLine(std::vector<Point>& polyLinePoints, double accuracy) const
+
+void  NurbsCurve::GetAsPolyLine( std::vector<Point>& polyLinePoints, double accuracy ) const
 {
   double t = GetRange().GetStart() + 0.1;
   while (t <= GetRange().GetEnd())
@@ -398,10 +392,36 @@ double NurbsCurve::DistanceToPoint(Point point) const
   double accuracy = 0.01;
   std::vector<Point> polylinePoints;
   GetAsPolyLine(polylinePoints, accuracy);
-  return C2Curve::DistancePointToCurve( point, polylinePoints );
+  return Curve::DistancePointToCurve( point, polylinePoints );
 }
 
 std::string NurbsCurve::GetName() const
 {
   return "Nurbs";
+}
+
+bool NurbsCurve::IsValid() const
+{
+  return ( nodes.size() );
+}
+
+std::vector<Point>  NurbsCurve::GetPoles() const
+{
+  return poles;
+}
+std::vector<double> NurbsCurve::GetWeights() const
+{
+  return weights;
+}
+std::vector<double> NurbsCurve::GetNodes() const
+{
+  return nodes;
+}
+bool NurbsCurve::IsClosed() const
+{
+  return isClosed;
+}
+double NurbsCurve::Degree() const {
+  return degree;
+}
 }

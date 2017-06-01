@@ -8,6 +8,7 @@
 #include <QComboBox>
 #include <QDialogButtonBox>
 
+namespace Editor {
 //------------------------------------------------------------------------------
 // \ru Конструктор MainWindow. Создается вспомогательный класс windowHandler  и форма MainWindow
 // ---
@@ -78,7 +79,7 @@ void MainWindow::CreateMenus()
 
   createCurveMenu = menuBar()->addMenu( tr("&Curves") );
  // createCurveMenu->addAction( createPointAct );
-  createCurveMenu->addAction( createLineAct.get() );
+  createCurveMenu->addAction( createLineAct );
   createCurveMenu->addAction( createEllipseAct );
   createCurveMenu->addAction( createPolylineAct );
   createCurveMenu->addAction( createNurbsAct );
@@ -112,15 +113,15 @@ void MainWindow::CreateActions()
   connect( loadAct, &QAction::triggered, this, &MainWindow::OnLoadFile );
 
 
-  createPointAct = new QAction ( tr("&Point"), this );
+  createPointAct = new QAction( tr("&Point"), this );
   createPointAct->setStatusTip( tr("Creating point") );
   createPointAct->setShortcut(tr("CTRL+Q"));
   connect( createPointAct, &QAction::triggered, this, &MainWindow::OnCreatePoint );
 
-  createLineAct = std::make_shared<QAction>( tr("&Line"), this );
+  createLineAct = new QAction( tr("&Line"), this );
  // createLineAct->setShortcuts( QKeySequence::New );
   createLineAct->setStatusTip( tr("Creating line") );
-  connect( createLineAct.get(), &QAction::triggered, this, &MainWindow::OnCreateLine );
+  connect( createLineAct, &QAction::triggered, this, &MainWindow::OnCreateLine );
 
   createEllipseAct = new QAction( tr("&Ellipse"), this );
   createEllipseAct->setStatusTip( tr("Creating circle") );
@@ -131,7 +132,7 @@ void MainWindow::CreateActions()
   connect( createNurbsAct, &QAction::triggered, this, &MainWindow::OnCreateNurbs );
 
   creatorCurves = new QActionGroup( this );
-  creatorCurves->addAction( createLineAct.get() ) ;
+  creatorCurves->addAction( createLineAct ) ;
   creatorCurves->addAction( createEllipseAct );
   creatorCurves->addAction( createPolylineAct );
   creatorCurves->addAction( createNurbsAct );
@@ -222,14 +223,14 @@ void MainWindow::OnCreateEllipse()
 
 */
 //-----------------------------------------------------------------------------
-/*
+
 void MainWindow::OnCreateCircle()
 {
   createCircleAct->setCheckable( true );
   createCircleAct->setChecked( true );
   windowHandler.CreateCircle();
 }
-*/
+
 
 
 //-----------------------------------------------------------------------------
@@ -387,4 +388,5 @@ void MainWindow::resizeEvent( QResizeEvent *event )
 void MainWindow::contextMenuRequested( const QPoint& point )
 {
   contextMenu->popup( mapToGlobal(point) );
+}
 }

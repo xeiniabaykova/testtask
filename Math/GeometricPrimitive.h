@@ -12,11 +12,14 @@
 #include "Range.h"
 #include <vector>
 
-//------------------------------------------------------------------------------
-/** \brief \ru Абстрактный класс для базового  геометрического объекта
- *   \~
+///////////////////////////////////////////////////////////////////////////////
+//
+/// Абстрактный класс для базового  геометрического объекта.
+/**
+  Представлет функции для хранения, масштабирования, поворота и сдвига геометрического объекта, проверки его на правильность.
 */
-// ---
+///////////////////////////////////////////////////////////////////////////////
+namespace Math {
 class GeometricPrimitive { 
 public:
   GeometricPrimitive() = default;
@@ -25,9 +28,10 @@ private:
   GeometricPrimitive( const GeometricPrimitive &obj ) = delete;
   GeometricPrimitive& operator=( GeometricPrimitive &obj ) = delete;
 public:
-  virtual void Translate ( double xShift, double yShift ) = 0;
-  virtual void Rotate    ( double alpha ) = 0;
-  virtual void Scale ( double XScaling, double YScaling ) = 0;
+  virtual void Translate ( double xShift, double yShift ) = 0;    ///< Сдвиг по оси x на xShift, по оси y на yShift.
+  virtual void Rotate    ( double alpha ) = 0;                    ///< Повернуть относительно начала координат на угол alpha.
+  virtual void Scale     ( double XScaling, double YScaling ) = 0;///< Масштабировать на xScaling по оси x, на yScaling по оси у.
+  virtual bool IsValid   () const = 0;                            ///< Проверка на правильность геометрического примитива.
 };
-
+}
 #endif // GEOMETRICPRIMITIVE_H

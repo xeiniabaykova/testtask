@@ -4,107 +4,78 @@
 #include "CommonConstantsMath.h"
 
 
-
+namespace Math {
 namespace {
 
-
-
-bool IsEqualPoint( Point point1, Point point2 ) 
+//double DistanceCircleToPoint( Point center, double r, Point point)
+//{
+//	if ( Distance(point, center) < r )
+//		return r - Distance( point, center );
+//	else
+//		return Distance( point, center ) - r;
+//}
+static bool IsCirclePoints( Point point1, Point point2, Point point3 )
 {
-  if ( fabs(point1.GetX() - point2.GetX()) < CommonConstantsMath::NULL_TOL
-    && fabs(point1.GetY() - point2.GetY()) < CommonConstantsMath::NULL_TOL )
-		return true;
-	return false;
-}
-bool IsEqualPoint(Point point1, Point point2, Point point3 )
-{
-	if (fabs(point1.GetX() - point2.GetX()) < CommonConstantsMath::NULL_TOL
-		&& fabs(point1.GetY() - point2.GetY()) < CommonConstantsMath::NULL_TOL
-		&& fabs(point2.GetX() - point3.GetX()) < CommonConstantsMath::NULL_TOL
-		&& fabs(point2.GetY() - point3.GetY()) < CommonConstantsMath::NULL_TOL)
-		return true;
-	return false;
-}
+    return !( IsEqual(point1, point2) || IsEqual(point2, point3) );
 
-double Distance(Point point1, Point point2)
-{
-	return sqrt((point1.GetX() - point2.GetX()) * (point1.GetX() - point2.GetX()) +
-		(point1.GetY() - point2.GetY()) * (point1.GetY() - point2.GetY()));
-}
-
-double DistanceCircleToPoint(Point center, double r, Point point)
-{
-	if ( Distance(point, center) < r ) 
-		return r - Distance( point, center );
-	else 
-		return Distance( point, center ) - r;
-}
-bool IsCirclePoints( Point point1, Point point2, Point point3 )
-{
-	if (IsEqualPoint(point1, point2, point3))
-		return false;
-
-	if ( fabs(Distance(point1, point2) - Distance(point1, point3)) < CommonConstantsMath::NULL_TOL ) 
-		return true;
-	return false;
-}
-
-void FindRadiusCenter(Point point1, Point point2, Point point3, double& radius, Point& center )
-{ 
-	if ((Distance(point1, point2) - Distance(point2, point3)) < CommonConstantsMath::NULL_TOL)
-	{
-		radius = Distance(point1, point2);
-		center = point2;
-	}
-	else if ((Distance(point2, point3) - Distance(point3, point1)) < CommonConstantsMath::NULL_TOL)
-	{
-		radius = Distance(point2, point3);
-		center = point3;
-
-	}
-	else if ((Distance(point2, point1) - Distance(point1, point3)) < CommonConstantsMath::NULL_TOL)
-	{
-		radius = Distance(point2, point1);
-		center = point1;
-	}
+  return ( fabs(Distance(point1, point2) - Distance(point1, point3)) < CommonConstantsMath::NULL_TOL ) ;
 
 }
-bool PointsOneLine( Point point1, Point point2, Point point3 )
-{
-	if ( fabs((point3.GetX() - point1.GetX()) /
-    (point2.GetX() - point1.GetX()) - (point3.GetY() - point1.GetY()) / (point2.GetY() - point1.GetY())) < CommonConstantsMath::NULL_TOL)
-		return true;
-	return false;
-}
 
-// данные в эллипсе правильные, если: точки не совпадают, не лежат на одной
-bool CorrectEllipseData( Point point1, Point point2, Point point3 )
+//-----------------------------------------------------------------------------
+/**
+  Проверка, нахождения трех точек на одной линии.
+*/
+//---
+
+static bool PointsOneLine( Point point1, Point point2, Point point3 )
 {
-	if ( IsEqualPoint(point1, point2) ||
-		IsEqualPoint(point2, point3) ||
-		IsEqualPoint(point1, point3) )
-		return false;
-	if (PointsOneLine(point1, point2, point3))
-		return false;
-	return true;
-}
-// если обе точки не совпадают, то считаем, что все верно
-bool CorrectCircleData( Point point1, Point point2 )
-{
-	if (IsEqualPoint(point1, point2))
-		return false;
-	return true;
-}
+  return ( fabs((point3.GetX() - point1.GetX()) /
+    (point2.GetX() - point1.GetX()) - (point3.GetY() - point1.GetY()) / (point2.GetY() - point1.GetY())) < CommonConstantsMath::NULL_TOL);
 }
 
 
 //-----------------------------------------------------------------------------
 /**
-  \ru Коструктор Ellipse. Вычисляются два радиуса и записывается центральная точка
+  Проверка правильности данных для построения эллипса.
 */
+//---
+static bool CorrectEllipseData( Point point1, Point point2, Point point3 )
+{
+  return  !( (IsEqual(point1, point2) ||
+    IsEqual(point2, point3) ||
+    IsEqual(point1, point3) ) || (PointsOneLine(point1, point2, point3)) );
+
+}
+
+
 //-----------------------------------------------------------------------------
+/**
+  Проверка правильности данных для построения окружности.
+*/
+//---
+static bool CorrectCircleData( Point point1, Point point2 )
+{
+  return !( IsEqual(point1, point2) );
+}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+/// Класс геометрического представления эллипса.
+/**
+  Представлет функции для хранения и проведения опраций над эллипсом.
+*/
+///////////////////////////////////////////////////////////////////////////////
+
+//-----------------------------------------------------------------------------
+/**
+  \ru Конструктор Ellipse по двум радиусам и углу наклона отностительно главной оси.
+*/
+//---
 Ellipse::Ellipse( Point center, double r1, double r2, double alpha ):
-  C2Curve(),
+  Curve(),
   center( center ),
   r1    ( r1     ),
   r2    ( r2     ),
@@ -115,9 +86,13 @@ Ellipse::Ellipse( Point center, double r1, double r2, double alpha ):
   SetReferensedPoints( points );
 }
 
-
+//-----------------------------------------------------------------------------
+/**
+  \ru Конструктор Ellipse по массиву точек.
+*/
+//---
 Ellipse::Ellipse ( const std::vector<Point>& points ):
-  C2Curve(),
+  Curve(),
   center( Point(0.0,0.0) ),
   r1    ( 0.0   ),
   r2    ( 0.0    ),
@@ -149,17 +124,16 @@ Ellipse::Ellipse ( const std::vector<Point>& points ):
       double axisA = sqrt( x * x + y * y );
       alpha = atan2( y, x );
 		  r1 = axisA;
-      Point newCoordPoint( points[2].GetX() - center.GetX(), points[2].GetY() - center.GetY() );
-      Point point2( newCoordPoint.GetX() * cos(alpha) + newCoordPoint.GetY() * sin(alpha),
-        -newCoordPoint.GetX() * sin(alpha) + newCoordPoint.GetY() * cos(alpha) );
+      Point newCoordPoint = (points[2] - center);
+      newCoordPoint.Rotate( alpha );
 
-      double axisB = ( sqrt(fabs((point2.GetY()) * (point2.GetY()) /
-        (1 - (point2.GetX()) * (point2.GetX()) / (r1 * r1)))) );
+      double axisB = ( sqrt(fabs((newCoordPoint.GetY()) * (newCoordPoint.GetY()) /
+        (1 - (newCoordPoint.GetX()) * (newCoordPoint.GetX()) / (r1 * r1)))) );
 		  r2 = axisB;
 	  }
     else if ( IsCirclePoints(points[0], points[1], points[2]) )
 	  {
-		  double r = Distance(points[0], points[1]);
+      double r = Distance( points[0], points[1]);
 		  center = points[0];
 		  alpha = 0;
 		  r1 = r2 = r;
@@ -170,24 +144,22 @@ Ellipse::Ellipse ( const std::vector<Point>& points ):
 
 //-----------------------------------------------------------------------------
 /**
-  \ru возвращается точка по параметру t
+  Возвращается точка по параметру t.
 */
-//-----------------------------------------------------------------------------
+//---
 Point Ellipse::GetPoint( double t ) const
 {
-
-   Point point( r1 * cos(t), r2 * sin(t) );
-   Point transformPoint( center.GetX() + point.GetX() * cos(alpha) - point.GetY() * sin(alpha),
-                        center.GetY() + point.GetX() * sin(alpha)   + point.GetY() * cos(alpha) );
-   return transformPoint;
+  Vector vector( r1 * cos(t), r2 * sin(t) );
+  vector.Rotate( alpha );
+  return center + vector;
 }
 
 
 //-----------------------------------------------------------------------------
 /**
-  \ru возращаются границы параметра t для эллипса
+  Возращает границы параметра t для эллипса.
 */
-//-----------------------------------------------------------------------------
+//---
 
 
 Range Ellipse::GetRange() const
@@ -198,69 +170,127 @@ Range Ellipse::GetRange() const
 
 //-----------------------------------------------------------------------------
 /**
-  \ru возвращает производную элипса по параметру t
+  Возвращает производную элипса по параметру t.
 */
 //-----------------------------------------------------------------------------
 Vector Ellipse::GetDerivativePoint( double t ) const
 {
-  Point point( r1 * -sin(t), r2 * cos(t) );
-
-  Vector transformPoint( point.GetX() * cos(alpha) - point.GetY() * sin(alpha),
-	  point.GetX() * sin(alpha) + point.GetY() * cos(alpha));
-
-  return transformPoint;
-
+  Vector vector( r1 * -sin(t), r2 * cos(t) );
+  vector.Rotate( alpha );
+  return vector;
 }
 
 
 //-----------------------------------------------------------------------------
 /**
-  \ru возвращает вторую эллипса по параметру t
+  Вернуть вторую производную эллипса по параметру t.
 */
-//-----------------------------------------------------------------------------
+//---
 Vector Ellipse::Get2DerivativePoint( double t ) const
 {
-  Point point( -r1 * cos(t), -r2 * sin(t) );
-
-  Vector transformPoint(point.GetX() * cos(alpha) - point.GetY() * sin(alpha),
-	  point.GetX() * sin(alpha) + point.GetY() * cos(alpha));
-
-  return transformPoint;
+  Vector vector( -r1 * cos(t), -r2 * sin(t) );
+  vector.Rotate( alpha );
+  return vector;
 }
 
-double Ellipse::DistanceToPoint( Point point ) const
-{
-  std::vector<Point> polylinePoints;
-  if ( fabs(r1 - r2) < CommonConstantsMath::NULL_TOL )
-	  return DistanceCircleToPoint(center, r1, point);
-  GetAsPolyLine( polylinePoints, CommonConstantsMath::PRECISION_POLYLINE );
-  return C2Curve::DistancePointToCurve( point, polylinePoints );
-}
 
+//-----------------------------------------------------------------------------
+/**
+  Сдвинуть эллипс на xShift по оси х, на yShift по оси y.
+*/
+//---
 void Ellipse::Translate( double xShift, double yShift )
 {
-  center = Point( center.GetX() + xShift, center.GetY() + yShift );
+  center.Translate( xShift, yShift );
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+  Повернуть эллипс на угол alphaAng относительно начала координат.
+*/
+//---
 void Ellipse::Rotate( double alphaAng )
 {
-  alpha += alphaAng;
+  center.Rotate( alphaAng );
 }
 
-void Ellipse::Scale( double XScaling, double YScaling )
+
+//-----------------------------------------------------------------------------
+/**
+  Маштабировать эллипс на  xScaling по оси х, yScaling по оси у.
+*/
+//---
+void Ellipse::Scale( double xScaling, double yScaling )
 {
-	r1 *= XScaling;
-	r2 *= YScaling;
+  r1 *= xScaling;
+  r2 *= yScaling;
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+  Проверить корректность эллипса: считаем, что если оба радиуса не равны нулю, то эллипс корректен.
+*/
+//---
 bool Ellipse::IsValid() const
 {
-	if (r1 < CommonConstantsMath::NULL_TOL || r2 < CommonConstantsMath::NULL_TOL)
-		return false;
-	return true;
+  return !( r1 < CommonConstantsMath::NULL_TOL || r2 < CommonConstantsMath::NULL_TOL );
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+  Вернуть имя, используемое при записи эллипса в файл.
+*/
+//---
 std::string Ellipse::GetName() const
 {
   return "Ellipse";
+}
+
+
+//-----------------------------------------------------------------------------
+/**
+  Вернуть гравный радиус.
+*/
+//---
+double Ellipse::GetMajorRadius() const
+{
+  return r1;
+}
+
+
+//-----------------------------------------------------------------------------
+/**
+  Вернуть побочный радиус.
+*/
+//---
+double Ellipse::GetMinorRadius() const
+{
+  return r2;
+}
+
+
+//-----------------------------------------------------------------------------
+/**
+  Вернуть угол наклона относительно оси ох.
+*/
+//---
+double Ellipse::GetAlpha() const
+{
+  return alpha;
+}
+
+
+//-----------------------------------------------------------------------------
+/**
+  Вернуть центр эллипса.
+*/
+//---
+Point Ellipse::GetCenter() const
+{
+  return center;
+}
+
 }

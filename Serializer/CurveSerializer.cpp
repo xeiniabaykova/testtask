@@ -2,7 +2,7 @@
 
 #include <cinttypes>
 #include <cstdio>
-
+namespace Serializer {
 Math::Point CurveSerializer::ReadPoint(std::istream& input) const
 {
   Math::Point point( ReadDouble(input), ReadDouble(input) );
@@ -47,4 +47,5 @@ void CurveSerializer::WriteInt( std::ostream& output, int value ) const
   std::int64_t size;
 #endif
   output.write( (char*)&value, sizeof(size) );
+}
 }

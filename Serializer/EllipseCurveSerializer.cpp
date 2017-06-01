@@ -1,5 +1,6 @@
 #include "EllipseCurveSerializer.h"
 
+namespace Serializer {
 std::string EllipseCurveSerializer::GetHeaderName()
 {
   return Math::Ellipse().GetName();
@@ -21,4 +22,4 @@ void EllipseCurveSerializer::Write( std::ostream& theOutput, const Math::Geometr
   WriteDouble( theOutput, dynamic_cast<const Math::Ellipse&>(theCurve).GetMinorRadius() );
   WriteDouble( theOutput, dynamic_cast<const Math::Ellipse&>(theCurve).GetAlpha() );
 }
-
+}

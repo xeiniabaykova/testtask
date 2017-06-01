@@ -1,30 +1,33 @@
 ////////////////////////////////////////////////////////////////////////////////
 /**
   \file
-  \brief \ru  полилиния в двумерном пространстве\~
+  \brief \ru  Полилиния в двумерном пространстве.\~
 
 */
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef GEOMPOLYLINE_H
 #define GEOMPOLYLINE_H
-#include "C2Curve.h"
+#include "Curve.h"
 #include "Point.h"
 #include <vector>
 #include "GeometricPrimitive.h"
 
-
-//------------------------------------------------------------------------------
-/** \brief \ru Класс геометрического представления линии \~
+///////////////////////////////////////////////////////////////////////////////
+//
+/// Класс геометрического представления полилинии.
+/**
+  Представлет функции для хранения, масштабирования, поворота и сдвига геометрического объекта, проверки его на правильность.
 */
-// ---
-class GeomPolyline: public C2Curve
+///////////////////////////////////////////////////////////////////////////////
+
+namespace Math {
+class GeomPolyline: public Curve
 {
 private:
  std::vector<Point> referencedPoints;
- bool isValid;
 public:
- /**  \brief \ru создать полилинию по опорным точкам
+ /**  \brief \ru Конструктор полилинии по опорным точкам.
    \param[in] points - опорные точки .\~
  */
  //---
@@ -36,16 +39,16 @@ private:
   GeomPolyline& operator=( GeomPolyline &obj ) = delete;
 
 public:
-  virtual Point  GetPoint            ( double t ) const;                                             ///< вернуть точку по параметру t
-  virtual Vector  GetDerivativePoint  ( double t ) const;                                             ///< вернуть производную линнии по параметру t
-  virtual Vector  Get2DerivativePoint ( double t ) const;                                             ///< вернуть вторую производную на линии по параметру t
-  virtual Range  GetRange            () const;                                                       ///< вернуть парметризацию  параметризация от [0, 1]
-  virtual void   GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< вернуть полилинию для полилинии (это и есть сама полилиния)
-  virtual double DistanceToPoint     ( Point point ) const;
-  virtual void   Translate         ( double xShift, double yShift ); // сдвиг по осям x, y
-  virtual void   Rotate            ( double alpha ); // поворот на угол alpha
-  virtual void   Scale         ( double XScaling, double YScaling ); // матрица растяжения
-  bool IsValid();
+  virtual Point  GetPoint            ( double t ) const;                                             ///< Вернуть точку по параметру t.
+  virtual Vector GetDerivativePoint  ( double t ) const;                                             ///< Вернуть производную линнии по параметру t.
+  virtual Vector Get2DerivativePoint ( double t ) const;                                             ///< Вернуть вторую производную на линии по параметру t.
+  virtual Range  GetRange            () const;                                                       ///< Вернуть парметризацию  параметризация от [0, 1].
+  virtual void   GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< Вернуть полилинию для полилинии (это и есть сама полилиния).
+  virtual double DistanceToPoint     ( Point point ) const;                                           ///< Вернуть расстояние от точки до полилинии.
+  virtual void   Translate           ( double xShift, double yShift );                                ///< Сдвиг по оси x на xShift, по оси y на yShift.
+  virtual void   Rotate              ( double alpha );                                                ///< Повернуть эллипс на угол alphaAng относительно начала координат.
+  virtual void   Scale               ( double XScaling, double YScaling );                            ///< Масштабировать на xScaling по оси x, на yScaling по оси у
+  bool           IsValid             () const;
 };
-
+}
 #endif // GEOMPOLYLINE_H

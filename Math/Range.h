@@ -14,6 +14,7 @@
  * : началом и концом. Считаем, что начало всегда меньше конца. \~
 */
 // ---
+namespace Math {
 class Range {
 private:
   double start; ///< начало
@@ -33,6 +34,6 @@ public:
   double GetStart () const; ///< получить конец интервала
   double GetEnd   () const; ///< получить конец интервала
 };
-
+}
 #endif // RANGE_H
 

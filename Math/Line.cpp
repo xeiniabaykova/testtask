@@ -2,6 +2,7 @@
 #include "CommonConstantsMath.h"
 #include <cmath>
 
+namespace Math {
 namespace {
 
 bool IsEqualPoint(Point point1, Point point2)
@@ -21,7 +22,7 @@ bool IsEqualPoint(Point point1, Point point2)
 */
 //-----------------------------------------------------------------------------
 Line::Line( Point startPoint, Point endPoint ):
-  C2Curve(),
+  Curve(),
   startPoint( startPoint ),
   endPoint  ( endPoint )
 {
@@ -35,7 +36,7 @@ Line::Line( Point startPoint, Point endPoint ):
 }
 
 Line::Line( const std::vector<Point>& points ):
-  C2Curve(),
+  Curve(),
   startPoint( Point(0.0, 0.0) ),
   endPoint  ( Point(0.0, 0.0) )
 {
@@ -132,7 +133,7 @@ double Line::DistanceToPoint( Point point ) const
 {
   std::vector<Point> polylinePoints;
   GetAsPolyLine( polylinePoints, CommonConstantsMath::PRECISION_POLYLINE );
-  return C2Curve::DistancePointToCurve( point, polylinePoints );
+  return Curve::DistancePointToCurve( point, polylinePoints );
 }
 
 std::string Line::GetName() const
@@ -144,4 +145,5 @@ std::string Line::GetName() const
 bool Line::IsValid() const
 {
   return ( !IsEqualPoint(startPoint, endPoint) );
+}
 }

@@ -23,6 +23,7 @@
 /** \brief \ru Класс обработчик событий формы mainwindow. \~
 */
 // ---
+namespace Editor {
 class MainWindowHandler {
   enum CurrentState
   {
@@ -84,5 +85,5 @@ public:
   void CreateRefPoint         ( Math::Point point );
 
 };
-
+}
 #endif // MAINWINDOWHANDLER_H

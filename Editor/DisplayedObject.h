@@ -19,42 +19,35 @@
 
 //------------------------------------------------------------------------------
 /** \brief \ru Хранение информации о отображаемой кривой :
- * цвет, селектирвумость, опорные точки и средство для отображения графика в Qchart \~
+ * цвет, селектирвумость, опорные точки и средство для отображения графика в Qchart. \~
 */
 // ---
 
 QT_CHARTS_USE_NAMESPACE
+namespace Editor {
 struct DisplayedObject
 {
 private:
-  QColor                          currentColor;     ///< цвет неслектированной кривой
-  bool                            selected;         ///< свойство селектированности кривой
-  QLineSeries*    currentseries;    ///< series с точками
-  QScatterSeries* seriesRef;        ///< series с опорными точками
-  std::shared_ptr<Math::Curve>        curve;
-  QValueAxis*     axisX;
-  QValueAxis*     axisY;
+  QColor                              currentColor;  ///< Цвет неслектированной кривой.
+  bool                                selected;      ///< Свойство селектированности кривой.
+  QLineSeries*                        currentseries; ///< Series с точками.
+  QScatterSeries*                     seriesRef;     ///< Series с опорными точками.
+  std::shared_ptr<Math::Curve>        curve;         ///< Геометрическая кривая.
+  QValueAxis*                         axisX;         ///< Ось ох.
+  QValueAxis*                         axisY;         ///< Ось оy.
 public:
   DisplayedObject() = default;
   virtual ~DisplayedObject();
-  DisplayedObject( std::shared_ptr<Math::Curve> curve,  QValueAxis* axisX,  QValueAxis* axisY ):
-    currentColor ( 51, 0, 51 ),
-    selected     ( false ),
-    curve        ( curve ),
-    axisX        ( axisX ),
-    axisY        ( axisY )
-  {
-  }
+  DisplayedObject( std::shared_ptr<Math::Curve> curve,  QValueAxis* axisX,  QValueAxis* axisY );
 private:
   DisplayedObject( const DisplayedObject &obj ) = delete;
   DisplayedObject& operator=( DisplayedObject &obj ) = delete;
  public:
-  void addCurveToChart         ( QChart * chart );
-  bool GetSelectionStatus      ();                                                      ///< получить информацию о селектированности кривой
-  void ModifySelectionStatus   ( Math::Point cursor, double precision, QColor selectedColor ); ///< изменить информацию о селектированности кривой в зависимости от полученной точки
-  void SetColor                ( QColor color );                                         ///< установить цвет кривой
-  void SetSeries               ( QLineSeries *  current, QScatterSeries *ref );          ///< установить series
-  void SetColorUnselectedCurve ( QColor color );
+  void addCurveToChart         ( QChart * chart );                                             ///< Добавить кривую к пространству отрисовки.
+  bool GetSelectionStatus      ();                                                             ///< Получить информацию о селектированности кривой
+  void ModifySelectionStatus   ( Math::Point cursor, double precision, QColor selectedColor ); ///< Изменить информацию о селектированности кривой в зависимости от полученной точки
+  void SetColor                ( QColor color );                                               ///< Установить цвет кривой.
+  void SetColorUnselectedCurve ( QColor color );                                               ///< Установить цвет неселектированной кривой.
 };
-
+}
 #endif // DISPLAYEDCURVE_H

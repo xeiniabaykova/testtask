@@ -16,10 +16,11 @@
 
 
 //------------------------------------------------------------------------------
-/** \brief \ru чтение текущего состояния из файла
-  запись текущего состояния в файл \~
+/** \brief Чтение текущего состояния из файла.
+  Запись текущего состояния в файл. \~
 */
 // ---
+namespace Editor {
 class FileIO: public QWidget {
 public:
   FileIO() = default;
@@ -30,9 +31,9 @@ private:
   FileIO& operator=( FileIO &obj ) = delete;
 
 public:
-  void Open(); ///< \ru создается диалог открытия файла
-  void Save(const std::vector<std::shared_ptr<DisplayedObject>>& savedObj); ///< \ru создается диалог сохранения файла
+  void Open();                                                              ///< Создается диалог открытия файла.
+  void Save(const std::vector<std::shared_ptr<DisplayedObject>>& savedObj); ///< Создается диалог сохранения файла.
 
 };
-
+}
 #endif // FILEIO_H

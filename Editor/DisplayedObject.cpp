@@ -1,6 +1,16 @@
 #include "DisplayedObject.h"
 #include "CommonConstantsEditor.h"
 
+namespace Editor {
+
+DisplayedObject::DisplayedObject( std::shared_ptr<Math::Curve> curve,  QValueAxis* axisX,  QValueAxis* axisY ):
+  currentColor ( 51, 0, 51 ),
+  selected     ( false ),
+  curve        ( curve ),
+  axisX        ( axisX ),
+  axisY        ( axisY )
+{
+}
 //-----------------------------------------------------------------------------
 /**
   \ru вернуть текущее состояние селекции
@@ -46,17 +56,6 @@ void DisplayedObject::SetColorUnselectedCurve( QColor color )
   currentColor = color;
 }
 
-//-----------------------------------------------------------------------------
-/**
-  \ru добавить series к кривой
-*/
-//-----------------------------------------------------------------------------
-void DisplayedObject::SetSeries( QLineSeries *  current, QScatterSeries *ref )
-{
-  currentseries = current;
-  seriesRef = ref;
-}
-
 
 //-----------------------------------------------------------------------------
 /**
@@ -96,4 +95,5 @@ void DisplayedObject::addCurveToChart( QChart * chart)
   currentseries->attachAxis( axisY );
   seriesRef->attachAxis( axisX );
   seriesRef->attachAxis( axisY );
+}
 }

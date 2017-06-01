@@ -1,6 +1,6 @@
 #include "Range.h"
 
-
+namespace Math {
 //-----------------------------------------------------------------------------
 /**
   Конструктор Range
@@ -44,4 +44,5 @@ double Range::GetStart() const
 double Range::GetEnd() const
 {
   return end;
+}
 }

@@ -1,6 +1,6 @@
 #include "LineSerializer.h"
 
-
+namespace Serializer {
 std::string LineSerializer::GetHeaderName()
 {
   return Math::Line( Math::Point(), Math::Point() ).GetName();
@@ -19,4 +19,5 @@ void LineSerializer::Write ( std::ostream& theOutput, const Math::GeometricPrimi
 {
   WritePoint( theOutput, dynamic_cast<const Math::Line&> (theCurve).GetPoint(0) );
   WritePoint( theOutput, dynamic_cast<const Math::Line&> (theCurve).GetPoint(1) );
+}
 }
