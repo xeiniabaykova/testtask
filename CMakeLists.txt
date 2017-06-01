@@ -67,8 +67,8 @@ message("EDITOR: " ${EditorSrc})
 set(SOURCE_FILES
 		${EditorSrc}
 		${UTestSrc}
-		Math/C2Curve.cpp
-		Math/C2Curve.h
+		Math/Curve.cpp
+		Math/Curve.h
 		Math/CommonConstantsMath.cpp
 		Math/CommonConstantsMath.h
 		Math/Ellipse.cpp
