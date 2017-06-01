@@ -16,7 +16,7 @@
 
 
 //------------------------------------------------------------------------------
-/** \brief \ru Класс геометрического представления линии \~
+/** \brief \ru Класс геометрического представления отрезка \~
 */
 // ---
 namespace Math {
@@ -40,14 +40,13 @@ public:
   virtual Point   GetPoint            ( double t ) const;                                              ///< вернуть точку по параметру t
   virtual Vector  GetDerivativePoint  ( double t ) const;                                              ///< вернуть производную линнии по параметру t
   virtual Vector  Get2DerivativePoint ( double t ) const;                                              ///< вернуть вторую производную на линии по параметру t
-  virtual Range        GetRange            () const;                                                        ///< вернуть парметризацию  параметризация от [0, 1]
-  virtual void         GetAsPolyLine       ( std::vector<Point>& polyLinePoints, double accuracy ) const;  ///< вернуть полилинию для линии (это две точки - начало и конец)
-          double       DistanceToPoint     ( Point point )                                          const;
-  virtual void         Translate        ( double xShift, double yShift );                                ///< сдвиг по осям x, y
-  virtual void         Rotate           ( double alpha );                                                ///< поворот на угол alpha
-  virtual void Scale (double xScaling, double yScaling);
-          std::string GetName() const;
-          bool        IsValid() const;
+  virtual Range   GetRange            () const;                                                        ///< вернуть парметризацию  параметризация от [0, 1]
+  virtual void    GetAsPolyLine       ( std::vector<Point>& polyLinePoints, double accuracy ) const;  ///< вернуть полилинию для линии (это две точки - начало и конец)
+  virtual void    Translate           ( double xShift, double yShift );                                ///< сдвиг по осям x, y
+  virtual void    Rotate              ( double alpha );                                                ///< поворот на угол alpha
+  virtual void    Scale               (double xScaling, double yScaling);
+  std::string     GetName             () const;
+  bool            IsValid             () const;
 
 private:
   Line( const Line &obj ) = delete;

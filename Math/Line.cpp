@@ -129,12 +129,6 @@ void Line::Scale( double xScaling, double yScaling )
   endPoint = Point( endPoint.GetX() * xScaling, endPoint.GetY() * yScaling );
 }
 
-double Line::DistanceToPoint( Point point ) const
-{
-  std::vector<Point> polylinePoints;
-  GetAsPolyLine( polylinePoints, CommonConstantsMath::PRECISION_POLYLINE );
-  return Curve::DistancePointToCurve( point, polylinePoints );
-}
 
 std::string Line::GetName() const
 {
