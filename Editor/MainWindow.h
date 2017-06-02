@@ -23,7 +23,7 @@ class MainWindow;
 /** \brief Класс главной формы. \~
 */
 // ---
-namespace Editor {
+
 class MainWindow : public QMainWindow {
   Q_OBJECT
 private:
@@ -51,7 +51,7 @@ private:
   QAction           * loadAct;              ///< Событие загрузки из файла.
 
   QAction           * clearScreenAct;       ///< Событие очистки экрана.
-  MainWindowHandler   windowHandler;        ///< Вспомогательный класс для обработки событий.
+  Editor::MainWindowHandler   windowHandler;        ///< Вспомогательный класс для обработки событий.
   QActionGroup      * creatorCurves;        ///< Группа для меню создания кривых.
 
 public:
@@ -93,5 +93,5 @@ private slots:
   void contextMenuRequested( const QPoint& point ); /// Создать контекстное меню.
 
 };
-}
+
 #endif // MAINWINDOW_H

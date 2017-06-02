@@ -8,7 +8,7 @@
 #include <QComboBox>
 #include <QDialogButtonBox>
 
-namespace Editor {
+
 //------------------------------------------------------------------------------
 // \ru Конструктор MainWindow. Создается вспомогательный класс windowHandler  и форма MainWindow
 // ---
@@ -96,9 +96,9 @@ void MainWindow::CreateMenus()
 
 //-----------------------------------------------------------------------------
 /**
-   \ru создаются действия для пунктов меню:
-   \ru "save", "load", "create point", "create line", "create ellipse", "create Circle"
-   \ru "create nurbs", "delete curve", "find intersection", "Clear Screen"
+   cоздаются действия для пунктов меню:
+   "save", "load", "create point", "create line", "create ellipse", "create Circle"
+   create nurbs", "delete curve", "find intersection", "Clear Screen"
 
 */
 //-----------------------------------------------------------------------------
@@ -113,10 +113,10 @@ void MainWindow::CreateActions()
   connect( loadAct, &QAction::triggered, this, &MainWindow::OnLoadFile );
 
 
-  createPointAct = new QAction( tr("&Point"), this );
-  createPointAct->setStatusTip( tr("Creating point") );
-  createPointAct->setShortcut(tr("CTRL+Q"));
-  connect( createPointAct, &QAction::triggered, this, &MainWindow::OnCreatePoint );
+//  createPointAct = new QAction( tr("&Point"), this );
+//  createPointAct->setStatusTip( tr("Creating point") );
+//  createPointAct->setShortcut(tr("CTRL+Q"));
+//  connect( createPointAct, &QAction::triggered, this, &MainWindow::OnCreatePoint );
 
   createLineAct = new QAction( tr("&Line"), this );
  // createLineAct->setShortcuts( QKeySequence::New );
@@ -126,6 +126,14 @@ void MainWindow::CreateActions()
   createEllipseAct = new QAction( tr("&Ellipse"), this );
   createEllipseAct->setStatusTip( tr("Creating circle") );
   connect( createEllipseAct, &QAction::triggered, this, &MainWindow::OnCreateEllipse );
+
+  createCircleAct  =  new QAction( tr("&Circle"), this );
+  createCircleAct->setStatusTip( tr("Creating circle") );
+  connect( createCircleAct, &QAction::triggered, this, &MainWindow::OnCreateCircle );
+
+  createPolylineAct = new QAction( tr("&Poliline"), this );
+  createPolylineAct->setStatusTip( tr("Creating nurbs") );
+  connect( createPolylineAct, &QAction::triggered, this, &MainWindow::OnCreatePolyline );
 
   createNurbsAct = new QAction( tr("&Nurbs"), this );
   createNurbsAct->setStatusTip( tr("Creating nurbs") );
@@ -388,5 +396,4 @@ void MainWindow::resizeEvent( QResizeEvent *event )
 void MainWindow::contextMenuRequested( const QPoint& point )
 {
   contextMenu->popup( mapToGlobal(point) );
-}
 }

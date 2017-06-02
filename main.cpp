@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
   QChart *chart = new QChart();
   chart->setSizePolicy( QSizePolicy::Policy::Maximum,QSizePolicy::Policy::Maximum );
   chart->resize( width, height );
-  Editor::MainWindow w( chart );
+  MainWindow w( chart );
   w.CreateActions();
   w.CreateMenus();
 
