@@ -40,7 +40,7 @@ public:
   */
   //---
   Ellipse ( const std::vector<Point>& points );
-  /**  \brief \ru Создать эллипс по двум радиусам и центральной точке.
+  /**  \brief Создать эллипс по двум радиусам и центральной точке.
     \param[in] center - ентр эллипса .\~
     \param[in] r1 - главный радиус .\~
     \param[in] r2 - побочный радиус .\~
@@ -54,19 +54,20 @@ private:
   Ellipse( const Ellipse &obj ) = delete;
   Ellipse& operator=( Ellipse &obj ) = delete;
 public:
-  virtual Point  GetPoint            ( double t ) const;                   ///< Вернуть точку на кривой по параметру t.
-  virtual Range  GetRange            () const;                             ///< Вернуть границы параметра для эллипса : [0, 2 * pi].
-  virtual Vector GetDerivativePoint  ( double t ) const;                   ///< Вернуть производную на эллипсе по параметру t.
-  virtual Vector Get2DerivativePoint ( double t ) const;                   ///< Вернуть вторую производную на эллипсе по параметру t.
-  virtual void   Translate           ( double xShift, double yShift );     ///< Сдвиг по оси x на xShift, по оси y на yShift.
-  virtual void   Rotate              ( double alpha );                     ///< Повернуть относительно начала координат на угол alpha.
-  virtual void   Scale               ( double xScaling, double yScaling ); ///< Масштабировать на xScaling по оси x, на yScaling по оси у.
-  bool           IsValid             () const;                             ///< Проверить корректность эллипса: считаем, что если оба радиуса не равны нулю, то эллипс корректен.
-  double         GetMajorRadius      () const;                             ///< Вернуть гравный радиус.
-  double         GetMinorRadius      () const;                             ///< Вернуть побочный радиус.
-  double         GetAlpha            () const;                             ///< Вернуть угол наклона относительно оси ох.
-  Point          GetCenter           () const;                             ///< Вернуть центр эллипса.
-  std::string    GetName             () const;                             ///< Вернуть имя, используемое при записи эллипса в файл.
+  virtual Point              GetPoint            ( double t ) const;                   ///< Вернуть точку на кривой по параметру t.
+  virtual Range              GetRange            () const;                             ///< Вернуть границы параметра для эллипса : [0, 2 * pi].
+  virtual Vector             GetDerivativePoint  ( double t ) const;                   ///< Вернуть производную на эллипсе по параметру t.
+  virtual Vector             Get2DerivativePoint ( double t ) const;                   ///< Вернуть вторую производную на эллипсе по параметру t.
+  virtual void               Translate           ( double xShift, double yShift );     ///< Сдвиг по оси x на xShift, по оси y на yShift.
+  virtual void               Rotate              ( double alpha );                     ///< Повернуть относительно начала координат на угол alpha.
+  virtual void               Scale               ( double xScaling, double yScaling ); ///< Масштабировать на xScaling по оси x, на yScaling по оси у.
+  bool                       IsValid             () const;                             ///< Проверить корректность эллипса: считаем, что если оба радиуса не равны нулю, то эллипс корректен.
+  double                     GetMajorRadius      () const;                             ///< Вернуть гравный радиус.
+  double                     GetMinorRadius      () const;                             ///< Вернуть побочный радиус.
+  double                     GetAlpha            () const;                             ///< Вернуть угол наклона относительно оси ох.
+  Point                      GetCenter           () const;                             ///< Вернуть центр эллипса.
+  std::string                GetName             () const;                             ///< Вернуть имя, используемое при записи эллипса в файл.
+  virtual std::vector<Point> GetReferensedPoints () const;                             ///< Вернуть опорные точки, использованные для построения эллипса.
 };
 }
 #endif // ELLIPSE_H

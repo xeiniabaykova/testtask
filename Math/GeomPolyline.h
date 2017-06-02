@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /**
   \file
-  \brief \ru  Полилиния в двумерном пространстве.\~
+  \brief Полилиния в двумерном пространстве.\~
 
 */
 ////////////////////////////////////////////////////////////////////////////////
@@ -27,11 +27,11 @@ class GeomPolyline: public Curve
 private:
  std::vector<Point> referencedPoints;
 public:
- /**  \brief \ru Конструктор полилинии по опорным точкам.
+ /**  \brief Конструктор полилинии по опорным точкам.
    \param[in] points - опорные точки .\~
  */
  //---
-  GeomPolyline( const std::vector<Point>& points );
+  GeomPolyline( const std::vector<Point>& thePoints );
   GeomPolyline() = delete;
   virtual ~GeomPolyline() = default;
 private:
@@ -39,16 +39,18 @@ private:
   GeomPolyline& operator=( GeomPolyline &obj ) = delete;
 
 public:
-  virtual Point  GetPoint            ( double t ) const;                                             ///< Вернуть точку по параметру t.
-  virtual Vector GetDerivativePoint  ( double t ) const;                                             ///< Вернуть производную линнии по параметру t.
-  virtual Vector Get2DerivativePoint ( double t ) const;                                             ///< Вернуть вторую производную на линии по параметру t.
-  virtual Range  GetRange            () const;                                                       ///< Вернуть парметризацию  параметризация от [0, 1].
-  virtual void   GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy ) const; ///< Вернуть полилинию для полилинии (это и есть сама полилиния).
-  virtual double DistanceToPoint     ( Point point ) const;                                           ///< Вернуть расстояние от точки до полилинии.
-  virtual void   Translate           ( double xShift, double yShift );                                ///< Сдвиг по оси x на xShift, по оси y на yShift.
-  virtual void   Rotate              ( double alpha );                                                ///< Повернуть эллипс на угол alphaAng относительно начала координат.
-  virtual void   Scale               ( double XScaling, double YScaling );                            ///< Масштабировать на xScaling по оси x, на yScaling по оси у
-  bool           IsValid             () const;
+  virtual Point      GetPoint            ( double t ) const;                                             ///< Вернуть точку по параметру t.
+  virtual Vector     GetDerivativePoint  ( double t ) const;                                             ///< Вернуть производную линнии по параметру t.
+  virtual Vector     Get2DerivativePoint ( double t ) const;                                             ///< Вернуть вторую производную на линии по параметру t.
+  virtual Range      GetRange            () const;                                                       ///< Вернуть парметризацию  параметризация от [0, 1].
+  /// Вернуть полилинию для полилинии (это и есть сама полилиния).
+  virtual void       GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy  = CommonConstantsMath::PRECISION_POLYLINE ) const;
+  double             DistanceToPoint     ( Point point ) const;                                           ///< Вернуть расстояние от точки до полилинии.
+  virtual void       Translate           ( double xShift, double yShift );                                ///< Сдвинуть по оси x на xShift, по оси y на yShift.
+  virtual void       Rotate              ( double alpha );                                                ///< Повернуть полинию на угол alphaAng относительно начала координат.
+  virtual void       Scale               ( double XScaling, double YScaling );                            ///< Масштабировать на xScaling по оси x, на yScaling по оси у.
+  bool               IsValid             () const;                                                        ///< Проверить корректность полилинии: нет совпадающих точек, количество точек не равно нулю.
+  std::vector<Point> GetReferensedPoints () const;                                                        ///< Вернуть опорные точки, использованные для построения полилинии.
 };
 }
 #endif // GEOMPOLYLINE_H

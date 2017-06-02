@@ -6,14 +6,12 @@
 
 namespace Math {
 namespace {
+//-----------------------------------------------------------------------------
+/**
+  Проверка, образуют ли три точки окружность с цетром в point1.
+*/
+//---
 
-//double DistanceCircleToPoint( Point center, double r, Point point)
-//{
-//	if ( Distance(point, center) < r )
-//		return r - Distance( point, center );
-//	else
-//		return Distance( point, center ) - r;
-//}
 static bool IsCirclePoints( Point point1, Point point2, Point point3 )
 {
     return !( IsEqual(point1, point2) || IsEqual(point2, point3) );
@@ -24,7 +22,7 @@ static bool IsCirclePoints( Point point1, Point point2, Point point3 )
 
 //-----------------------------------------------------------------------------
 /**
-  Проверка, нахождения трех точек на одной линии.
+  Проверка нахождения трех точек на одной линии.
 */
 //---
 
@@ -71,7 +69,7 @@ static bool CorrectCircleData( Point point1, Point point2 )
 
 //-----------------------------------------------------------------------------
 /**
-  \ru Конструктор Ellipse по двум радиусам и углу наклона отностительно главной оси.
+  Конструктор Ellipse по двум радиусам и углу наклона отностительно главной оси.
 */
 //---
 Ellipse::Ellipse( Point center, double r1, double r2, double alpha ):
@@ -83,12 +81,11 @@ Ellipse::Ellipse( Point center, double r1, double r2, double alpha ):
 {
   std::vector<Point> points;
   points.push_back( center );
-  SetReferensedPoints( points );
 }
 
 //-----------------------------------------------------------------------------
 /**
-  \ru Конструктор Ellipse по массиву точек.
+  Конструктор Ellipse по массиву точек.
 */
 //---
 Ellipse::Ellipse ( const std::vector<Point>& points ):
@@ -291,6 +288,21 @@ double Ellipse::GetAlpha() const
 Point Ellipse::GetCenter() const
 {
   return center;
+}
+
+
+//-----------------------------------------------------------------------------
+/**
+  Вернуть опорные точки, использованные для построения эллипса.
+  Это точка центра.
+*/
+//---
+std::vector<Point> Ellipse::GetReferensedPoints () const
+{
+  std::vector<Point> refPoints;
+  refPoints.push_back( center );
+  return refPoints;
+
 }
 
 }

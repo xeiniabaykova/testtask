@@ -1,3 +1,11 @@
+////////////////////////////////////////////////////////////////////////////////
+/**
+  \file
+  \brief Базовый класс кривой.\~
+
+*/
+////////////////////////////////////////////////////////////////////////////////
+
 #ifndef VECTOR_H
 #define VECTOR_H
 
@@ -5,7 +13,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /**
   \file
-  \brief \ru двумерный вектор \~
+  \brief Класс, представляющий собой двумерный вектор. \~
 
 */
 ////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +33,7 @@ public:
 public:
   virtual void Translate ( double xShift, double yShift );
   virtual void Rotate    ( double alpha );
-  virtual void Scale ( double XScaling, double YScaling );
+  virtual void Scale     ( double XScaling, double YScaling );
   double  GetX() const;
   double  GetY() const;
   Vector operator * ( double param  ) const;
