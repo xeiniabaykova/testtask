@@ -91,8 +91,10 @@ GeomPolyline::GeomPolyline( const std::vector<Point>& thePoints ):
 //---
 void GeomPolyline::Init( const std::vector<Point>& theReferencedPoints )
 {
+
   if ( CorrectPolylineData(theReferencedPoints) )
   {
+	  referencedPoints.clear();
 	  for ( int i=0; i<theReferencedPoints.size(); i++)
     referencedPoints.push_back( theReferencedPoints[i] );
   }

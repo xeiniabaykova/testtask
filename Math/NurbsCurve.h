@@ -58,11 +58,12 @@ public:
   virtual void        Scale                  ( double XScaling, double YScaling );                             ///< Масштабировать на xScaling по оси x, на yScaling по оси у.
   std::vector<double> BasicFunctions         ( int i, double x) const;                                         ///< Подсчитать значения базисных функций на отрезке x - degree.
   double              CountWeight            ( int k , double x) const;                                        ///< Подсчитать значения базисных функций, умноженных на вес на отрезке x - degree.
-  double              CountWeightD           ( double x )  const;                                              ///< Подсчитать значения производных базисных функций, умноженных на вес на отрезке x - degree.
-  double              CountWeightD2          ( double x )  const;                                              ///< Подсчитать значения вторых производных базисных функций, умноженных на вес на отрезке x - degree
+  double              CountWeightD           ( double x, int span )  const;                                              ///< Подсчитать значения производных базисных функций, умноженных на вес на отрезке x - degree.
+  double              CountWeightD2          ( double x, int span )  const;                                              ///< Подсчитать значения вторых производных базисных функций, умноженных на вес на отрезке x - degree
   int                 FindSpan               ( double x ) const;                                               ///< Найти интервал ненулевых базисных функций для парметра t.
   void                ComputeBasicFunction   ( double x, int i, double & result ) const;                       ///< Подсчитать базисную функцию для порядка i и значения парметра t.
-  void                ComputeBasicFunctionD  ( double x, int i, double& result, int derivativeOrder ) const;   ///< Подсчитать производную от базисной функцию для порядка i и значения парметра t, где derivativeOrder - порядок производной.
+  void                ComputeBasicFunctionD  (double x, int i, int derivativeOrder, std::vector<std::vector<double>>& ders) const;
+  ///< Подсчитать производную от базисной функцию для порядка i и значения парметра t, где derivativeOrder - порядок производной.
   std::vector<Point>  GetPoles               () const;                                                         ///< Вернуть опорные точки.
   std::vector<double> GetWeights             () const;                                                         ///< Вернуть веса опорных точек.
   std::vector<double> GetNodes               () const;                                                         ///< Вернуть границы параметра t для базисных полиномов.

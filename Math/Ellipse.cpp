@@ -72,15 +72,25 @@ static bool CorrectCircleData( Point point1, Point point2 )
   Конструктор Ellipse по двум радиусам и углу наклона отностительно главной оси.
 */
 //---
-Ellipse::Ellipse( Point center, double r1, double r2, double alpha ):
-  Curve(),
-  center( center ),
-  r1    ( r1     ),
-  r2    ( r2     ),
-  alpha ( alpha  )
+Ellipse::Ellipse(Point thecenter, double ther1, double ther2, double thealpha) :
+	Curve(),
+	center(Point(0.0, 0.0)),
+	r1(0.0),
+	r2(0.0),
+	alpha(0.0)
 {
-  std::vector<Point> points;
-  points.push_back( center );
+	center = thecenter;
+	alpha = thealpha;
+	if (ther2 > ther1)
+	{
+		r2 = ther1;
+		r1 = ther2;
+	}
+	else {
+		r2 = ther1;
+		r1 = ther2;
+	}
+
 }
 
 //-----------------------------------------------------------------------------

@@ -12,7 +12,7 @@ double Curve::CountingStep( double tCurrent, double accuracy) const
 {
   Vector firstDerivative = GetDerivativePoint( tCurrent );
   Vector secondDerivative = Get2DerivativePoint( tCurrent );
-  double vectorMult = firstDerivative.GetX() * secondDerivative.GetY() + firstDerivative.GetY() * secondDerivative.GetX();
+  double vectorMult = firstDerivative.GetX() * secondDerivative.GetY() - firstDerivative.GetY() * secondDerivative.GetX();
   double normVectorMult = sqrt( vectorMult * vectorMult );
   double multiplicationFirstDerivative = firstDerivative * firstDerivative;
   double normFirstDerivative = sqrt( multiplicationFirstDerivative );
@@ -32,8 +32,13 @@ void Curve::GetAsPolyLine( GeomPolyline &polyLine, double accuracy ) const
   polyLinePoints.push_back( GetPoint(t) );
   while ( t < GetRange().GetEnd() )
   {
-    t += CountingStep( t, accuracy);
-    Point point ( GetPoint(t) );
+    double current = CountingStep( t, accuracy);
+	//if (current > 1000.0 * accuracy)
+	//	current = (GetRange().GetEnd() - GetRange().GetStart()) / 100.0;
+	//if (current < 0)
+	//	current = (GetRange().GetEnd() - GetRange().GetStart()) / 100.0;
+	t = t + current;
+	Point point ( GetPoint(t) );
     polyLinePoints.push_back( point );
   }
    polyLine.Init( polyLinePoints );

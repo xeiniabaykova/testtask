@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>
 #include "../Point.h"
 #include "../Line.h"
+#include "GeomPolyline.h"
 #include <memory>
 
 using namespace Math;
@@ -55,12 +56,12 @@ TEST(Line, GetPoint)
   EXPECT_NEAR( point.GetY(), 2.5, 1.e-7 );
 
   point = line.GetPoint( -0.25 );
-  EXPECT_NEAR( point.GetX(), -1.25, 1.e-7 );
-  EXPECT_NEAR( point.GetY(), -1.25, 1.e-7 );
+  EXPECT_NEAR( point.GetX(), 0., 1.e-7 );
+  EXPECT_NEAR( point.GetY(), 0., 1.e-7 );
 
   point = line.GetPoint( 1.75 );
-  EXPECT_NEAR( point.GetX(), 8.75, 1.e-7 );
-  EXPECT_NEAR( point.GetY(), 8.75, 1.e-7 );
+  EXPECT_NEAR( point.GetX(), 5., 1.e-7 );
+  EXPECT_NEAR( point.GetY(), 5., 1.e-7 );
 }
 
 TEST(Line, GetDerivativePoint)
@@ -114,20 +115,20 @@ TEST(Line, GetRange)
 TEST(Line, GetAsPolyLine)
 {
   const Line line( Point(0., 0.), Point(5., 5.) );
-  std::vector<Point> points;
-  line.GetAsPolyLine( points, 1.e-7 );
-  EXPECT_EQ( points.size(), 2 );
-  EXPECT_NEAR( points[0].GetX(), 0., 1.e-7 );
-  EXPECT_NEAR( points[0].GetY(), 0., 1.e-7 );
-  EXPECT_NEAR( points[1].GetX(), 5., 1.e-7 );
-  EXPECT_NEAR( points[1].GetY(), 5., 1.e-7 );
+  GeomPolyline polyline;
+  line.GetAsPolyLine( polyline, 1.e-7 );
+  EXPECT_EQ( polyline.GetReferensedPoints().size(), 2 );
+  EXPECT_NEAR(polyline.GetReferensedPoints()[0].GetX(), 0., 1.e-7 );
+  EXPECT_NEAR(polyline.GetReferensedPoints()[0].GetY(), 0., 1.e-7 );
+  EXPECT_NEAR(polyline.GetReferensedPoints()[1].GetX(), 5., 1.e-7 );
+  EXPECT_NEAR(polyline.GetReferensedPoints()[1].GetY(), 5., 1.e-7 );
 
-  line.GetAsPolyLine( points, 1.e-2 );
-  EXPECT_EQ( points.size(), 2 );
-  EXPECT_NEAR( points[0].GetX(), 0., 1.e-7 );
-  EXPECT_NEAR( points[0].GetY(), 0., 1.e-7 );
-  EXPECT_NEAR( points[1].GetX(), 5., 1.e-7 );
-  EXPECT_NEAR( points[1].GetY(), 5., 1.e-7 );
+  line.GetAsPolyLine( polyline, 1.e-2 );
+  EXPECT_EQ(polyline.GetReferensedPoints().size(), 2 );
+  EXPECT_NEAR( polyline.GetReferensedPoints()[0].GetX(), 0., 1.e-7 );
+  EXPECT_NEAR( polyline.GetReferensedPoints()[0].GetY(), 0., 1.e-7 );
+  EXPECT_NEAR( polyline.GetReferensedPoints()[1].GetX(), 5., 1.e-7 );
+  EXPECT_NEAR( polyline.GetReferensedPoints()[1].GetY(), 5., 1.e-7 );
 }
 
 TEST(Line, DistanceToPoint)
@@ -165,14 +166,14 @@ TEST(Line, Rotation)
   Line line( Point(1., 1.), Point(5., 5.) );
   line.Rotate( 3.14159265358979323846 );
   auto point = line.GetPoint( 0. );
-  EXPECT_NEAR( point.GetX(), -1., 1.e-7 );
-  EXPECT_NEAR( point.GetY(), -1., 1.e-7 );
+   EXPECT_NEAR( point.GetX(), -1., 1.e-7 );
+   EXPECT_NEAR( point.GetY(), -1., 1.e-7 );
 
   point = line.GetPoint( 1. );
   EXPECT_NEAR( point.GetX(), -5., 1.e-7 );
   EXPECT_NEAR( point.GetY(), -5., 1.e-7 );
 
-  line.Rotate( -3.14159265358979323846/4. );
+  line.Rotate( 3.14159265358979323846/4. );
   point = line.GetPoint( 0. );
   EXPECT_NEAR( point.GetX(), -::sqrt(2.), 1.e-7 );
   EXPECT_NEAR( point.GetY(), 0., 1.e-7 );

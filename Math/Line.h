@@ -53,7 +53,7 @@ public:
   virtual Vector             GetDerivativePoint  ( double t ) const;                                             ///< Вернуть производную линнии по параметру t.
   virtual Vector             Get2DerivativePoint ( double t ) const;                                             ///< Вернуть вторую производную на линии по параметру t.
   virtual Range              GetRange            () const;                                                       ///< Вернуть парметризацию  параметризация от [0, 1].
-  virtual void               GetAsPolyLine       ( std::vector<Point>& polyLinePoints, double accuracy ) const;  ///< Вернуть полилинию для линии (это две точки - начало и конец).
+  virtual void               GetAsPolyLine       ( GeomPolyline &polyLine, double ) const;                       ///< Вернуть полилинию для линии (это две точки - начало и конец).
   virtual void               Translate           ( double xShift, double yShift );                               ///< Сдвинуть по осям x, y.
   virtual void               Rotate              ( double alpha );                                               ///< Повернуть на угол alpha относительно начала координат.
   virtual void               Scale               ( double xScaling, double yScaling );                           ///< Маштабировать по оси х на xScaling, по оси y на yScaling.

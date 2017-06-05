@@ -113,82 +113,96 @@ int NurbsCurve::FindSpan( double x ) const
   Подсчитать производную от базисной функцию для порядка i и значения парметра t, где derivativeOrder - порядок производной.
 */
 //---
-void NurbsCurve::ComputeBasicFunctionD( double x, int i, double& result, int derivativeOrder ) const
+void NurbsCurve::ComputeBasicFunctionD( double x, int i, int derivativeOrder, std::vector<std::vector<double>>& ders) const
 {
-  if ( x < nodes[i] || x >= nodes[i + degree + 1] )
-  {
-    result = 0.0;
-    return;
-  }
-  std::vector<std::vector<double>> vNodes;
-  vNodes.resize( degree + 1 );
-  for ( int j = 0; j < degree + 1; j++ )
-    vNodes[j].resize(degree + 1);
 
-  for ( int j = 0; j <= degree; j++ )
-  {
-    if ( (x >= nodes[i + j]) && (x < nodes[i + j + 1]) )
-      vNodes[j][0] = 1.0;
-    else
-      vNodes[j][0] = 0.0;
-  }
+	std::vector<std::vector<double>> tempders;
+	tempders.resize(degree + 1);
+	for (int k = 0; k < degree + 1; k++)
+		tempders[k].resize(degree + 1);
+	
+	ders.resize(degree + 1);
+	for (int k = 0; k < degree + 1; k++)
+		ders[k].resize(degree + 1);
 
-  for (int k = 1; k <= degree; k++)
-  {
-    double saved;
-    if (vNodes[0][k - 1] == 0.0)  saved = 0.0;
-    else saved = ( (x - nodes[i]) * vNodes[0][k - 1] ) / ( nodes[i + k] - nodes[i] );
-    for (int j = 0; j < degree - k + 1; j++)
-    {
-      double uLeft = nodes[i + j + 1];
-      double uRight = nodes[i + j + k + 1];
-      if ( vNodes[j + 1][k - 1] == 0.0 )
-      {
-        vNodes[j][k] = saved;
-        saved = 0.0;
-      }
-      else
-      {
-        double temp = vNodes[j + 1][k - 1] / ( uRight - uLeft );
-        vNodes[j][k] = saved + ( uRight - x ) * temp;
-        saved = (x - uLeft) * temp;
-      }
-    }
-  }
-  std::vector<double> derivative;
-  derivative.resize(degree);
-  derivative[0] = vNodes[0][degree];
-  for ( int k = 1; k <= derivativeOrder; k++ )
-  {
-    for ( int j = 0; j <= k; j++ )
-      derivative[j] = vNodes[j][degree - k];
+	std::vector<std::vector<double>> N;
+	N.resize(degree + 1);
+	for (int k = 0; k < degree + 1; k++)
+		N[k].resize(degree + 1);
+	std::vector<double> left;
+	left.resize(degree + 1);
+	std::vector<double> right;
+	right.resize(degree + 1);
+	N[0][0] = 1.0;
+	for (int j = 1; j <= degree; j++)
+	{
+		left[j] = x - nodes[i + 1 - j];
+		right[j] = nodes[i + j] - x;
+		double saved = 0.0;
+		for (int r = 0; r < j; r++)
+		{
+			N[j][r] = right[r + 1] + left[j - r];
+			double temp = N[r][j - 1] / N[j][r];
+			N[r][j] = saved + right[r + 1] * temp;
+			saved = left[j - r] + temp;
+		}
+		N[j][j] = saved;
+	}
+	for (int j = 0; j <= degree; j++)
+		ders[0][j] = N[j][degree];
+	for (int r = 0; r <= degree; r++)
+	{
+		double s1 = 0;
+		double s2 = 1;
+		tempders[0][0] = 1.0;
+		for (int k = 1; k <= derivativeOrder; k++)
+		{
+			double d = 0.0;
+			int rk = r - k;
+			int degk = degree - k;
+			if (r >= k)
+			{
+				tempders[s2][0] = tempders[s1][0] / N[degk + 1][rk];
+				d = tempders[s2][0] * N[rk][degk];
+			}
+			int j1 = 0;
+			if (rk >= -1)
+				j1 = 1;
+			else
+				j1 = -rk;
+			int j2 = 0;
+			if (r - 1 <= degk)
+				j2 = k - 1;
+			else 
+				j2 = degree - r;
 
-    double saved = 0.0;
-    for ( int m = 1; m <= k; m++ )
-    {
-      if ( derivative[0] == 0.0 ) saved = 0.0;
-      else
-        saved = derivative[0] / (nodes[i + degree - k + m] - nodes[i]);
-      for (int j = 0; j < k - m + 1; j++)
-      {
-        double uLeft = nodes[i + j + 1];
-        double uRight = nodes[i + j + degree + m + 1];
-        if (derivative[j + 1] == 0.0)
-        {
-          derivative[j] = (degree - k + m) * saved;
-          saved = 0.0;
-        }
-        else
-        {
-          double temp = derivative[j + 1] / ( uRight - uLeft );
-          derivative[j] = ( degree - k + m ) * ( saved - temp );
-          saved = temp;
-        }
-      }
-    }
-    result = derivative[0];
-  }
+			for (int j = j1; j <= j2; j++)
+			{
+				tempders[s2][j] = (tempders[s1][j] - tempders[s1][j - 1]) /
+					N[degk + 1][rk + j];
+				d += tempders[s2][j] * N[rk + j][degk];
+			}
+			if (r <= degk)
+			{
+				tempders[s2][k] = -tempders[s1][k - 1] / N[degk + 1][r];
+				d += -tempders[s2][k] * N[r][degk];
+			}
+			ders[k][r] = d;
+			double j = s1;
+			s1 = s2;
+			s2 = j;
+		}
 
+	}
+	double r = degree;
+	for (int k = 1; k <= derivativeOrder; k++)
+	{
+		for (int j = 0; j <= degree; j++)
+			ders[k][j] *= r;
+		r *= (degree - k);
+	}
+
+	
 }
 
 
@@ -238,12 +252,11 @@ void NurbsCurve::Scale(double XScaling, double YScaling)
 double NurbsCurve::CountWeight( int k, double x )  const
 {
   double w = 0.0;
-  double n = 0;
   std::vector<double> node = BasicFunctions( k, x );
 
   for (int i = 0; i <= degree; i++)
   {
-    w = w + node[i] * weights[k - degree -n + i];
+    w = w + node[i] * weights[k - degree  + i];
   }
   return w;
 }
@@ -254,14 +267,15 @@ double NurbsCurve::CountWeight( int k, double x )  const
   Подсчитать значения производных базисных функций, умноженных на вес на отрезке x - degree.
 */
 //---
-double NurbsCurve::CountWeightD( double t )  const
+double NurbsCurve::CountWeightD( double t , int span)  const
 {
   double w = 0.0;
-  for (int i = 0; i < weights.size(); i++)
+  std::vector<std::vector<double>> ders;
+  ComputeBasicFunctionD(t, span, 1, ders);
+  for (int i = 0; i <=degree; i++)
   {
-    double result;
-    ComputeBasicFunctionD( t, i, result, 1 );
-    w += result * weights[i];
+   
+    w += ders[0][i] * weights[span - degree + i];
   }
   return w;
 }
@@ -272,14 +286,16 @@ double NurbsCurve::CountWeightD( double t )  const
   Подсчитать значения вторых производных базисных функций, умноженных на вес на отрезке x - degree.
 */
 //---
-double NurbsCurve::CountWeightD2( double t )  const
+double NurbsCurve::CountWeightD2( double t , int span)  const
 {
   double w = 0.0;
+  std::vector<std::vector<double>> ders;
+  ComputeBasicFunctionD(t, span, 2, ders);
   for (int i = 0; i < weights.size(); i++)
   {
     double result;
-    ComputeBasicFunctionD(t, i, result, 2);
-    w += result * weights[i];
+    
+    w += ders[1][i] * weights[i];
   }
   return w;
 }
@@ -375,14 +391,17 @@ std::vector<double> NurbsCurve::BasicFunctions( int i, double x) const
 //---
 Vector  NurbsCurve::GetDerivativePoint( double t ) const
 {
-  double span = FindSpan( t );
-  double weightNurbsD = CountWeightD( t );
+	double tcurrent = FixedRange(t);
+  double span = FindSpan(tcurrent);
+  double weightNurbsD = CountWeightD(tcurrent, span);
+  std::vector<std::vector<double>> ders;
+  ComputeBasicFunctionD( tcurrent, span, 1, ders );
   Point resultPoint;
-  for (int i = 0; i < poles.size(); i++)
+  for (int i = 0; i <= degree; i++)
   {
     double result;
-    ComputeBasicFunctionD( t, span, result, 1 );
-    resultPoint = resultPoint + poles[i] * result * weights[i];
+   
+    resultPoint = resultPoint + poles[i] * ders[1][i] * weights[i];
   }
   return Vector( ( resultPoint * ( 1 / weightNurbsD )).GetX(), (resultPoint * ( 1 / weightNurbsD)).GetY() );
 }
@@ -395,14 +414,15 @@ Vector  NurbsCurve::GetDerivativePoint( double t ) const
 //---
 Vector  NurbsCurve::Get2DerivativePoint( double t ) const
 {
-  double span = FindSpan( t );
-  double weightNurbsD2 = CountWeightD2( t );
+	double tcurrent = FixedRange(t);
+  double span = FindSpan(tcurrent);
+  double weightNurbsD2 = CountWeightD2(tcurrent, span );
   Point resultPoint;
+  std::vector<std::vector<double>> ders;
+  ComputeBasicFunctionD(tcurrent, span, 2, ders);
   for ( int i = 0; i < poles.size(); i++ )
   {
-    double result;
-    ComputeBasicFunctionD( t, span, result, 2 );
-    resultPoint = resultPoint + poles[i] * result * weights[i];
+    resultPoint = resultPoint + poles[i] * ders[2][i] * weights[i];
   }
   return Vector( (resultPoint *(1 / weightNurbsD2)).GetX(), (resultPoint *(1 / weightNurbsD2)).GetY() );
 }

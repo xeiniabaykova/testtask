@@ -57,8 +57,10 @@ void Point::Rotate( double alpha )
 {
   double cosAlpha = cos( alpha );
   double sinAlpha = sin( alpha );
-  x = x * cosAlpha - y * sinAlpha;
-  y = x * sinAlpha + y * cosAlpha;
+  double oldx = x;
+  double oldy = y;
+  x = oldx * cosAlpha - oldy * sinAlpha;
+  y = oldx * sinAlpha + oldy * cosAlpha;
 }
 
 

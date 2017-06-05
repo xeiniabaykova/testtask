@@ -1,5 +1,6 @@
 #include "Line.h"
 #include "CommonConstantsMath.h"
+#include "GeomPolyline.h"
 #include <cmath>
 
 namespace Math {
@@ -16,7 +17,7 @@ Line::Line( Point theStartPoint, Point theEndPoint ):
   startPoint( Point(0.0, 0.0) ),
   endPoint  ( Point(0.0, 0.0) )
 {
-  if ( !IsEqual(startPoint, endPoint) )
+  if ( !IsEqual(theStartPoint, theEndPoint) )
 	{
      startPoint = theStartPoint;
      endPoint = theEndPoint;
@@ -94,13 +95,19 @@ Vector Line::Get2DerivativePoint( double ) const
   Возвращается полилилния для текущего отрезка - это точки начала и конца.
 */
 //---
-void Line::GetAsPolyLine( std::vector<Point> & polyLinePoints, double ) const
+//-----------------------------------------------------------------------------
+/**
+Вернуть полилилния для полилинии - это полилиния.
+*/
+//---
+void Line::GetAsPolyLine(GeomPolyline &polyLine, double) const
 {
-  polyLinePoints.clear();
-  polyLinePoints.push_back( startPoint );
-  polyLinePoints.push_back( endPoint );
-}
+	std::vector<Point> points;
+	points.push_back(startPoint);
+	points.push_back(endPoint);
+	polyLine.Init( points);
 
+}
 
 //-----------------------------------------------------------------------------
 /**
