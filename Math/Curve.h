@@ -23,8 +23,11 @@
   границы парметра, венуть полилинию для гривой.
 */
 ///////////////////////////////////////////////////////////////////////////////
+
 namespace Math {
+  class GeomPolyline;
 class Curve: public GeometricPrimitive {
+
 public:
   Curve() = default;
   virtual ~Curve() = default;
@@ -39,7 +42,8 @@ public:
   virtual Vector     GetDerivativePoint  ( double t ) const = 0; ///< Вернуть производную точки точки на кривой по параметру t
   virtual Vector     Get2DerivativePoint ( double t ) const = 0; ///< вернуть вторую производную точки точки на кривой по параметру t
   /// Возвращает полилинию для геометрического примитива с точностью accuracy. Точки, составляющие полилинию, расчитываются с помощью функции countingStep.
-  virtual void       GetAsPolyLine       ( std::vector<Point> & polyLinePoints, double accuracy = CommonConstantsMath::PRECISION_POLYLINE) const;
+  virtual void       GetAsPolyLine       ( GeomPolyline &polyLine, double accuracy = CommonConstantsMath::PRECISION_POLYLINE   ) const;
+  double FixedRange ( double t ) const;
 private:
   /// Расчитывается параметрический шаг по кривой, позволяющий апроксимировать кривую с необходимой точностью.
   double CountingStep                ( double tCurrent , double accuracy = CommonConstantsMath::PRECISION_POLYLINE) const;

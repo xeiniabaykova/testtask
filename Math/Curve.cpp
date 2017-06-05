@@ -1,6 +1,7 @@
 #include "Curve.h"
 #include <cmath>
 #include <limits>
+#include "GeomPolyline.h"
 namespace Math {
 //-----------------------------------------------------------------------------
 /**
@@ -11,11 +12,11 @@ double Curve::CountingStep( double tCurrent, double accuracy) const
 {
   Vector firstDerivative = GetDerivativePoint( tCurrent );
   Vector secondDerivative = Get2DerivativePoint( tCurrent );
-  double vectorMult = firstDerivative * secondDerivative;
+  double vectorMult = firstDerivative.GetX() * secondDerivative.GetY() + firstDerivative.GetY() * secondDerivative.GetX();
   double normVectorMult = sqrt( vectorMult * vectorMult );
   double multiplicationFirstDerivative = firstDerivative * firstDerivative;
   double normFirstDerivative = sqrt( multiplicationFirstDerivative );
-  return 2 * sqrt (accuracy * (2 * normFirstDerivative / normVectorMult - accuracy / multiplicationFirstDerivative) );
+  return 2 * sqrt ( accuracy * (2 * normFirstDerivative / normVectorMult - accuracy / multiplicationFirstDerivative) );
 }
 
 
@@ -24,9 +25,9 @@ double Curve::CountingStep( double tCurrent, double accuracy) const
   Возвращает полилинию для геометрического примитива с точностью accuracy. Точки, составляющие полилинию, расчитываются с помощью функции countingStep.
 */
 //---
-void Curve::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy ) const
+void Curve::GetAsPolyLine( GeomPolyline &polyLine, double accuracy ) const
 {
-  polyLinePoints.clear();
+  std::vector<Point> polyLinePoints;
   double t = GetRange().GetStart();
   polyLinePoints.push_back( GetPoint(t) );
   while ( t < GetRange().GetEnd() )
@@ -35,5 +36,15 @@ void Curve::GetAsPolyLine( std::vector<Point> & polyLinePoints, double accuracy 
     Point point ( GetPoint(t) );
     polyLinePoints.push_back( point );
   }
+   polyLine.Init( polyLinePoints );
+}
+
+double Curve::FixedRange( double t ) const
+{
+  if ( t < GetRange().GetStart() )
+    return GetRange().GetStart();
+  if ( t > GetRange().GetEnd() )
+    return GetRange().GetEnd();
+  return t;
 }
 }

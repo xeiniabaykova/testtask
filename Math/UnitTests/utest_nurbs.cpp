@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 #include "../NurbsCurve.h"
 #include <memory>
-
+using namespace Math;
 
 static bool IsEqualPoints(Point p1, Point p2, double eps=CommonConstantsMath::NULL_TOL)
 {

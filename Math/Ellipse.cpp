@@ -14,9 +14,9 @@ namespace {
 
 static bool IsCirclePoints( Point point1, Point point2, Point point3 )
 {
-    return !( IsEqual(point1, point2) || IsEqual(point2, point3) );
+   return !( IsEqual(point1, point2) || IsEqual(point2, point3) ) &&
 
-  return ( fabs(Distance(point1, point2) - Distance(point1, point3)) < CommonConstantsMath::NULL_TOL ) ;
+  ( fabs(Distance(point1, point2) - Distance(point1, point3)) < CommonConstantsMath::NULL_TOL ) ;
 
 }
 
@@ -130,7 +130,7 @@ Ellipse::Ellipse ( const std::vector<Point>& points ):
 	  }
     else if ( IsCirclePoints(points[0], points[1], points[2]) )
 	  {
-      double r = Distance( points[0], points[1]);
+      double r = Distance( points[0], points[1] );
 		  center = points[0];
 		  alpha = 0;
 		  r1 = r2 = r;
@@ -144,13 +144,23 @@ Ellipse::Ellipse ( const std::vector<Point>& points ):
   Возвращается точка по параметру t.
 */
 //---
+//Point Ellipse::GetPoint( double t ) const
+//{
+//  Vector vector( r1 * cos(t), r2 * sin(t) );
+//  vector.Rotate( alpha );
+//  return center + vector;
+//}
+
+
 Point Ellipse::GetPoint( double t ) const
 {
-  Vector vector( r1 * cos(t), r2 * sin(t) );
-  vector.Rotate( alpha );
-  return center + vector;
-}
+  double tcurrent = FixedRange( t );
 
+   Point point( r1 * cos(tcurrent), r2 * sin(tcurrent) );
+   Point transformPoint( center.GetX() + point.GetX() * cos(alpha) - point.GetY() * sin(alpha),
+                        center.GetY() + point.GetX() * sin(alpha)   + point.GetY() * cos(alpha) );
+   return transformPoint;
+}
 
 //-----------------------------------------------------------------------------
 /**
@@ -172,7 +182,8 @@ Range Ellipse::GetRange() const
 //-----------------------------------------------------------------------------
 Vector Ellipse::GetDerivativePoint( double t ) const
 {
-  Vector vector( r1 * -sin(t), r2 * cos(t) );
+  double tcurrent = FixedRange( t );
+  Vector vector( r1 * -sin(tcurrent), r2 * cos(tcurrent) );
   vector.Rotate( alpha );
   return vector;
 }
@@ -185,7 +196,8 @@ Vector Ellipse::GetDerivativePoint( double t ) const
 //---
 Vector Ellipse::Get2DerivativePoint( double t ) const
 {
-  Vector vector( -r1 * cos(t), -r2 * sin(t) );
+  double tcurrent = FixedRange( t );
+  Vector vector( -r1 * cos(tcurrent), -r2 * sin(tcurrent) );
   vector.Rotate( alpha );
   return vector;
 }
@@ -209,7 +221,8 @@ void Ellipse::Translate( double xShift, double yShift )
 //---
 void Ellipse::Rotate( double alphaAng )
 {
-  center.Rotate( alphaAng );
+  center.Rotate( alphaAng  );
+  alpha = alphaAng + alpha;
 }
 
 

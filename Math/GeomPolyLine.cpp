@@ -7,16 +7,17 @@ namespace {
 
 //-----------------------------------------------------------------------------
 /**
-  Полилиния считается верной, если количество точек не равно нулю, если точки не совпадают.
+  Полилиния считается верной, если количество точек не равно нулю, если точки не совпадают ( кроме траничных - полилиния может быть замкнутой).
 */
 //---
 static bool CorrectPolylineData( const std::vector<Point>& points )
 {
-  if ( points.size() == 0 )
+  if ( points.size() < 2 )
     return false;
-
-  for ( int i = 0; i < points.size(); i++ )
-    for ( int j = 0; j < points.size(); j++ )
+  if ( points.size() == 2 && IsEqual(points[0], points[1]) )
+	  return false;
+  for ( int i = 0; i < points.size() - 1; i++ )
+    for ( int j = 0; j < points.size() - 1; j++ )
       {
         if ( i == j )
             continue;
@@ -61,21 +62,41 @@ static double Distance( Point first, Point second, Point point )
   Представлет функции для хранения и проведения опраций над полилинией.
 */
 ///////////////////////////////////////////////////////////////////////////////
+
+GeomPolyline::GeomPolyline():
+  referencedPoints( 0 )
+{
+}
+
 //-----------------------------------------------------------------------------
 /**
   Конструктор полилинии по опорным точкам. Если точки удовлетворяют условию корректности: их количество не равно нулю и нет совпадающих точек,
-  то создается полилиния по воходым точкам. Считаем, что точки в полилинию добаляются в том же порядке, что и находятся в воходном массиве.
+  то создается полилиния по воходым точкам. Считаем, что точки в полилинию добаляются в том же порядке, что и находятся в входном массиве.
 */
 //---
 GeomPolyline::GeomPolyline( const std::vector<Point>& thePoints ):
   referencedPoints( 0 )
 {
-  if ( CorrectPolylineData(referencedPoints) )
+  if ( CorrectPolylineData(thePoints) )
   {
     referencedPoints = thePoints;
   }
 }
 
+//-----------------------------------------------------------------------------
+/**
+  Инициализация полилинии по опорным точкам. Если точки удовлетворяют условию корректности: их количество не равно нулю и нет совпадающих точек,
+  то создается полилиния по воходым точкам. Считаем, что точки в полилинию добаляются в том же порядке, что и находятся в входном массиве.
+*/
+//---
+void GeomPolyline::Init( const std::vector<Point>& theReferencedPoints )
+{
+  if ( CorrectPolylineData(theReferencedPoints) )
+  {
+	  for ( int i=0; i<theReferencedPoints.size(); i++)
+    referencedPoints.push_back( theReferencedPoints[i] );
+  }
+}
 
 //-----------------------------------------------------------------------------
 /**
@@ -95,8 +116,9 @@ Range GeomPolyline::GetRange() const
 //---
 Point GeomPolyline::GetPoint( double t ) const
 {
-  double currentT = 0.0;
-  double leftParam = std::modf( t, &currentT );
+  double tcurrent = FixedRange( t );
+  double leftParam = 0.0;
+  double currentT = std::modf( tcurrent, &leftParam);
   Point startPoint( referencedPoints[leftParam] );
   Vector derection = referencedPoints[leftParam + 1] - referencedPoints[leftParam];
   return startPoint + derection * currentT;
@@ -110,8 +132,9 @@ Point GeomPolyline::GetPoint( double t ) const
 //---
 Vector GeomPolyline::GetDerivativePoint( double t ) const
 {
-  double currentT = 0.0;
-  double leftParam = std::modf( t, &currentT );
+  double tcurrent = FixedRange( t );
+  double leftParam = 0.0;
+  double currentT = std::modf(tcurrent, &leftParam);
   return ( referencedPoints[leftParam + 1] - referencedPoints[leftParam] );
 }
 
@@ -126,16 +149,6 @@ Vector GeomPolyline::Get2DerivativePoint( double ) const
   return Vector ( 0.0, 0.0 );
 }
 
-
-//-----------------------------------------------------------------------------
-/**
-  Вернуть полилилния для полилинии - это полилиния.
-*/
-//---
-void GeomPolyline::GetAsPolyLine( std::vector<Point> & polyLinePoints, double ) const
-{
-  polyLinePoints = referencedPoints;
-}
 
 
 //-----------------------------------------------------------------------------
@@ -212,5 +225,18 @@ std::vector<Point> GeomPolyline::GetReferensedPoints() const
 {
  std::vector<Point> refPoints = referencedPoints;
   return refPoints;
+}
+
+
+
+//-----------------------------------------------------------------------------
+/**
+Вернуть полилилния для полилинии - это полилиния.
+*/
+//---
+void GeomPolyline::GetAsPolyLine(GeomPolyline &polyLine, double) const
+{
+	polyLine.Init( referencedPoints );
+
 }
 }
