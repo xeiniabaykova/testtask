@@ -498,7 +498,7 @@ Vector NurbsCurve::CountingDer( double t, int der) const
 			resultPoint = resultPoint - dtempders[k - i] * Bin(k, i) * weight[i];
 		dtempders[k] = resultPoint * (1 / weight[0]);
 	}
-	return  Vector(dtempders[der ].GetX(), dtempders[der].GetY());
+	return  Vector(dtempders[der].GetX(), dtempders[der].GetY());
 }
 
 //-----------------------------------------------------------------------------

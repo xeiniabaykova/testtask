@@ -167,9 +167,8 @@ Point Ellipse::GetPoint( double t ) const
   double tcurrent = FixedRange( t );
 
    Point point( r1 * cos(tcurrent), r2 * sin(tcurrent) );
-   Point transformPoint( center.GetX() + point.GetX() * cos(alpha) - point.GetY() * sin(alpha),
-                        center.GetY() + point.GetX() * sin(alpha)   + point.GetY() * cos(alpha) );
-   return transformPoint;
+   point.Rotate(alpha);
+   return point;
 }
 
 //-----------------------------------------------------------------------------
