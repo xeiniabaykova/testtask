@@ -430,7 +430,7 @@ std::vector<Point> NurbsCurve::PointDers( double t, int der ) const
 	double span = FindSpan(tcurrent);
 	double weightNurbsD = CountWeightD(tcurrent, span);
 	std::vector<std::vector<double>> ders;
-	ComputeBasicFunctionD(tcurrent, span, 1, ders);
+	ComputeBasicFunctionD(tcurrent, span, der, ders);
 	std::vector<Point> points;
 
 	for ( int j = 0; j <= der; j++ ) 
@@ -459,7 +459,7 @@ std::vector<double> NurbsCurve::WeightDers( double t, int der ) const
 	double span = FindSpan( tcurrent );
 	double weightNurbsD = CountWeightD( tcurrent, span );
 	std::vector<std::vector<double>> ders;
-	ComputeBasicFunctionD( tcurrent, span, 1, ders );
+	ComputeBasicFunctionD( tcurrent, span, der, ders );
 	std::vector<double> result;
 	for ( int j = 0; j <= der; j++ )
 	{

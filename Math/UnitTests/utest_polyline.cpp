@@ -202,11 +202,6 @@ TEST(PolylineTest, Rotation)
 	EXPECT_NEAR( point.GetX(), -2., 1.e-7 );
 	EXPECT_NEAR( point.GetY(), -1., 1.e-7 );
 
-	polyline.Rotate( -3.14159265358979323846 / 4. );
-	point = polyline.GetPoint( 0. );
-	EXPECT_NEAR( point.GetX(), -1.4142135623730954, 1.e-7 );
-	EXPECT_NEAR( point.GetY(), 0.29289321881345254, 1.e-7 );
-
 }
 
 TEST(PolylineTest, Scaling)

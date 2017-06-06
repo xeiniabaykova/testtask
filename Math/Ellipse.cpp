@@ -168,7 +168,7 @@ Point Ellipse::GetPoint( double t ) const
 
    Point point( r1 * cos(tcurrent), r2 * sin(tcurrent) );
    point.Rotate(alpha);
-   return point;
+   return center + point;
 }
 
 //-----------------------------------------------------------------------------
