@@ -12,6 +12,17 @@ NurbsCurve::NurbsCurve( const std::vector<Point>& ppoles, const std::vector<doub
   isClosed ( iisClosed ),
   degree   ( ddegree )
 {
+  for ( size_t i = 0; i < degree + 1; ++i ) {
+    nodes.push_back( 0. );
+  }
+  double node = 1.;
+  for ( size_t i = 0; i < points.size() - degree - 1; ++i ) {
+    nodes.push_back( node );
+    node += 1.;
+  }
+  for ( size_t i=0; i < degree + 1; ++i ) {
+    nodes.push_back( node );
+  }
   if ( isClosed )
   {
     for ( size_t i=0; i<degree; ++i )
@@ -308,46 +319,32 @@ double NurbsCurve::CountWeightD2( double t , int span)  const
 //---
 Point NurbsCurve::GetPoint( double t ) const
 {
-	int n = 0;
-  if ( !isClosed )
+	if (!isClosed)
 	{
-    if ( t < nodes[0 ])
+		if (t < nodes[0])
 			t = nodes[0];
-    if ( t > nodes[nodes.size() - 1] )
+		if (t > nodes[nodes.size() - 1])
 			t = nodes[nodes.size() - 1];
 	}
-  if ( isClosed )
+	if (isClosed)
 	{
 		Range range = GetRange();
 
-    while ( t < range.GetStart() )
-      t += range.GetEnd() - range.GetStart();
-    while ( t > range.GetEnd() )
-			t -= range.GetEnd() - range.GetStart();			
+		while (t < range.GetStart())
+			t += range.GetEnd() - range.GetStart();
+		while (t > range.GetEnd())
+			t -= range.GetEnd() - range.GetStart();
 	}
-  int span = FindSpan(t);
-  double weightNurbs = CountWeight( span, t );
-  Point resultPoint( 0.0, 0.0 );
-  std::vector<double> node = BasicFunctions( span, t );
-    for ( int i = 0; i <= degree; i++ )
-	  {
-		  n = span - degree - i;
-      if ( n > (int)poles.size() ) {
-        n = n - ( poles.size() );
-		  }
-		  if (n < 0) {
-        n = n + ( poles.size() );
-		  }
+	int span = FindSpan(t);
+	double weightNurbs = CountWeight(span, t);
+	Point resultPoint(0.0, 0.0);
+	std::vector<double> node = BasicFunctions(span, t);
 
-		  resultPoint = resultPoint + poles[n] * node[i] * weights[n];
-	  }
-    return Point( resultPoint * ( 1 / weightNurbs) );
-
-  for ( int i = 0; i <= degree; i++ )
-  {
-    resultPoint = resultPoint + poles[span - degree + i] * node[i] * weights[span - degree + i];
-  }
-  return Point( resultPoint *( 1 / weightNurbs) );
+	for (int i = 0; i <= degree; i++)
+	{
+		resultPoint = resultPoint + poles[span - degree + i] * node[i] * weights[span - degree + i];
+	}
+	return Point(resultPoint * (1 / weightNurbs));
 }
 
 
