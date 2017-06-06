@@ -4,7 +4,7 @@
 #include "../GeomPolyline.h"
 #include "gtest/gtest.h"
 using namespace Math;
-/// если две точки в полилинии, они не должны совпадать
+/// РµСЃР»Рё РґРІРµ С‚РѕС‡РєРё РІ РїРѕР»РёР»РёРЅРёРё, РѕРЅРё РЅРµ РґРѕР»Р¶РЅС‹ СЃРѕРІРїР°РґР°С‚СЊ
 TEST(PolylineTest, ConstructSamePoints)
 {
 	Point samePoint(0.0, 0.0);
@@ -12,7 +12,7 @@ TEST(PolylineTest, ConstructSamePoints)
 	const GeomPolyline polyline( samePoints );
 	EXPECT_FALSE( polyline.IsValid() );
 }
-/// в полилинии всегда должно быть больше (или равно) двух точек
+/// РІ РїРѕР»РёР»РёРЅРёРё РІСЃРµРіРґР° РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ (РёР»Рё СЂР°РІРЅРѕ) РґРІСѓС… С‚РѕС‡РµРє
 TEST( PolylineTest, ConstructOnePoint )
 {
 	Point samePoint( 0.0, 0.0 );
@@ -20,7 +20,7 @@ TEST( PolylineTest, ConstructOnePoint )
 	const GeomPolyline polyline( samePoints );
 	EXPECT_FALSE( polyline.IsValid() );
 }
-/// в полилинии всегда должно быть больше (или равно) двух точек
+/// РІ РїРѕР»РёР»РёРЅРёРё РІСЃРµРіРґР° РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ (РёР»Рё СЂР°РІРЅРѕ) РґРІСѓС… С‚РѕС‡РµРє
 TEST(PolylineTest, Construct0Points)
 {
 	std::vector<Point> samePoints;
@@ -28,7 +28,7 @@ TEST(PolylineTest, Construct0Points)
 	EXPECT_FALSE(polyline.IsValid());
 }
 
-/// точки ( кроме начала и конца не должны совпадать между собой
+/// С‚РѕС‡РєРё ( РєСЂРѕРјРµ РЅР°С‡Р°Р»Р° Рё РєРѕРЅС†Р° РЅРµ РґРѕР»Р¶РЅС‹ СЃРѕРІРїР°РґР°С‚СЊ РјРµР¶РґСѓ СЃРѕР±РѕР№
 TEST(PolylineTest, ConstructSame4Point)
 {
 	Point samePoint( 0.0, 0.0 );
@@ -36,7 +36,7 @@ TEST(PolylineTest, ConstructSame4Point)
 	const GeomPolyline polyline( samePoints );
 	EXPECT_FALSE( polyline.IsValid() );
 }
-/// проверяем правильность получения точки
+/// РїСЂРѕРІРµСЂСЏРµРј РїСЂР°РІРёР»СЊРЅРѕСЃС‚СЊ РїРѕР»СѓС‡РµРЅРёСЏ С‚РѕС‡РєРё
 TEST(PolylineTest, GetPoint)
 {
 	std::vector<Point> points;
@@ -59,7 +59,7 @@ TEST(PolylineTest, GetPoint)
 	EXPECT_NEAR( point.GetX(), 1.5, 1.e-7 );
 	EXPECT_NEAR( point.GetY(), 1.0, 1.e-7 );
 
-	/// если парметр заходит за границу, то возвращаем ближайшею точку
+	/// РµСЃР»Рё РїР°СЂРјРµС‚СЂ Р·Р°С…РѕРґРёС‚ Р·Р° РіСЂР°РЅРёС†Сѓ, С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµРј Р±Р»РёР¶Р°Р№С€РµСЋ С‚РѕС‡РєСѓ
 	point = polyline.GetPoint( -0.25 );
 	EXPECT_NEAR( point.GetX(), 1., 1.e-7 );
 	EXPECT_NEAR( point.GetY(), 1., 1.e-7 );
@@ -92,7 +92,7 @@ TEST( PolylineTest, GetDerivativePoint )
 	EXPECT_NEAR( der.GetX(), 3., 1.e-7 );
 	EXPECT_NEAR( der.GetY(), 1., 1.e-7 );
 }
-/// вторые производные всегда равны нулю
+/// РІС‚РѕСЂС‹Рµ РїСЂРѕРёР·РІРѕРґРЅС‹Рµ РІСЃРµРіРґР° СЂР°РІРЅС‹ РЅСѓР»СЋ
 TEST(PolylineTest, Get2DerivativePoint)
 {
 	std::vector<Point> points;

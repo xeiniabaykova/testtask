@@ -173,7 +173,7 @@ TEST(Line, Rotation)
   EXPECT_NEAR( point.GetX(), -5., 1.e-7 );
   EXPECT_NEAR( point.GetY(), -5., 1.e-7 );
 
-  line.Rotate( 3.14159265358979323846/4. );
+  line.Rotate( -3.14159265358979323846/4. );
   point = line.GetPoint( 0. );
   EXPECT_NEAR( point.GetX(), -::sqrt(2.), 1.e-7 );
   EXPECT_NEAR( point.GetY(), 0., 1.e-7 );
