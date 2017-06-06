@@ -12,16 +12,20 @@ NurbsCurve::NurbsCurve( const std::vector<Point>& ppoles, const std::vector<doub
   isClosed ( iisClosed ),
   degree   ( ddegree )
 {
-  for ( size_t i = 0; i < degree + 1; ++i ) {
-    nodes.push_back( 0. );
-  }
-  double node = 1.;
-  for ( size_t i = 0; i < ppoles.size() - degree - 1; ++i ) {
-    nodes.push_back( node );
-    node += 1.;
-  }
-  for ( size_t i=0; i < degree + 1; ++i ) {
-    nodes.push_back( node );
+
+  if ( nnodes.size() == 0 ) 
+  { 
+	  for (size_t i = 0; i < degree + 1; ++i) {
+		  nodes.push_back(0.);
+	  }
+	  double node = 1.;
+	  for ( size_t i = 0; i < ppoles.size() - degree - 1; ++i ) {
+		  nodes.push_back(node);
+		  node += 1.;
+	  }
+	  for ( size_t i = 0; i < degree + 1; ++i ) {
+		  nodes.push_back(node);
+	  }
   }
   if ( isClosed )
   {
@@ -155,7 +159,7 @@ void NurbsCurve::ComputeBasicFunctionD( double x, int i, int derivativeOrder, st
 			N[j][r] = right[r + 1] + left[j - r];
 			double temp = N[r][j - 1] / N[j][r];
 			N[r][j] = saved + right[r + 1] * temp;
-			saved = left[j - r] + temp;
+			saved = left[j - r] * temp;
 		}
 		N[j][j] = saved;
 	}
@@ -163,8 +167,8 @@ void NurbsCurve::ComputeBasicFunctionD( double x, int i, int derivativeOrder, st
 		ders[0][j] = N[j][degree];
 	for (int r = 0; r <= degree; r++)
 	{
-		double s1 = 0;
-		double s2 = 1;
+	int s1 = 0;
+		int s2 = 1;
 		tempders[0][0] = 1.0;
 		for (int k = 1; k <= derivativeOrder; k++)
 		{
@@ -199,13 +203,13 @@ void NurbsCurve::ComputeBasicFunctionD( double x, int i, int derivativeOrder, st
 				d += -tempders[s2][k] * N[r][degk];
 			}
 			ders[k][r] = d;
-			double j = s1;
+			int j = s1;
 			s1 = s2;
 			s2 = j;
 		}
 
 	}
-	double r = degree;
+	int r = degree;
 	for (int k = 1; k <= derivativeOrder; k++)
 	{
 		for (int j = 0; j <= degree; j++)
@@ -388,7 +392,7 @@ std::vector<double> NurbsCurve::BasicFunctions( int i, double x) const
 //---
 Vector  NurbsCurve::GetDerivativePoint( double t ) const
 {
-	double tcurrent = FixedRange(t);
+  double tcurrent = FixedRange(t);
   double span = FindSpan(tcurrent);
   double weightNurbsD = CountWeightD(tcurrent, span);
   std::vector<std::vector<double>> ders;
