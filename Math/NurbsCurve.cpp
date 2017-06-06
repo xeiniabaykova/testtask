@@ -352,10 +352,10 @@ double NurbsCurve::CountWeightD2( double t , int span)  const
 
 //-----------------------------------------------------------------------------
 /**
-   Вернуть точку на кривой по параметру t.
+	Исправить границы для параметра.
 */
 //---
-Point NurbsCurve::GetPoint( double t ) const
+double NurbsCurve::fixedParam( double t ) const
 {
 	if (!isClosed)
 	{
@@ -373,10 +373,21 @@ Point NurbsCurve::GetPoint( double t ) const
 		while (t > range.GetEnd())
 			t -= range.GetEnd() - range.GetStart();
 	}
-	int span = FindSpan(t);
-	double weightNurbs = CountWeight(span, t);
+	return t;
+}
+
+//-----------------------------------------------------------------------------
+/**
+   Вернуть точку на кривой по параметру t.
+*/
+//---
+Point NurbsCurve::GetPoint( double t ) const
+{
+	double currentT = fixedParam(t);
+	int span = FindSpan( currentT );
+	double weightNurbs = CountWeight( span, currentT) ;
 	Point resultPoint(0.0, 0.0);
-	std::vector<double> node = BasicFunctions(span, t);
+	std::vector<double> node = BasicFunctions(span, currentT);
 
 	for (int i = 0; i <= degree; i++)
 	{
@@ -439,7 +450,7 @@ std::vector<Point> NurbsCurve::PointDers( double t, int der ) const
 		for ( int i = 0; i <= degree; i++ )
 		{
 
-			resultPoint = resultPoint + poles[span - degree + i] * ders[j][i];
+			resultPoint = resultPoint + poles[span - degree + i] * ders[j][i] * weights[span - degree + i];
 		}
 		points.push_back(resultPoint);
 	}
@@ -470,7 +481,6 @@ std::vector<double> NurbsCurve::WeightDers( double t, int der ) const
 	    resultWeight = resultWeight + weights[span - degree + i] * ders[j][i];
 	}
 	result.push_back( resultWeight );
-
 	}
 	return result;
 }
@@ -494,11 +504,11 @@ Vector NurbsCurve::CountingDer( double t, int der) const
 	for (int k = 0; k <= der; k++)
 	{
 		resultPoint = pointd[k];
-		for (int i = 1; i <= k; i++)
-			resultPoint = resultPoint - dtempders[k - i] * Bin(k, i) * weight[i];
-		dtempders[k] = resultPoint * (1 / weight[0]);
+		for ( int i = 1; i <= k; i++ )
+			resultPoint = resultPoint - dtempders[k - i] * Bin( k, i ) * weight[i];
+		dtempders[k] = resultPoint * ( 1 / weight[0] );
 	}
-	return  Vector(dtempders[der].GetX(), dtempders[der].GetY());
+	return  Vector( dtempders[der].GetX(), dtempders[der].GetY() );
 }
 
 //-----------------------------------------------------------------------------
@@ -508,7 +518,8 @@ Vector NurbsCurve::CountingDer( double t, int der) const
 //---
 Vector  NurbsCurve::GetDerivativePoint( double t ) const
 {
-	return  CountingDer(t, 1);
+	double currentT = fixedParam( t );
+	return  CountingDer( currentT, 1);
 }
 
 
@@ -519,7 +530,8 @@ Vector  NurbsCurve::GetDerivativePoint( double t ) const
 //---
 Vector  NurbsCurve::Get2DerivativePoint( double t ) const
 {
-	return  CountingDer(t, 2);
+	double currentT = fixedParam( t );
+	return  CountingDer(currentT , 2);
 }
 
 

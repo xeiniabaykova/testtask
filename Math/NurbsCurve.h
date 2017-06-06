@@ -75,6 +75,7 @@ public:
   std::string         GetName                () const;                                                         ///< Вернуть имя, используемое для записи примитива в файл.
   bool                IsValid                () const;                                                         ///< Проверка на правильность кривой.
   std::vector<Point> GetReferensedPoints     () const;                                                         ///< Вернуть опорные точки, использованные для построения nurbs - кривой
+  double             fixedParam              ( double t )  const;                                                 ///< Исправить границы для параметра.
 };
 }
 
