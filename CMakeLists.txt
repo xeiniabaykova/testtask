@@ -3,12 +3,6 @@ project(TestTask1)
 
 set(CMAKE_CXX_STANDARD 14)
 
-find_package(Qt5Core REQUIRED)
-find_package(Qt5Charts REQUIRED)
-find_package(Qt5Gui REQUIRED)
-find_package(Qt5OpenGL REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -20,7 +14,7 @@ if (UTESTS)
 			Math/UnitTests/utest_line.cpp
 			Math/UnitTests/utest_ellipse.cpp
 			Math/UnitTests/utest_nurbs.cpp
-			#			Math/UnitTests/utest_polyline.cpp
+			Math/UnitTests/utest_polyline.cpp
 			)
 	include_directories($ENV{GTEST_ROOT}
 			$ENV{GTEST_ROOT}/include
@@ -32,6 +26,12 @@ endif(UTESTS)
 
 option(EDITOR "Compile Editor" OFF)
 if (EDITOR)
+	find_package(Qt5Core REQUIRED)
+	find_package(Qt5Charts REQUIRED)
+	find_package(Qt5Gui REQUIRED)
+	find_package(Qt5OpenGL REQUIRED)
+	find_package(Qt5Widgets REQUIRED)
+
 	set(EditorSrc
 			main.cpp
 			Editor/CreatorHandler.cpp
@@ -86,10 +86,16 @@ set(SOURCE_FILES
 		Math/Range.h
 		Math/Vector.cpp
 		Math/Vector.h
-		Serealizer/CurveSerializer.h
-		Serealizer/CurveSerializer.cpp
-		Serealizer/LineSerializer.h
-		Serealizer/LineSerializer.cpp
+		Serializer/CurveSerializer.h
+		Serializer/CurveSerializer.cpp
+		Serializer/LineSerializer.h
+		Serializer/LineSerializer.cpp
+		Serializer/EllipseCurveSerializer.cpp
+		Serializer/EllipseCurveSerializer.h
+		Serializer/NURBSCurveSerializer.cpp
+		Serializer/NURBSCurveSerializer.h
+		Serializer/Serializer.cpp
+		Serializer/Serializer.h
 		)
 
 add_executable(TestTask1 ${SOURCE_FILES})

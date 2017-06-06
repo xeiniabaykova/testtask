@@ -1,6 +1,6 @@
 #include "GeomPolyline.h"
-#include "CommonConstantsMath.h"
 #include <cmath>
+#include <limits>
 
 namespace Math {
 namespace {
