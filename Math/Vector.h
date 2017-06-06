@@ -31,17 +31,17 @@ public:
   Vector( const Vector& point );
   virtual ~Vector() = default;
 public:
-  virtual void Translate ( double xShift, double yShift );
-  virtual void Rotate    ( double alpha );
-  virtual void Scale     ( double XScaling, double YScaling );
-  double       GetX() const;
-  double       GetY() const;
-  Vector operator * ( double param  ) const;
-  double operator * ( Vector param ) const;
-  Vector operator - ( Vector point ) const;
-  Vector operator + ( Vector point ) const;
-  Vector operator = ( Vector point );
-  bool IsValid() const;
+  virtual void Translate  ( double xShift, double yShift );      ///< Сдвинуть по осям x, y на xShift, yShift .
+  virtual void Rotate     ( double alpha );                      ///< Повернуть на угол alpha относительно начала координат.
+  virtual void Scale      ( double XScaling, double YScaling );  ///< Маштабировать по оси х на xScaling, по оси y на yScaling.
+  double       GetX       () const;                              ///< Получить координату x.
+  double       GetY       () const;                              ///< Получить координату y.
+  Vector       operator * ( double param ) const;                ///< Домножить вектор на скаляр.
+  double       operator * ( Vector param ) const;                ///< Получить скалярное произведение векторов по определению.
+  Vector       operator - ( Vector point ) const;                ///< Получить разность векторов.
+  Vector       operator + ( Vector point ) const;                ///< Получить сумму векторов.
+  Vector       operator = ( Vector point );                      ///< Присвоить один вектор другому.
+  bool         IsValid    () const;                              ///< Проверить вектор на правильность.
 };
 }
 #endif // VECTOR_H

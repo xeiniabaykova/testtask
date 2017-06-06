@@ -16,7 +16,7 @@ NurbsCurve::NurbsCurve( const std::vector<Point>& ppoles, const std::vector<doub
     nodes.push_back( 0. );
   }
   double node = 1.;
-  for ( size_t i = 0; i < points.size() - degree - 1; ++i ) {
+  for ( size_t i = 0; i < ppoles.size() - degree - 1; ++i ) {
     nodes.push_back( node );
     node += 1.;
   }

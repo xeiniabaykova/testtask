@@ -44,6 +44,12 @@ void Curve::GetAsPolyLine( GeomPolyline &polyLine, double accuracy ) const
    polyLine.Init( polyLinePoints );
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+	Получить по параметру t, паремтр, врходящий в область определения для геоме6трического примитива. 
+*/
+//---
 double Curve::FixedRange( double t ) const
 {
   if ( t < GetRange().GetStart() )
