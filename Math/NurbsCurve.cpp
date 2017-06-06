@@ -4,6 +4,36 @@
 namespace Math {
 
 
+namespace {
+
+//-----------------------------------------------------------------------------
+/**
+	Подсчитать фаториал числа n.
+*/
+//---
+static long double fact( int N )
+{
+	if ( N < 0 )
+		return 0;
+	if ( N == 0 )
+		return 1;
+	else
+		return N * fact( N - 1 );
+}
+
+
+//-----------------------------------------------------------------------------
+/**
+	Подсчитать биномиальные коэффициенты от числел n, k
+*/
+//---
+static double Bin( int n, int k )
+{
+	return fact( n ) / (fact( k ) * fact( n - k) );
+}
+
+}
+
 NurbsCurve::NurbsCurve( const std::vector<Point>& ppoles, const std::vector<double>& wweights,
   const std::vector<double>& nnodes, bool iisClosed, int ddegree ):
   poles    ( ppoles ),
@@ -148,6 +178,8 @@ void NurbsCurve::ComputeBasicFunctionD( double x, int i, int derivativeOrder, st
 	left.resize(degree + 1);
 	std::vector<double> right;
 	right.resize(degree + 1);
+
+
 	N[0][0] = 1.0;
 	for (int j = 1; j <= degree; j++)
 	{
@@ -163,11 +195,14 @@ void NurbsCurve::ComputeBasicFunctionD( double x, int i, int derivativeOrder, st
 		}
 		N[j][j] = saved;
 	}
+
 	for (int j = 0; j <= degree; j++)
 		ders[0][j] = N[j][degree];
+
+
 	for (int r = 0; r <= degree; r++)
 	{
-	int s1 = 0;
+	    int s1 = 0;
 		int s2 = 1;
 		tempders[0][0] = 1.0;
 		for (int k = 1; k <= derivativeOrder; k++)
@@ -200,7 +235,7 @@ void NurbsCurve::ComputeBasicFunctionD( double x, int i, int derivativeOrder, st
 			if (r <= degk)
 			{
 				tempders[s2][k] = -tempders[s1][k - 1] / N[degk + 1][r];
-				d += -tempders[s2][k] * N[r][degk];
+				d += tempders[s2][k] * N[r][degk];
 			}
 			ders[k][r] = d;
 			int j = s1;
@@ -213,8 +248,8 @@ void NurbsCurve::ComputeBasicFunctionD( double x, int i, int derivativeOrder, st
 	for (int k = 1; k <= derivativeOrder; k++)
 	{
 		for (int j = 0; j <= degree; j++)
-			ders[k][j] *= r;
-		r *= (degree - k);
+			ders[k][j] = ders[k][j] * r;
+		r = r * (degree - k);
 	}
 
 	
@@ -290,7 +325,7 @@ double NurbsCurve::CountWeightD( double t , int span)  const
   for (int i = 0; i <=degree; i++)
   {
    
-    w += ders[0][i] * weights[span - degree + i];
+    w = w + ders[1][i] * weights[span - degree + i];
   }
   return w;
 }
@@ -303,16 +338,15 @@ double NurbsCurve::CountWeightD( double t , int span)  const
 //---
 double NurbsCurve::CountWeightD2( double t , int span)  const
 {
-  double w = 0.0;
-  std::vector<std::vector<double>> ders;
-  ComputeBasicFunctionD(t, span, 2, ders);
-  for (int i = 0; i < weights.size(); i++)
-  {
-    double result;
-    
-    w += ders[1][i] * weights[i];
-  }
-  return w;
+	double w = 0.0;
+	std::vector<std::vector<double>> ders;
+	ComputeBasicFunctionD(t, span, 2, ders);
+	for (int i = 0; i <= degree; i++)
+	{
+
+		w =  w+ ders[2][i] * weights[span - degree + i];
+	}
+	return w;
 }
 
 
@@ -387,24 +421,94 @@ std::vector<double> NurbsCurve::BasicFunctions( int i, double x) const
 
 //-----------------------------------------------------------------------------
 /**
-  Вернуть производную на nurbs по параметру t.
+  Производные от базисных функций, помноженные на соответсвующие точки кривой.
+*/
+//---
+std::vector<Point> NurbsCurve::PointDers( double t, int der ) const
+{
+	double tcurrent = FixedRange(t);
+	double span = FindSpan(tcurrent);
+	double weightNurbsD = CountWeightD(tcurrent, span);
+	std::vector<std::vector<double>> ders;
+	ComputeBasicFunctionD(tcurrent, span, 1, ders);
+	std::vector<Point> points;
+
+	for ( int j = 0; j <= der; j++ ) 
+	{
+		Point resultPoint;
+		for ( int i = 0; i <= degree; i++ )
+		{
+
+			resultPoint = resultPoint + poles[span - degree + i] * ders[j][i];
+		}
+		points.push_back(resultPoint);
+	}
+	return points;
+}
+
+
+
+//-----------------------------------------------------------------------------
+/**
+  Производные от базисных функций, помноженные на соответсвующие веса кривой.
+*/
+//---
+std::vector<double> NurbsCurve::WeightDers( double t, int der ) const
+{
+	double tcurrent = FixedRange( t );
+	double span = FindSpan( tcurrent );
+	double weightNurbsD = CountWeightD( tcurrent, span );
+	std::vector<std::vector<double>> ders;
+	ComputeBasicFunctionD( tcurrent, span, 1, ders );
+	std::vector<double> result;
+	for ( int j = 0; j <= der; j++ )
+	{
+		double resultWeight = 0;
+	  for ( int i = 0; i <= degree; i++ )
+	  {
+
+	    resultWeight = resultWeight + weights[span - degree + i] * ders[j][i];
+	}
+	result.push_back( resultWeight );
+
+	}
+	return result;
+}
+
+
+//-----------------------------------------------------------------------------
+/**
+	Внутренняя функция для посдчета производной порядка der.
+*/
+//---
+Vector NurbsCurve::CountingDer( double t, int der) const
+{
+	double tcurrent = FixedRange(t);
+	double span = FindSpan(tcurrent);
+
+	std::vector<double> weight = WeightDers( tcurrent, der );
+	std::vector< Point> pointd = PointDers( t, der );
+	Point resultPoint;
+	std::vector<Point> dtempders;
+	dtempders.resize( der  + 1);
+	for (int k = 0; k <= der; k++)
+	{
+		resultPoint = pointd[k];
+		for (int i = 1; i <= k; i++)
+			resultPoint = resultPoint - dtempders[k - i] * Bin(k, i) * weight[i];
+		dtempders[k] = resultPoint * (1 / weight[0]);
+	}
+	return  Vector(dtempders[der ].GetX(), dtempders[der].GetY());
+}
+
+//-----------------------------------------------------------------------------
+/**
+	Вернуть производную на nurbs по параметру t.
 */
 //---
 Vector  NurbsCurve::GetDerivativePoint( double t ) const
 {
-  double tcurrent = FixedRange(t);
-  double span = FindSpan(tcurrent);
-  double weightNurbsD = CountWeightD(tcurrent, span);
-  std::vector<std::vector<double>> ders;
-  ComputeBasicFunctionD( tcurrent, span, 1, ders );
-  Point resultPoint;
-  for (int i = 0; i <= degree; i++)
-  {
-    double result;
-   
-    resultPoint = resultPoint + poles[i] * ders[1][i] * weights[i];
-  }
-  return Vector( ( resultPoint * ( 1 / weightNurbsD )).GetX(), (resultPoint * ( 1 / weightNurbsD)).GetY() );
+	return  CountingDer(t, 1);
 }
 
 
@@ -415,17 +519,7 @@ Vector  NurbsCurve::GetDerivativePoint( double t ) const
 //---
 Vector  NurbsCurve::Get2DerivativePoint( double t ) const
 {
-	double tcurrent = FixedRange(t);
-  double span = FindSpan(tcurrent);
-  double weightNurbsD2 = CountWeightD2(tcurrent, span );
-  Point resultPoint;
-  std::vector<std::vector<double>> ders;
-  ComputeBasicFunctionD(tcurrent, span, 2, ders);
-  for ( int i = 0; i < poles.size(); i++ )
-  {
-    resultPoint = resultPoint + poles[i] * ders[2][i] * weights[i];
-  }
-  return Vector( (resultPoint *(1 / weightNurbsD2)).GetX(), (resultPoint *(1 / weightNurbsD2)).GetY() );
+	return  CountingDer(t, 2);
 }
 
 

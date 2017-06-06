@@ -57,9 +57,12 @@ public:
   virtual void        Rotate                 ( double alpha );                                                 ///< Повернуть относительно начала координат на угол alpha.
   virtual void        Scale                  ( double XScaling, double YScaling );                             ///< Масштабировать на xScaling по оси x, на yScaling по оси у.
   std::vector<double> BasicFunctions         ( int i, double x) const;                                         ///< Подсчитать значения базисных функций на отрезке x - degree.
+  Vector              CountingDer            ( double t, int der ) const;                                      ///<  Внутренняя функция для посдчета производной порядка der.
+  std::vector<Point>  PointDers              ( double t , int der ) const;                                     ///<  Производные от базисных функций, помноженные на соответсвующие точки кривой.
+  std::vector<double> WeightDers             ( double t, int der ) const;                                      ///<  Производные от базисных функций, помноженные на соответсвующие веса кривой.
   double              CountWeight            ( int k , double x) const;                                        ///< Подсчитать значения базисных функций, умноженных на вес на отрезке x - degree.
-  double              CountWeightD           ( double x, int span )  const;                                              ///< Подсчитать значения производных базисных функций, умноженных на вес на отрезке x - degree.
-  double              CountWeightD2          ( double x, int span )  const;                                              ///< Подсчитать значения вторых производных базисных функций, умноженных на вес на отрезке x - degree
+  double              CountWeightD           ( double x, int span )  const;                                    ///< Подсчитать значения производных базисных функций, умноженных на вес на отрезке x - degree.
+  double              CountWeightD2          ( double x, int span )  const;                                    ///< Подсчитать значения вторых производных базисных функций, умноженных на вес на отрезке x - degree
   int                 FindSpan               ( double x ) const;                                               ///< Найти интервал ненулевых базисных функций для парметра t.
   void                ComputeBasicFunction   ( double x, int i, double & result ) const;                       ///< Подсчитать базисную функцию для порядка i и значения парметра t.
   void                ComputeBasicFunctionD  (double x, int i, int derivativeOrder, std::vector<std::vector<double>>& ders) const;

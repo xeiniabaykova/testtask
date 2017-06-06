@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.7)
 project(TestTask1)
-
+set (CMAKE_PREFIX_PATH "C:\\Qt\\5.8\\msvc2015_64")
 set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_AUTOMOC ON)
