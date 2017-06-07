@@ -89,7 +89,7 @@ TEST(Circle, GetDerivativePoint)
   EXPECT_TRUE( IsEqualVectors(circle.GetDerivativePoint(0.), Vector(0., 2.)) );
   EXPECT_TRUE( IsEqualVectors(circle.GetDerivativePoint(CommonConstantsMath::PI*2.), Vector(0., 2.)) );
   EXPECT_TRUE( IsEqualVectors(circle.GetDerivativePoint(CommonConstantsMath::PI/4.), Vector(-sqrt(2.), sqrt(2.))) );
-  EXPECT_TRUE(IsEqualVectors(circle.GetDerivativePoint(CommonConstantsMath::PI / 4.), Vector(-sqrt(2.), sqrt(2.))));
+  EXPECT_TRUE(IsEqualVectors(circle.GetDerivativePoint(CommonConstantsMath::PI*9./4.), Vector(-sqrt(2.), sqrt(2.))));
   EXPECT_TRUE( IsEqualVectors(circle.GetDerivativePoint(CommonConstantsMath::PI), Vector(0., -2.)) );
   EXPECT_TRUE( IsEqualVectors(circle.GetDerivativePoint(CommonConstantsMath::PI*5./4.), Vector(sqrt(2.), -sqrt(2.))) );
 }
@@ -144,14 +144,14 @@ TEST(Circle, Translation)
 
 TEST(Circle, Rotation)
 {
-  //Ellipse circle(Point(1., 1.), 2., 2., 0.);
-  //circle.Rotate( CommonConstantsMath::PI/4. );
-  //EXPECT_TRUE( IsEqualPoints(circle.GetPoint(0.), Point(1.+sqrt(2.), 1.+sqrt(2.))) );
-  //EXPECT_TRUE( IsEqualPoints(circle.GetPoint(CommonConstantsMath::PI*2.), Point(1.+sqrt(2.), 1.+sqrt(2.))) );
-  //EXPECT_TRUE( IsEqualPoints(circle.GetPoint(CommonConstantsMath::PI/4.), Point(1., 3.)) );
-  //EXPECT_TRUE( IsEqualPoints(circle.GetPoint(CommonConstantsMath::PI*9./4.), Point(1., 3.)) );
-  //EXPECT_TRUE( IsEqualPoints(circle.GetPoint(CommonConstantsMath::PI), Point(1.-sqrt(2.), 1.-sqrt(2.))) );
-  //EXPECT_TRUE( IsEqualPoints(circle.GetPoint(CommonConstantsMath::PI*5./4.), Point(1., -1.)) );
+  Ellipse circle(Point(1., 1.), 2., 2., 0.);
+  circle.Rotate( CommonConstantsMath::PI/4. );
+  EXPECT_TRUE( IsEqualPoints(circle.GetPoint(0.), Point(1.41421356237309, 2.828427124746)) );
+  EXPECT_TRUE( IsEqualPoints(circle.GetPoint(CommonConstantsMath::PI*2.), Point(1.41421356237309, 2.82842712474618)) );
+  EXPECT_TRUE( IsEqualPoints(circle.GetPoint(CommonConstantsMath::PI/4.), Point(0., 3.4142135623730)) );
+  EXPECT_TRUE( IsEqualPoints(circle.GetPoint(CommonConstantsMath::PI*9./4.), Point(0., 3.4142135623730)) );
+  EXPECT_TRUE( IsEqualPoints(circle.GetPoint(CommonConstantsMath::PI), Point(-1.41421356237309, 0.)) );
+  EXPECT_TRUE( IsEqualPoints(circle.GetPoint(CommonConstantsMath::PI*5./4.), Point(0., -0.58578643762690)) );
 }
 
 TEST(Circle, Scaling)
@@ -327,7 +327,7 @@ TEST(Ellipse, Translation)
   EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*5./4.), Point(5.5, -2.5)) );
 }
 
-TEST(Ellipse, Rotation)
+TEST(Ellipse, Rotate1)
 {
   Ellipse ellipse( Point(0., 0.), 1., 4., CommonConstantsMath::PI/4. );
   ellipse.Rotate( -CommonConstantsMath::PI/4. );
@@ -340,6 +340,18 @@ TEST(Ellipse, Rotation)
   EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI), Point(-1., 0.)) );
   EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*5./4.),
                              Point(-0.7071067811865477, -2.82842712474619)) );
+}
+
+TEST(Ellipse, Rotate2)
+{
+  Ellipse ellipse( Point(3., 2.), 3., 2., 0. );
+  ellipse.Rotate( CommonConstantsMath::PI/2. );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(0.), Point(-2.0, 6.0)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*2.), Point(-2.0, 6.0)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI/4.), Point(-3.41421356237309, 5.1213203435596)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*9./4.), Point(-3.41421356237309, 5.1213203435596)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI), Point(-2.0, 0.0)) );
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI*5./4.), Point(-0.58578643762690, 0.87867965644035)) );
 }
 
 TEST(Ellipse, Scaling)
