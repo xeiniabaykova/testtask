@@ -359,9 +359,9 @@ double NurbsCurve::fixedParam( double t ) const
 {
 	if (!isClosed)
 	{
-		if (t < nodes[0])
+		if ( t < nodes[0] )
 			t = nodes[0];
-		if (t > nodes[nodes.size() - 1])
+		if ( t > nodes[nodes.size() - 1] )
 			t = nodes[nodes.size() - 1];
 	}
 	if (isClosed)

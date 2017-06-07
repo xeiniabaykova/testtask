@@ -33,10 +33,6 @@ void Curve::GetAsPolyLine( GeomPolyline &polyLine, double accuracy ) const
   while ( t < GetRange().GetEnd() )
   {
     double current = CountingStep( t, accuracy);
-	//if (current > 1000.0 * accuracy)
-	//	current = (GetRange().GetEnd() - GetRange().GetStart()) / 100.0;
-	//if (current < 0)
-	//	current = (GetRange().GetEnd() - GetRange().GetStart()) / 100.0;
 	t = t + current;
 	Point point ( GetPoint(t) );
     polyLinePoints.push_back( point );

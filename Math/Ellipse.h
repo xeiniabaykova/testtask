@@ -68,6 +68,7 @@ public:
   Point                      GetCenter           () const;                             ///< Вернуть центр эллипса.
   std::string                GetName             () const;                             ///< Вернуть имя, используемое при записи эллипса в файл.
   virtual std::vector<Point> GetReferensedPoints () const;                             ///< Вернуть опорные точки, использованные для построения эллипса.
+  double                     FixedParameter      ( double t) const;
 };
 }
 #endif // ELLIPSE_H

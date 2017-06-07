@@ -81,16 +81,11 @@ Ellipse::Ellipse(Point thecenter, double ther1, double ther2, double thealpha) :
 {
 	center = thecenter;
 	alpha = thealpha;
-	if (ther2 > ther1)
+	if ( ther1 > CommonConstantsMath::NULL_TOL && ther2 > CommonConstantsMath::NULL_TOL )
 	{
-		r2 = ther1;
-		r1 = ther2;
-	}
-	else {
-		r2 = ther1;
-		r1 = ther2;
-	}
-
+		r1 = ther1;
+		r2 = ther2;
+	}		
 }
 
 //-----------------------------------------------------------------------------
@@ -131,7 +126,7 @@ Ellipse::Ellipse ( const std::vector<Point>& points ):
       double axisA = sqrt( x * x + y * y );
       alpha = atan2( y, x );
 		  r1 = axisA;
-      Point newCoordPoint = (points[2] - center);
+      Point newCoordPoint (std::fabs((points[2] - center).GetX()), std::fabs((points[2] - center).GetY()));
       newCoordPoint.Rotate( alpha );
 
       double axisB = ( sqrt(fabs((newCoordPoint.GetY()) * (newCoordPoint.GetY()) /
@@ -164,7 +159,7 @@ Ellipse::Ellipse ( const std::vector<Point>& points ):
 
 Point Ellipse::GetPoint( double t ) const
 {
-  double tcurrent = FixedRange( t );
+	double tcurrent = FixedParameter(t);
 
    Point point( r1 * cos(tcurrent), r2 * sin(tcurrent) );
    point.Rotate(alpha);
@@ -191,7 +186,7 @@ Range Ellipse::GetRange() const
 //-----------------------------------------------------------------------------
 Vector Ellipse::GetDerivativePoint( double t ) const
 {
-  double tcurrent = FixedRange( t );
+	double tcurrent = FixedParameter(t);
   Vector vector( r1 * -sin(tcurrent), r2 * cos(tcurrent) );
   vector.Rotate( alpha );
   return vector;
@@ -205,7 +200,7 @@ Vector Ellipse::GetDerivativePoint( double t ) const
 //---
 Vector Ellipse::Get2DerivativePoint( double t ) const
 {
-  double tcurrent = FixedRange( t );
+  double tcurrent = FixedParameter(t);
   Vector vector( -r1 * cos(tcurrent), -r2 * sin(tcurrent) );
   vector.Rotate( alpha );
   return vector;
@@ -231,7 +226,7 @@ void Ellipse::Translate( double xShift, double yShift )
 void Ellipse::Rotate( double alphaAng )
 {
   center.Rotate( alphaAng  );
-  alpha = alphaAng + alpha;
+  alpha = alpha + alphaAng ;
 }
 
 
@@ -325,6 +320,18 @@ std::vector<Point> Ellipse::GetReferensedPoints () const
   refPoints.push_back( center );
   return refPoints;
 
+}
+
+
+double Ellipse::FixedParameter( double t ) const
+{
+	Range range = GetRange();
+
+	while ( t < range.GetStart() )
+		t += range.GetEnd() - range.GetStart();
+	while ( t > range.GetEnd() )
+		t -= range.GetEnd() - range.GetStart();
+	return t;
 }
 
 }
