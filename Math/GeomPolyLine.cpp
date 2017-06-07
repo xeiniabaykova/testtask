@@ -91,10 +91,9 @@ GeomPolyline::GeomPolyline( const std::vector<Point>& thePoints ):
 //---
 void GeomPolyline::Init( const std::vector<Point>& theReferencedPoints )
 {
-
+	referencedPoints.clear();
   if ( CorrectPolylineData(theReferencedPoints) )
   {
-	  referencedPoints.clear();
 	  for ( int i=0; i<theReferencedPoints.size(); i++)
     referencedPoints.push_back( theReferencedPoints[i] );
   }
@@ -107,7 +106,12 @@ void GeomPolyline::Init( const std::vector<Point>& theReferencedPoints )
 //---
 Range GeomPolyline::GetRange() const
 {
-  return Range( 0.0, referencedPoints.size() );
+	if (IsValid())
+	{
+		return Range(0.0, referencedPoints.size() - 1);
+	}
+	else
+		Range( std::nan(0), std::nan(0) );
 }
 
 
@@ -118,12 +122,21 @@ Range GeomPolyline::GetRange() const
 //---
 Point GeomPolyline::GetPoint( double t ) const
 {
-  double tcurrent = FixedRange( t );
-  double leftParam = 0.0;
-  double currentT = std::modf( tcurrent, &leftParam);
-  Point startPoint( referencedPoints[leftParam] );
-  Vector derection = referencedPoints[leftParam + 1] - referencedPoints[leftParam];
-  return startPoint + derection * currentT;
+	if ( IsValid() ) 
+	{
+		double tcurrent = FixedRange(t);
+		double leftParam = 0.0;
+		double currentT = std::modf(tcurrent, &leftParam);
+		if (leftParam >= referencedPoints.size() - 1)
+		{
+			return  Point(referencedPoints[referencedPoints.size() - 1]);
+		}
+		Point startPoint(referencedPoints[leftParam]);
+		Vector derection = referencedPoints[leftParam + 1] - referencedPoints[leftParam];
+		return startPoint + derection * currentT;
+	}
+	else
+		return Point( std::nan(0), std::nan(0) );
 }
 
 
@@ -134,10 +147,19 @@ Point GeomPolyline::GetPoint( double t ) const
 //---
 Vector GeomPolyline::GetDerivativePoint( double t ) const
 {
-  double tcurrent = FixedRange( t );
-  double leftParam = 0.0;
-  double currentT = std::modf(tcurrent, &leftParam);
-  return ( referencedPoints[leftParam + 1] - referencedPoints[leftParam] );
+	if (IsValid())
+	{
+		double tcurrent = FixedRange(t);
+		double leftParam = 0.0;
+		double currentT = std::modf(tcurrent, &leftParam);
+		if (leftParam >= referencedPoints.size() - 1)
+		{
+			return  (referencedPoints[referencedPoints.size() - 1] - referencedPoints[referencedPoints.size() - 2]);
+		}
+		return (referencedPoints[leftParam + 1] - referencedPoints[leftParam]);
+	}
+	else
+		return Vector( std::nan(0), std::nan(0) );
 }
 
 
@@ -148,7 +170,12 @@ Vector GeomPolyline::GetDerivativePoint( double t ) const
 //---
 Vector GeomPolyline::Get2DerivativePoint( double ) const
 {
-  return Vector ( 0.0, 0.0 );
+	if (IsValid())
+	{
+		return Vector(0.0, 0.0);
+	} 
+	else 
+		return Vector(std::nan(0), std::nan(0));
 }
 
 
@@ -160,8 +187,11 @@ Vector GeomPolyline::Get2DerivativePoint( double ) const
 //---
 void GeomPolyline::Translate ( double xShift, double yShift )
 {
-  for (int i = 0; i < referencedPoints.size(); i++ )
-    referencedPoints[i].Translate ( xShift, yShift );
+	if ( IsValid() )
+	{
+		for (int i = 0; i < referencedPoints.size(); i++)
+			referencedPoints[i].Translate(xShift, yShift);
+	}
 }
 
 
@@ -172,8 +202,11 @@ void GeomPolyline::Translate ( double xShift, double yShift )
 //---
 void GeomPolyline::Rotate( double alpha )
 {
-  for (int i = 0; i < referencedPoints.size(); i++ )
-    referencedPoints[i].Rotate( alpha );
+	if (IsValid())
+	{
+		for (int i = 0; i < referencedPoints.size(); i++)
+			referencedPoints[i].Rotate(alpha);
+	}
 }
 
 
@@ -184,8 +217,11 @@ void GeomPolyline::Rotate( double alpha )
 //---
 void GeomPolyline::Scale( double xScaling, double yScaling )
 {
-  for (int i = 0; i < referencedPoints.size(); i++ )
-    referencedPoints[i].Scale ( xScaling,yScaling );
+	if (IsValid())
+	{
+		for (int i = 0; i < referencedPoints.size(); i++)
+			referencedPoints[i].Scale(xScaling, yScaling);
+	}
 }
 
 
@@ -196,14 +232,19 @@ void GeomPolyline::Scale( double xScaling, double yScaling )
 //---
 double GeomPolyline::DistanceToPoint ( Point point ) const
 {
-  double minDistance = std::numeric_limits<double>::max();
-   for ( int j = 1; j < referencedPoints.size(); j++ )
-   {
-     double currentDistance = Distance( referencedPoints[j - 1], referencedPoints[j], point );
-     if ( currentDistance < minDistance )
-       minDistance = currentDistance;
-   }
-   return minDistance;
+	if ( IsValid() )
+	{
+		double minDistance = std::numeric_limits<double>::max();
+		for (int j = 1; j < referencedPoints.size(); j++)
+		{
+			double currentDistance = Distance(referencedPoints[j - 1], referencedPoints[j], point);
+			if (currentDistance < minDistance)
+				minDistance = currentDistance;
+		}
+		return minDistance;
+	}
+	else
+		return -1.;
 }
 
 
@@ -225,8 +266,11 @@ bool GeomPolyline::IsValid() const
 //---
 std::vector<Point> GeomPolyline::GetReferensedPoints() const
 {
- std::vector<Point> refPoints = referencedPoints;
-  return refPoints;
+	if (IsValid())
+	{
+		std::vector<Point> refPoints = referencedPoints;
+		return refPoints;
+	}
 }
 
 

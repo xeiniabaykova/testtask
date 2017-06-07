@@ -41,56 +41,102 @@ TEST(PolylineTest, GetPoint)
 {
 	std::vector<Point> points;
 	points.push_back( Point(1., 1.) );
-	points.push_back( Point(2., 1.) );
-	points.push_back( Point(1., 2.) );
-	points.push_back( Point(4., 3.) );
-	points.push_back( Point(2., 0.) );
+	points.push_back( Point(3., 3.) );
+	points.push_back( Point(5., 1.) );
+	points.push_back( Point(7., 1.) );
 
 	const GeomPolyline polyline( points );
-	auto point = polyline.GetPoint( 0.0 );
+	auto point = polyline.GetPoint( -0.75 );
 	EXPECT_NEAR( point.GetX(), 1., 1.e-7 );
 	EXPECT_NEAR( point.GetY(), 1., 1.e-7 );
 
-	point = polyline.GetPoint( 1. );
-	EXPECT_NEAR( point.GetX(), 2., 1.e-7 );
-	EXPECT_NEAR( point.GetY(), 1., 1.e-7 );
-
-	point = polyline.GetPoint( 0.5 );
-	EXPECT_NEAR( point.GetX(), 1.5, 1.e-7 );
-	EXPECT_NEAR( point.GetY(), 1.0, 1.e-7 );
-
-	/// если парметр заходит за границу, то возвращаем ближайшею точку
-	point = polyline.GetPoint( -0.25 );
+	point = polyline.GetPoint( 0. );
 	EXPECT_NEAR( point.GetX(), 1., 1.e-7 );
 	EXPECT_NEAR( point.GetY(), 1., 1.e-7 );
+
+	point = polyline.GetPoint(0.25);
+	EXPECT_NEAR(point.GetX(), 1.5, 1.e-7);
+	EXPECT_NEAR(point.GetY(), 1.5, 1.e-7);
+
+	point = polyline.GetPoint(1.);
+	EXPECT_NEAR(point.GetX(), 3., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 3., 1.e-7);
+
+	point = polyline.GetPoint(1.5);
+	EXPECT_NEAR(point.GetX(), 4., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 2., 1.e-7);
+
+	point = polyline.GetPoint(2.0);
+	EXPECT_NEAR(point.GetX(), 5., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 1., 1.e-7);
+
+	point = polyline.GetPoint(2.75);
+	EXPECT_NEAR(point.GetX(), 6.5, 1.e-7);
+	EXPECT_NEAR(point.GetY(), 1., 1.e-7);
+
+	point = polyline.GetPoint(3.);
+	EXPECT_NEAR(point.GetX(), 7., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 1., 1.e-7);
+
+	point = polyline.GetPoint(4.);
+	EXPECT_NEAR(point.GetX(), 7., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 1., 1.e-7);
+
+	point = polyline.GetPoint(4.15);
+	EXPECT_NEAR(point.GetX(), 7., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 1., 1.e-7);
+
 
 }
 
 TEST( PolylineTest, GetDerivativePoint )
 {
 	std::vector<Point> points;
-	points.push_back( Point(1., 1.) );
-	points.push_back( Point(2., 1.) );
-	points.push_back( Point(1., 2.) );
-	points.push_back( Point(4., 3.) );
-	points.push_back( Point(2., 0.) );
+	points.push_back(Point(1., 1.));
+	points.push_back(Point(3., 3.));
+	points.push_back(Point(5., 1.));
+	points.push_back(Point(7., 1.));
 
-	const GeomPolyline polyline( points );
-	auto der = polyline.GetDerivativePoint( 0.0 );
-	EXPECT_NEAR( der.GetX(), 1., 1.e-7 );
-	EXPECT_NEAR( der.GetY(), 0., 1.e-7 );
+	const GeomPolyline polyline(points);
+	auto point = polyline.GetDerivativePoint( -0.75 );
+	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 2., 1.e-7);
 
-	der = polyline.GetDerivativePoint( 0.25 );
-	EXPECT_NEAR( der.GetX(), 1., 1.e-7 );
-	EXPECT_NEAR( der.GetY(), 0., 1.e-7 );
+	point = polyline.GetDerivativePoint(0.);
+	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 2., 1.e-7);
 
-	der = polyline.GetDerivativePoint( -1.2 );
-	EXPECT_NEAR( der.GetX(), 1., 1.e-7 );
-	EXPECT_NEAR( der.GetY(), 0., 1.e-7 );
+	point = polyline.GetDerivativePoint(0.25);
+	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 2., 1.e-7);
 
-	der = polyline.GetDerivativePoint( 2.3 );
-	EXPECT_NEAR( der.GetX(), 3., 1.e-7 );
-	EXPECT_NEAR( der.GetY(), 1., 1.e-7 );
+	point = polyline.GetDerivativePoint(1.);
+	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
+	EXPECT_NEAR(point.GetY(), -2., 1.e-7);
+
+	point = polyline.GetDerivativePoint(1.5);
+	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
+	EXPECT_NEAR(point.GetY(), -2., 1.e-7);
+
+	point = polyline.GetDerivativePoint(2.0);
+	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 0., 1.e-7);
+
+	point = polyline.GetDerivativePoint(2.75);
+	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 0., 1.e-7);
+
+	point = polyline.GetDerivativePoint(3.);
+	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 0., 1.e-7);
+
+	point = polyline.GetDerivativePoint(4.);
+	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 0., 1.e-7);
+
+	point = polyline.GetDerivativePoint(4.15);
+	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 0., 1.e-7);
 }
 /// вторые производные всегда равны нулю
 TEST(PolylineTest, Get2DerivativePoint)
@@ -136,7 +182,7 @@ TEST(PolylineTest, GetRange)
 
 	const auto range = polyline.GetRange();
 	EXPECT_NEAR( range.GetStart(), 0., 1.e-7 );
-	EXPECT_NEAR( range.GetEnd(), 8., 1.e-7 );
+	EXPECT_NEAR( range.GetEnd(), 7., 1.e-7 );
 }
 
 TEST(PolylineTest, GetAsPolyLine)

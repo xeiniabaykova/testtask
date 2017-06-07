@@ -155,6 +155,6 @@ double Vector::operator * ( Vector vector ) const
 //---
 bool Vector::IsValid() const
 {
-  return true;
+  return !( std::isnan(x) || std::isnan(y) );
 }
 }
