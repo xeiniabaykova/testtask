@@ -111,7 +111,7 @@ Range GeomPolyline::GetRange() const
 		return Range(0.0, referencedPoints.size() - 1);
 	}
 	else
-		Range( std::nan(0), std::nan(0) );
+		return Range(NAN,NAN);
 }
 
 
@@ -131,12 +131,12 @@ Point GeomPolyline::GetPoint( double t ) const
 		{
 			return  Point(referencedPoints[referencedPoints.size() - 1]);
 		}
-		Point startPoint(referencedPoints[leftParam]);
+		Point startPoint( referencedPoints[leftParam] );
 		Vector derection = referencedPoints[leftParam + 1] - referencedPoints[leftParam];
 		return startPoint + derection * currentT;
 	}
 	else
-		return Point( std::nan(0), std::nan(0) );
+		return Point( NAN, NAN );
 }
 
 
@@ -159,7 +159,7 @@ Vector GeomPolyline::GetDerivativePoint( double t ) const
 		return (referencedPoints[leftParam + 1] - referencedPoints[leftParam]);
 	}
 	else
-		return Vector( std::nan(0), std::nan(0) );
+		return Vector( NAN, NAN );
 }
 
 
@@ -175,7 +175,7 @@ Vector GeomPolyline::Get2DerivativePoint( double ) const
 		return Vector(0.0, 0.0);
 	} 
 	else 
-		return Vector(std::nan(0), std::nan(0));
+		return Vector( NAN, NAN );
 }
 
 

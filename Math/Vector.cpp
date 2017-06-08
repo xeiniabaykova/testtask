@@ -52,6 +52,7 @@ double Vector::GetY() const
 //----------------------------------------------------------------------------
 /**
 	Сдвинуть по осям x, y на xShift, yShift .
+	Если вектор или одно из значений не является валидным, вектор не изменяется.
 */
 //---
 void Vector::Translate ( double xShift, double yShift )
@@ -65,28 +66,36 @@ void Vector::Translate ( double xShift, double yShift )
 //----------------------------------------------------------------------------
 /**
 	Повернуть на угол alpha относительно начала координат.
+	Если вектор или одно из значений не является валидным, вектор не изменяется.
 */
 //---
 void Vector::Rotate( double alpha )
 {
-  double cosAlpha = cos( alpha );
-  double sinAlpha = sin( alpha );
-  double oldx = x;
-  double oldy = y;
-  x = oldx * cosAlpha - oldy * sinAlpha;
-  y = oldx * sinAlpha + oldy * cosAlpha;
+	if ( this->IsValid() && !std::isnan(alpha) )
+	{
+		double cosAlpha = cos(alpha);
+		double sinAlpha = sin(alpha);
+		double oldx = x;
+		double oldy = y;
+		x = oldx * cosAlpha - oldy * sinAlpha;
+		y = oldx * sinAlpha + oldy * cosAlpha;
+	}
 }
 
 
 //----------------------------------------------------------------------------
 /**
 	Маштабировать по оси х на xScaling, по оси y на yScaling.
+	Если вектор или одно из значений не является валидным, вектор не изменяется.
 */
 //---
 void Vector::Scale( double xScaling, double yScaling )
 {
-  x *= xScaling;
-  y *= yScaling;
+	if ( this->IsValid() && !std::isnan(xScaling) && !std::isnan(yScaling) )
+	{
+		x *= xScaling;
+		y *= yScaling;
+	}
 
 }
 
@@ -94,63 +103,88 @@ void Vector::Scale( double xScaling, double yScaling )
 //----------------------------------------------------------------------------
 /**
 	Домножить вектор на скаляр.
+	Если одно из значений не является валидным, возвращается NAN.
 */
 //---
 Vector Vector::operator * ( double param  ) const
 {
-  return Vector( x * param, y * param );
+	if ( this->IsValid() && !std::isnan(param) )
+	{
+		return Vector(x * param, y * param);
+	}
 }
 
 
 //----------------------------------------------------------------------------
 /**
 	Получить разность векторов.
+	Если одно из значений не является валидным, возвращается NAN.
 */
 //---
-Vector Vector::operator - ( Vector point ) const
+Vector Vector::operator - ( Vector vector ) const
 {
-  return Vector( x - point.GetX(), y -point.GetY() );
+	if (vector.IsValid() && this->IsValid())
+	{
+		return Vector(x - vector.GetX(), y - vector.GetY());
+	}
+	else
+		return  Vector(NAN, NAN);;
 }
 
 
 //----------------------------------------------------------------------------
 /**
 	Получить сумму векторов.
+	Если одно из значений не является валидным, возвращается NAN.
 */
 //---
-Vector Vector::operator + ( Vector point ) const
+Vector Vector::operator + ( Vector vector ) const
 {
-  return Vector( x + point.GetX(), y + point.GetY() );
+	if (vector.IsValid() && this->IsValid())
+	{
+		return Vector(x + vector.GetX(), y + vector.GetY());
+	}
+	else
+		return Vector(NAN, NAN);
 }
 
 
 //----------------------------------------------------------------------------
 /**
 	Присвоить один вектор другому.
+	Если одно из значений не является валидным, возвращается NAN.
 */
 //---
-Vector Vector::operator = ( Vector point )
+Vector Vector::operator = ( Vector vector )
 {
-  x = point.GetX();
-  y = point.GetY();
-  return *this;
+	if (vector.IsValid() && this->IsValid())
+	{
+		x = vector.GetX();
+		y = vector.GetY();
+		return *this;
+	}
+	else
+		return Vector(NAN, NAN);
 }
 
 
 //----------------------------------------------------------------------------
 /**
 	Получить скалярное произведение векторов по определению.
+	Если одно из значений не является валидным, возвращается NAN.
 */
 //---
 double Vector::operator * ( Vector vector ) const
 {
-  return x * vector.x + y * vector.y;
+	if ( vector.IsValid() && this->IsValid() )
+		return x * vector.x + y * vector.y;
+	else return NAN;
 }
 
 
 //----------------------------------------------------------------------------
 /**
-	Проверить вектор на правильность.
+	Проверить вектор на правильность. Вектор считается верным, если ни одно значение не является nan/
 */
 //---
 bool Vector::IsValid() const

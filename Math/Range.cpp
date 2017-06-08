@@ -1,4 +1,5 @@
 #include "Range.h"
+#include <cmath>
 
 namespace Math {
 //-----------------------------------------------------------------------------
@@ -44,5 +45,15 @@ double Range::GetStart() const
 double Range::GetEnd() const
 {
   return end;
+}
+
+//-----------------------------------------------------------------------------
+/**
+Возращаем корректность интервала.
+*/
+//---
+bool Range::IsValid() const
+{
+	return true;
 }
 }

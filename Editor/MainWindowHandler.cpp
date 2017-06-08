@@ -1,6 +1,10 @@
 #include "MainWindowHandler.h"
 #include "FileIO.h"
+
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QDesktopWidget>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QLabel>
 #include <QInputDialog>
 #include <QtCharts/QLineSeries>
 #include <functional>
@@ -10,9 +14,9 @@
 namespace Editor {
 //-----------------------------------------------------------------------------
 /**
-  \ru Конструктор MainWindowHandler
+  Конструктор MainWindowHandler
 */
-//-----------------------------------------------------------------------------
+//---
 MainWindowHandler::MainWindowHandler (QChart * chart):
   chart         ( chart             ),
   state         ( StateExpectAction ),
@@ -22,6 +26,14 @@ MainWindowHandler::MainWindowHandler (QChart * chart):
   CreateChart();
 }
 
+
+//-----------------------------------------------------------------------------
+/**
+  Задается необходимое количество точек - 2
+  Создается объект для создания геометрического представления отрезка.
+
+*/
+//--
 void MainWindowHandler::CreateLine()
 {
   state = StateCreateCurve;
@@ -31,11 +43,11 @@ void MainWindowHandler::CreateLine()
 
 //-----------------------------------------------------------------------------
 /**
-  \ru задается необходимое количество точек - 3
-  \ru создается объект для создания геометрического представления эллипса
+  Задается необходимое количество точек - 3
+  Создается объект для создания геометрического представления эллипса
 
 */
-//-----------------------------------------------------------------------------
+//--
 void MainWindowHandler::CreateEllipse()
 {
   geomCreator = std::make_shared<CreatorHandler>( 3, CreatorHandler::CreateEllipse );
@@ -45,11 +57,11 @@ void MainWindowHandler::CreateEllipse()
 
 //-----------------------------------------------------------------------------
 /**
-  \ru задается необходимое количество точек - 2
-  \ru создается объект для создания геометрического представления окружности
+  Задается необходимое количество точек - 2
+  Создается объект для создания геометрического представления окружности
 
 */
-//-----------------------------------------------------------------------------
+//---
 void MainWindowHandler::CreateCircle()
 {
   state = StateCreateCurve;
@@ -59,11 +71,11 @@ void MainWindowHandler::CreateCircle()
 
 //-----------------------------------------------------------------------------
 /**
-  \ru задается необходимое количество точек - 2
+  \ru задается необходимое количество точек - -1
   \ru создается объект для создания геометрического представления nurbs
 
 */
-//-----------------------------------------------------------------------------
+//---
 void MainWindowHandler::CreateNurbs()
 {
   state = StateCreateLine;
@@ -75,7 +87,7 @@ void MainWindowHandler::CreateNurbs()
 /**
   функции обработки события создания полилнии
 */
-//-----------------------------------------------------------------------------
+//---
 void MainWindowHandler::CreatePolyline()
 {
   state = StateCreateLine;
@@ -85,10 +97,10 @@ void MainWindowHandler::CreatePolyline()
 
 //-----------------------------------------------------------------------------
 /**
-  \ru создается объект для открытия файла
-  \ru запускается окно открытия файла
+  Создается объект для открытия файла.
+  Запускается окно открытия файла.
 */
-//-----------------------------------------------------------------------------
+//---
 void MainWindowHandler::LoadFile()
 {
   FileIO open;
@@ -98,10 +110,10 @@ void MainWindowHandler::LoadFile()
 
 //-----------------------------------------------------------------------------
 /**
-  \ru создается объект для сохранения файла
-  \ru запускается окно сохранения файла
+  Создается объект для сохранения файла.
+  Запускается окно сохранения файла.
 */
-//-----------------------------------------------------------------------------
+//---
 void MainWindowHandler::SaveFile( const std::vector<std::shared_ptr<DisplayedObject>>& savedObj )
 {
   FileIO save;
@@ -111,10 +123,10 @@ void MainWindowHandler::SaveFile( const std::vector<std::shared_ptr<DisplayedObj
 
 //-----------------------------------------------------------------------------
 /**
-  \ru вызывается метод создания кривой по точкам
-  \ru обнуляется массив точек полученных с экрана
+  Вызывается метод создания кривой по точкам.
+  Обнуляется массив точек полученных с экрана.
 */
-//-----------------------------------------------------------------------------
+//---
 void MainWindowHandler::CreateCurve()
 {
   std::shared_ptr<Math::Curve> primitive = geomCreator->Create();
@@ -129,7 +141,6 @@ void MainWindowHandler::StopCreateCurve()
   if ( state == StateCreateLine )
   {
     CreateCurve();
-   // geomCreator;
   }
   state = StateExpectAction;
 }
@@ -256,9 +267,9 @@ void MainWindowHandler::CreateEmptySeries()
 
 //-----------------------------------------------------------------------------
 /**
-   обработка события очистки экрана
+   Обработка события очистки экрана.
 */
-//-----------------------------------------------------------------------------
+//---
 void MainWindowHandler::ClearScreen()
 { 
    displayedCurves.clear();
@@ -266,48 +277,52 @@ void MainWindowHandler::ClearScreen()
 }
 
 
+//-----------------------------------------------------------------------------
+/**
+   Обработка события очистки экрана.
+*/
+//---
 void MainWindowHandler::CreateChart()
 {
-    axisX = new QValueAxis;
-    axisX->setRange( 0, 10 );
-    chart->addAxis( axisX, Qt::AlignBottom );
+  axisX = new QValueAxis;
+  axisX->setRange( 0, 10 );
+  chart->addAxis( axisX, Qt::AlignBottom );
 
-    axisY = new QValueAxis;
-    axisY->setRange( 0, 10 );
-    chart->addAxis( axisY, Qt::AlignLeft );
-    chart->legend()->setVisible(false);
+  axisY = new QValueAxis;
+  axisY->setRange( 0, 10 );
+  chart->addAxis( axisY, Qt::AlignLeft );
+  chart->legend()->setVisible(false);
 
-    QLineSeries *series = new QLineSeries;
-    *series<< QPointF( 0, 0 ) << QPointF( 10, 10);
-    series->setColor( QColor(255,255,255) );
-    chart->addSeries( series );
+  QLineSeries *series = new QLineSeries;
+  *series<< QPointF( 0, 0 ) << QPointF( 10, 10);
+  series->setColor( QColor(255,255,255) );
+  chart->addSeries( series );
 
-    series->attachAxis( axisX );
-    series->attachAxis( axisY );
+  series->attachAxis( axisX );
+  series->attachAxis( axisY );
 
-//    seriesReferenced = new QScatterSeries();
-//    seriesReferenced->setColor( QColor(0, 17, 17) );
-//    chart->addSeries( seriesReferenced );
-//    seriesReferenced->attachAxis( axisX );
-//    seriesReferenced->attachAxis( axisY );
-
-    tempSeriesReferenced = new QScatterSeries();
-    tempSeriesReferenced->setColor( QColor(0, 17, 17) );
-    chart->addSeries( tempSeriesReferenced );
-    tempSeriesReferenced->attachAxis( axisX );
-    tempSeriesReferenced->attachAxis( axisY );
-    tempSeriesReferenced->clear();
-    chart->axisX()->setVisible( false );
-    chart->axisY()->setVisible( false );
+  tempSeriesReferenced = new QScatterSeries();
+  tempSeriesReferenced->setColor( QColor(0, 17, 17) );
+  chart->addSeries( tempSeriesReferenced );
+  tempSeriesReferenced->attachAxis( axisX );
+  tempSeriesReferenced->attachAxis( axisY );
+  tempSeriesReferenced->clear();
+  chart->axisX()->setVisible( false );
+  chart->axisY()->setVisible( false );
 }
 
 
+//-----------------------------------------------------------------------------
+/**
+   Отобразить точку, выбранную пользователем.
+*/
+//---
 void MainWindowHandler::CreateRefPoint( Math::Point point )
 {
   *tempSeriesReferenced << QPointF( point.GetX(), point.GetY() );
   tempSeriesReferenced->setMarkerShape( QScatterSeries::MarkerShapeCircle );
   tempSeriesReferenced->setMarkerSize( 15.0 );
-
-
 }
+
+
 }

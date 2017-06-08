@@ -18,11 +18,13 @@
 #include <Editor/CreatorHandler.h>
 #include <memory>
 
-
-//------------------------------------------------------------------------------
-/** \brief Класс обработчик событий формы mainwindow. \~
+///////////////////////////////////////////////////////////////////////////////
+//
+/// Класс обработчик событий формы mainwindow.
+/**
 */
-// ---
+///////////////////////////////////////////////////////////////////////////////
+
 namespace Editor {
 class MainWindowHandler {
   enum CurrentState
@@ -35,14 +37,14 @@ class MainWindowHandler {
   };
 
 private:
-  QColor                                        selectedColor;
-  QChart                                        * chart;           ///< объект для отрисовки графика
-  std::shared_ptr<CreatorHandler>               geomCreator;     ///< объект для создания геометрического примитива
-  CurrentState                                  state;           ///< объект для хранения текущего состояния окна
-  std::vector<std::shared_ptr<DisplayedObject>> displayedCurves; ///< набор графиков, отображенных на экране
-  QValueAxis                                    *axisX;
-  QValueAxis                                    *axisY;
-  QScatterSeries                                *tempSeriesReferenced;
+  QColor                                        selectedColor;         ///< Цвет селекируемой кривой.
+  QChart                                        * chart;               ///< Объект для отрисовки графика.
+  std::shared_ptr<CreatorHandler>               geomCreator;           ///< Объект для создания геометрического примитива.
+  CurrentState                                  state;                 ///< Объект для хранения текущего состояния окна.
+  std::vector<std::shared_ptr<DisplayedObject>> displayedCurves;       ///< Набор графиков, отображенных на экране.
+  QValueAxis                                    *axisX;                ///< Ось Оу.
+  QValueAxis                                    *axisY;                ///< Ось Ох.
+  QScatterSeries                                *tempSeriesReferenced; ///< Объект для отображения точек, выбранных пользователем.
 
 public:
   /**  \brief \ru
@@ -57,32 +59,27 @@ private:
   MainWindowHandler& operator=( MainWindowHandler &obj ) = delete;
 
 public:
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  /** \brief \ru Вспомогательные данные. \~
-      \details \ru текущее состояние приложения: создание, удаление кривой, нахождение пересечения \~
-    */
-  // ---
-
 public:
  // void CreatePoint            ();                         ///< создать и отобразить точку
-  void CreateLine             ();                         ///< создать и отобразить отрезок
-  void CreateEllipse          ();                         ///< создать и отобразить эллипс
-  void CreateCircle           ();                         ///< создать и отобразить окружность
-  void CreateNurbs            ();                         ///< создать и отобразить nurbs
-  void LoadFile               ();                         ///< загрузить кривые из файла
-  void SaveFile               ( const std::vector<std::shared_ptr<DisplayedObject>>& savedObj );                         ///< сохранить кривые в файл
-  void CreatePolyline         ();                         ///< создать и отобразить полилинию
-  void CreateCurve            ();                         ///< создать кривую
-  void MouseEvent             ( QMouseEvent *event );     ///< обработать событие клика мышкой
-  void StopCreateCurve        ();                         ///< обработать ожидание создания кривой
-  void ResizeEvent            ( QResizeEvent *event );    ///< обработать изменение размера окна
-  void StateExpect            ( QMouseEvent *event );     ///< обработать ожидаение клика мышкой при отсуствии создания кривых
-  void ChangeColor            ( QColor color );           ///< обработать изменение цвета кривой
-  void DeleteCurve            ();                         ///< обработать удаление кривой
-  void CreateEmptySeries      ();                         ///< КОСТЫЛЬ! необходим для верной работы функции map to value
-  void ClearScreen            ();                         ///< обработать очистку экрана
-  void CreateChart            ();
-  void CreateRefPoint         ( Math::Point point );
+  void CreateLine             ();                         ///< Создать и отобразить отрезок.
+  void CreateEllipse          ();                         ///< Создать и отобразить эллипс.
+  void CreateCircle           ();                         ///< Создать и отобразить окружность.
+  void CreateNurbs            ();                         ///< Создать и отобразить nurbs.
+  void LoadFile               ();                         ///< Загрузить кривые из файла.
+  void SaveFile               ( const std::vector<std::shared_ptr<DisplayedObject>>& savedObj );///< Сохранить кривые в файл.
+  void CreatePolyline         ();                         ///< Создать и отобразить полилинию.
+  void CreateCurve            ();                         ///< Создать кривую.
+  void MouseEvent             ( QMouseEvent *event );     ///< Обработать событие клика мышкой.
+  void StopCreateCurve        ();                         ///< Обработать ожидание создания кривой.
+  void ResizeEvent            ( QResizeEvent *event );    ///< Обработать изменение размера окна.
+  void StateExpect            ( QMouseEvent *event );     ///< Обработать ожидаение клика мышкой при отсуствии создания кривых.
+  void ChangeColor            ( QColor color );           ///< Обработать изменение цвета кривой.
+  void DeleteCurve            ();                         ///< Обработать удаление кривой.
+  void CreateEmptySeries      ();                         ///< КОСТЫЛЬ! необходим для верной работы функции map to value.
+  void ClearScreen            ();                         ///< Обработать очистку экрана.
+  void CreateChart            ();                          ///< Обработать создание экрана.
+  void CreateRefPoint         ( Math::Point point );           ///< Отобразить точку, выбранную пользователем.
+  void AddInformationNurbs    ( bool& isClosed, int& degree ); /// Вызвать меню для получения информации о нурбс - кривой.
 
 };
 }

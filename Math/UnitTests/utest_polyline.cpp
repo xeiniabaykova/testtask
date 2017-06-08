@@ -349,10 +349,67 @@ TEST( PolylineTest, PolylineConstitution )
   GeomPolyline polyline7( points7 );
   EXPECT_FALSE( polyline7.IsValid() ); // ����������� ���������� ����� ����������� � ��� ��������� ���������
 
-  // ��������� �� �� ����� ��� ������ Init
+  // Проверить то же самое для метода Init}
+
+TEST(PolylineTest, PolylineInit)
+{
+	std::vector<Point> points0;
+	GeomPolyline polyline0;
+	polyline0.Init( points0 );
+	EXPECT_FALSE(polyline0.IsValid()); // Полилинии без точек невалидны
+
+	std::vector<Point> points1(1, Point());
+	GeomPolyline polyline1;
+	polyline1.Init( points1 );
+	EXPECT_FALSE(polyline1.IsValid()); // Полилинии с одной точкой невалидны
+
+	std::vector<Point> points2(2, Point());
+	points2[0].Translate(5.0, 10.0);
+	GeomPolyline polyline2;
+	polyline2.Init( points2 );
+	EXPECT_TRUE(polyline2.IsValid()); // Полилинии с двумя разными точками разрешены
+
+	std::vector<Point> points3(4, Point());
+	points3[1].Translate(5.0, 0.0);
+	points3[2].Translate(5.0, 10.0);
+	points3[3].Translate(0.0, 10.0);
+	GeomPolyline polyline3;
+	polyline3.Init(points3);
+	EXPECT_TRUE(polyline3.IsValid()); // Незамкнутые полилинии разрешены
+
+	std::vector<Point> points4(4, Point());
+	points4[1].Translate(5.0, 0.0);
+	points4[2].Translate(5.0, 10.0);
+	GeomPolyline polyline4;
+	polyline4.Init(points4);
+	EXPECT_TRUE(polyline4.IsValid()); // Замкнутые полилинии разрешены
+
+	std::vector<Point> points5(4, Point());
+	points5[1].Translate(5.0, 10.0);
+	points5[2].Translate(5.0, 10.0);
+	points5[3].Translate(2.0, 30.0);
+	GeomPolyline polyline5;
+	polyline5.Init(points5);
+	EXPECT_FALSE(polyline5.IsValid()); // совпадающие внутренние точки недопустимы
+
+	std::vector<Point> points6(5, Point());
+	points6[1].Translate(5.0, 10.0);
+	points6[2].Translate(8.0, 10.0);
+	points6[3].Translate(5.0, 10.0);
+	points6[4].Translate(50.0, 100.0);
+	GeomPolyline polyline6;
+	polyline6.Init(points6);
+	EXPECT_FALSE(polyline6.IsValid()); // совпадающие внутренние точки недопустимы
+
+	std::vector<Point> points7(5, Point());
+	points7[1].Translate(5.0, 10.0);
+	points7[2].Translate(8.0, 10.0);
+	points7[3].Translate(5.0, 10.0);
+	GeomPolyline polyline7;
+	polyline7.Init(points7);
+	EXPECT_FALSE(polyline7.IsValid()); // совпадающие внутренние точки недопустимы и для замкнутой полилинии
+
 }
-
-
 TEST( PolylineTest, CorrectInput )
 {
   // ������������ ������, ��������� �� ���������� ������ � ���������� ���������
@@ -444,12 +501,111 @@ TEST( PolylineTest, CorrectInput )
 
 TEST( PolylineTest, ExtremeInput2 )
 {
-  // ��������� �� ���� ������
+   // полилиния по двум точкам
+
+	std::vector<Point> points;
+	points.push_back(Point(1., 1.));
+	points.push_back(Point(3., 3.));
+	
+	GeomPolyline polyline;
+	ASSERT_FALSE( polyline.IsValid() );
+
+	polyline.Init(points);
+	ASSERT_TRUE(polyline.IsValid());
+	/// получение точек работает корректно
+	auto point = polyline.GetPoint(-0.75);
+	EXPECT_NEAR(point.GetX(), 1., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 1., 1.e-7);
+
+	point = polyline.GetPoint(0.);
+	EXPECT_NEAR(point.GetX(), 1., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 1., 1.e-7);
+
+	point = polyline.GetPoint(0.25);
+	EXPECT_NEAR(point.GetX(), 1.5, 1.e-7);
+	EXPECT_NEAR(point.GetY(), 1.5, 1.e-7);
+
+	point = polyline.GetPoint(1.);
+	EXPECT_NEAR(point.GetX(), 3., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 3., 1.e-7);
+	/// translate работает корректно 
+	polyline.Translate(1.0, 2.0);
+    point = polyline.GetPoint(0.);
+	EXPECT_NEAR(point.GetX(), 2.0, 1.e-7);
+	EXPECT_NEAR(point.GetY(), 3.0, 1.e-7);
+
+	/// roatate работает корретно
+
+	polyline.Rotate( CommonConstantsMath::PI );
+	point = polyline.GetPoint(0.);
+	EXPECT_NEAR(point.GetX(), -2.0, 1.e-7);
+	EXPECT_NEAR(point.GetY(), -3.0, 1.e-7);
+
+	/// scale работает корретно
+	polyline.Scale( 777., 0.07 );
+	point = polyline.GetPoint(0.);
+	EXPECT_NEAR(point.GetX(),-1554.0, 1.e-7);
+	EXPECT_NEAR(point.GetY(), -0.2099999999, 1.e-7);
+
+	/// фукнция расстояния тоже корректна
+
+	double distanceTosomePt = polyline.DistanceToPoint(Point(3., 4.)); 
+	EXPECT_NEAR(distanceTosomePt, 1557.0056917365464, 1.e-7);
 }
 
 TEST( PolylineTest, ExtremeInputClosed )
 {
   // ��������� ��������� �� ��� ������
+
+	std::vector<Point> points;
+	points.push_back(Point(1., 1.));
+	points.push_back(Point(3., 3.));
+	points.push_back(Point(1., 1.));
+
+	GeomPolyline polyline;
+	ASSERT_FALSE(polyline.IsValid());
+
+	polyline.Init(points);
+	ASSERT_TRUE(polyline.IsValid());
+	/// получение точек работает корректно
+	auto point = polyline.GetPoint(-0.75);
+	EXPECT_NEAR(point.GetX(), 1., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 1., 1.e-7);
+
+	point = polyline.GetPoint(0.);
+	EXPECT_NEAR(point.GetX(), 1., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 1., 1.e-7);
+
+	point = polyline.GetPoint(0.25);
+	EXPECT_NEAR(point.GetX(), 1.5, 1.e-7);
+	EXPECT_NEAR(point.GetY(), 1.5, 1.e-7);
+
+	point = polyline.GetPoint(1.);
+	EXPECT_NEAR(point.GetX(), 3., 1.e-7);
+	EXPECT_NEAR(point.GetY(), 3., 1.e-7);
+	/// translate работает корректно 
+	polyline.Translate(1.0, 2.0);
+	point = polyline.GetPoint(0.);
+	EXPECT_NEAR(point.GetX(), 2.0, 1.e-7);
+	EXPECT_NEAR(point.GetY(), 3.0, 1.e-7);
+
+	/// roatate работает корретно
+
+	polyline.Rotate(CommonConstantsMath::PI);
+	point = polyline.GetPoint(0.);
+	EXPECT_NEAR(point.GetX(), -2.0, 1.e-7);
+	EXPECT_NEAR(point.GetY(), -3.0, 1.e-7);
+
+	/// scale работает корретно
+	polyline.Scale(777., 0.07);
+	point = polyline.GetPoint(0.);
+	EXPECT_NEAR(point.GetX(), -1554., 1.e-7);
+	EXPECT_NEAR(point.GetY(), -0.20999999999, 1.e-7);
+
+	/// фукнция расстояния тоже корректна
+
+	double distanceTosomePt = polyline.DistanceToPoint(Point(3., 4.));
+	EXPECT_NEAR(distanceTosomePt, 1557.0056917365464, 1.e-7);
 }
 
 // ������������ "������������" �������
@@ -461,8 +617,9 @@ TEST( PolylineTest, DISABLED_InvalidPolyline )
 
   ASSERT_FALSE( polyline.IsValid() );
   Range emptyRange = polyline.GetRange();
-
-  EXPECT_NEAR( emptyRange.GetStart(), emptyRange.GetEnd(), pointNearValue ); // �������� ������� ����� ��� ��� �����-�� ������� ������� ���������
+  // Особое состояние - диапозон из NAN
+  ASSERT_TRUE(std::isnan(emptyRange.GetStart()) );
+  ASSERT_TRUE(std::isnan(emptyRange.GetEnd())) ;
 
   const double midParam = 0.5 * (emptyRange.GetStart() + emptyRange.GetEnd());
   Point midPt = polyline.GetPoint( midParam );

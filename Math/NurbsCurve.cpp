@@ -24,7 +24,7 @@ static long double fact( int N )
 
 //-----------------------------------------------------------------------------
 /**
-	Подсчитать биномиальные коэффициенты от числел n, k
+	Подсчитать биномиальные коэффициенты от числел n, k/
 */
 //---
 static double Bin( int n, int k )
@@ -32,39 +32,70 @@ static double Bin( int n, int k )
 	return fact( n ) / (fact( k ) * fact( n - k) );
 }
 
+
+
+//-----------------------------------------------------------------------------
+/**
+  Примитивная проверка для корректности данных длшя nurbs - кривой.
+*/
+//---
+static bool CorrectNurbs( const std::vector<Point>& ppoles, const std::vector<double>& wweights,
+	const std::vector<double>& nnodes, bool iisClosed, int ddegree )
+{
+	if ( ppoles.size() == 0 && ppoles.size() != wweights.size() && ppoles.size() < ddegree - 1 )
+		return false;
+
 }
+}
+
+
+/**  \brief Создать nurbs - кривую по опорным точкам, весам, опорным точкам и замкнутости.
+\param[in] points - опорные точки .\~
+\param[in] referencePoints - Опорные точки .\~
+\param[in] weights - Веса .\~
+\param[in] isClosed - Замкнутость .\~
+*/
+//---
 
 NurbsCurve::NurbsCurve( const std::vector<Point>& ppoles, const std::vector<double>& wweights,
   const std::vector<double>& nnodes, bool iisClosed, int ddegree ):
-  poles    ( ppoles ),
-  weights  ( wweights ),
-  nodes    ( nnodes ),
-  isClosed ( iisClosed ),
-  degree   ( ddegree )
+  poles    ( 0 ),
+  weights  ( 0 ),
+  nodes    ( 0 ),
+  isClosed ( 0 ),
+  degree   ( 0 )
 {
-
-  if ( nnodes.size() == 0 ) 
-  { 
-	  for (size_t i = 0; i < degree + 1; ++i) {
-		  nodes.push_back(0.);
-	  }
-	  double node = 1.;
-	  for ( size_t i = 0; i < ppoles.size() - degree - 1; ++i ) {
-		  nodes.push_back(node);
-		  node += 1.;
-	  }
-	  for ( size_t i = 0; i < degree + 1; ++i ) {
-		  nodes.push_back(node);
-	  }
-  }
-  if ( isClosed )
-  {
-    for ( size_t i=0; i<degree; ++i )
-    {
-      weights.push_back( weights[i] );
-      poles.push_back( poles[i] );
-    }
-  }
+	
+if ((CorrectNurbs(ppoles, wweights, nnodes, iisClosed, ddegree))) 
+{
+	poles = ppoles;
+	weights = wweights;
+	nodes = nnodes;
+	isClosed = iisClosed;
+	degree = ddegree;
+	if (nnodes.size() == 0)
+	{
+		for (size_t i = 0; i < degree + 1; ++i) {
+			nodes.push_back(0.);
+		}
+		double node = 1.;
+		for (size_t i = 0; i < ppoles.size() - degree - 1; ++i) {
+			nodes.push_back(node);
+			node += 1.;
+		}
+		for (size_t i = 0; i < degree + 1; ++i) {
+			nodes.push_back(node);
+		}
+	}
+	if (isClosed)
+	{
+		for (size_t i = 0; i < degree; ++i)
+		{
+			weights.push_back(weights[i]);
+			poles.push_back(poles[i]);
+		}
+	}
+}
 }
 
 
@@ -355,7 +386,7 @@ double NurbsCurve::CountWeightD2( double t , int span)  const
 	Исправить границы для параметра.
 */
 //---
-double NurbsCurve::fixedParam( double t ) const
+double NurbsCurve::FixedParam( double t ) const
 {
 	if (!isClosed)
 	{
@@ -383,17 +414,22 @@ double NurbsCurve::fixedParam( double t ) const
 //---
 Point NurbsCurve::GetPoint( double t ) const
 {
-	double currentT = fixedParam(t);
-	int span = FindSpan( currentT );
-	double weightNurbs = CountWeight( span, currentT) ;
-	Point resultPoint(0.0, 0.0);
-	std::vector<double> node = BasicFunctions(span, currentT);
-
-	for (int i = 0; i <= degree; i++)
+	if (IsValid())
 	{
-		resultPoint = resultPoint + poles[span - degree + i] * node[i] * weights[span - degree + i];
+		double currentT = FixedParam(t);
+		int span = FindSpan(currentT);
+		double weightNurbs = CountWeight(span, currentT);
+		Point resultPoint(0.0, 0.0);
+		std::vector<double> node = BasicFunctions(span, currentT);
+
+		for (int i = 0; i <= degree; i++)
+		{
+			resultPoint = resultPoint + poles[span - degree + i] * node[i] * weights[span - degree + i];
+		}
+		return Point(resultPoint * (1 / weightNurbs));
 	}
-	return Point(resultPoint * (1 / weightNurbs));
+	else
+		return Point(NAN, NAN);
 }
 
 
@@ -518,8 +554,13 @@ Vector NurbsCurve::CountingDer( double t, int der) const
 //---
 Vector  NurbsCurve::GetDerivativePoint( double t ) const
 {
-	double currentT = fixedParam( t );
-	return  CountingDer( currentT, 1);
+	if (IsValid()) 
+	{
+		double currentT = FixedParam(t);
+		return  CountingDer(currentT, 1);
+	}
+	else
+		return Vector(NAN, NAN);
 }
 
 
@@ -530,8 +571,13 @@ Vector  NurbsCurve::GetDerivativePoint( double t ) const
 //---
 Vector  NurbsCurve::Get2DerivativePoint( double t ) const
 {
-	double currentT = fixedParam( t );
-	return  CountingDer(currentT , 2);
+	if (IsValid()) 
+	{
+		double currentT = FixedParam(t);
+		return  CountingDer(currentT, 2);
+	}
+	else
+		return Vector(NAN, NAN);
 }
 
 
@@ -543,10 +589,15 @@ Vector  NurbsCurve::Get2DerivativePoint( double t ) const
 //---
 Range  NurbsCurve::GetRange() const
 {
-	if (isClosed)
-		return Range(nodes[degree], nodes[nodes.size() - 1 - degree]);
+	if (IsValid())
+	{
+		if (isClosed)
+			return Range(nodes[degree], nodes[nodes.size() - 1 - degree]);
 
-  return Range(nodes[0], nodes[nodes.size() - 1]);
+		return Range(nodes[0], nodes[nodes.size() - 1]);
+	}
+	else
+		return Range(NAN, NAN);
 }
 
 
@@ -557,12 +608,15 @@ Range  NurbsCurve::GetRange() const
 //---
 void  NurbsCurve::GetAsPolyLine( std::vector<Point>& polyLinePoints, double accuracy ) const
 {
-  double t = GetRange().GetStart() + 0.1;
-  while (t <= GetRange().GetEnd())
-  {
-    polyLinePoints.push_back( GetPoint(t) );
-    t = t + 0.1;
-  }
+if ( IsValid() ) 
+{
+	double t = GetRange().GetStart() + 0.1;
+	while (t <= GetRange().GetEnd())
+	{
+		polyLinePoints.push_back(GetPoint(t));
+		t = t + 0.1;
+	}
+}
 }
 
 

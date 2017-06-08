@@ -81,10 +81,9 @@ void DisplayedObject::addCurveToChart( QChart * chart)
 
   Math::GeomPolyline polyPoints;
   curve->GetAsPolyLine( polyPoints );
-  std::vector<Math::Point> polyline;
-  polyPoints.GetAsPolyLine( polyline );
-  for ( int i = 0; i < polyline.size(); i++ )
-    *currentseries << QPointF( polyline[i].GetX(), polyline[i].GetY() );
+
+  for ( int i = 0; i < polyPoints.GetReferensedPoints().size(); i++ )
+    *currentseries << QPointF( polyPoints.GetReferensedPoints()[i].GetX(), polyPoints.GetReferensedPoints()[i].GetY() );
 
   for ( int i = 0; i < curve->GetReferensedPoints().size(); i++ )
      *seriesRef << QPointF( curve->GetReferensedPoints()[i].GetX(), curve->GetReferensedPoints()[i].GetY() );

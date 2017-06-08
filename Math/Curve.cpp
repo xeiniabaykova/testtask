@@ -49,9 +49,9 @@ void Curve::GetAsPolyLine( GeomPolyline &polyLine, double accuracy ) const
 double Curve::FixedRange( double t ) const
 {
   if ( t < GetRange().GetStart() )
-    return GetRange().GetStart();
-  if ( t > GetRange().GetEnd() )
+   return GetRange().GetStart();
+  else if ( t > GetRange().GetEnd() )
     return GetRange().GetEnd();
-  return t;
+  else return t;
 }
 }

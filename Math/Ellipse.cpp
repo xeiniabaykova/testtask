@@ -79,12 +79,12 @@ Ellipse::Ellipse(Point thecenter, double ther1, double ther2, double thealpha) :
 	r2(0.0),
 	alpha(0.0)
 {
-	center = thecenter;
-	alpha = thealpha;
 	if ( ther1 > CommonConstantsMath::NULL_TOL && ther2 > CommonConstantsMath::NULL_TOL )
 	{
 		r1 = ther1;
 		r2 = ther2;
+		center = thecenter;
+		alpha = thealpha;
 	}		
 }
 
@@ -144,26 +144,24 @@ Ellipse::Ellipse ( const std::vector<Point>& points ):
   }
 }
 
+
 //-----------------------------------------------------------------------------
 /**
   Возвращается точка по параметру t.
 */
 //---
-//Point Ellipse::GetPoint( double t ) const
-//{
-//  Vector vector( r1 * cos(t), r2 * sin(t) );
-//  vector.Rotate( alpha );
-//  return center + vector;
-//}
-
-
 Point Ellipse::GetPoint( double t ) const
 {
-	double tcurrent = FixedParameter(t);
+	if ( IsValid() )
+	{
+		double tcurrent = FixedParameter(t);
 
-   Point point( r1 * cos(tcurrent), r2 * sin(tcurrent) );
-   point.Rotate(alpha);
-   return center + point;
+		Point point(r1 * cos(tcurrent), r2 * sin(tcurrent));
+		point.Rotate(alpha);
+		return center + point;
+	}
+	else
+		Point(NAN, NAN);
 }
 
 //-----------------------------------------------------------------------------
@@ -175,7 +173,12 @@ Point Ellipse::GetPoint( double t ) const
 
 Range Ellipse::GetRange() const
 {
-  return Range( 0.0, 2.0 * CommonConstantsMath::PI );
+	if (IsValid())
+	{
+		return Range(0.0, 2.0 * CommonConstantsMath::PI);
+	}
+	else
+		Range(NAN, NAN);
 }
 
 
@@ -186,10 +189,15 @@ Range Ellipse::GetRange() const
 //-----------------------------------------------------------------------------
 Vector Ellipse::GetDerivativePoint( double t ) const
 {
-	double tcurrent = FixedParameter(t);
-  Vector vector( r1 * -sin(tcurrent), r2 * cos(tcurrent) );
-  vector.Rotate( alpha );
-  return vector;
+	if (IsValid())
+	{
+		double tcurrent = FixedParameter(t);
+		Vector vector(r1 * -sin(tcurrent), r2 * cos(tcurrent));
+		vector.Rotate(alpha);
+		return vector;
+	}
+	else
+		return Vector(NAN, NAN);
 }
 
 
@@ -200,10 +208,15 @@ Vector Ellipse::GetDerivativePoint( double t ) const
 //---
 Vector Ellipse::Get2DerivativePoint( double t ) const
 {
-  double tcurrent = FixedParameter(t);
-  Vector vector( -r1 * cos(tcurrent), -r2 * sin(tcurrent) );
-  vector.Rotate( alpha );
-  return vector;
+	if (IsValid())
+	{
+		double tcurrent = FixedParameter(t);
+		Vector vector(-r1 * cos(tcurrent), -r2 * sin(tcurrent));
+		vector.Rotate(alpha);
+		return vector;
+	}
+	else
+		Vector(NAN, NAN);
 }
 
 
@@ -323,6 +336,11 @@ std::vector<Point> Ellipse::GetReferensedPoints () const
 }
 
 
+//-----------------------------------------------------------------------------
+/**
+	 Возращает параметр, преобразованный к области определения параметра [0, 2pi], используя свойство переодичности кривой.
+*/
+//---
 double Ellipse::FixedParameter( double t ) const
 {
 	Range range = GetRange();
