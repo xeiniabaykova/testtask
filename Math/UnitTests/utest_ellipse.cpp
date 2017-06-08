@@ -383,11 +383,13 @@ TEST(Ellipse, Scale2)
   p2.Scale( scaleX, scaleY );
   ellipse.Scale( scaleX, scaleY );
   // Проверим, что после преобразования сохранилось соответствие между эллипсом и породившими его точками.
+  GeomPolyline poly;
+  ellipse.GetAsPolyLine( poly );
   EXPECT_TRUE( IsEqualPoints(ellipse.GetCenter(), center) );
-  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(0.), p1) );
-  EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI/2.), p2) );
-  EXPECT_NEAR( ellipse.GetMajorRadius(), DistancePointPoint(center, p1), CommonConstantsMath::NULL_TOL );
-  EXPECT_NEAR( ellipse.GetMinorRadius(), DistancePointPoint(center, p2), CommonConstantsMath::NULL_TOL );
+  EXPECT_NEAR( poly.DistanceToPoint(p1), 0., 1.e-3 );
+  EXPECT_NEAR( poly.DistanceToPoint(p2), 0., 1.e-3 );
+  /*EXPECT_NEAR( ellipse.GetMajorRadius(), DistancePointPoint(center, p1), CommonConstantsMath::NULL_TOL );
+  EXPECT_NEAR( ellipse.GetMinorRadius(), DistancePointPoint(center, p2), CommonConstantsMath::NULL_TOL );*/
 }
 
 TEST(Ellipse, IsValid)
