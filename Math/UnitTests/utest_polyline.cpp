@@ -1,8 +1,10 @@
 //
 // Created by alakhverdyants on 22.05.17.
 //
-#include "../GeomPolyline.h"
-#include "gtest/gtest.h"
+#include "GeomPolyline.h"
+#include <gtest/gtest.h>
+
+
 using namespace Math;
 /// если две точки в полилинии, они не должны совпадать
 TEST(PolylineTest, ConstructSamePoints)
@@ -296,59 +298,58 @@ TEST( Point, DistancePoints )
 
 
 // ����� �� ���������� ���������
-TEST( PolylineTest, PolylineConstitution )
-{
-  GeomPolyline polylineD;
-  EXPECT_FALSE( polylineD.IsValid() ); // ��������� �� ��������� ���������
+TEST( PolylineTest, PolylineConstitution ) {
+	GeomPolyline polylineD;
+	EXPECT_FALSE(polylineD.IsValid()); // ��������� �� ��������� ���������
 
-  std::vector<Point> points0;
-  GeomPolyline polyline0( points0 );
-  EXPECT_FALSE( polyline0.IsValid() ); // ��������� ��� ����� ���������
+	std::vector<Point> points0;
+	GeomPolyline polyline0(points0);
+	EXPECT_FALSE(polyline0.IsValid()); // ��������� ��� ����� ���������
 
-  std::vector<Point> points1( 1 , Point() );
-  GeomPolyline polyline1( points1 );
-  EXPECT_FALSE( polyline1.IsValid() ); // ��������� � ����� ������ ���������
+	std::vector<Point> points1(1, Point());
+	GeomPolyline polyline1(points1);
+	EXPECT_FALSE(polyline1.IsValid()); // ��������� � ����� ������ ���������
 
-  std::vector<Point> points2( 2, Point() );
-  points2[0].Translate( 5.0, 10.0 );
-  GeomPolyline polyline2( points2 );
-  EXPECT_TRUE( polyline2.IsValid() ); // ��������� � ����� ������� ������� ���������
+	std::vector<Point> points2(2, Point());
+	points2[0].Translate(5.0, 10.0);
+	GeomPolyline polyline2(points2);
+	EXPECT_TRUE(polyline2.IsValid()); // ��������� � ����� ������� ������� ���������
 
-  std::vector<Point> points3( 4, Point() );
-  points3[1].Translate( 5.0, 0.0 );
-  points3[2].Translate( 5.0, 10.0 );
-  points3[3].Translate( 0.0, 10.0 );
-  GeomPolyline polyline3( points3 );
-  EXPECT_TRUE( polyline3.IsValid() ); // ����������� ��������� ���������
+	std::vector<Point> points3(4, Point());
+	points3[1].Translate(5.0, 0.0);
+	points3[2].Translate(5.0, 10.0);
+	points3[3].Translate(0.0, 10.0);
+	GeomPolyline polyline3(points3);
+	EXPECT_TRUE(polyline3.IsValid()); // ����������� ��������� ���������
 
-  std::vector<Point> points4( 4, Point() );
-  points4[1].Translate( 5.0, 0.0 );
-  points4[2].Translate( 5.0, 10.0 );
-  GeomPolyline polyline4( points4 );
-  EXPECT_TRUE( polyline4.IsValid() ); // ��������� ��������� ���������
+	std::vector<Point> points4(4, Point());
+	points4[1].Translate(5.0, 0.0);
+	points4[2].Translate(5.0, 10.0);
+	GeomPolyline polyline4(points4);
+	EXPECT_TRUE(polyline4.IsValid()); // ��������� ��������� ���������
 
-  std::vector<Point> points5( 4, Point() );
-  points5[1].Translate( 5.0, 10.0 );
-  points5[2].Translate( 5.0, 10.0 );
-  points5[3].Translate( 2.0, 30.0 );
-  GeomPolyline polyline5( points5 );
-  EXPECT_FALSE( polyline5.IsValid() ); // ����������� ���������� ����� �����������
+	std::vector<Point> points5(4, Point());
+	points5[1].Translate(5.0, 10.0);
+	points5[2].Translate(5.0, 10.0);
+	points5[3].Translate(2.0, 30.0);
+	GeomPolyline polyline5(points5);
+	EXPECT_FALSE(polyline5.IsValid()); // ����������� ���������� ����� �����������
 
-  std::vector<Point> points6( 5, Point() );
-  points6[1].Translate( 5.0, 10.0 );
-  points6[2].Translate( 8.0, 10.0 );
-  points6[3].Translate( 5.0, 10.0 );
-  points6[4].Translate( 50.0, 100.0 );
-  GeomPolyline polyline6( points6 );
-  EXPECT_FALSE( polyline6.IsValid() ); // ����������� ���������� ����� �����������
+	std::vector<Point> points6(5, Point());
+	points6[1].Translate(5.0, 10.0);
+	points6[2].Translate(8.0, 10.0);
+	points6[3].Translate(5.0, 10.0);
+	points6[4].Translate(50.0, 100.0);
+	GeomPolyline polyline6(points6);
+	EXPECT_FALSE(polyline6.IsValid()); // ����������� ���������� ����� �����������
 
-  std::vector<Point> points7( 5, Point() );
-  points7[1].Translate( 5.0, 10.0 );
-  points7[2].Translate( 8.0, 10.0 );
-  points7[3].Translate( 5.0, 10.0 );
-  GeomPolyline polyline7( points7 );
-  EXPECT_FALSE( polyline7.IsValid() ); // ����������� ���������� ����� ����������� � ��� ��������� ���������
-
+	std::vector<Point> points7(5, Point());
+	points7[1].Translate(5.0, 10.0);
+	points7[2].Translate(8.0, 10.0);
+	points7[3].Translate(5.0, 10.0);
+	GeomPolyline polyline7(points7);
+	EXPECT_FALSE(polyline7.IsValid()); // ����������� ���������� ����� ����������� � ��� ��������� ���������
+}
   // Проверить то же самое для метода Init}
 
 TEST(PolylineTest, PolylineInit)
@@ -555,8 +556,6 @@ TEST( PolylineTest, ExtremeInput2 )
 
 TEST( PolylineTest, ExtremeInputClosed )
 {
-  // ��������� ��������� �� ��� ������
-
 	std::vector<Point> points;
 	points.push_back(Point(1., 1.));
 	points.push_back(Point(3., 3.));
