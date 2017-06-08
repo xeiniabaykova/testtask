@@ -373,6 +373,7 @@ TEST(Ellipse, Scale2)
   std::vector<Point> ellPnts = {center, p1, p2};
   Ellipse ellipse( ellPnts );
   // Проверим, что получили ожидаемое начальное состояние.
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetCenter(), center) );
   EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(0.), p1) );
   EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI/2.), p2) );
   // Проведем масштабирующее преобразование эллипса и точек, на основе которых мы его породили.
@@ -382,6 +383,7 @@ TEST(Ellipse, Scale2)
   p2.Scale( scaleX, scaleY );
   ellipse.Scale( scaleX, scaleY );
   // Проверим, что после преобразования сохранилось соответствие между эллипсом и породившими его точками.
+  EXPECT_TRUE( IsEqualPoints(ellipse.GetCenter(), center) );
   EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(0.), p1) );
   EXPECT_TRUE( IsEqualPoints(ellipse.GetPoint(CommonConstantsMath::PI/2.), p2) );
   EXPECT_NEAR( ellipse.GetMajorRadius(), DistancePointPoint(center, p1), CommonConstantsMath::NULL_TOL );
