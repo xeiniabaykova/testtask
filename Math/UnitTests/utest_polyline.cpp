@@ -273,66 +273,66 @@ TEST(PolylineTest, Scaling)
 
 static const double pointNearValue( 1e-7 );
 
-// Конструткор точки, функция нахождения расстояния
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 TEST( Point, DistancePoints )
 {
   Point p1, p2( 3.0, -4.0 );
-  // Тест конструктора по умолчанию
+  // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   ASSERT_TRUE( p1.IsValid() );
   ASSERT_TRUE( p2.IsValid() );
 
   ASSERT_NEAR( p1.GetX(), 0.0, pointNearValue );
   ASSERT_NEAR( p1.GetY(), 0.0, pointNearValue );
-  // Тест конструктора по координатам
+  // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   ASSERT_NEAR( p2.GetX(), 3.0, pointNearValue );
   ASSERT_NEAR( p2.GetY(), -4.0, pointNearValue );
-  // Расстояние от точки до себя
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ
   ASSERT_NEAR( Math::Distance( p1, p1 ), 0.0, pointNearValue );
   ASSERT_NEAR( Math::Distance( p2, p2 ), 0.0, pointNearValue );
-  // Теорема Пифагора
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   ASSERT_NEAR( Math::Distance( p1, p2 ), 5.0, pointNearValue );
   ASSERT_NEAR( Math::Distance( p2, p1 ), 5.0, pointNearValue );
 }
 
 
-// Тесты на устройство полилинии
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 TEST( PolylineTest, PolylineConstitution )
 {
   GeomPolyline polylineD;
-  EXPECT_FALSE( polylineD.IsValid() ); // Полилинии по умолчанию невалидны
+  EXPECT_FALSE( polylineD.IsValid() ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
   std::vector<Point> points0;
   GeomPolyline polyline0( points0 );
-  EXPECT_FALSE( polyline0.IsValid() ); // Полилинии без точек невалидны
+  EXPECT_FALSE( polyline0.IsValid() ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
   std::vector<Point> points1( 1 , Point() );
   GeomPolyline polyline1( points1 );
-  EXPECT_FALSE( polyline1.IsValid() ); // Полилинии с одной точкой невалидны
+  EXPECT_FALSE( polyline1.IsValid() ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
   std::vector<Point> points2( 2, Point() );
   points2[0].Translate( 5.0, 10.0 );
   GeomPolyline polyline2( points2 );
-  EXPECT_TRUE( polyline2.IsValid() ); // Полилинии с двумя разными точками разрешены
+  EXPECT_TRUE( polyline2.IsValid() ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
   std::vector<Point> points3( 4, Point() );
   points3[1].Translate( 5.0, 0.0 );
   points3[2].Translate( 5.0, 10.0 );
   points3[3].Translate( 0.0, 10.0 );
   GeomPolyline polyline3( points3 );
-  EXPECT_TRUE( polyline3.IsValid() ); // Незамкнутые полилинии разрешены
+  EXPECT_TRUE( polyline3.IsValid() ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
   std::vector<Point> points4( 4, Point() );
   points4[1].Translate( 5.0, 0.0 );
   points4[2].Translate( 5.0, 10.0 );
   GeomPolyline polyline4( points4 );
-  EXPECT_TRUE( polyline4.IsValid() ); // Замкнутые полилинии разрешены
+  EXPECT_TRUE( polyline4.IsValid() ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
   std::vector<Point> points5( 4, Point() );
   points5[1].Translate( 5.0, 10.0 );
   points5[2].Translate( 5.0, 10.0 );
   points5[3].Translate( 2.0, 30.0 );
   GeomPolyline polyline5( points5 );
-  EXPECT_FALSE( polyline5.IsValid() ); // совпадающие внутренние точки недопустимы
+  EXPECT_FALSE( polyline5.IsValid() ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
   std::vector<Point> points6( 5, Point() );
   points6[1].Translate( 5.0, 10.0 );
@@ -340,57 +340,57 @@ TEST( PolylineTest, PolylineConstitution )
   points6[3].Translate( 5.0, 10.0 );
   points6[4].Translate( 50.0, 100.0 );
   GeomPolyline polyline6( points6 );
-  EXPECT_FALSE( polyline6.IsValid() ); // совпадающие внутренние точки недопустимы
+  EXPECT_FALSE( polyline6.IsValid() ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
   std::vector<Point> points7( 5, Point() );
   points7[1].Translate( 5.0, 10.0 );
   points7[2].Translate( 8.0, 10.0 );
   points7[3].Translate( 5.0, 10.0 );
   GeomPolyline polyline7( points7 );
-  EXPECT_FALSE( polyline7.IsValid() ); // совпадающие внутренние точки недопустимы и для замкнутой полилинии
+  EXPECT_FALSE( polyline7.IsValid() ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
-  // Проверить то же самое для метода Init
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ Init
 }
 
 
 TEST( PolylineTest, CorrectInput )
 {
-  // Тестирование кривой, созданной по корректным данным в корректных операциях
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   std::vector<Point> points;
-  points.push_back( Point( 0., 0. ) ); // параметр 0.0
-  points.push_back( Point( 2., 0. ) ); // параметр 1.0
-  points.push_back( Point( 2., 1. ) ); // параметр 2.0
-  points.push_back( Point( 0., 1. ) ); // параметр 3.0
+  points.push_back( Point( 0., 0. ) ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 0.0
+  points.push_back( Point( 2., 0. ) ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1.0
+  points.push_back( Point( 2., 1. ) ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 2.0
+  points.push_back( Point( 0., 1. ) ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 3.0
   GeomPolyline polyline( points );
   ASSERT_TRUE( polyline.IsValid() );
 
-  // Тестируем диапазон
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   Range pRange = polyline.GetRange();
   EXPECT_GT( pRange.GetEnd(), pRange.GetStart() );
   EXPECT_NEAR( pRange.GetStart(), 0.0, pointNearValue );
   EXPECT_NEAR( pRange.GetEnd(), 3.0, pointNearValue );
-  // преобразование парамтера в диапазон  
-  EXPECT_NEAR( polyline.FixedRange( 2.0 ), 2.0, pointNearValue ); // Середина диапазона
-  EXPECT_NEAR( polyline.FixedRange( pRange.GetStart() ), pRange.GetStart(), pointNearValue ); // Левая граница
-  EXPECT_NEAR( polyline.FixedRange( pRange.GetEnd() ), pRange.GetEnd(), pointNearValue ); // Правая граница
-  // За границами
-  EXPECT_NEAR( polyline.FixedRange( pRange.GetStart() - 5.0 ), pRange.GetStart(), pointNearValue ); // Левая граница
-  EXPECT_NEAR( polyline.FixedRange( pRange.GetEnd() + 2.0 ), pRange.GetEnd(), pointNearValue ); // Правая граница
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ  
+  EXPECT_NEAR( polyline.FixedRange( 2.0 ), 2.0, pointNearValue ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+  EXPECT_NEAR( polyline.FixedRange( pRange.GetStart() ), pRange.GetStart(), pointNearValue ); // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+  EXPECT_NEAR( polyline.FixedRange( pRange.GetEnd() ), pRange.GetEnd(), pointNearValue ); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+  // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+  EXPECT_NEAR( polyline.FixedRange( pRange.GetStart() - 5.0 ), pRange.GetStart(), pointNearValue ); // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+  EXPECT_NEAR( polyline.FixedRange( pRange.GetEnd() + 2.0 ), pRange.GetEnd(), pointNearValue ); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
-  // Тест вычисления точек
+  // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 
-  // В целочисленных координатах должны быть исходные точки
+  // пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
   ASSERT_NEAR( Math::Distance( polyline.GetPoint( 0.0 ), points[0] ), 0.0, pointNearValue );
   ASSERT_NEAR( Math::Distance( polyline.GetPoint( 1.0 ), points[1] ), 0.0, pointNearValue );
   ASSERT_NEAR( Math::Distance( polyline.GetPoint( 2.0 ), points[2] ), 0.0, pointNearValue );
-  // промежуточные точки
-  Point inter0 = points[0] * 0.2 + points[1] * 0.8; // параметр 0.8
-  Point inter1 = points[1] * 0.2 + points[2] * 0.8; // параметр 1.8
-  Point inter2 = points[2] * 0.2 + points[3] * 0.8; // параметр 2.8
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+  Point inter0 = points[0] * 0.2 + points[1] * 0.8; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 0.8
+  Point inter1 = points[1] * 0.2 + points[2] * 0.8; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1.8
+  Point inter2 = points[2] * 0.2 + points[3] * 0.8; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 2.8
   ASSERT_NEAR( Math::Distance( polyline.GetPoint( 0.8 ), inter0 ), 0.0, pointNearValue );
   ASSERT_NEAR( Math::Distance( polyline.GetPoint( 1.8 ), inter1 ), 0.0, pointNearValue );
   ASSERT_NEAR( Math::Distance( polyline.GetPoint( 2.8 ), inter2 ), 0.0, pointNearValue );
-  // Тестируем производные
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   Vector v00 = polyline.GetDerivativePoint( 0.0 );
   Vector v10 = polyline.GetDerivativePoint( 1.0 );
   Vector v20 = polyline.GetDerivativePoint( 2.0 );
@@ -399,7 +399,7 @@ TEST( PolylineTest, CorrectInput )
   Vector v18 = polyline.GetDerivativePoint( 1.8 );
   Vector v28 = polyline.GetDerivativePoint( 2.8 );
 
-  // производные в точках: абсолютное значение
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   ASSERT_NEAR( v00.GetX(), 2.0, pointNearValue );
   ASSERT_NEAR( v00.GetY(), 0.0, pointNearValue );
   
@@ -409,7 +409,7 @@ TEST( PolylineTest, CorrectInput )
   ASSERT_NEAR( v20.GetX(), -2.0, pointNearValue );
   ASSERT_NEAR( v20.GetY(), 0.0, pointNearValue );
 
-  // Непрерывность производной справа
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
   ASSERT_NEAR( v00.GetX(), v08.GetX(), pointNearValue );
   ASSERT_NEAR( v00.GetY(), v08.GetY(), pointNearValue );
   
@@ -419,67 +419,67 @@ TEST( PolylineTest, CorrectInput )
   ASSERT_NEAR( v20.GetX(), v28.GetX(), pointNearValue );
   ASSERT_NEAR( v20.GetY(), v28.GetY(), pointNearValue );
 
-  // Пограничные параметры и их непротиворечивость
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   ASSERT_NEAR( Math::Distance( points[0], polyline.GetPoint( pRange.GetStart() ) ), 0.0, pointNearValue );
   ASSERT_NEAR( Math::Distance( points.back(), polyline.GetPoint( pRange.GetEnd() ) ), 0.0, pointNearValue );
 
-  // Применение метода коррекции параметра при вычислении точки
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 
-  // Вычисление точки
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
   ASSERT_NEAR( Math::Distance( polyline.GetPoint( polyline.GetRange().GetStart() - 1.7 ), polyline.GetPoint( polyline.GetRange().GetStart() ) ), 0.0, pointNearValue );
   ASSERT_NEAR( Math::Distance( polyline.GetPoint( polyline.GetRange().GetEnd()), polyline.GetPoint( polyline.GetRange().GetEnd() + 2.4 ) ), 0.0, pointNearValue );
 
-  // Вычисление производной
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   ASSERT_NEAR( Math::Distance( Point(polyline.GetDerivativePoint( polyline.GetRange().GetStart() - 1.7 )), Point( polyline.GetDerivativePoint( polyline.GetRange().GetStart() ) )), 0.0, pointNearValue );
   ASSERT_NEAR( Math::Distance( Point( polyline.GetDerivativePoint( polyline.GetRange().GetEnd() )), Point( polyline.GetDerivativePoint( polyline.GetRange().GetEnd() + 2.4 ) )), 0.0, pointNearValue );
 
-  // Расстояние до точки
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
   ASSERT_NEAR( polyline.DistanceToPoint( Point() ), 0.0, pointNearValue );
   ASSERT_NEAR( polyline.DistanceToPoint( Point( 1.0, 0.0 ) ), 0.0, pointNearValue );
   ASSERT_NEAR( polyline.DistanceToPoint( Point( -1., 0. ) ), 1.0, pointNearValue );
 }
 
 
-// Тестирование погранчиных случаев
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
 TEST( PolylineTest, ExtremeInput2 )
 {
-  // полилиния по двум точкам
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 }
 
 TEST( PolylineTest, ExtremeInputClosed )
 {
-  // Замкнутая полилиния по трём точкам
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 }
 
-// Тестирование "некорректных" случаев
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
-TEST( PolylineTest, InvalidPolyline )
+TEST( PolylineTest, DISABLED_InvalidPolyline )
 {
-  // Тестирование невалидной полилинии
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   GeomPolyline polyline;
 
   ASSERT_FALSE( polyline.IsValid() );
   Range emptyRange = polyline.GetRange();
 
-  EXPECT_NEAR( emptyRange.GetStart(), emptyRange.GetEnd(), pointNearValue ); // Диапазон нулевой длины или ещё какой-то признак особого состояния
+  EXPECT_NEAR( emptyRange.GetStart(), emptyRange.GetEnd(), pointNearValue ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
   const double midParam = 0.5 * (emptyRange.GetStart() + emptyRange.GetEnd());
   Point midPt = polyline.GetPoint( midParam );
-  EXPECT_FALSE( midPt.IsValid() ); // вычисление точки должно формально работать, но нужно сигнализировать, что результатом нельзя пользоваться
+  EXPECT_FALSE( midPt.IsValid() ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
   Vector midDer = polyline.GetDerivativePoint( midParam );
-  EXPECT_FALSE( midDer.IsValid() ); // вычисление производной должно формально работать, но нужно сигнализировать, что результатом нельзя пользоваться
+  EXPECT_FALSE( midDer.IsValid() ); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
   GeomPolyline polyReplica;
   std::vector<Point> repInitPts( 2, Point() ) ;
   repInitPts[1].Translate( 10., 20. );
 
   polyline.GetAsPolyLine( polyReplica, Math::CommonConstantsMath::PRECISION_POLYLINE );
-  EXPECT_FALSE( polyReplica.IsValid() ); // копия-полилиния должна насчитываться в любом случае, если не предусмотрено информации о невозможности это сделать
+  EXPECT_FALSE( polyReplica.IsValid() ); // пїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
-  double distanceTosomePt = polyline.DistanceToPoint( Point( 3., 4. ) ); // Должно как-то работать.
-  EXPECT_LT( distanceTosomePt, -Math::CommonConstantsMath::NULL_TOL ); // В качестве критерия некорреткности операции предлагаю взять этот: возвращать, например, -1
+  double distanceTosomePt = polyline.DistanceToPoint( Point( 3., 4. ) ); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+  EXPECT_LT( distanceTosomePt, -Math::CommonConstantsMath::NULL_TOL ); // пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, -1
 }
 
-// Тестирование переходов валидная - невалидная
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
