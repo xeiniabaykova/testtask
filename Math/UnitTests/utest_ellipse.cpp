@@ -384,3 +384,53 @@ TEST(Ellipse, IsValid2)
   Ellipse ellipse2(Point(2., 1.), 1., 1., 0.);
   EXPECT_TRUE( ellipse2.IsValid() );
 }
+
+
+// Правило экстраполяции: один в один взято с правила экстраполяции полилинии:
+// приведение к граничным точкам всего того, что лежит за пределами области определения
+TEST( Ellipse, Extrapole )
+{
+  Ellipse ellipse( Point(), 1., 1., 0. );
+  ASSERT_TRUE( ellipse.IsValid() );
+  EXPECT_NEAR( Math::Distance( ellipse.GetPoint( ellipse.GetRange().GetStart() - 1.7 ), ellipse.GetPoint( ellipse.GetRange().GetStart() ) ), 0.0, 1e-7 );
+  EXPECT_NEAR( Math::Distance( ellipse.GetPoint( ellipse.GetRange().GetEnd() ), ellipse.GetPoint( ellipse.GetRange().GetEnd() + 2.4 ) ), 0.0, 1e-7 );
+}
+
+// Грубое вычисление габарита
+static void Gabarit( Curve& crv, double& rx, double& ry ) {
+  GeomPolyline polyRep;
+  crv.GetAsPolyLine( polyRep );
+  if ( polyRep.IsValid() ) {
+    auto approxPts = polyRep.GetReferensedPoints();
+    double gab[] = { 100.0, -100.0, 100.0, -100.0 };
+    for ( size_t i = 0; i < approxPts.size(); i++ ) {
+      const Point& curPt = approxPts[i];
+      if ( !curPt.IsValid() )
+        continue;
+      if ( gab[0] > curPt.GetX() )
+        gab[0] = curPt.GetX();
+      if ( gab[1] < curPt.GetX() )
+        gab[1] = curPt.GetX();
+      if ( gab[2] > curPt.GetY() )
+        gab[2] = curPt.GetY();
+      if ( gab[3] < curPt.GetY() )
+        gab[3] = curPt.GetY();
+    }
+    rx = gab[1] - gab[0];
+    ry = gab[3] - gab[2];
+  }
+}
+
+
+TEST( Ellipse, ScaleRotated )
+{
+  Ellipse ellipse( Point(), 2., 1., Math::CommonConstantsMath::PI / 6.0 );
+  ASSERT_TRUE( ellipse.IsValid() );
+  double gabarits[4];
+  Gabarit( ellipse, gabarits[0], gabarits[1] );
+  ellipse.Scale( 2.0, 1.0 );
+  ASSERT_TRUE( ellipse.IsValid() );
+  Gabarit( ellipse, gabarits[2], gabarits[3] );
+  EXPECT_NEAR( gabarits[0] * 2, gabarits[2], 0.5 );
+  EXPECT_NEAR( gabarits[1], gabarits[3], 0.5 );
+}
