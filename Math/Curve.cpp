@@ -30,11 +30,17 @@ void Curve::GetAsPolyLine( GeomPolyline &polyLine, double accuracy ) const
   std::vector<Point> polyLinePoints;
   double t = GetRange().GetStart();
   polyLinePoints.push_back( GetPoint(t) );
-  while ( t < GetRange().GetEnd() )
+  while ( t <= GetRange().GetEnd() )
   {
     double current = CountingStep( t, accuracy);
-	t = t + current;
-	Point point ( GetPoint(t) );
+    t = t + current;
+    if ( t > GetRange().GetEnd() )
+    {
+      Point point ( GetPoint(GetRange().GetEnd()) );
+       polyLinePoints.push_back( point );
+       break;
+    }
+    Point point ( GetPoint(t) );
     polyLinePoints.push_back( point );
   }
    polyLine.Init( polyLinePoints );

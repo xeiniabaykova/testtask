@@ -56,7 +56,7 @@ public:
   virtual Range       GetRange               () const;                                                         ///< Вернуть границы параметра для Nurbs : [nodes[0], nodes[size]].
   virtual Vector      GetDerivativePoint     ( double t ) const;                                               ///< Вернуть производную на nurbs по параметру t.
   virtual Vector      Get2DerivativePoint    ( double t ) const;                                               ///< Вернуть вторую производную на nurbs по параметру t.
-  virtual void        GetAsPolyLine          ( std::vector<Point> & polyLinePoints, double accuracy ) const;   ///< Вернуть полилинию для nurbs.
+ // virtual void        GetAsPolyLine          ( std::vector<Point> & polyLinePoints, double accuracy ) const;   ///< Вернуть полилинию для nurbs.
   virtual void        Translate              ( double xShift, double yShift );                                 ///< Сдвиг по оси x на xShift, по оси y на yShift.
   virtual void        Rotate                 ( double alpha );                                                 ///< Повернуть относительно начала координат на угол alpha.
   virtual void        Scale                  ( double XScaling, double YScaling );                             ///< Масштабировать на xScaling по оси x, на yScaling по оси у.

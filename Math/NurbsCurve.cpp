@@ -604,23 +604,23 @@ Range  NurbsCurve::GetRange() const
 }
 
 
-//-----------------------------------------------------------------------------
-/**
-  Вернуть полилинию для nurbs.
-*/
-//---
-void  NurbsCurve::GetAsPolyLine( std::vector<Point>& polyLinePoints, double accuracy ) const
-{
-if ( IsValid() ) 
-{
-	double t = GetRange().GetStart() + 0.1;
-  while ( t <= GetRange().GetEnd() )
-	{
-    polyLinePoints.push_back( GetPoint(t) );
-		t = t + 0.1;
-	}
-}
-}
+////-----------------------------------------------------------------------------
+///**
+//  Вернуть полилинию для nurbs.
+//*/
+////---
+//void  NurbsCurve::GetAsPolyLine( std::vector<Point>& polyLinePoints, double accuracy ) const
+//{
+//  if ( IsValid() )
+//  {
+//    double t = GetRange().GetStart();
+//    while ( t <= GetRange().GetEnd() )
+//    {
+//      polyLinePoints.push_back( GetPoint(t) );
+//      t = t + 0.1;
+//    }
+//  }
+//}
 
 
 //-----------------------------------------------------------------------------
