@@ -259,8 +259,9 @@ void Ellipse::Scale( double xScaling, double yScaling )
 {
   if ( IsValid() )
   {
-  r1 *= xScaling;
-  r2 *= yScaling;
+	  center.Scale(xScaling, yScaling);
+	  r1 *= xScaling;
+	  r2 *= yScaling;
   }
 }
 

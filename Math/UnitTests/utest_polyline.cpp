@@ -296,9 +296,9 @@ TEST( Point, DistancePoints )
   ASSERT_NEAR( Math::Distance( p2, p1 ), 5.0, pointNearValue );
 }
 
-
+TEST(PolylineTest, PolylineConstitution) 
+{
 // ����� �� ���������� ���������
-  EXPECT_FALSE( polylineD.IsValid() ); // ��������� �� ��������� ���������
 	GeomPolyline polylineD;
 	EXPECT_FALSE(polylineD.IsValid()); // ��������� �� ��������� ���������
 
