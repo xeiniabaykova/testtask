@@ -200,7 +200,7 @@ TEST(PolylineTest, GetAsPolyLine)
 	points.push_back( Point(6., 11.) );
 	points.push_back( Point(7., 11.) );
 	const GeomPolyline polyline(points);
-	 GeomPolyline polylineFromPolyline;
+	GeomPolyline polylineFromPolyline;
 	polyline.GetAsPolyLine( polylineFromPolyline, 1.e-7 );
 	EXPECT_EQ( polylineFromPolyline.GetReferensedPoints().size(), 8 );
 	EXPECT_NEAR( polylineFromPolyline.GetReferensedPoints()[0].GetX(), 8., 1.e-7 );
@@ -298,7 +298,7 @@ TEST( Point, DistancePoints )
 
 
 // ����� �� ���������� ���������
-TEST( PolylineTest, PolylineConstitution ) {
+  EXPECT_FALSE( polylineD.IsValid() ); // ��������� �� ��������� ���������
 	GeomPolyline polylineD;
 	EXPECT_FALSE(polylineD.IsValid()); // ��������� �� ��������� ���������
 
@@ -343,15 +343,8 @@ TEST( PolylineTest, PolylineConstitution ) {
 	GeomPolyline polyline6(points6);
 	EXPECT_FALSE(polyline6.IsValid()); // ����������� ���������� ����� �����������
 
-	std::vector<Point> points7(5, Point());
-	points7[1].Translate(5.0, 10.0);
-	points7[2].Translate(8.0, 10.0);
-	points7[3].Translate(5.0, 10.0);
-	GeomPolyline polyline7(points7);
-	EXPECT_FALSE(polyline7.IsValid()); // ����������� ���������� ����� ����������� � ��� ��������� ���������
+	// Проверить то же самое для метода Init}
 }
-  // Проверить то же самое для метода Init}
-
 TEST(PolylineTest, PolylineInit)
 {
 	std::vector<Point> points0;

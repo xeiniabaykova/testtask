@@ -14,7 +14,7 @@ DisplayedObject::DisplayedObject( std::shared_ptr<Math::Curve> curve,  QValueAxi
 }
 //-----------------------------------------------------------------------------
 /**
-  \ru вернуть текущее состояние селекции
+  Вернуть текущее состояние селекции.
 */
 //---
 bool DisplayedObject::GetSelectionStatus()
@@ -25,7 +25,7 @@ bool DisplayedObject::GetSelectionStatus()
 
 //-----------------------------------------------------------------------------
 /**
-  Изменить состояние селекции в зависимости от полученной точки
+  Изменить состояние селекции в зависимости от полученной точки.
 */
 //---
 void DisplayedObject::ModifySelectionStatus( Math::Point cursor, double precision, QColor selectedColor )
@@ -43,7 +43,7 @@ void DisplayedObject::ModifySelectionStatus( Math::Point cursor, double precisio
 
 //-----------------------------------------------------------------------------
 /**
-  Установить новый цвет для неселектированной кривой
+  Установить новый цвет для неселектированной кривой.
 */
 //---
 void DisplayedObject::SetColor( QColor color )
@@ -62,15 +62,21 @@ void DisplayedObject::SetColorUnselectedCurve( QColor color )
 
 //-----------------------------------------------------------------------------
 /**
-  \ru убрать series из графика
+  Убрать series из графика.
 */
-//-----------------------------------------------------------------------------
+//---
  DisplayedObject::~DisplayedObject()
 {
   currentseries->chart()->removeSeries( currentseries );
   seriesRef->chart()->removeSeries( seriesRef );
 }
 
+
+ //-----------------------------------------------------------------------------
+ /**
+   Добавить кривую к пространству отрисовки.
+ */
+ //---
 void DisplayedObject::addCurveToChart( QChart * chart)
 {
   currentseries = new QLineSeries;

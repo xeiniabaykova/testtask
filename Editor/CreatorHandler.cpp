@@ -47,7 +47,8 @@ bool CreatorHandler::IsSufficientNum() const
 //---
 std::shared_ptr<Math::Curve> CreatorHandler::Create()
 {
-  switch( type ){
+  switch( type )
+  {
   case CreateLine:
   {
     return std::make_shared<Math::Line>( points );
@@ -107,13 +108,13 @@ void CreatorHandler::AddInformationNurbs( bool& isClosed, int& degree )
   QLabel* Closed = new QLabel( "&Closed:");
   QLabel* DegreeLabel = new QLabel( "&Degree:");
   QLineEdit * closedEdit = new QLineEdit();
-  closedEdit->setPlaceholderText(QString("0"));
-  closedEdit->setText(QString("0"));
+  closedEdit->setPlaceholderText( QString("0") );
+  closedEdit->setText( QString("0") );
   QLineEdit * degreeEdit = new QLineEdit();
   isClosed = 0;
   degree = 3;
-  degreeEdit->setPlaceholderText(QString("3"));
-  degreeEdit->setText(QString("3"));
+  degreeEdit->setPlaceholderText( QString("3") );
+  degreeEdit->setText( QString("3") );
   QDialogButtonBox * buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok| QDialogButtonBox::Cancel );
 
   QObject::connect( buttonBox, SIGNAL(accepted()), d, SLOT(accept()) );

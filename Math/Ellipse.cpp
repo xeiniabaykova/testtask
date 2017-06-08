@@ -15,8 +15,7 @@ namespace {
 static bool IsCirclePoints( Point point1, Point point2, Point point3 )
 {
    return !( IsEqual(point1, point2) || IsEqual(point2, point3) ) &&
-
-  ( fabs(Distance(point1, point2) - Distance(point1, point3)) < CommonConstantsMath::NULL_TOL ) ;
+    ( fabs(Distance(point1, point2) - Distance(point1, point3)) < CommonConstantsMath::NULL_TOL ) ;
 
 }
 
@@ -29,7 +28,8 @@ static bool IsCirclePoints( Point point1, Point point2, Point point3 )
 static bool PointsOneLine( Point point1, Point point2, Point point3 )
 {
   return ( fabs((point3.GetX() - point1.GetX()) /
-    (point2.GetX() - point1.GetX()) - (point3.GetY() - point1.GetY()) / (point2.GetY() - point1.GetY())) < CommonConstantsMath::NULL_TOL);
+    (point2.GetX() - point1.GetX()) - (point3.GetY() - point1.GetY())
+                / (point2.GetY() - point1.GetY())) < CommonConstantsMath::NULL_TOL);
 }
 
 
@@ -40,9 +40,10 @@ static bool PointsOneLine( Point point1, Point point2, Point point3 )
 //---
 static bool CorrectEllipseData( Point point1, Point point2, Point point3 )
 {
-  return  !( (IsEqual(point1, point2) ||
-    IsEqual(point2, point3) ||
-    IsEqual(point1, point3) ) || (PointsOneLine(point1, point2, point3)) );
+  return  !( (IsEqual(point1, point2)  ||
+              IsEqual(point2, point3)  ||
+              IsEqual(point1, point3)) ||
+              (PointsOneLine(point1, point2, point3)) );
 
 }
 
@@ -96,9 +97,9 @@ Ellipse::Ellipse(Point thecenter, double ther1, double ther2, double thealpha) :
 Ellipse::Ellipse ( const std::vector<Point>& points ):
   Curve(),
   center( Point(0.0,0.0) ),
-  r1    ( 0.0   ),
-  r2    ( 0.0    ),
-  alpha ( 0.0  )
+  r1    ( 0.0 ),
+  r2    ( 0.0 ),
+  alpha ( 0.0 )
 {  
 	// если точки 2, то это - окружность, создаем окружность
   if ( points.size() == 2 )
@@ -152,16 +153,16 @@ Ellipse::Ellipse ( const std::vector<Point>& points ):
 //---
 Point Ellipse::GetPoint( double t ) const
 {
-	if ( IsValid() )
-	{
-		double tcurrent = FixedParameter(t);
+  if ( IsValid() )
+  {
+    double tcurrent = FixedParameter( t );
 
-		Point point(r1 * cos(tcurrent), r2 * sin(tcurrent));
-		point.Rotate(alpha);
-		return center + point;
-	}
-	else
-		Point(NAN, NAN);
+    Point point( r1 * cos(tcurrent), r2 * sin(tcurrent) );
+    point.Rotate( alpha );
+    return center + point;
+  }
+  else
+    Point( NAN, NAN );
 }
 
 //-----------------------------------------------------------------------------
@@ -173,12 +174,12 @@ Point Ellipse::GetPoint( double t ) const
 
 Range Ellipse::GetRange() const
 {
-	if (IsValid())
+  if ( IsValid() )
 	{
-		return Range(0.0, 2.0 * CommonConstantsMath::PI);
+    return Range( 0.0, 2.0 * CommonConstantsMath::PI );
 	}
 	else
-		Range(NAN, NAN);
+    Range( NAN, NAN );
 }
 
 
@@ -186,18 +187,18 @@ Range Ellipse::GetRange() const
 /**
   Возвращает производную элипса по параметру t.
 */
-//-----------------------------------------------------------------------------
+//---
 Vector Ellipse::GetDerivativePoint( double t ) const
 {
-	if (IsValid())
+  if ( IsValid() )
 	{
-		double tcurrent = FixedParameter(t);
-		Vector vector(r1 * -sin(tcurrent), r2 * cos(tcurrent));
-		vector.Rotate(alpha);
+    double tcurrent = FixedParameter( t );
+    Vector vector( r1 * -sin(tcurrent), r2 * cos(tcurrent) );
+    vector.Rotate( alpha );
 		return vector;
 	}
 	else
-		return Vector(NAN, NAN);
+    return Vector( NAN, NAN );
 }
 
 
@@ -208,15 +209,15 @@ Vector Ellipse::GetDerivativePoint( double t ) const
 //---
 Vector Ellipse::Get2DerivativePoint( double t ) const
 {
-	if (IsValid())
+  if ( IsValid() )
 	{
-		double tcurrent = FixedParameter(t);
-		Vector vector(-r1 * cos(tcurrent), -r2 * sin(tcurrent));
-		vector.Rotate(alpha);
+    double tcurrent = FixedParameter( t );
+    Vector vector( -r1 * cos(tcurrent), -r2 * sin(tcurrent) );
+    vector.Rotate( alpha );
 		return vector;
 	}
 	else
-		Vector(NAN, NAN);
+    Vector( NAN, NAN );
 }
 
 
@@ -227,7 +228,10 @@ Vector Ellipse::Get2DerivativePoint( double t ) const
 //---
 void Ellipse::Translate( double xShift, double yShift )
 {
+  if ( IsValid() )
+  {
   center.Translate( xShift, yShift );
+  }
 }
 
 
@@ -238,8 +242,11 @@ void Ellipse::Translate( double xShift, double yShift )
 //---
 void Ellipse::Rotate( double alphaAng )
 {
-  center.Rotate( alphaAng  );
-  alpha = alpha + alphaAng ;
+  if ( IsValid() )
+  {
+  center.Rotate( alphaAng );
+  alpha = alpha + alphaAng;
+  }
 }
 
 
@@ -250,8 +257,11 @@ void Ellipse::Rotate( double alphaAng )
 //---
 void Ellipse::Scale( double xScaling, double yScaling )
 {
+  if ( IsValid() )
+  {
   r1 *= xScaling;
   r2 *= yScaling;
+  }
 }
 
 
@@ -329,10 +339,13 @@ Point Ellipse::GetCenter() const
 //---
 std::vector<Point> Ellipse::GetReferensedPoints () const
 {
-  std::vector<Point> refPoints;
-  refPoints.push_back( center );
-  return refPoints;
-
+  if ( IsValid() )
+  {
+    std::vector<Point> refPoints;
+    refPoints.push_back( center );
+    return refPoints;
+  } else
+    return std::vector<Point>();
 }
 
 
@@ -343,13 +356,17 @@ std::vector<Point> Ellipse::GetReferensedPoints () const
 //---
 double Ellipse::FixedParameter( double t ) const
 {
-	Range range = GetRange();
+  if ( IsValid() )
+  {
+    Range range = GetRange();
 
-	while ( t < range.GetStart() )
-		t += range.GetEnd() - range.GetStart();
-	while ( t > range.GetEnd() )
-		t -= range.GetEnd() - range.GetStart();
-	return t;
+    while ( t < range.GetStart() )
+      t += range.GetEnd() - range.GetStart();
+    while ( t > range.GetEnd() )
+      t -= range.GetEnd() - range.GetStart();
+    return t;
+  } else
+    return NAN;
 }
 
 }

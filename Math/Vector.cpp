@@ -178,17 +178,32 @@ double Vector::operator * ( Vector vector ) const
 {
 	if ( vector.IsValid() && this->IsValid() )
 		return x * vector.x + y * vector.y;
-	else return NAN;
+  else
+    return NAN;
 }
 
 
 //----------------------------------------------------------------------------
 /**
-	Проверить вектор на правильность. Вектор считается верным, если ни одно значение не является nan/
+  Проверить вектор на правильность. Вектор считается верным, если ни одно значение не является nan.
 */
 //---
 bool Vector::IsValid() const
 {
   return !( std::isnan(x) || std::isnan(y) );
+}
+
+//----------------------------------------------------------------------------
+/**
+  Получить векторное произведение векторов по определению.
+*/
+//---
+double Vector::VectorMult( Vector vector ) const
+{
+  if ( vector.IsValid() && this->IsValid() )
+    return x * vector.y - y * vector.x;
+  else
+    return NAN;
+
 }
 }

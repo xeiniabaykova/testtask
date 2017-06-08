@@ -22,8 +22,8 @@ namespace Math {
 class Vector: public GeometricPrimitive
 {
 private:
-  double x; ///< координата x
-  double y; ///< координата y
+  double x; ///< Координата x.
+  double y; ///< Координата y.
 
 public:
   Vector() = default;
@@ -36,6 +36,7 @@ public:
   virtual void Scale      ( double XScaling, double YScaling );  ///< Маштабировать по оси х на xScaling, по оси y на yScaling.
   double       GetX       () const;                              ///< Получить координату x.
   double       GetY       () const;                              ///< Получить координату y.
+  double       VectorMult ( Vector vector ) const;               ///< Получить векторное произведение векторов по определению.
   Vector       operator * ( double param ) const;                ///< Домножить вектор на скаляр.
   double       operator * ( Vector param ) const;                ///< Получить скалярное произведение векторов по определению.
   Vector       operator - ( Vector vector ) const;               ///< Получить разность векторов.

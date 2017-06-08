@@ -174,7 +174,7 @@ bool Line::IsValid() const
   Соответственно, это точки начала и колнца отрезка.
 */
 //---
-std::vector<Point> Line::GetReferensedPoints () const
+std::vector<Point> Line::GetReferensedPoints() const
 {
   std::vector<Point> refPoints;
   refPoints.push_back( startPoint );

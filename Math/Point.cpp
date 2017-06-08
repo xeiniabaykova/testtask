@@ -9,9 +9,9 @@ namespace Math {
   Коструктор Point.
 */
 //---
-Point::Point( double x, double y):
-  x(x),
-  y(y)
+Point::Point( double theX, double theY):
+  x( theX ),
+  y( theY )
 {
 }
 
@@ -45,8 +45,11 @@ Point::Point(const Vector& vector)
 //---
 void Point::Translate(  double xShift, double yShift )
 {
-	x += xShift;
-	y += yShift;
+  if ( IsValid() )
+  {
+    x += xShift;
+    y += yShift;
+  }
 }
 
 
@@ -57,12 +60,15 @@ void Point::Translate(  double xShift, double yShift )
 //---
 void Point::Rotate( double alpha )
 {
-  double cosAlpha = cos( alpha );
-  double sinAlpha = sin( alpha );
-  double oldx = x;
-  double oldy = y;
-  x = oldx * cosAlpha - oldy * sinAlpha;
-  y = oldx * sinAlpha + oldy * cosAlpha;
+  if ( IsValid() )
+  {
+    double cosAlpha = cos( alpha );
+    double sinAlpha = sin( alpha );
+    double oldx = x;
+    double oldy = y;
+    x = oldx * cosAlpha - oldy * sinAlpha;
+    y = oldx * sinAlpha + oldy * cosAlpha;
+  }
 }
 
 
@@ -73,8 +79,11 @@ void Point::Rotate( double alpha )
 //---
 void Point::Scale(  double xScaling, double yScaling  )
 {
-  x *= xScaling;
-  y *= yScaling;
+  if ( IsValid() )
+  {
+    x *= xScaling;
+    y *= yScaling;
+  }
 }
 
 
@@ -107,7 +116,11 @@ double Point::GetY() const
 //---
 Point Point::operator * (double param) const
 {
-  return Point( x * param, y * param);
+  if ( IsValid() )
+  {
+    return Point( x * param, y * param);
+  } else
+    return Point( NAN, NAN );
 }
 
 
@@ -118,7 +131,11 @@ Point Point::operator * (double param) const
 //---
 Vector Point::operator - (Point point) const
 {
-  return Vector( x - point.GetX(), y - point.GetY() );
+  if ( IsValid() && point.IsValid() )
+  {
+    return Vector( x - point.GetX(), y - point.GetY() );
+  } else
+    return Vector( NAN, NAN );
 }
 
 
@@ -129,7 +146,11 @@ Vector Point::operator - (Point point) const
 //---
 Point Point::operator + ( Point point ) const
 {
-  return Point( x + point.GetX(), y + point.GetY());
+  if ( IsValid() && point.IsValid() )
+  {
+    return Point( x + point.GetX(), y + point.GetY());
+  } else
+    return Point( NAN, NAN );
 }
 
 
@@ -140,7 +161,11 @@ Point Point::operator + ( Point point ) const
 //---
 Point Point::operator + ( Vector vector ) const
 {
-  return Point( x + vector.GetX(), y + vector.GetY() );
+  if ( IsValid() && vector.IsValid() )
+  {
+    return Point( x + vector.GetX(), y + vector.GetY() );
+  } else
+    return Point( NAN, NAN );
 }
 
 
