@@ -91,7 +91,7 @@ TEST(PolylineTest, GetPoint)
 
 }
 
-TEST( PolylineTest, GetDerivativePoint )
+TEST( PolylineTest, GetDerivative )
 {
 	std::vector<Point> points;
 	points.push_back(Point(1., 1.));
@@ -100,48 +100,48 @@ TEST( PolylineTest, GetDerivativePoint )
 	points.push_back(Point(7., 1.));
 
 	const GeomPolyline polyline(points);
-	auto point = polyline.GetDerivativePoint( -0.75 );
+	auto point = polyline.GetDerivative( -0.75 );
 	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
 	EXPECT_NEAR(point.GetY(), 2., 1.e-7);
 
-	point = polyline.GetDerivativePoint(0.);
+	point = polyline.GetDerivative(0.);
 	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
 	EXPECT_NEAR(point.GetY(), 2., 1.e-7);
 
-	point = polyline.GetDerivativePoint(0.25);
+	point = polyline.GetDerivative(0.25);
 	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
 	EXPECT_NEAR(point.GetY(), 2., 1.e-7);
 
-	point = polyline.GetDerivativePoint(1.);
+	point = polyline.GetDerivative(1.);
 	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
 	EXPECT_NEAR(point.GetY(), -2., 1.e-7);
 
-	point = polyline.GetDerivativePoint(1.5);
+	point = polyline.GetDerivative(1.5);
 	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
 	EXPECT_NEAR(point.GetY(), -2., 1.e-7);
 
-	point = polyline.GetDerivativePoint(2.0);
+	point = polyline.GetDerivative(2.0);
 	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
 	EXPECT_NEAR(point.GetY(), 0., 1.e-7);
 
-	point = polyline.GetDerivativePoint(2.75);
+	point = polyline.GetDerivative(2.75);
 	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
 	EXPECT_NEAR(point.GetY(), 0., 1.e-7);
 
-	point = polyline.GetDerivativePoint(3.);
+	point = polyline.GetDerivative(3.);
 	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
 	EXPECT_NEAR(point.GetY(), 0., 1.e-7);
 
-	point = polyline.GetDerivativePoint(4.);
+	point = polyline.GetDerivative(4.);
 	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
 	EXPECT_NEAR(point.GetY(), 0., 1.e-7);
 
-	point = polyline.GetDerivativePoint(4.15);
+	point = polyline.GetDerivative(4.15);
 	EXPECT_NEAR(point.GetX(), 2., 1.e-7);
 	EXPECT_NEAR(point.GetY(), 0., 1.e-7);
 }
 /// вторые производные всегда равны нулю
-TEST(PolylineTest, Get2DerivativePoint)
+TEST(PolylineTest, Get2Derivative)
 {
 	std::vector<Point> points;
 	points.push_back( Point(8., 1.) );
@@ -152,19 +152,19 @@ TEST(PolylineTest, Get2DerivativePoint)
 
 	const GeomPolyline polyline( points );
 
-	auto der = polyline.Get2DerivativePoint( 0.0 );
+	auto der = polyline.Get2Derivative( 0.0 );
 	EXPECT_NEAR( der.GetX(), 0., 1.e-7 );
 	EXPECT_NEAR( der.GetY(), 0., 1.e-7 );
 
-	der = polyline.Get2DerivativePoint( 1.25 );
+	der = polyline.Get2Derivative( 1.25 );
 	EXPECT_NEAR( der.GetX(), 0., 1.e-7 );
 	EXPECT_NEAR( der.GetY(), 0., 1.e-7 );
 
-	der = polyline.Get2DerivativePoint( -1.9999 );
+	der = polyline.Get2Derivative( -1.9999 );
 	EXPECT_NEAR( der.GetX(), 0., 1.e-7 );
 	EXPECT_NEAR( der.GetY(), 0., 1.e-7 );
 
-	der = polyline.Get2DerivativePoint( 2.9 );
+	der = polyline.Get2Derivative( 2.9 );
 	EXPECT_NEAR( der.GetX(), 0., 1.e-7 );
 	EXPECT_NEAR( der.GetY(), 0., 1.e-7 );
 }
@@ -442,13 +442,13 @@ TEST( PolylineTest, CorrectInput )
   ASSERT_NEAR( Math::Distance( polyline.GetPoint( 1.8 ), inter1 ), 0.0, pointNearValue );
   ASSERT_NEAR( Math::Distance( polyline.GetPoint( 2.8 ), inter2 ), 0.0, pointNearValue );
   // ��������� �����������
-  Vector v00 = polyline.GetDerivativePoint( 0.0 );
-  Vector v10 = polyline.GetDerivativePoint( 1.0 );
-  Vector v20 = polyline.GetDerivativePoint( 2.0 );
+  Vector v00 = polyline.GetDerivative( 0.0 );
+  Vector v10 = polyline.GetDerivative( 1.0 );
+  Vector v20 = polyline.GetDerivative( 2.0 );
 
-  Vector v08 = polyline.GetDerivativePoint( 0.8 );
-  Vector v18 = polyline.GetDerivativePoint( 1.8 );
-  Vector v28 = polyline.GetDerivativePoint( 2.8 );
+  Vector v08 = polyline.GetDerivative( 0.8 );
+  Vector v18 = polyline.GetDerivative( 1.8 );
+  Vector v28 = polyline.GetDerivative( 2.8 );
 
   // ����������� � ������: ���������� ��������
   ASSERT_NEAR( v00.GetX(), 2.0, pointNearValue );
@@ -481,8 +481,8 @@ TEST( PolylineTest, CorrectInput )
   ASSERT_NEAR( Math::Distance( polyline.GetPoint( polyline.GetRange().GetEnd()), polyline.GetPoint( polyline.GetRange().GetEnd() + 2.4 ) ), 0.0, pointNearValue );
 
   // ���������� �����������
-  ASSERT_NEAR( Math::Distance( Point(polyline.GetDerivativePoint( polyline.GetRange().GetStart() - 1.7 )), Point( polyline.GetDerivativePoint( polyline.GetRange().GetStart() ) )), 0.0, pointNearValue );
-  ASSERT_NEAR( Math::Distance( Point( polyline.GetDerivativePoint( polyline.GetRange().GetEnd() )), Point( polyline.GetDerivativePoint( polyline.GetRange().GetEnd() + 2.4 ) )), 0.0, pointNearValue );
+  ASSERT_NEAR( Math::Distance( Point(polyline.GetDerivative( polyline.GetRange().GetStart() - 1.7 )), Point( polyline.GetDerivative( polyline.GetRange().GetStart() ) )), 0.0, pointNearValue );
+  ASSERT_NEAR( Math::Distance( Point( polyline.GetDerivative( polyline.GetRange().GetEnd() )), Point( polyline.GetDerivative( polyline.GetRange().GetEnd() + 2.4 ) )), 0.0, pointNearValue );
 
   // ���������� �� �����
   ASSERT_NEAR( polyline.DistanceToPoint( Point() ), 0.0, pointNearValue );
@@ -609,15 +609,15 @@ TEST( PolylineTest, DISABLED_InvalidPolyline )
 
   ASSERT_FALSE( polyline.IsValid() );
   Range emptyRange = polyline.GetRange();
-  // Особое состояние - диапозон из NAN
-  ASSERT_TRUE(std::isnan(emptyRange.GetStart()) );
-  ASSERT_TRUE(std::isnan(emptyRange.GetEnd())) ;
+  // Особое состояние - диапозон из inf
+  ASSERT_TRUE( std::isinf(emptyRange.GetStart()) );
+  ASSERT_TRUE( std::isinf(emptyRange.GetEnd()) ) ;
 
   const double midParam = 0.5 * (emptyRange.GetStart() + emptyRange.GetEnd());
   Point midPt = polyline.GetPoint( midParam );
   EXPECT_FALSE( midPt.IsValid() ); // ���������� ����� ������ ��������� ��������, �� ����� ���������������, ��� ����������� ������ ������������
 
-  Vector midDer = polyline.GetDerivativePoint( midParam );
+  Vector midDer = polyline.GetDerivative( midParam );
   EXPECT_FALSE( midDer.IsValid() ); // ���������� ����������� ������ ��������� ��������, �� ����� ���������������, ��� ����������� ������ ������������
 
   GeomPolyline polyReplica;

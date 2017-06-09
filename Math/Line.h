@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /**
   \file
-  \brief Отрезок в двумерном пространстве\~
+  Отрезок в двумерном пространстве\~
 
 */
 ////////////////////////////////////////////////////////////////////////////////
@@ -14,7 +14,7 @@
 #include <string>
 #include "GeometricPrimitive.h"
 
-
+namespace Math {
 ///////////////////////////////////////////////////////////////////////////////
 //
 /// Класс геометрического представления отрезка.
@@ -22,7 +22,6 @@
   Представлет функции для хранения и проведения опраций над отрезком.
 */
 ///////////////////////////////////////////////////////////////////////////////
-namespace Math {
 class Line: public Curve
 {
 private:
@@ -39,7 +38,7 @@ public:
    */
    //---
   Line( const std::vector<Point>& points );
-  /**  \brief создать отрезок по начальной и конечной точке отрезка
+  /**  \brief Cоздать отрезок по начальной и конечной точке отрезка
     \param[in] startPoint - начальная точка .\~
     \param[in] endPoint - конечная точка .\~
      Если точки совпадают между собой. то отрезок не создается.
@@ -50,8 +49,8 @@ public:
 
 public:
   virtual Point              GetPoint            ( double t ) const;                                             ///< Вернуть точку по параметру t.
-  virtual Vector             GetDerivativePoint  ( double t ) const;                                             ///< Вернуть производную линнии по параметру t.
-  virtual Vector             Get2DerivativePoint ( double t ) const;                                             ///< Вернуть вторую производную на линии по параметру t.
+  virtual Vector             GetDerivative       ( double t ) const;                                             ///< Вернуть производную линнии по параметру t.
+  virtual Vector             Get2Derivative      ( double t ) const;                                             ///< Вернуть вторую производную на линии по параметру t.
   virtual Range              GetRange            () const;                                                       ///< Вернуть парметризацию  параметризация от [0, 1].
   virtual void               GetAsPolyLine       ( GeomPolyline &polyLine, double ) const;                       ///< Вернуть полилинию для линии (это две точки - начало и конец).
   virtual void               Translate           ( double xShift, double yShift );                               ///< Сдвинуть по осям x, y.

@@ -421,7 +421,7 @@ double NurbsCurve::FixedParam( double t ) const
 //---
 Point NurbsCurve::GetPoint( double t ) const
 {
-	if (IsValid())
+	if ( IsValid() )
 	{
 		double currentT = FixedParam(t);
 		int span = FindSpan(currentT);
@@ -436,7 +436,7 @@ Point NurbsCurve::GetPoint( double t ) const
     return Point( resultPoint * ( 1 / weightNurbs) );
 	}
 	else
-		return Point(NAN, NAN);
+		return Point( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
@@ -555,7 +555,7 @@ Vector NurbsCurve::CountingDer( double t, int der) const
 	Вернуть производную на nurbs по параметру t.
 */
 //---
-Vector  NurbsCurve::GetDerivativePoint( double t ) const
+Vector  NurbsCurve::GetDerivative( double t ) const
 {
   if ( IsValid() )
 	{
@@ -563,7 +563,7 @@ Vector  NurbsCurve::GetDerivativePoint( double t ) const
     return  CountingDer( currentT, 1 );
 	}
 	else
-		return Vector(NAN, NAN);
+		return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
@@ -572,7 +572,7 @@ Vector  NurbsCurve::GetDerivativePoint( double t ) const
   Вернуть вторую производную на nurbs по параметру t.
 */
 //---
-Vector  NurbsCurve::Get2DerivativePoint( double t ) const
+Vector  NurbsCurve::Get2Derivative( double t ) const
 {
   if ( IsValid() )
 	{
@@ -580,7 +580,7 @@ Vector  NurbsCurve::Get2DerivativePoint( double t ) const
     return  CountingDer( currentT, 2 );
 	}
 	else
-		return Vector(NAN, NAN);
+		return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
@@ -600,7 +600,7 @@ Range  NurbsCurve::GetRange() const
     return Range( nodes[0], nodes[nodes.size() - 1] );
 	}
 	else
-    return Range( NAN, NAN );
+    return Range( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 

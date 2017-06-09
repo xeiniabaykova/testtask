@@ -10,9 +10,9 @@ namespace Math {
 //---
 double Curve::CountingStep( double tCurrent, double accuracy) const
 {
-  Vector firstDerivative = GetDerivativePoint( tCurrent );
-  Vector secondDerivative = Get2DerivativePoint( tCurrent );
-  double vectorMult = firstDerivative.GetX() * secondDerivative.GetY() - firstDerivative.GetY() * secondDerivative.GetX();
+  Vector firstDerivative = GetDerivative( tCurrent );
+  Vector secondDerivative = Get2Derivative( tCurrent );
+  double vectorMult = firstDerivative.VectorMult( secondDerivative );
   double normVectorMult = sqrt( vectorMult * vectorMult );
   double multiplicationFirstDerivative = firstDerivative * firstDerivative;
   double normFirstDerivative = sqrt( multiplicationFirstDerivative );

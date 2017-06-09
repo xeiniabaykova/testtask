@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /**
   \file
-  \brief Полилиния в двумерном пространстве.\~
+  Полилиния в двумерном пространстве.\~
 
 */
 ////////////////////////////////////////////////////////////////////////////////
@@ -13,6 +13,7 @@
 #include <vector>
 #include "GeometricPrimitive.h"
 
+namespace Math {
 ///////////////////////////////////////////////////////////////////////////////
 //
 /// Класс геометрического представления полилинии.
@@ -21,14 +22,13 @@
 */
 ///////////////////////////////////////////////////////////////////////////////
 
-namespace Math {
 class GeomPolyline: public Curve
 {
 private:
  std::vector<Point> referencedPoints;
 public:
  /**  \brief Конструктор полилинии по опорным точкам.
-   \param[in] points - опорные точки .\~
+   \param[in] Points - опорные точки .\~
  */
  //---
   GeomPolyline( const std::vector<Point>& thePoints );
@@ -41,8 +41,8 @@ private:
 public:
   void                Init                ( const std::vector<Point>& theReferencedPoints );
   virtual Point       GetPoint            ( double t ) const;                                             ///< Вернуть точку по параметру t.
-  virtual Vector      GetDerivativePoint  ( double t ) const;                                             ///< Вернуть производную линнии по параметру t.
-  virtual Vector      Get2DerivativePoint ( double t ) const;                                             ///< Вернуть вторую производную на линии по параметру t.
+  virtual Vector      GetDerivative       ( double t ) const;                                             ///< Вернуть производную линнии по параметру t.
+  virtual Vector      Get2Derivative      ( double t ) const;                                             ///< Вернуть вторую производную на линии по параметру t.
   virtual Range       GetRange            () const;                                                       ///< Вернуть парметризацию  параметризация от [0, 1].
   /// Вернуть полилинию для полилинии (это и есть сама полилиния).
   void                GetAsPolyLine(GeomPolyline &polyLine, double) const;

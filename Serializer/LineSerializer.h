@@ -21,9 +21,9 @@ namespace Serializer {
 
 class LineSerializer:public CurveSerializer {
 public:
+   LineSerializer() = default;
   virtual ~LineSerializer() = default;
 private:
-  LineSerializer() = default;
   LineSerializer( const LineSerializer &obj ) = delete;
   LineSerializer& operator=( LineSerializer &obj ) = delete;
 public:

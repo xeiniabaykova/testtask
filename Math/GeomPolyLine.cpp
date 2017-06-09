@@ -111,7 +111,7 @@ Range GeomPolyline::GetRange() const
 		return Range(0.0, referencedPoints.size() - 1);
 	}
 	else
-		return Range(NAN,NAN);
+		return Range( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
@@ -136,7 +136,7 @@ Point GeomPolyline::GetPoint( double t ) const
 		return startPoint + derection * currentT;
 	}
 	else
-		return Point( NAN, NAN );
+		return Point( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
@@ -145,7 +145,7 @@ Point GeomPolyline::GetPoint( double t ) const
   Вернуть производную полилиннии по параметру t.
 */
 //---
-Vector GeomPolyline::GetDerivativePoint( double t ) const
+Vector GeomPolyline::GetDerivative( double t ) const
 {
   if ( IsValid() )
 	{
@@ -159,7 +159,7 @@ Vector GeomPolyline::GetDerivativePoint( double t ) const
     return ( referencedPoints[leftParam + 1] - referencedPoints[leftParam] );
 	}
 	else
-		return Vector( NAN, NAN );
+		return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
@@ -168,14 +168,14 @@ Vector GeomPolyline::GetDerivativePoint( double t ) const
   Вернуть вторую производную полилиннии по параметру t.
 */
 //---
-Vector GeomPolyline::Get2DerivativePoint( double ) const
+Vector GeomPolyline::Get2Derivative( double ) const
 {
   if ( IsValid() )
 	{
     return Vector( 0.0, 0.0 );
 	} 
 	else 
-		return Vector( NAN, NAN );
+		return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 

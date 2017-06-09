@@ -64,42 +64,42 @@ TEST(Line, GetPoint)
   EXPECT_NEAR( point.GetY(), 5., 1.e-7 );
 }
 
-TEST(Line, GetDerivativePoint)
+TEST(Line, GetDerivative)
 {
   const Line line( Point(0., 0.), Point(5., 5.) );
-  auto der = line.GetDerivativePoint( 0.0 );
+  auto der = line.GetDerivative( 0.0 );
   EXPECT_NEAR( der.GetX(), 5., 1.e-7 );
   EXPECT_NEAR( der.GetY(), 5., 1.e-7 );
 
-  der = line.GetDerivativePoint( 0.25 );
+  der = line.GetDerivative( 0.25 );
   EXPECT_NEAR( der.GetX(), 5., 1.e-7 );
   EXPECT_NEAR( der.GetY(), 5., 1.e-7 );
 
-  der = line.GetDerivativePoint( -1.2 );
+  der = line.GetDerivative( -1.2 );
   EXPECT_NEAR( der.GetX(), 5., 1.e-7 );
   EXPECT_NEAR( der.GetY(), 5., 1.e-7 );
 
-  der = line.GetDerivativePoint( 2.3 );
+  der = line.GetDerivative( 2.3 );
   EXPECT_NEAR( der.GetX(), 5., 1.e-7 );
   EXPECT_NEAR( der.GetY(), 5., 1.e-7 );
 }
 
-TEST(Line, Get2DerivativePoint)
+TEST(Line, Get2Derivative)
 {
   const Line line( Point(0., 0.), Point(5., 5.) );
-  auto der = line.Get2DerivativePoint( 0.0 );
+  auto der = line.Get2Derivative( 0.0 );
   EXPECT_NEAR( der.GetX(), 0., 1.e-7 );
   EXPECT_NEAR( der.GetY(), 0., 1.e-7 );
 
-  der = line.Get2DerivativePoint( 0.25 );
+  der = line.Get2Derivative( 0.25 );
   EXPECT_NEAR( der.GetX(), 0., 1.e-7 );
   EXPECT_NEAR( der.GetY(), 0., 1.e-7 );
 
-  der = line.Get2DerivativePoint( -1.2 );
+  der = line.Get2Derivative( -1.2 );
   EXPECT_NEAR( der.GetX(), 0., 1.e-7 );
   EXPECT_NEAR( der.GetY(), 0., 1.e-7 );
 
-  der = line.Get2DerivativePoint( 2.3 );
+  der = line.Get2Derivative( 2.3 );
   EXPECT_NEAR( der.GetX(), 0., 1.e-7 );
   EXPECT_NEAR( der.GetY(), 0., 1.e-7 );
 }

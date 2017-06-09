@@ -54,6 +54,6 @@ double Range::GetEnd() const
 //---
 bool Range::IsValid() const
 {
-   return !( std::isnan(start) || std::isnan(end) );
+   return !( std::isinf(start) || std::isinf(end) );
 }
 }

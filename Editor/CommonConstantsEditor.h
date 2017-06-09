@@ -15,7 +15,7 @@ namespace Editor {
 ///////////////////////////////////////////////////////////////////////////////
 struct CommonConstantsEditor
 {
-  static double PRECISION_SELECT; ///< Точность селектирования.
+  static const double PRECISION_SELECT; ///< Точность селектирования.
 };
 }
 

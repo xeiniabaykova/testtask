@@ -1,4 +1,5 @@
 #include <cmath>
+#include <limits>
 #include "Point.h"
 #include "CommonConstantsMath.h"
 
@@ -120,7 +121,7 @@ Point Point::operator * (double param) const
   {
     return Point( x * param, y * param);
   } else
-    return Point( NAN, NAN );
+    return Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
 }
 
 
@@ -135,7 +136,7 @@ Vector Point::operator - (Point point) const
   {
     return Vector( x - point.GetX(), y - point.GetY() );
   } else
-    return Vector( NAN, NAN );
+    return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
 }
 
 
@@ -150,7 +151,7 @@ Point Point::operator + ( Point point ) const
   {
     return Point( x + point.GetX(), y + point.GetY());
   } else
-    return Point( NAN, NAN );
+    return Point( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
@@ -165,7 +166,7 @@ Point Point::operator + ( Vector vector ) const
   {
     return Point( x + vector.GetX(), y + vector.GetY() );
   } else
-    return Point( NAN, NAN );
+    return Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
@@ -189,10 +190,25 @@ Point Point::operator = ( Point point )
 //---
 bool Point::IsValid() const
 {
-  return !( std::isnan(x) || std::isnan(y) );
+  return !( std::isinf(x) || std::isinf(y) );
 }
 
 
+//-----------------------------------------------------------------------------
+/**
+  Вернуть модуль точки.
+*/
+//---
+double Point::Lenght() const
+{
+  return sqrt ( x * x + y * y );
+}
+
+//-----------------------------------------------------------------------------
+/**
+  Вернуть имя, используемое при записи точки в файл.
+*/
+//---
 std::string Point::GetName() const
 {
   return "Vector";
@@ -220,5 +236,4 @@ bool IsEqual( Point point1, Point point2 )
   return( fabs(point1.GetX() - point2.GetX()) < CommonConstantsMath::NULL_TOL
     && fabs(point1.GetY() - point2.GetY()) < CommonConstantsMath::NULL_TOL );
 }
-
 }

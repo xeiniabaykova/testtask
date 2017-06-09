@@ -1,5 +1,7 @@
 #include "Vector.h"
 #include <cmath>
+#include <limits>
+#include "CommonConstantsMath.h"
 
 namespace Math {
 
@@ -71,7 +73,7 @@ void Vector::Translate ( double xShift, double yShift )
 //---
 void Vector::Rotate( double alpha )
 {
-	if ( this->IsValid() && !std::isnan(alpha) )
+	if ( this->IsValid() && !std::isinf(alpha) )
 	{
 		double cosAlpha = cos(alpha);
 		double sinAlpha = sin(alpha);
@@ -91,7 +93,7 @@ void Vector::Rotate( double alpha )
 //---
 void Vector::Scale( double xScaling, double yScaling )
 {
-	if ( this->IsValid() && !std::isnan(xScaling) && !std::isnan(yScaling) )
+	if ( this->IsValid() && !std::isinf(xScaling) && !std::isinf(yScaling) )
 	{
 		x *= xScaling;
 		y *= yScaling;
@@ -103,22 +105,24 @@ void Vector::Scale( double xScaling, double yScaling )
 //----------------------------------------------------------------------------
 /**
 	Домножить вектор на скаляр.
-	Если одно из значений не является валидным, возвращается NAN.
+	Если одно из значений не является валидным, возвращается вектор из inf.
 */
 //---
 Vector Vector::operator * ( double param  ) const
 {
-	if ( this->IsValid() && !std::isnan(param) )
+	if ( this->IsValid() && !std::isinf(param) )
 	{
 		return Vector(x * param, y * param);
 	}
+	else
+		return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
 //----------------------------------------------------------------------------
 /**
 	Получить разность векторов.
-	Если одно из значений не является валидным, возвращается NAN.
+	Если одно из значений не является валидным, возвращается vector из inf.
 */
 //---
 Vector Vector::operator - ( Vector vector ) const
@@ -128,14 +132,14 @@ Vector Vector::operator - ( Vector vector ) const
 		return Vector(x - vector.GetX(), y - vector.GetY());
 	}
 	else
-		return  Vector(NAN, NAN);;
+		return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
 //----------------------------------------------------------------------------
 /**
 	Получить сумму векторов.
-	Если одно из значений не является валидным, возвращается NAN.
+	Если одно из значений не является валидным, возвращается вектор из inf.
 */
 //---
 Vector Vector::operator + ( Vector vector ) const
@@ -145,14 +149,14 @@ Vector Vector::operator + ( Vector vector ) const
 		return Vector(x + vector.GetX(), y + vector.GetY());
 	}
 	else
-		return Vector(NAN, NAN);
+		return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
 //----------------------------------------------------------------------------
 /**
 	Присвоить один вектор другому.
-	Если одно из значений не является валидным, возвращается NAN.
+	Если одно из значений не является валидным, возвращается вектор из inf.
 */
 //---
 Vector Vector::operator = ( Vector vector )
@@ -164,14 +168,14 @@ Vector Vector::operator = ( Vector vector )
 		return *this;
 	}
 	else
-		return Vector(NAN, NAN);
+		return Vector(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
 }
 
 
 //----------------------------------------------------------------------------
 /**
 	Получить скалярное произведение векторов по определению.
-	Если одно из значений не является валидным, возвращается NAN.
+	Если одно из значений не является валидным, возвращается inf.
 */
 //---
 double Vector::operator * ( Vector vector ) const
@@ -179,18 +183,18 @@ double Vector::operator * ( Vector vector ) const
 	if ( vector.IsValid() && this->IsValid() )
 		return x * vector.x + y * vector.y;
   else
-    return NAN;
+    return std::numeric_limits<double>::infinity();
 }
 
 
 //----------------------------------------------------------------------------
 /**
-  Проверить вектор на правильность. Вектор считается верным, если ни одно значение не является nan.
+  Проверить вектор на правильность. Вектор считается верным, если ни одно значение не является inf.
 */
 //---
 bool Vector::IsValid() const
 {
-  return !( std::isnan(x) || std::isnan(y) );
+  return !( std::isinf(x) || std::isinf(y) );
 }
 
 //----------------------------------------------------------------------------
@@ -203,12 +207,32 @@ double Vector::VectorMult( Vector vector ) const
   if ( vector.IsValid() && this->IsValid() )
     return x * vector.y - y * vector.x;
   else
-    return NAN;
+    return std::numeric_limits<double>::infinity();
 
 }
 
 
+//----------------------------------------------------------------------------
+/**
+  Получить длину вектора по определению.
+*/
+//---
+double Vector::Lenght() const
+{
+	return sqrt( x * x + y * y );
+}
 
+
+//----------------------------------------------------------------------------
+/**
+   Проверить вектора на параллельность.
+*/
+//---
+bool Vector::IsCollinear( Vector vector ) const
+{
+	return ( abs(x / y - vector.x / vector.y) < CommonConstantsMath::NULL_TOL );
+
+}
 //----------------------------------------------------------------------------
 /**
   Вернуть имя, используемое при записи точки в файл.

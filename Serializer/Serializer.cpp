@@ -97,16 +97,16 @@ std::vector<std::shared_ptr<Math::GeometricPrimitive>> Serializer::ReadCurves (s
 void Serializer::WriteCurves (const std::vector<std::shared_ptr<Math::GeometricPrimitive>>& theCurves, std::string theFileName)
 {
 
-  std::function<bool(std::shared_ptr<Math::GeometricPrimitive>, std::shared_ptr<Math::GeometricPrimitive>)> aCompare =
-    [] (std::shared_ptr<Math::GeometricPrimitive> aCurveFirst, std::shared_ptr<Math::GeometricPrimitive> aCurveSecond) {
-    return *aCurveFirst == *aCurveSecond;
-  };
-  std::vector<std::shared_ptr<Math::GeometricPrimitive>> aUniqueCurves = theCurves;
-  auto aIt = std::unique( aUniqueCurves.begin(), aUniqueCurves.end(), aCompare );
-  aUniqueCurves.erase( aIt, aUniqueCurves.end() );
-  std::ofstream fout;
-  fout.open( theFileName, std::ios::binary );
-  for ( size_t i = 0; i < aUniqueCurves.size(); i++ )
-    Write( fout, *aUniqueCurves[i].get() );
+//  std::function<bool(std::shared_ptr<Math::GeometricPrimitive>, std::shared_ptr<Math::GeometricPrimitive>)> aCompare =
+//    [] (std::shared_ptr<Math::GeometricPrimitive> aCurveFirst, std::shared_ptr<Math::GeometricPrimitive> aCurveSecond) {
+//    //return *aCurveFirst == *aCurveSecond;
+//  };
+//  std::vector<std::shared_ptr<Math::GeometricPrimitive>> aUniqueCurves = theCurves;
+//  auto aIt = std::unique( aUniqueCurves.begin(), aUniqueCurves.end(), aCompare );
+//  aUniqueCurves.erase( aIt, aUniqueCurves.end() );
+//  std::ofstream fout;
+//  fout.open( theFileName, std::ios::binary );
+//  for ( size_t i = 0; i < aUniqueCurves.size(); i++ )
+//    Write( fout, *aUniqueCurves[i].get() );
 }
 }

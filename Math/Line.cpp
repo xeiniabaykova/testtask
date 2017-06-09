@@ -73,7 +73,7 @@ Point Line::GetPoint( double t ) const
   Верунуть производную по парметру t.
 */
 //---
-Vector Line::GetDerivativePoint( double ) const
+Vector Line::GetDerivative( double ) const
 {
   return endPoint - startPoint;
 }
@@ -84,7 +84,7 @@ Vector Line::GetDerivativePoint( double ) const
   Верунуть вторую производную по парметру t.
 */
 //---
-Vector Line::Get2DerivativePoint( double ) const
+Vector Line::Get2Derivative( double ) const
 {
   return Vector( 0.0, 0.0 );
 }

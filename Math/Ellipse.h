@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /**
   \file
-  \brief Геометрическое представление эллипса.\~
+  Геометрическое представление эллипса.\~
 
 */
 ////////////////////////////////////////////////////////////////////////////////
@@ -16,7 +16,7 @@
 #include "GeometricPrimitive.h"
 #include "Vector.h"
 
-
+namespace Math {
 ///////////////////////////////////////////////////////////////////////////////
 //
 /// Класс геометрического представления эллипса.
@@ -24,26 +24,25 @@
   Представлет функции для хранения и проведения опраций над эллипсом.
 */
 ///////////////////////////////////////////////////////////////////////////////
-namespace Math {
 class Ellipse: public Curve
 {
 private:
-  Point center;  ///< центр
-  double r1;     ///< первый радиус
-  double r2;     ///< второй радиус
-  double alpha;  ///< угол между главной осью и осью х
+  Point center;  ///< Центр.
+  double r1;     ///< Главный радиус.
+  double r2;     ///< Побочный радиус.
+  double alpha;  ///< Угол между главной осью и осью х.
 public:
   /**  \brief  Создать эллипс по массиву точек.
-    \param[in] points[0] - Центр эллипса .\~
-    \param[in] points[1] - Главная ось эллипса .\~
-    \param[in] points[1] - Точка, лежащая на границе эллипса .\~
+    \param[in] Points[0] - Центр эллипса .\~
+    \param[in] Points[1] - Главная ось эллипса .\~
+    \param[in] Points[1] - Точка, лежащая на границе эллипса .\~
   */
   //---
   Ellipse ( const std::vector<Point>& points );
   /**  \brief Создать эллипс по двум радиусам и центральной точке.
-    \param[in] center - ентр эллипса .\~
-    \param[in] r1 - главный радиус .\~
-    \param[in] r2 - побочный радиус .\~
+    \param[in] Center - ентр эллипса .\~
+    \param[in] R1 - главный радиус .\~
+    \param[in] R2 - побочный радиус .\~
   */
   //---
   Ellipse ( Point center, double r1, double r2, double alpha );
@@ -56,8 +55,8 @@ private:
 public:
   virtual Point              GetPoint            ( double t ) const;                   ///< Вернуть точку на кривой по параметру t.
   virtual Range              GetRange            () const;                             ///< Вернуть границы параметра для эллипса : [0, 2 * pi].
-  virtual Vector             GetDerivativePoint  ( double t ) const;                   ///< Вернуть производную на эллипсе по параметру t.
-  virtual Vector             Get2DerivativePoint ( double t ) const;                   ///< Вернуть вторую производную на эллипсе по параметру t.
+  virtual Vector             GetDerivative       ( double t ) const;                   ///< Вернуть производную на эллипсе по параметру t.
+  virtual Vector             Get2Derivative      ( double t ) const;                   ///< Вернуть вторую производную на эллипсе по параметру t.
   virtual void               Translate           ( double xShift, double yShift );     ///< Сдвиг по оси x на xShift, по оси y на yShift.
   virtual void               Rotate              ( double alpha );                     ///< Повернуть относительно начала координат на угол alpha.
   virtual void               Scale               ( double xScaling, double yScaling ); ///< Масштабировать на xScaling по оси x, на yScaling по оси у.

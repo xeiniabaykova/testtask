@@ -27,9 +27,8 @@ static bool IsCirclePoints( Point point1, Point point2, Point point3 )
 
 static bool PointsOneLine( Point point1, Point point2, Point point3 )
 {
-  return ( fabs((point3.GetX() - point1.GetX()) /
-    (point2.GetX() - point1.GetX()) - (point3.GetY() - point1.GetY())
-                / (point2.GetY() - point1.GetY())) < CommonConstantsMath::NULL_TOL);
+	return (Vector(point1 - point2).IsCollinear(Vector(point2 - point3)));
+
 }
 
 
@@ -162,7 +161,7 @@ Point Ellipse::GetPoint( double t ) const
     return center + point;
   }
   else
-    Point( NAN, NAN );
+    Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
 }
 
 //-----------------------------------------------------------------------------
@@ -179,7 +178,7 @@ Range Ellipse::GetRange() const
     return Range( 0.0, 2.0 * CommonConstantsMath::PI );
 	}
 	else
-    Range( NAN, NAN );
+    Range( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
@@ -188,7 +187,7 @@ Range Ellipse::GetRange() const
   Возвращает производную элипса по параметру t.
 */
 //---
-Vector Ellipse::GetDerivativePoint( double t ) const
+Vector Ellipse::GetDerivative( double t ) const
 {
   if ( IsValid() )
 	{
@@ -198,7 +197,7 @@ Vector Ellipse::GetDerivativePoint( double t ) const
 		return vector;
 	}
 	else
-    return Vector( NAN, NAN );
+    return Vector(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
@@ -207,7 +206,7 @@ Vector Ellipse::GetDerivativePoint( double t ) const
   Вернуть вторую производную эллипса по параметру t.
 */
 //---
-Vector Ellipse::Get2DerivativePoint( double t ) const
+Vector Ellipse::Get2Derivative( double t ) const
 {
   if ( IsValid() )
 	{
@@ -217,7 +216,7 @@ Vector Ellipse::Get2DerivativePoint( double t ) const
 		return vector;
 	}
 	else
-    Vector( NAN, NAN );
+    Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
@@ -244,8 +243,8 @@ void Ellipse::Rotate( double alphaAng )
 {
   if ( IsValid() )
   {
-  center.Rotate( alphaAng );
-  alpha = alpha + alphaAng;
+	  center.Rotate( alphaAng );
+      alpha = alpha + alphaAng;
   }
 }
 
@@ -258,10 +257,19 @@ void Ellipse::Rotate( double alphaAng )
 void Ellipse::Scale( double xScaling, double yScaling )
 {
   if ( IsValid() )
-  {
-	  center.Scale(xScaling, yScaling);
-	  r1 *= xScaling;
-	  r2 *= yScaling;
+  {	
+	  Vector R1( r1 * cos(alpha), r1 * sin(alpha) );
+	  Vector R2( r2 * sin(alpha), r2 * cos( alpha) );
+	  center.Scale( xScaling, yScaling );
+	  R1.Scale( xScaling, yScaling );
+	  R2.Scale( xScaling, yScaling );
+	  double scaleCoef =  R1.Lenght() / r1;
+	  double scaleCoef1 = R2.Lenght() / r2;
+	  r1 *= scaleCoef;
+	  r2 *= scaleCoef1;
+	  double x = R1.GetX();
+	  double y = R1.GetY();
+	  alpha = atan2(y, x);
   }
 }
 
@@ -367,7 +375,7 @@ double Ellipse::FixedParameter( double t ) const
       t -= range.GetEnd() - range.GetStart();
     return t;
   } else
-    return NAN;
+    return std::numeric_limits<double>::infinity();
 }
 
 }

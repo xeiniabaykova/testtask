@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /**
-\file
-\brief nurbs - кривая в двумерном пространстве.\~
+  \file
+  Nurbs - кривая в двумерном пространстве.\~
 
 */
 ////////////////////////////////////////////////////////////////////////////////
@@ -16,7 +16,7 @@
 #include <string>
 #include "GeometricPrimitive.h"
 
-
+namespace Math {
 ////////////////////////////////////////////////////////////////////////////////
 /**
 
@@ -24,9 +24,6 @@
 
 */
 ////////////////////////////////////////////////////////////////////////////////
-
-namespace Math {
-
 class NurbsCurve : public Curve
 {
 private:
@@ -43,7 +40,7 @@ public:
   NurbsCurve() = default;
   virtual ~NurbsCurve() = default;
   /**  \brief Создать nurbs - кривую по опорным точкам, весам, опорным точкам и замкнутости.
-  \param[in] points - опорные точки .\~
+  \param[in] points - Опорные точки .\~
   \param[in] referencePoints - Опорные точки .\~
   \param[in] weights - Веса .\~
   \param[in] isClosed - Замкнутость .\~
@@ -54,8 +51,8 @@ public:
 
   virtual Point       GetPoint               ( double t ) const;                                               ///< Вернуть точку на кривой по параметру t.
   virtual Range       GetRange               () const;                                                         ///< Вернуть границы параметра для Nurbs : [nodes[0], nodes[size]].
-  virtual Vector      GetDerivativePoint     ( double t ) const;                                               ///< Вернуть производную на nurbs по параметру t.
-  virtual Vector      Get2DerivativePoint    ( double t ) const;                                               ///< Вернуть вторую производную на nurbs по параметру t.
+  virtual Vector      GetDerivative     ( double t ) const;                                               ///< Вернуть производную на nurbs по параметру t.
+  virtual Vector      Get2Derivative    ( double t ) const;                                               ///< Вернуть вторую производную на nurbs по параметру t.
  // virtual void        GetAsPolyLine          ( std::vector<Point> & polyLinePoints, double accuracy ) const;   ///< Вернуть полилинию для nurbs.
   virtual void        Translate              ( double xShift, double yShift );                                 ///< Сдвиг по оси x на xShift, по оси y на yShift.
   virtual void        Rotate                 ( double alpha );                                                 ///< Повернуть относительно начала координат на угол alpha.
