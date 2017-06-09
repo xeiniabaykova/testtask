@@ -6,8 +6,8 @@ std::string NURBSCurveSerializer::GetHeaderName()
   return Math::NurbsCurve().GetName();
 }
 
-  std::unique_ptr<Math::GeometricPrimitive> NURBSCurveSerializer::Read( std::istream& theInput )
-  {
+std::unique_ptr<Math::GeometricPrimitive> NURBSCurveSerializer::Read( std::istream& theInput )
+{
 
   int  numNodes;
   int numWeights;

@@ -41,8 +41,9 @@ public:
   double       operator * ( Vector param ) const;                ///< Получить скалярное произведение векторов по определению.
   Vector       operator - ( Vector vector ) const;               ///< Получить разность векторов.
   Vector       operator + ( Vector vector ) const;               ///< Получить сумму векторов.
-  Vector       operator = ( Vector vector );                      ///< Присвоить один вектор другому.
+  Vector       operator = ( Vector vector );                     ///< Присвоить один вектор другому.
   bool         IsValid    () const;                              ///< Проверить вектор на правильность.
+  std::string  GetName    () const;                              ///< Вернуть имя, используемое при записи точки в файл.
 };
 }
 #endif // VECTOR_H

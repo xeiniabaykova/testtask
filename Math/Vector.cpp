@@ -206,4 +206,16 @@ double Vector::VectorMult( Vector vector ) const
     return NAN;
 
 }
+
+
+
+//----------------------------------------------------------------------------
+/**
+  Вернуть имя, используемое при записи точки в файл.
+*/
+//---
+std::string Vector::GetName() const
+{
+  return "Vector";
+}
 }

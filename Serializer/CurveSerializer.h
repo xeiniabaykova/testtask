@@ -1,41 +1,43 @@
 #ifndef CURVESERIALIZER_H
 #define CURVESERIALIZER_H
+////////////////////////////////////////////////////////////////////////////////
+/**
+  \file
+  \brief Общий класс для записи и чтения кривых.\~
+
+*/
+////////////////////////////////////////////////////////////////////////////////
 #include <Math/GeometricPrimitive.h>
 #include <Math/Point.h>
 #include <istream>
 #include <memory>
 
-// Check windows
-#if _WIN32 || _WIN64
-#if _WIN64
-#define ENVIRONMENT64
-#else
-#define ENVIRONMENT32
-#endif
-#endif
-
-// Check GCC
-#if __GNUC__
-#if __x86_64__ || __ppc64__
-#define ENVIRONMENT64
-#else
-#define ENVIRONMENT32
-#endif
-#endif
-
 namespace Serializer {
+///////////////////////////////////////////////////////////////////////////////
+//
+/// Чтение и запись геометрического примитива.
+/// Чтение и запись производяться в бинарном формате.
+/**
+*/
+///////////////////////////////////////////////////////////////////////////////
 class CurveSerializer {
 public:
-  virtual std::unique_ptr<Math::GeometricPrimitive> Read (std::istream& theInput) = 0;
-  virtual void Write (std::ostream& theOutput, const Math::GeometricPrimitive& theCurve) = 0;
   virtual ~CurveSerializer() = default;
-
-  Math::Point ReadPoint   ( std::istream& input ) const;
-  void WritePoint   ( std::ostream& output, const Math::Point& point ) const;
-  double ReadDouble ( std::istream& input ) const;
-  int ReadInt       ( std::istream& input ) const;
-  void WriteInt     ( std::ostream& output, int value ) const;
-  void WriteDouble  ( std::ostream& otutput, double value ) const;
+    CurveSerializer() = default;
+private:
+  CurveSerializer( const CurveSerializer &obj ) = delete;
+  CurveSerializer& operator=( CurveSerializer &obj ) = delete;
+public:
+  virtual std::unique_ptr<Math::GeometricPrimitive> Read       ( std::istream& theInput ) = 0; ///< Чтение геометрического примитива из потока.
+  /// Запись геометрического примитва в поток.
+  virtual void                                      Write       ( std::ostream& theOutput, const Math::GeometricPrimitive& theCurve ) = 0;
+  Math::Point                                       ReadPoint   ( std::istream& input ) const;                            ///< Чтение точки из потока.
+  void                                              WritePoint  ( std::ostream& output, const Math::Point& point ) const; ///< Запись точки в поток.
+  double                                            ReadDouble  ( std::istream& input ) const;                            ///< Чтение числа с плавающей запятой из потока.
+  int                                               ReadInt     ( std::istream& input ) const;                            ///< Чтение целочисленного значения из потока.
+  void                                              WriteInt    ( std::ostream& output, int value ) const;                ///< Запись целочисленного значения в поток.
+  void                                              WriteDouble ( std::ostream& otutput, double value ) const;            ///< Запись числа с плавающей запятой в поток.
 };
+
 }
 #endif // CURVESERIALIZER_H

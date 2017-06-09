@@ -285,4 +285,16 @@ void GeomPolyline::GetAsPolyLine( GeomPolyline &polyLine, double ) const
 	polyLine.Init( referencedPoints );
 
 }
+
+
+
+//-----------------------------------------------------------------------------
+/**
+  Вернуть имя, используемое при записи полилинии в файл.
+*/
+//---
+std::string GeomPolyline::GetName() const
+{
+  return "Polyline";
+}
 }

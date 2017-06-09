@@ -25,11 +25,6 @@ double CurveSerializer::ReadDouble( std::istream& input ) const
 int CurveSerializer::ReadInt( std::istream& input ) const
 {
 
-//#if ENVIRONMENT32
-//  std::int32_t value;
-//#else
- // std::int64_t value;
-//#endif
   int value;
   input.read( (char*)&value, sizeof value );
   return value;
@@ -41,11 +36,6 @@ void CurveSerializer::WriteDouble( std::ostream& output, double value ) const
 
 void CurveSerializer::WriteInt( std::ostream& output, int value ) const
 {
-#if ENVIRONMENT32
-  std::int32_t size;
-#else
-  std::int64_t size;
-#endif
-  output.write( (char*)&value, sizeof(size) );
+  output.write( (char*)&value, sizeof(value) );
 }
 }
