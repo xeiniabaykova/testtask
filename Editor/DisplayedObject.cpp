@@ -72,11 +72,11 @@ void DisplayedObject::SetColorUnselectedCurve( QColor color )
 }
 
 
- //-----------------------------------------------------------------------------
- /**
-   Добавить кривую к пространству отрисовки.
- */
- //---
+//-----------------------------------------------------------------------------
+/**
+ Добавить кривую к пространству отрисовки.
+*/
+//---
 void DisplayedObject::addCurveToChart( QChart * chart)
 {
   currentseries = new QLineSeries;
@@ -88,10 +88,10 @@ void DisplayedObject::addCurveToChart( QChart * chart)
   Math::GeomPolyline polyPoints;
   curve->GetAsPolyLine( polyPoints );
 
-  for ( int i = 0; i < polyPoints.GetReferensedPoints().size(); i++ )
+  for ( size_t i = 0; i < polyPoints.GetReferensedPoints().size(); i++ )
     *currentseries << QPointF( polyPoints.GetReferensedPoints()[i].GetX(), polyPoints.GetReferensedPoints()[i].GetY() );
 
-  for ( int i = 0; i < curve->GetReferensedPoints().size(); i++ )
+  for ( size_t i = 0; i < curve->GetReferensedPoints().size(); i++ )
      *seriesRef << QPointF( curve->GetReferensedPoints()[i].GetX(), curve->GetReferensedPoints()[i].GetY() );
 
   seriesRef->setMarkerShape( QScatterSeries::MarkerShapeCircle );
@@ -104,5 +104,17 @@ void DisplayedObject::addCurveToChart( QChart * chart)
   currentseries->attachAxis( axisY );
   seriesRef->attachAxis( axisX );
   seriesRef->attachAxis( axisY );
+}
+
+
+
+//-----------------------------------------------------------------------------
+/**
+  Вернуть геометрический примитив.
+*/
+//---
+std::shared_ptr<Math::Curve> DisplayedObject::GetPrimitive()
+{
+  return curve;
 }
 }

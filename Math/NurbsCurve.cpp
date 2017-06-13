@@ -7,11 +7,9 @@ namespace Math {
 namespace {
 
 //-----------------------------------------------------------------------------
-/**
-	Подсчитать фаториал числа n.
-*/
-//---
-static long double fact( int N )
+//	Подсчитать фаториал числа n.
+// ---
+static double fact( int N )
 {
 	if ( N < 0 )
 		return 0;
@@ -23,10 +21,8 @@ static long double fact( int N )
 
 
 //-----------------------------------------------------------------------------
-/**
-  Подсчитать биномиальные коэффициенты от числел n, k.
-*/
-//---
+//  Подсчитать биномиальные коэффициенты от числел n, k.
+// ---
 static double Bin( int n, int k )
 {
 	return fact( n ) / (fact( k ) * fact( n - k) );
@@ -35,11 +31,9 @@ static double Bin( int n, int k )
 
 
 //-----------------------------------------------------------------------------
-/**
-  Примитивная проверка для корректности данных длшя nurbs - кривой.
-*/
-//---
-static bool CorrectNurbs( const std::vector<Point>& ppoles, const std::vector<double>& wweights,
+//  Примитивная проверка для корректности данных длшя nurbs - кривой.
+// ---
+static bool IsCorrectNurbs( const std::vector<Point>& ppoles, const std::vector<double>& wweights,
 	const std::vector<double>& nnodes, bool iisClosed, int ddegree )
 {
   return !( ppoles.size() == 0 && ppoles.size() != wweights.size()
@@ -66,6 +60,7 @@ static bool CorrectNurbs( const std::vector<Point>& ppoles, const std::vector<do
 
 NurbsCurve::NurbsCurve( const std::vector<Point>& ppoles, const std::vector<double>& wweights,
   const std::vector<double>& nnodes, bool iisClosed, int ddegree ):
+  Curve    (),
   poles    ( 0 ),
   weights  ( 0 ),
   nodes    ( 0 ),
@@ -73,7 +68,7 @@ NurbsCurve::NurbsCurve( const std::vector<Point>& ppoles, const std::vector<doub
   degree   ( 0 )
 {
 	
-if ( (CorrectNurbs(ppoles, wweights, nnodes, iisClosed, ddegree)) )
+if ( (IsCorrectNurbs(ppoles, wweights, nnodes, iisClosed, ddegree)) )
 {
 	poles = ppoles;
 	weights = wweights;
@@ -107,10 +102,8 @@ if ( (CorrectNurbs(ppoles, wweights, nnodes, iisClosed, ddegree)) )
 
 
 //-----------------------------------------------------------------------------
-/**
-  Подсчитать базисную функцию для порядка i и значения парметра t.
-*/
-//---
+//  Подсчитать базисную функцию для порядка i и значения парметра t.
+// ---
 void NurbsCurve::ComputeBasicFunction( double x, int i, double& result ) const
 {
   int p = degree;
@@ -128,21 +121,21 @@ void NurbsCurve::ComputeBasicFunction( double x, int i, double& result ) const
     result = 0.0;
     return;
   }
-  for ( int j = 0; j <= p; j++ )
+  for ( size_t j = 0; j <= p; j++ )
   {
     if ( x >= nodes[i + j] && x < nodes[i + j + 1] )
       N[j] = 1.0;
     else
       N[j] = 0.0;
   }
-  for ( int k = 1; k <= p; k++ )
+  for ( size_t k = 1; k <= p; k++ )
   {
     double saved = 0.0;
     if ( N[0] == 0.0 )
       saved = 0.0;
     else
       saved = ( (x - nodes[i]) * N[0]) / (nodes[i + k] - nodes[i] );
-    for ( int j = 0; j < p - k + 1; j++ )
+    for ( size_t j = 0; j < p - k + 1; j++ )
     {
       double uLeft = nodes[i + j + 1];
       double uRight = nodes[i + j + k + 1];
@@ -164,10 +157,8 @@ void NurbsCurve::ComputeBasicFunction( double x, int i, double& result ) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Найти интервал ненулевых базисных функций для парметра t.
-*/
-//---
+//  Найти интервал ненулевых базисных функций для парметра t.
+// ---
 int NurbsCurve::FindSpan( double x ) const
 {
 	int n = 0;
@@ -192,25 +183,23 @@ int NurbsCurve::FindSpan( double x ) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Подсчитать производную от базисной функцию для порядка i и значения парметра t, где derivativeOrder - порядок производной.
-*/
-//---
+//  Подсчитать производную от базисной функцию для порядка i и значения парметра t, где derivativeOrder - порядок производной.
+// ---
 void NurbsCurve::ComputeBasicFunctionD( double x, int i, int derivativeOrder, std::vector<std::vector<double>>& ders) const
 {
 
 	std::vector<std::vector<double>> tempders;
   tempders.resize( degree + 1 );
-  for ( int k = 0; k < degree + 1; k++ )
+  for ( size_t k = 0; k < degree + 1; k++ )
 		tempders[k].resize(degree + 1);
 	
 	ders.resize(degree + 1);
-	for (int k = 0; k < degree + 1; k++)
+  for (size_t k = 0; k < degree + 1; k++)
     ders[k].resize( degree + 1 );
 
 	std::vector<std::vector<double>> N;
   N.resize( degree + 1 );
-  for ( int k = 0; k < degree + 1; k++ )
+  for ( size_t k = 0; k < degree + 1; k++ )
     N[k].resize( degree + 1 );
 	std::vector<double> left;
 	left.resize(degree + 1);
@@ -219,12 +208,12 @@ void NurbsCurve::ComputeBasicFunctionD( double x, int i, int derivativeOrder, st
 
 
 	N[0][0] = 1.0;
-  for ( int j = 1; j <= degree; j++ )
+  for ( size_t j = 1; j <= degree; j++ )
 	{
 		left[j] = x - nodes[i + 1 - j];
 		right[j] = nodes[i + j] - x;
 		double saved = 0.0;
-    for ( int r = 0; r < j; r++ )
+    for ( size_t r = 0; r < j; r++ )
 		{
 			N[j][r] = right[r + 1] + left[j - r];
 			double temp = N[r][j - 1] / N[j][r];
@@ -234,16 +223,16 @@ void NurbsCurve::ComputeBasicFunctionD( double x, int i, int derivativeOrder, st
 		N[j][j] = saved;
 	}
 
-  for ( int j = 0; j <= degree; j++ )
+  for ( size_t j = 0; j <= degree; j++ )
 		ders[0][j] = N[j][degree];
 
 
-  for ( int r = 0; r <= degree; r++ )
+  for ( size_t r = 0; r <= degree; r++ )
 	{
 	    int s1 = 0;
 		int s2 = 1;
 		tempders[0][0] = 1.0;
-    for ( int k = 1; k <= derivativeOrder; k++ )
+    for ( size_t k = 1; k <= derivativeOrder; k++ )
 		{
 			double d = 0.0;
 			int rk = r - k;
@@ -264,7 +253,7 @@ void NurbsCurve::ComputeBasicFunctionD( double x, int i, int derivativeOrder, st
 			else 
 				j2 = degree - r;
 
-      for ( int j = j1; j <= j2; j++ )
+      for ( size_t j = j1; j <= j2; j++ )
 			{
         tempders[s2][j] = ( tempders[s1][j] - tempders[s1][j - 1] ) /
 					N[degk + 1][rk + j];
@@ -283,11 +272,11 @@ void NurbsCurve::ComputeBasicFunctionD( double x, int i, int derivativeOrder, st
 
 	}
 	int r = degree;
-  for ( int k = 1; k <= derivativeOrder; k++ )
+  for ( size_t k = 1; k <= derivativeOrder; k++ )
 	{
-		for (int j = 0; j <= degree; j++)
+    for ( size_t j = 0; j <= degree; j++)
 			ders[k][j] = ders[k][j] * r;
-		r = r * (degree - k);
+    r = r * ( degree - k );
 	}
 
 	
@@ -295,10 +284,8 @@ void NurbsCurve::ComputeBasicFunctionD( double x, int i, int derivativeOrder, st
 
 
 //-----------------------------------------------------------------------------
-/**
-  Сдвиг по оси x на xShift, по оси y на yShift.
-*/
-//---
+//  Сдвиг по оси x на xShift, по оси y на yShift.
+// ---
 void NurbsCurve::Translate( double xShift, double yShift )
 {
   for ( size_t i = 0; i < poles.size(); i++ )
@@ -308,10 +295,8 @@ void NurbsCurve::Translate( double xShift, double yShift )
 
 
 //-----------------------------------------------------------------------------
-/**
-  Повернуть относительно начала координат на угол alpha.
-*/
-//---
+//  Повернуть относительно начала координат на угол alpha.
+// ---
 void NurbsCurve::Rotate( double alpha )
 {
   for ( size_t i = 0; i < poles.size(); i++ )
@@ -320,10 +305,8 @@ void NurbsCurve::Rotate( double alpha )
 
 
 //-----------------------------------------------------------------------------
-/**
-  Повернуть относительно начала координат на угол alpha.
-*/
-//---
+//  Повернуть относительно начала координат на угол alpha.
+// ---
 void NurbsCurve::Scale(double XScaling, double YScaling)
 {
   for ( size_t i = 0; i < poles.size(); i++ )
@@ -333,16 +316,14 @@ void NurbsCurve::Scale(double XScaling, double YScaling)
 
 
 //-----------------------------------------------------------------------------
-/**
-  Подсчитать значения базисных функций, умноженных на вес на отрезке x - degree.
-*/
-//---
+//  Подсчитать значения базисных функций, умноженных на вес на отрезке x - degree.
+// ---
 double NurbsCurve::CountWeight( int k, double x )  const
 {
   double w = 0.0;
   std::vector<double> node = BasicFunctions( k, x );
 
-  for (int i = 0; i <= degree; i++)
+  for (size_t i = 0; i <= degree; i++)
   {
     w = w + node[i] * weights[k - degree  + i];
   }
@@ -351,16 +332,14 @@ double NurbsCurve::CountWeight( int k, double x )  const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Подсчитать значения производных базисных функций, умноженных на вес на отрезке x - degree.
-*/
-//---
+//  Подсчитать значения производных базисных функций, умноженных на вес на отрезке x - degree.
+// ---
 double NurbsCurve::CountWeightD( double t , int span)  const
 {
   double w = 0.0;
   std::vector<std::vector<double>> ders;
   ComputeBasicFunctionD(t, span, 1, ders);
-  for (int i = 0; i <=degree; i++)
+  for ( size_t i = 0; i <= degree; i++ )
   {
    
     w = w + ders[1][i] * weights[span - degree + i];
@@ -370,82 +349,54 @@ double NurbsCurve::CountWeightD( double t , int span)  const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Подсчитать значения вторых производных базисных функций, умноженных на вес на отрезке x - degree.
-*/
-//---
+//  Подсчитать значения вторых производных базисных функций, умноженных на вес на отрезке x - degree.
+// ---
 double NurbsCurve::CountWeightD2( double t , int span)  const
 {
 	double w = 0.0;
 	std::vector<std::vector<double>> ders;
 	ComputeBasicFunctionD(t, span, 2, ders);
-	for (int i = 0; i <= degree; i++)
+  for ( size_t i = 0; i <= degree; i++ )
 	{
 
-		w =  w+ ders[2][i] * weights[span - degree + i];
+    w =  w + ders[2][i] * weights[span - degree + i];
 	}
 	return w;
 }
 
 
 //-----------------------------------------------------------------------------
-/**
-	Исправить границы для параметра.
-*/
-//---
-double NurbsCurve::FixedParam( double t ) const
-{
-	if (!isClosed)
-	{
-		if ( t < nodes[0] )
-			t = nodes[0];
-		if ( t > nodes[nodes.size() - 1] )
-			t = nodes[nodes.size() - 1];
-	}
-	if (isClosed)
-	{
-		Range range = GetRange();
-
-    while ( t < range.GetStart() )
-			t += range.GetEnd() - range.GetStart();
-    while ( t > range.GetEnd() )
-			t -= range.GetEnd() - range.GetStart();
-	}
-	return t;
-}
-
-//-----------------------------------------------------------------------------
-/**
-   Вернуть точку на кривой по параметру t.
-*/
-//---
+//   Вернуть точку на кривой по параметру t.
+// ---
 Point NurbsCurve::GetPoint( double t ) const
 {
 	if ( IsValid() )
 	{
-		double currentT = FixedParam(t);
+    double currentT = FixParametr(t);
 		int span = FindSpan(currentT);
 		double weightNurbs = CountWeight(span, currentT);
 		Point resultPoint(0.0, 0.0);
 		std::vector<double> node = BasicFunctions(span, currentT);
 
-		for (int i = 0; i <= degree; i++)
+    for (size_t i = 0; i <= degree; i++)
 		{
 			resultPoint = resultPoint + poles[span - degree + i] * node[i] * weights[span - degree + i];
 		}
-    return Point( resultPoint * ( 1 / weightNurbs) );
+  //  if ( fabs(weightNurbs) <CommonConstantsMath::NULL_TOL )
+    //  return Point( resultPoint * ( 1. / weightNurbs) )
+    //  if ==0 * maxdouble;
+    return Point( resultPoint * ( 1. / weightNurbs) );
 	}
 	else
-		return Point( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
+    return
+        Point( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
 
 //-----------------------------------------------------------------------------
-/**
-   Подсчитать значения базисных функций на отрезке x - degree.
-*/
-//---
+//   Подсчитать значения базисных функций на отрезке x - degree.
+// ---
 std::vector<double> NurbsCurve::BasicFunctions( int i, double x) const
 {
   std::vector<double> N;
@@ -455,12 +406,12 @@ std::vector<double> NurbsCurve::BasicFunctions( int i, double x) const
   std::vector<double> right;
   right.resize( degree + 1 );
   N[0] = 1.0;
-  for ( int j = 1; j <= degree; j++ )
+  for ( size_t j = 1; j <= degree; j++ )
   {
     left[j] = x - nodes[i + 1 - j];
     right[j] = nodes[i + j] - x;
     double saved = 0.0;
-    for ( int k = 0; k < j; k++ )
+    for ( size_t k = 0; k < j; k++ )
     {
       double temp = N[k] / ( right[k + 1] + left[j - k] );
       N[k] = saved + right[k + 1] * temp;
@@ -474,23 +425,20 @@ std::vector<double> NurbsCurve::BasicFunctions( int i, double x) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Производные от базисных функций, помноженные на соответсвующие точки кривой.
-*/
-//---
+//  Производные от базисных функций, помноженные на соответсвующие точки кривой.
+// ---
 std::vector<Point> NurbsCurve::PointDers( double t, int der ) const
 {
-	double tcurrent = FixedRange(t);
+  double tcurrent = FixParametr( t );
 	int span = FindSpan( tcurrent );
-  double weightNurbsD = CountWeightD( tcurrent, span );
 	std::vector<std::vector<double>> ders;
   ComputeBasicFunctionD( tcurrent, span, der, ders );
 	std::vector<Point> points;
 
-	for ( int j = 0; j <= der; j++ ) 
+  for ( size_t j = 0; j <= der; j++ )
 	{
 		Point resultPoint;
-		for ( int i = 0; i <= degree; i++ )
+    for ( size_t i = 0; i <= degree; i++ )
 		{
 			resultPoint = resultPoint + poles[span - degree + i] * ders[j][i] * weights[span - degree + i];
 		}
@@ -502,25 +450,22 @@ std::vector<Point> NurbsCurve::PointDers( double t, int der ) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Производные от базисных функций, помноженные на соответсвующие веса кривой.
-*/
-//---
+//  Производные от базисных функций, помноженные на соответсвующие веса кривой.
+// ---
 std::vector<double> NurbsCurve::WeightDers( double t, int der ) const
 {
-	double tcurrent = FixedRange( t );
+  double tcurrent = FixParametr( t );
 	int span = FindSpan( tcurrent );
-	double weightNurbsD = CountWeightD( tcurrent, span );
 	std::vector<std::vector<double>> ders;
 	ComputeBasicFunctionD( tcurrent, span, der, ders );
 	std::vector<double> result;
-	for ( int j = 0; j <= der; j++ )
+  for ( size_t j = 0; j <= der; j++ )
 	{
 		double resultWeight = 0;
-	  for ( int i = 0; i <= degree; i++ )
+    for ( size_t i = 0; i <= degree; i++ )
 	  {
 	    resultWeight = resultWeight + weights[span - degree + i] * ders[j][i];
-	}
+    }
 	result.push_back( resultWeight );
 	}
 	return result;
@@ -528,22 +473,20 @@ std::vector<double> NurbsCurve::WeightDers( double t, int der ) const
 
 
 //-----------------------------------------------------------------------------
-/**
-	Внутренняя функция для посдчета производной порядка der.
-*/
-//---
+// Внутренняя функция для посдчета производной порядка der.
+// ---
 Vector NurbsCurve::CountingDer( double t, int der) const
 {
-  double tcurrent = FixedRange( t );
+  double tcurrent = FixParametr( t );
 	std::vector<double> weight = WeightDers( tcurrent, der );
 	std::vector< Point> pointd = PointDers( t, der );
 	Point resultPoint;
 	std::vector<Point> dtempders;
 	dtempders.resize( der  + 1);
-	for (int k = 0; k <= der; k++)
+  for ( size_t k = 0; k <= der; k++)
 	{
 		resultPoint = pointd[k];
-		for ( int i = 1; i <= k; i++ )
+    for ( size_t i = 1; i <= k; i++ )
 			resultPoint = resultPoint - dtempders[k - i] * Bin( k, i ) * weight[i];
 		dtempders[k] = resultPoint * ( 1 / weight[0] );
 	}
@@ -551,16 +494,14 @@ Vector NurbsCurve::CountingDer( double t, int der) const
 }
 
 //-----------------------------------------------------------------------------
-/**
-	Вернуть производную на nurbs по параметру t.
-*/
-//---
+// Вернуть производную на nurbs по параметру t.
+// ---
 Vector  NurbsCurve::GetDerivative( double t ) const
 {
   if ( IsValid() )
 	{
-    double currentT = FixedParam( t );
-    return  CountingDer( currentT, 1 );
+    double currentT = FixParametr( t );
+    return CountingDer( currentT, 1 );
 	}
 	else
 		return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
@@ -568,15 +509,13 @@ Vector  NurbsCurve::GetDerivative( double t ) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть вторую производную на nurbs по параметру t.
-*/
-//---
+//  Вернуть вторую производную на nurbs по параметру t.
+// ---
 Vector  NurbsCurve::Get2Derivative( double t ) const
 {
   if ( IsValid() )
 	{
-    double currentT = FixedParam( t );
+    double currentT = FixParametr( t );
     return  CountingDer( currentT, 2 );
 	}
 	else
@@ -586,10 +525,8 @@ Vector  NurbsCurve::Get2Derivative( double t ) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть границы параметра для Nurbs : [nodes[0], nodes[size]].
-*/
-//---
+//  Вернуть границы параметра для Nurbs : [nodes[0], nodes[size]].
+// ---
 Range  NurbsCurve::GetRange() const
 {
 	if (IsValid())
@@ -624,10 +561,8 @@ Range  NurbsCurve::GetRange() const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть имя, используемое для записи примитива в файл.
-*/
-//---
+// Вернуть имя, используемое для записи примитива в файл.
+// ---
 std::string NurbsCurve::GetName() const
 {
   return "Nurbs";
@@ -635,10 +570,8 @@ std::string NurbsCurve::GetName() const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Проверка на правильность кривой.
-*/
-//---
+// Проверка на правильность кривой.
+// ---
 bool NurbsCurve::IsValid() const
 {
   return ( poles.size() > 0 );
@@ -646,10 +579,8 @@ bool NurbsCurve::IsValid() const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть опорные точки.
-*/
-//---
+// Вернуть опорные точки.
+// ---
 std::vector<Point> NurbsCurve::GetPoles() const
 {
   return poles;
@@ -658,10 +589,8 @@ std::vector<Point> NurbsCurve::GetPoles() const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть веса опорных точек.
-*/
-//---
+//  Вернуть веса опорных точек.
+// ---
 std::vector<double> NurbsCurve::GetWeights() const
 {
   return weights;
@@ -669,10 +598,8 @@ std::vector<double> NurbsCurve::GetWeights() const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть границы параметра t для базисных полиномов.
-*/
-//---
+// Вернуть границы параметра t для базисных полиномов.
+// ---
 std::vector<double> NurbsCurve::GetNodes() const
 {
   return nodes;
@@ -680,10 +607,8 @@ std::vector<double> NurbsCurve::GetNodes() const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть замкнутость Nurbs - кривой.
-*/
-//---
+// Вернуть замкнутость Nurbs - кривой.
+// ---
 bool NurbsCurve::IsClosed() const
 {
   return isClosed;
@@ -691,21 +616,17 @@ bool NurbsCurve::IsClosed() const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть степень Nurbs - кривой.
-*/
-//---
+//  Вернуть степень Nurbs - кривой.
+// ---
 double NurbsCurve::Degree() const
 {
   return degree;
 }
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть опорные точки, использованные для построения nurbs - кривой.
-*/
-//---
-std::vector<Point> NurbsCurve::GetReferensedPoints () const
+//  Вернуть опорные точки, использованные для построения nurbs - кривой.
+// ---
+std::vector<Point> NurbsCurve::GetReferensedPoints() const
 {
   return poles;
 }

@@ -168,7 +168,7 @@ void MainWindow::CreateActions()
 //-----------------------------------------------------------------------------
 void MainWindow::OnSaveFile()
 {
-  //windowHandler.SaveFile();
+  windowHandler.SaveFile();
 }
 
 

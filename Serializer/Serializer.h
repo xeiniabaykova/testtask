@@ -9,6 +9,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "CurveSerializer.h"
 #include "Math/GeometricPrimitive.h"
+#include "Math/Curve.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -32,10 +33,10 @@ public:
   template<typename FormattedSerializer>
   void RegisterSerializer();
 
-  std::unique_ptr<Math::GeometricPrimitive>              Read ( std::istream& theStream );
-  void                                                   Write ( std::ostream& theStream, const Math::GeometricPrimitive& aCurve );
-  std::vector<std::shared_ptr<Math::GeometricPrimitive>> ReadCurves ( std::string theFileName );
-  void                                                   WriteCurves (const std::vector<std::shared_ptr<Math::GeometricPrimitive>>& theCurves,std::string theFileName);
+  std::unique_ptr<Math::Curve>                          Read ( std::istream& theStream );
+  void                                                   Write ( std::ofstream& theStream, const Math::Curve& aCurve );
+  std::vector<std::shared_ptr<Math::Curve>> ReadCurves ( std::string theFileName );
+  void                                                   WriteCurves (const std::vector<std::shared_ptr<Math::Curve>>& theCurves,std::string theFileName);
 private:
   std::map<std::string, std::shared_ptr<CurveSerializer>> mySerializers;
 

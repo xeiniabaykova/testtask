@@ -7,11 +7,9 @@ namespace Math {
 
 
 //-----------------------------------------------------------------------------
-/**
-   Коструктор Line. Записывается начальная точка и конечная точка.
-  Если они совпадают, то создается пустой отрезок,
-*/
-//---
+//   Коструктор Line. Записывается начальная точка и конечная точка.
+//  Если они совпадают, то создается пустой отрезок,
+// ---
 Line::Line( Point theStartPoint, Point theEndPoint ):
   Curve(),
   startPoint( Point(0.0, 0.0) ),
@@ -26,12 +24,10 @@ Line::Line( Point theStartPoint, Point theEndPoint ):
 
 
 //-----------------------------------------------------------------------------
-/**
-  Коструктор Line. Записывается начальная точка и конечная точка.
-  Если они совпадают, то создается пустой отрезок, если массив точек имеет размер меньше двух,
-  то записывается пустой отрезок.
-*/
-//---
+//  Коструктор Line. Записывается начальная точка и конечная точка.
+//  Если они совпадают, то создается пустой отрезок, если массив точек имеет размер меньше двух,
+//  то записывается пустой отрезок.
+// ---
 Line::Line( const std::vector<Point>& points ):
   Curve(),
   startPoint( Point(0.0, 0.0) ),
@@ -45,10 +41,8 @@ Line::Line( const std::vector<Point>& points ):
 }
 
 //-----------------------------------------------------------------------------
-/**
-  Возращаются границы параметра t для прямой: [0, 1].
-*/
-//---
+//  Возращаются границы параметра t для прямой: [0, 1].
+// ---
 Range Line::GetRange() const
 {
   return Range( 0.0, 1.0 );
@@ -56,23 +50,19 @@ Range Line::GetRange() const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть точку по параметру t.
-*/
-//---
+//  Вернуть точку по параметру t.
+// ---
 Point Line::GetPoint( double t ) const
 {
-  double tcurrent = FixedRange( t );
+  double tcurrent = FixParametr( t );
   Vector direction = endPoint - startPoint;
   return startPoint + direction * tcurrent;
 }
 
 
 //-----------------------------------------------------------------------------
-/**
-  Верунуть производную по парметру t.
-*/
-//---
+// Верунуть производную по парметру t.
+// ---
 Vector Line::GetDerivative( double ) const
 {
   return endPoint - startPoint;
@@ -80,10 +70,8 @@ Vector Line::GetDerivative( double ) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Верунуть вторую производную по парметру t.
-*/
-//---
+// Верунуть вторую производную по парметру t.
+// ---
 Vector Line::Get2Derivative( double ) const
 {
   return Vector( 0.0, 0.0 );
@@ -91,15 +79,8 @@ Vector Line::Get2Derivative( double ) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Возвращается полилилния для текущего отрезка - это точки начала и конца.
-*/
-//---
-//-----------------------------------------------------------------------------
-/**
-Вернуть полилилния для полилинии - это полилиния.
-*/
-//---
+//  Возвращается полилилния для текущего отрезка - это точки начала и конца.
+// ---
 void Line::GetAsPolyLine(GeomPolyline &polyLine, double) const
 {
 	std::vector<Point> points;
@@ -110,10 +91,8 @@ void Line::GetAsPolyLine(GeomPolyline &polyLine, double) const
 }
 
 //-----------------------------------------------------------------------------
-/**
-  Сдвинуть по осям x, y на xShift, yShift.
-*/
-//---
+//  Сдвинуть по осям x, y на xShift, yShift.
+// ---
 void Line::Translate( double xShift, double yShift )
 {
   startPoint.Translate( xShift, yShift );
@@ -122,10 +101,8 @@ void Line::Translate( double xShift, double yShift )
 
 
 //-----------------------------------------------------------------------------
-/**
-  Повернуть на угол alpha относительно начала координат.
-*/
-//---
+//  Повернуть на угол alpha относительно начала координат.
+// ---
 void Line::Rotate( double alpha )
 {
   startPoint.Rotate( alpha );
@@ -135,10 +112,8 @@ void Line::Rotate( double alpha )
 
 
 //-----------------------------------------------------------------------------
-/**
-  Маштабировать по оси х на xScaling, по оси y на yScaling.
-*/
-//---
+//  Маштабировать по оси х на xScaling, по оси y на yScaling.
+// ---
 void Line::Scale( double xScaling, double yScaling )
 {
   startPoint.Scale( xScaling, yScaling );
@@ -147,10 +122,8 @@ void Line::Scale( double xScaling, double yScaling )
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть имя, используемое при записи отрезка в файл.
-*/
-//---
+//  Вернуть имя, используемое при записи отрезка в файл.
+// ---
 std::string Line::GetName() const
 {
   return "Line";
@@ -158,10 +131,8 @@ std::string Line::GetName() const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Проверка на корректность отрезка (начальная и конечная точка не совпадают).
-*/
-//---
+//  Проверка на корректность отрезка (начальная и конечная точка не совпадают).
+// ---
 bool Line::IsValid() const
 {
   return ( !IsEqual(startPoint, endPoint) );
@@ -169,16 +140,51 @@ bool Line::IsValid() const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть опорные точки, использованные для построения отрезка.
-  Соответственно, это точки начала и колнца отрезка.
-*/
-//---
+//  Вернуть опорные точки, использованные для построения отрезка.
+//  Соответственно, это точки начала и колнца отрезка.
+// ---
 std::vector<Point> Line::GetReferensedPoints() const
 {
   std::vector<Point> refPoints;
   refPoints.push_back( startPoint );
   refPoints.push_back( endPoint );
   return refPoints;
+}
+
+Point Line::GetStartPoint() const
+{
+  return startPoint;
+}
+Point Line::GetEndPoint() const
+{
+  return endPoint;
+}
+
+bool Line::IsClosed() const
+{
+  return false;
+}
+
+
+//-----------------------------------------------------------------------------
+//  Вернуть расстояние от точки до прямой.
+// ---
+double Line::DistanceToPoint( Point point ) const
+{
+   Vector v = endPoint - startPoint;
+   Vector w = point - startPoint;
+
+   double c1 = v * w;
+   if ( c1 <= 0 )
+       return Distance( point, startPoint );
+
+   double c2 = v * v;
+   if ( c2 <= c1 )
+       return Distance( point, endPoint );
+
+   double b = c1 / c2;
+   Point Pb = startPoint + v * b;
+   return Distance( point, Pb );
+
 }
 }

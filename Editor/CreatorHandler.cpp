@@ -69,7 +69,7 @@ std::shared_ptr<Math::Curve> CreatorHandler::Create()
   case CreateNURBS:
   {
     std::vector<double> weights;
-    for ( int i = 0; i < points.size(); i++ )
+    for ( size_t i = 0; i < points.size(); i++ )
       weights.push_back(1.0 );
 
     int degree = 3;

@@ -6,7 +6,7 @@ std::string NURBSCurveSerializer::GetHeaderName()
   return Math::NurbsCurve().GetName();
 }
 
-std::unique_ptr<Math::GeometricPrimitive> NURBSCurveSerializer::Read( std::istream& theInput )
+std::unique_ptr<Math::Curve> NURBSCurveSerializer::Read( std::istream& theInput )
 {
 
   int  numNodes;
@@ -42,7 +42,7 @@ std::unique_ptr<Math::GeometricPrimitive> NURBSCurveSerializer::Read( std::istre
 
 }
 
- void NURBSCurveSerializer::Write ( std::ostream& theOutput, const Math::GeometricPrimitive& theCurve )
+ void NURBSCurveSerializer::Write( std::ostream& theOutput, const Math::Curve& theCurve )
  {
   auto poles = static_cast<const Math::NurbsCurve&>(theCurve).GetPoles();
   WriteInt(theOutput, (int)poles.size());

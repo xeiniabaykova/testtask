@@ -19,9 +19,7 @@
 namespace Math {
 ////////////////////////////////////////////////////////////////////////////////
 /**
-
   Класс геометрического представления Nurbs - кривой. \~
-
 */
 ////////////////////////////////////////////////////////////////////////////////
 class NurbsCurve : public Curve
@@ -31,7 +29,7 @@ private:
   std::vector<double> weights; ///< Веса для опорных точек.
   std::vector<double> nodes;   ///< Границы параметра для опорного полинома.
   bool                isClosed;///< Замкнутость кривой.
-  int                 degree;  ///< Степень кривой.
+  size_t              degree;  ///< Степень кривой.
 
 private:
   NurbsCurve(const NurbsCurve &obj) = delete;
@@ -51,11 +49,11 @@ public:
 
   virtual Point       GetPoint               ( double t ) const;                                               ///< Вернуть точку на кривой по параметру t.
   virtual Range       GetRange               () const;                                                         ///< Вернуть границы параметра для Nurbs : [nodes[0], nodes[size]].
-  virtual Vector      GetDerivative     ( double t ) const;                                               ///< Вернуть производную на nurbs по параметру t.
-  virtual Vector      Get2Derivative    ( double t ) const;                                               ///< Вернуть вторую производную на nurbs по параметру t.
- // virtual void        GetAsPolyLine          ( std::vector<Point> & polyLinePoints, double accuracy ) const;   ///< Вернуть полилинию для nurbs.
+  virtual Vector      GetDerivative          ( double t ) const;                                               ///< Вернуть производную на nurbs по параметру t.
+  virtual Vector      Get2Derivative         ( double t ) const;                                               ///< Вернуть вторую производную на nurbs по параметру t.
   virtual void        Translate              ( double xShift, double yShift );                                 ///< Сдвиг по оси x на xShift, по оси y на yShift.
   virtual void        Rotate                 ( double alpha );                                                 ///< Повернуть относительно начала координат на угол alpha.
+  virtual std::vector<Point>  GetReferensedPoints    () const;                                                         ///< Вернуть опорные точки, использованные для построения nurbs - кривой
   virtual void        Scale                  ( double XScaling, double YScaling );                             ///< Масштабировать на xScaling по оси x, на yScaling по оси у.
   std::vector<double> BasicFunctions         ( int i, double x) const;                                         ///< Подсчитать значения базисных функций на отрезке x - degree.
   Vector              CountingDer            ( double t, int der ) const;                                      ///<  Внутренняя функция для посдчета производной порядка der.
@@ -75,8 +73,8 @@ public:
   double              Degree                 () const;                                                         ///< Вернуть степень Nurbs - кривой.
   std::string         GetName                () const;                                                         ///< Вернуть имя, используемое для записи примитива в файл.
   bool                IsValid                () const;                                                         ///< Проверка на правильность кривой.
-  std::vector<Point>  GetReferensedPoints    () const;                                                         ///< Вернуть опорные точки, использованные для построения nurbs - кривой
-  double              FixedParam             ( double t )  const;                                              ///< Исправить границы для параметра.
+
+ // double              FixParam              ( double t )  const;                                              ///< Исправить границы для параметра.
 };
 }
 

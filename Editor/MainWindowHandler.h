@@ -18,14 +18,14 @@
 #include <Editor/CreatorHandler.h>
 #include <memory>
 
+
+namespace Editor {
 ///////////////////////////////////////////////////////////////////////////////
 //
 /// Класс обработчик событий формы mainwindow.
 /**
 */
 ///////////////////////////////////////////////////////////////////////////////
-
-namespace Editor {
 class MainWindowHandler {
   enum CurrentState
   {
@@ -66,7 +66,7 @@ public:
   void CreateCircle           ();                         ///< Создать и отобразить окружность.
   void CreateNurbs            ();                         ///< Создать и отобразить nurbs.
   void LoadFile               ();                         ///< Загрузить кривые из файла.
-  void SaveFile               ( const std::vector<std::shared_ptr<DisplayedObject>>& savedObj );///< Сохранить кривые в файл.
+  void SaveFile               ();                          ///< Сохранить кривые в файл.
   void CreatePolyline         ();                         ///< Создать и отобразить полилинию.
   void CreateCurve            ();                         ///< Создать кривую.
   void MouseEvent             ( QMouseEvent *event );     ///< Обработать событие клика мышкой.

@@ -42,7 +42,6 @@ public:
   Point        operator + ( Vector vector ) const;              ///< Сложить ветор и точку. По определению, это точка.
   Point        operator = ( Point point );                      ///< Прировнять одну точку к другой точке.
   bool         IsValid    () const;                             ///< Проверить точки точки на правильность.
-  double       Lenght     () const;                             ///< Вернуть модуль точки.
   std::string  GetName    () const;                             ///< Вернуть имя, используемое при записи точки в файл.
 };
 

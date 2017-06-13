@@ -12,14 +12,15 @@
 #include <memory>
 #include "Math/Point.h"
 #include "Math/Curve.h"
+
+
+namespace Editor {
 ///////////////////////////////////////////////////////////////////////////////
 //
 /// Создание геометрического примитива по точкам полученным с экрана и дополнительной информации.
 /**
 */
 ///////////////////////////////////////////////////////////////////////////////
-
-namespace Editor {
 class CreatorHandler
 {
 public:
@@ -47,10 +48,10 @@ private:
   CreatorHandler( const CreatorHandler &obj ) = delete;
   CreatorHandler& operator=( CreatorHandler &obj ) = delete;
 public:
-  void                            AddPointFromScreen  ( Math::Point point ); ///< Добавить точку с экрана в массив текущих точек.
-  bool                            IsSufficientNum     () const;              ///< Проверить, достаточно ли текущее количество точек для создания и отображения выбранной кривой.
-  std::shared_ptr<Math::Curve>    Create              ();                    ///< Создать геометрический примитив.
-  void                            ClearPoints         ();                    ///< Очистить массив точек, полученных с экрана.
+  void                            AddPointFromScreen  ( Math::Point point );           ///< Добавить точку с экрана в массив текущих точек.
+  bool                            IsSufficientNum     () const;                        ///< Проверить, достаточно ли текущее количество точек для создания и отображения выбранной кривой.
+  std::shared_ptr<Math::Curve>    Create              ();                              ///< Создать геометрический примитив.
+  void                            ClearPoints         ();                              ///< Очистить массив точек, полученных с экрана.
   void                            AddInformationNurbs ( bool& isClosed, int& degree ); ///< Вызвать меню для получения информации о нурбс - кривой.
 };
 }

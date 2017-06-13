@@ -1,50 +1,50 @@
 #include <cmath>
 #include <limits>
 #include "Point.h"
+
 #include "CommonConstantsMath.h"
 
 
 namespace Math {
 //-----------------------------------------------------------------------------
-/**
-  Коструктор Point.
-*/
-//---
+// Коструктор Point.
+// ---
 Point::Point( double theX, double theY):
-  x( theX ),
-  y( theY )
+  GeometricPrimitive(),
+  x                 ( theX ),
+  y                 ( theY )
 {
 }
 
 
 //----------------------------------------------------------------------------
-/**
-  Коструктор копии.
-*/
-//---
-Point::Point(const Point& point)
+//  Коструктор копии.
+// ---
+Point::Point(const Point& point):
+  GeometricPrimitive(),
+  x(0),
+  y(0)
 {
 	x = point.GetX();
 	y = point.GetY();
 }
 
 //----------------------------------------------------------------------------
-/**
-  Коструктор создания точки из вектора.
-*/
-//---
-Point::Point(const Vector& vector)
+//  Коструктор создания точки из вектора.
+// ---
+Point::Point(const Vector& vector):
+  GeometricPrimitive(),
+  x(0),
+  y(0)
 {
   x = vector.GetX();
   y = vector.GetY();
 }
 
 //----------------------------------------------------------------------------
-/**
-  Сдвинуть по осям x, y.
-*/
-//---
-void Point::Translate(  double xShift, double yShift )
+//  Сдвинуть по осям x, y.
+// ---
+void Point::Translate( double xShift, double yShift )
 {
   if ( IsValid() )
   {
@@ -55,10 +55,8 @@ void Point::Translate(  double xShift, double yShift )
 
 
 //----------------------------------------------------------------------------
-/**
-  Повернуть на угол alpha относительно начала координат.
-*/
-//---
+//  Повернуть на угол alpha относительно начала координат.
+// ---
 void Point::Rotate( double alpha )
 {
   if ( IsValid() )
@@ -74,10 +72,8 @@ void Point::Rotate( double alpha )
 
 
 //----------------------------------------------------------------------------
-/**
-  Маштабировать по оси х на xScaling, по оси y на yScaling.
-*/
-//---
+//  Маштабировать по оси х на xScaling, по оси y на yScaling.
+// ---
 void Point::Scale(  double xScaling, double yScaling  )
 {
   if ( IsValid() )
@@ -89,10 +85,8 @@ void Point::Scale(  double xScaling, double yScaling  )
 
 
 //----------------------------------------------------------------------------
-/**
-  Получить координату x.
-*/
-//---
+//  Получить координату x.
+// ---
 double Point::GetX() const
 {
 	return x;
@@ -100,10 +94,8 @@ double Point::GetX() const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Получить координату y.
-*/
-//---
+// Получить координату y.
+// ---
 double Point::GetY() const
 {
 	return y;
@@ -111,10 +103,8 @@ double Point::GetY() const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Умножить точку на скаляр.
-*/
-//---
+// Умножить точку на скаляр.
+// ---
 Point Point::operator * (double param) const
 {
   if ( IsValid() )
@@ -126,10 +116,8 @@ Point Point::operator * (double param) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Получить разность точек ( по определению, это вектор).
-*/
-//---
+// Получить разность точек ( по определению, это вектор).
+// ---
 Vector Point::operator - (Point point) const
 {
   if ( IsValid() && point.IsValid() )
@@ -141,10 +129,8 @@ Vector Point::operator - (Point point) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Сложить две точки.
-*/
-//---
+//  Сложить две точки.
+// ---
 Point Point::operator + ( Point point ) const
 {
   if ( IsValid() && point.IsValid() )
@@ -156,10 +142,8 @@ Point Point::operator + ( Point point ) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Сложить ветор и точку. По определению, это точка.
-*/
-//---
+//  Сложить ветор и точку. По определению, это точка.
+// ---
 Point Point::operator + ( Vector vector ) const
 {
   if ( IsValid() && vector.IsValid() )
@@ -171,10 +155,8 @@ Point Point::operator + ( Vector vector ) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Прировнять одну точку к другой точке.
-*/
-//---
+//  Прировнять одну точку к другой точке.
+// ---
 Point Point::operator = ( Point point )
 {
   x = point.GetX();
@@ -184,10 +166,8 @@ Point Point::operator = ( Point point )
 
 
 //-----------------------------------------------------------------------------
-/**
-  Проверить точки точки на правильность.
-*/
-//---
+//  Проверить точки точки на правильность.
+// ---
 bool Point::IsValid() const
 {
   return !( std::isinf(x) || std::isinf(y) );
@@ -195,30 +175,16 @@ bool Point::IsValid() const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть модуль точки.
-*/
-//---
-double Point::Lenght() const
-{
-  return sqrt ( x * x + y * y );
-}
-
-//-----------------------------------------------------------------------------
-/**
-  Вернуть имя, используемое при записи точки в файл.
-*/
-//---
+//  Вернуть имя, используемое при записи точки в файл.
+// ---
 std::string Point::GetName() const
 {
   return "Vector";
 }
 
 //-----------------------------------------------------------------------------
-/**
-  Найти расстояние между точками.
-*/
-//---
+// Найти расстояние между точками.
+// ---
 double Distance( Point point1, Point point2 )
 {
   return sqrt( (point1 - point2).GetX() * (point1 - point2).GetX() +
@@ -227,10 +193,8 @@ double Distance( Point point1, Point point2 )
 
 
 //-----------------------------------------------------------------------------
-/**
-  Проверить точки на эквивалентность с точностью CommonConstantsMath::NULL_TOL.
-*/
-//---
+//  Проверить точки на эквивалентность с точностью CommonConstantsMath::NULL_TOL.
+// ---
 bool IsEqual( Point point1, Point point2 )
 {
   return( fabs(point1.GetX() - point2.GetX()) < CommonConstantsMath::NULL_TOL

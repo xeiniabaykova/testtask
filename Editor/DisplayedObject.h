@@ -17,6 +17,9 @@
 #include <QtCharts/QValueAxis>
 #include <memory>
 
+
+QT_CHARTS_USE_NAMESPACE
+namespace Editor {
 ///////////////////////////////////////////////////////////////////////////////
 //
 /// Хранение информации о отображаемой кривой :
@@ -24,9 +27,6 @@
 /**
 */
 ///////////////////////////////////////////////////////////////////////////////
-
-QT_CHARTS_USE_NAMESPACE
-namespace Editor {
 struct DisplayedObject
 {
 private:
@@ -42,8 +42,8 @@ public:
   virtual ~DisplayedObject();
   /**  \brief Создать отображаемую кривую по ее геометрическому представлению.
     \param[in] curve - количество точек, необходимых для создания очередного примитива.
-      \param[in]  axisX - ось ох.\~
-        \param[in]  axisX - ось оy.\~
+    \param[in]  axisX - ось ох.\~
+    \param[in]  axisX - ось оy.\~
   */
   //---
   DisplayedObject( std::shared_ptr<Math::Curve> curve,  QValueAxis* axisX,  QValueAxis* axisY );
@@ -51,11 +51,12 @@ private:
   DisplayedObject( const DisplayedObject &obj ) = delete;
   DisplayedObject& operator=( DisplayedObject &obj ) = delete;
  public:
-  void addCurveToChart         ( QChart * chart );                                             ///< Добавить кривую к пространству отрисовки.
-  bool GetSelectionStatus      ();                                                             ///< Получить информацию о селектированности кривой
-  void ModifySelectionStatus   ( Math::Point cursor, double precision, QColor selectedColor ); ///< Изменить информацию о селектированности кривой в зависимости от полученной точки
-  void SetColor                ( QColor color );                                               ///< Установить цвет кривой.
-  void SetColorUnselectedCurve ( QColor color );                                               ///< Установить цвет неселектированной кривой.
+  void                         addCurveToChart         ( QChart * chart );                                             ///< Добавить кривую к пространству отрисовки.
+  bool                         GetSelectionStatus      ();                                                             ///< Получить информацию о селектированности кривой
+  void                         ModifySelectionStatus   ( Math::Point cursor, double precision, QColor selectedColor ); ///< Изменить информацию о селектированности кривой в зависимости от полученной точки
+  void                         SetColor                ( QColor color );                                               ///< Установить цвет кривой.
+  void                         SetColorUnselectedCurve ( QColor color );                                               ///< Установить цвет неселектированной кривой.
+  std::shared_ptr<Math::Curve> GetPrimitive            ();                                                             ///< Вернуть геометрический примитив.
 };
 }
 #endif // DISPLAYEDCURVE_H

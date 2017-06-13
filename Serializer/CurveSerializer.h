@@ -7,7 +7,8 @@
 
 */
 ////////////////////////////////////////////////////////////////////////////////
-#include <Math/GeometricPrimitive.h>
+#include "Math/GeometricPrimitive.h"
+#include "Math/Curve.h"
 #include <Math/Point.h>
 #include <istream>
 #include <memory>
@@ -28,9 +29,9 @@ private:
   CurveSerializer( const CurveSerializer &obj ) = delete;
   CurveSerializer& operator=( CurveSerializer &obj ) = delete;
 public:
-  virtual std::unique_ptr<Math::GeometricPrimitive> Read       ( std::istream& theInput ) = 0; ///< Чтение геометрического примитива из потока.
+  virtual std::unique_ptr<Math::Curve> Read       ( std::istream& theInput ) = 0; ///< Чтение геометрического примитива из потока.
   /// Запись геометрического примитва в поток.
-  virtual void                                      Write       ( std::ostream& theOutput, const Math::GeometricPrimitive& theCurve ) = 0;
+  virtual void                                      Write       ( std::ostream& theOutput, const Math::Curve& theCurve ) = 0;
   Math::Point                                       ReadPoint   ( std::istream& input ) const;                            ///< Чтение точки из потока.
   void                                              WritePoint  ( std::ostream& output, const Math::Point& point ) const; ///< Запись точки в поток.
   double                                            ReadDouble  ( std::istream& input ) const;                            ///< Чтение числа с плавающей запятой из потока.

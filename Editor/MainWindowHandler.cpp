@@ -104,7 +104,14 @@ void MainWindowHandler::CreatePolyline()
 void MainWindowHandler::LoadFile()
 {
   FileIO open;
-  open.Open();
+  std::vector<std::shared_ptr<Math::Curve>> inputObj;
+  open.Open( inputObj );
+  for ( size_t i = 0; i < inputObj.size(); i++ )
+  {
+    std::shared_ptr<DisplayedObject> curve = std::make_shared<DisplayedObject>( inputObj[i], axisX, axisY );
+   curve->addCurveToChart( chart );
+    displayedCurves.push_back( curve );
+  }
 }
 
 
@@ -114,10 +121,18 @@ void MainWindowHandler::LoadFile()
   Запускается окно сохранения файла.
 */
 //---
-void MainWindowHandler::SaveFile( const std::vector<std::shared_ptr<DisplayedObject>>& savedObj )
+void MainWindowHandler::SaveFile( )
 {
+  std::vector<std::shared_ptr<Math::Curve>> savedCurves;
+
+  for ( size_t i = 0; i < displayedCurves.size(); i++ )
+  {
+    std::shared_ptr<Math::Curve> curve = displayedCurves[i]->GetPrimitive();
+     savedCurves.push_back( curve  );
+  }
+
   FileIO save;
-  //save.Save();
+  save.Save( savedCurves );
 }
 
 
@@ -202,7 +217,7 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
 void MainWindowHandler::StateExpect( QMouseEvent *event )
 {
   QPointF currentPoint = chart->mapToValue( QPointF(event->pos().x(), event->pos().y() - 30) );
-  for ( int i = 0; i < displayedCurves.size(); i++ )
+  for ( size_t i = 0; i < displayedCurves.size(); i++ )
     displayedCurves[i]->ModifySelectionStatus( Math::Point(currentPoint.x(), currentPoint.y()), CommonConstantsEditor::PRECISION_SELECT, selectedColor );
   state = StateExpectAction;
 }
@@ -215,7 +230,7 @@ void MainWindowHandler::StateExpect( QMouseEvent *event )
 //-----------------------------------------------------------------------------
 void MainWindowHandler::ChangeColor( QColor color )
 {
-  for ( int i = 0; i < displayedCurves.size(); i++ )
+  for ( size_t i = 0; i < displayedCurves.size(); i++ )
    if ( displayedCurves[i]->GetSelectionStatus() )
      displayedCurves[i]->SetColorUnselectedCurve( color );
 }
@@ -228,7 +243,7 @@ void MainWindowHandler::ChangeColor( QColor color )
 //-----------------------------------------------------------------------------
 void MainWindowHandler::DeleteCurve()
 {
-  for ( int i = 0; i < displayedCurves.size(); i++ )
+  for ( size_t i = 0; i < displayedCurves.size(); i++ )
     if ( displayedCurves[i]->GetSelectionStatus() )
        displayedCurves.erase( displayedCurves.begin() + i );
 

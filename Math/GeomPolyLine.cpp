@@ -1,4 +1,5 @@
 #include "GeomPolyline.h"
+#include "Line.h"
 #include <cmath>
 #include <limits>
 
@@ -6,18 +7,16 @@ namespace Math {
 namespace {
 
 //-----------------------------------------------------------------------------
-/**
-  Полилиния считается верной, если количество точек не равно нулю, если точки не совпадают ( кроме траничных - полилиния может быть замкнутой).
-*/
-//---
-static bool CorrectPolylineData( const std::vector<Point>& points )
+//  Полилиния считается верной, если количество точек не равно нулю, если точки не совпадают ( кроме траничных - полилиния может быть замкнутой).
+// ---
+static bool IsCorrectPolylineData( const std::vector<Point>& points )
 {
   if ( points.size() < 2 )
     return false;
   if ( points.size() == 2 && IsEqual(points[0], points[1]) )
 	  return false;
-  for ( int i = 0; i < points.size() - 1; i++ )
-    for ( int j = 0; j < points.size() - 1; j++ )
+  for ( size_t i = 0; i < points.size() - 1; i++ )
+    for ( size_t j = 0; j < points.size() - 1; j++ )
       {
         if ( i == j )
             continue;
@@ -26,32 +25,6 @@ static bool CorrectPolylineData( const std::vector<Point>& points )
        }
   return true;
 }
-
-//-----------------------------------------------------------------------------
-/**
-   Расстояние от точки до прямой.
-   QPoint first, QPoint second - начальные и конечные точки прямой
-   point - точка, до которой находится расстояние
-*/
-//-----------------------------------------------------------------------------
-static double Distance( Point first, Point second, Point point )
-{
-   Vector v = second - first;
-   Vector w = point - first;
-
-   double c1 = v * w;
-   if ( c1 <= 0 )
-       return Distance( point, first );
-
-   double c2 = v * v;
-   if ( c2 <= c1 )
-       return Distance( point, second );
-
-   double b = c1 / c2;
-   Point Pb = first + v * b;
-   return Distance( point, Pb );
-}
-
 }
 
 
@@ -64,46 +37,38 @@ static double Distance( Point first, Point second, Point point )
 ///////////////////////////////////////////////////////////////////////////////
 
 GeomPolyline::GeomPolyline():
-  referencedPoints( 0 )
+  Curve(),
+  referencedPoints()
 {
 }
 
 //-----------------------------------------------------------------------------
-/**
-  Конструктор полилинии по опорным точкам. Если точки удовлетворяют условию корректности: их количество не равно нулю и нет совпадающих точек,
-  то создается полилиния по воходым точкам. Считаем, что точки в полилинию добаляются в том же порядке, что и находятся в входном массиве.
-*/
-//---
+//  Конструктор полилинии по опорным точкам. Если точки удовлетворяют условию корректности: их количество не равно нулю и нет совпадающих точек,
+//  то создается полилиния по воходым точкам. Считаем, что точки в полилинию добаляются в том же порядке, что и находятся в входном массиве.
+// ---
 GeomPolyline::GeomPolyline( const std::vector<Point>& thePoints ):
-  referencedPoints( 0 )
+   Curve(),
+  referencedPoints()
 {
-  if ( CorrectPolylineData(thePoints) )
-  {
-    referencedPoints = thePoints;
-  }
+ Init( thePoints );
 }
 
 //-----------------------------------------------------------------------------
-/**
-  Инициализация полилинии по опорным точкам. Если точки удовлетворяют условию корректности: их количество не равно нулю и нет совпадающих точек,
-  то создается полилиния по воходым точкам. Считаем, что точки в полилинию добаляются в том же порядке, что и находятся в входном массиве.
-*/
-//---
+//  Инициализация полилинии по опорным точкам. Если точки удовлетворяют условию корректности: их количество не равно нулю и нет совпадающих точек,
+//  то создается полилиния по воходым точкам. Считаем, что точки в полилинию добаляются в том же порядке, что и находятся в входном массиве.
+// ---
 void GeomPolyline::Init( const std::vector<Point>& theReferencedPoints )
 {
 	referencedPoints.clear();
-  if ( CorrectPolylineData(theReferencedPoints) )
-  {
-	  for ( int i=0; i<theReferencedPoints.size(); i++)
-    referencedPoints.push_back( theReferencedPoints[i] );
+  if ( IsCorrectPolylineData(theReferencedPoints) )
+  {	 
+    referencedPoints = theReferencedPoints;
   }
 }
 
 //-----------------------------------------------------------------------------
-/**
- Вернуть границы параметра t для полинии: [0, количество точек].
-*/
-//---
+// Вернуть границы параметра t для полинии: [0, количество точек].
+// ---
 Range GeomPolyline::GetRange() const
 {
 	if (IsValid())
@@ -116,24 +81,22 @@ Range GeomPolyline::GetRange() const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть точку по параметру t.
-*/
-//---
+// Вернуть точку по параметру t.
+// ---
 Point GeomPolyline::GetPoint( double t ) const
 {
 	if ( IsValid() ) 
 	{
-		double tcurrent = FixedRange(t);
+    double tcurrent = FixParametr(t);
 		double leftParam = 0.0;
-    double currentT = std::modf( tcurrent, &leftParam );
+    tcurrent = std::modf( tcurrent, &leftParam );
     if ( leftParam >= referencedPoints.size() - 1 )
 		{
       return  Point( referencedPoints[referencedPoints.size() - 1] );
 		}
 		Point startPoint( referencedPoints[leftParam] );
 		Vector derection = referencedPoints[leftParam + 1] - referencedPoints[leftParam];
-		return startPoint + derection * currentT;
+    return startPoint + derection * tcurrent;
 	}
 	else
 		return Point( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
@@ -141,17 +104,15 @@ Point GeomPolyline::GetPoint( double t ) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть производную полилиннии по параметру t.
-*/
-//---
+// Вернуть производную полилиннии по параметру t.
+// ---
 Vector GeomPolyline::GetDerivative( double t ) const
 {
   if ( IsValid() )
 	{
-		double tcurrent = FixedRange(t);
+    double tcurrent = FixParametr( t );
 		double leftParam = 0.0;
-    double currentT = std::modf( tcurrent, &leftParam );
+    std::modf( tcurrent, &leftParam );
     if ( leftParam >= referencedPoints.size() - 1 )
 		{
       return  ( referencedPoints[referencedPoints.size() - 1] - referencedPoints[referencedPoints.size() - 2] );
@@ -164,10 +125,8 @@ Vector GeomPolyline::GetDerivative( double t ) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть вторую производную полилиннии по параметру t.
-*/
-//---
+// Вернуть вторую производную полилиннии по параметру t.
+// ---
 Vector GeomPolyline::Get2Derivative( double ) const
 {
   if ( IsValid() )
@@ -181,89 +140,77 @@ Vector GeomPolyline::Get2Derivative( double ) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Сдвинуть по оси x на xShift, по оси y на yShift.
-*/
-//---
+// Сдвинуть по оси x на xShift, по оси y на yShift.
+// ---
 void GeomPolyline::Translate ( double xShift, double yShift )
 {
 	if ( IsValid() )
 	{
-    for ( int i = 0; i < referencedPoints.size(); i++ )
+    for ( size_t i = 0; i < referencedPoints.size(); i++ )
       referencedPoints[i].Translate( xShift, yShift );
 	}
 }
 
 
 //-----------------------------------------------------------------------------
-/**
-  Повернуть полинию на угол alphaAng относительно начала координат.
-*/
-//---
+// Повернуть полинию на угол alphaAng относительно начала координат.
+// ---
 void GeomPolyline::Rotate( double alpha )
 {
 	if (IsValid())
 	{
-    for ( int i = 0; i < referencedPoints.size(); i++ )
+    for ( size_t i = 0; i < referencedPoints.size(); i++ )
 			referencedPoints[i].Rotate(alpha);
 	}
 }
 
 
 //-----------------------------------------------------------------------------
-/**
-  Масштабировать на xScaling по оси x, на yScaling по оси у.
-*/
-//---
+// Масштабировать на xScaling по оси x, на yScaling по оси у.
+// ---
 void GeomPolyline::Scale( double xScaling, double yScaling )
 {
   if ( IsValid() )
 	{
-    for ( int i = 0; i < referencedPoints.size(); i++ )
+    for ( size_t i = 0; i < referencedPoints.size(); i++ )
       referencedPoints[i].Scale( xScaling, yScaling );
 	}
 }
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть расстояние от точки до полилинии.
-*/
-//---
+// Вернуть расстояние от точки до полилинии.
+// ---
 double GeomPolyline::DistanceToPoint ( Point point ) const
 {
+  double minDistance = std::numeric_limits<double>::max();
 	if ( IsValid() )
 	{
-		double minDistance = std::numeric_limits<double>::max();
-    for ( int j = 1; j < referencedPoints.size(); j++ )
+    for ( size_t j = 1; j < referencedPoints.size(); j++ )
 		{
-      double currentDistance = Distance( referencedPoints[j - 1], referencedPoints[j], point );
+      double currentDistance = Line( referencedPoints[j - 1], referencedPoints[j]).DistanceToPoint( point );
       if ( currentDistance < minDistance )
 				minDistance = currentDistance;
-		}
-		return minDistance;
+      if ( currentDistance <CommonConstantsMath::NULL_TOL )
+        break;
+		}		
 	}
-	else
-		return -1.;
+  return minDistance;
 }
 
 
 //-----------------------------------------------------------------------------
-/**
-  Проверить корректность полилинии: нет совпадающих точек, количество точек не равно нулю
-*/
-//---
+// Проверить корректность полилинии: нет совпадающих точек, количество точек не равно нулю
+// ---
 bool GeomPolyline::IsValid() const
 {
-  return referencedPoints.size();
+  return !referencedPoints.empty();
 }
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть опорные точки, использованные для построения полилинии.
-  Соответственно, это точки, на основе которых построена полилиния.
-*/
-//---
+//  Вернуть опорные точки, использованные для построения полилинии.
+//  Соответственно, это точки, на основе которых построена полилиния.
+// ---
 std::vector<Point> GeomPolyline::GetReferensedPoints() const
 {
   if ( IsValid() )
@@ -276,10 +223,8 @@ std::vector<Point> GeomPolyline::GetReferensedPoints() const
 
 
 //-----------------------------------------------------------------------------
-/**
-Вернуть полилилния для полилинии - это полилиния.
-*/
-//---
+// Вернуть полилилния для полилинии - это полилиния.
+// ---
 void GeomPolyline::GetAsPolyLine( GeomPolyline &polyLine, double ) const
 {
 	polyLine.Init( referencedPoints );
@@ -289,12 +234,16 @@ void GeomPolyline::GetAsPolyLine( GeomPolyline &polyLine, double ) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть имя, используемое при записи полилинии в файл.
-*/
-//---
+//  Вернуть имя, используемое при записи полилинии в файл.
+// ---
 std::string GeomPolyline::GetName() const
 {
   return "Polyline";
+}
+
+bool GeomPolyline::IsClosed() const
+{
+  return ( std::fabs(Distance(referencedPoints[referencedPoints.size() - 2], referencedPoints[referencedPoints.size() - 1]))
+      < CommonConstantsMath::NULL_TOL );
 }
 }

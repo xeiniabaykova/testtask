@@ -26,8 +26,12 @@ private:
   EllipseCurveSerializer( const EllipseCurveSerializer &obj ) = delete;
   EllipseCurveSerializer& operator=( EllipseCurveSerializer &obj ) = delete;
 public:
-  virtual std::unique_ptr<Math::GeometricPrimitive>Read          ( std::istream& theInput );///< Чтение эллипса из потока.
-  virtual void                                     Write         ( std::ostream& theOutput, const Math::GeometricPrimitive& theCurve ); ///< Запись эллипса в поток.
+  /// Чтение эллипса из потока. Данные читаются в следующем порядке: центр (Point), главный радиус, побочный радиус, угол наклона относительно оси ох.
+  /// В случае невалидных данных возвращается пустой примитив.
+  virtual std::unique_ptr<Math::Curve>Read          ( std::istream& theInput );///< Чтение эллипса из потока.
+  /// Запись эллипса в поток. Данные записываются в следующем порядке: центр (Point), главный радиус, побочный радиус, угол наклона относительно оси ох.
+  /// В случае невалидных данных в файл ничего не записывается.
+  virtual void                                     Write         ( std::ostream& theOutput, const Math::Curve& theCurve );
   virtual std::string                              GetHeaderName ();///< Получение заголовка примитва эллпипс.
 };
 }

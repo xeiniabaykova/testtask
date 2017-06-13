@@ -15,6 +15,7 @@
 #include "Range.h"
 #include <vector>
 
+
 namespace Math {
 class GeomPolyline;
 ///////////////////////////////////////////////////////////////////////////////
@@ -44,7 +45,9 @@ public:
   virtual Vector             Get2Derivative      ( double t ) const = 0; ///< вернуть вторую производную точки точки на кривой по параметру t.
   /// Возвращает полилинию для геометрического примитива с точностью accuracy. Точки, составляющие полилинию, расчитываются с помощью функции countingStep.
   virtual void               GetAsPolyLine       ( GeomPolyline &polyLine, double accuracy = CommonConstantsMath::PRECISION_POLYLINE ) const;
-  double                     FixedRange          ( double t ) const;        ///< Получить по параметру t, паремтр, врходящий в область определения для геоме6трического примитива.
+  virtual bool               IsClosed            () const = 0;  /// Проверяется замкнутость геометрического примитива.
+//protected:
+   double                     FixParametr         ( double t ) const;        ///< Получить по параметру t, паремтр, врходящий в область определения для геометрического примитива.
 private:
   /// Расчитывается параметрический шаг по кривой, позволяющий апроксимировать кривую с необходимой точностью.
   double CountingStep                   ( double tCurrent , double accuracy = CommonConstantsMath::PRECISION_POLYLINE ) const;

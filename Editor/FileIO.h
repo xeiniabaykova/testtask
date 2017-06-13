@@ -15,14 +15,12 @@
 #include <memory>
 
 
+namespace Editor {
 ///////////////////////////////////////////////////////////////////////////////
-//
 /// Чтение текущего состояния из файла,запись текущего состояния в файл. :
 /**
 */
 ///////////////////////////////////////////////////////////////////////////////
-
-namespace Editor {
 class FileIO: public QWidget {
 public:
   FileIO() = default;
@@ -33,8 +31,8 @@ private:
   FileIO& operator=( FileIO &obj ) = delete;
 
 public:
-  void Open();                                                              ///< Создается диалог открытия файла.
-  void Save(const std::vector<std::shared_ptr<DisplayedObject>>& savedObj); ///< Создается диалог сохранения файла.
+  void Open ( std::vector<std::shared_ptr<Math::Curve>>& inputObj );       ///< Создается диалог открытия файла.
+  void Save (const std::vector<std::shared_ptr<Math::Curve>>& savedObj ); ///< Создается диалог сохранения файла.
 
 };
 }

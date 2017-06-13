@@ -33,9 +33,10 @@ public:
   virtual ~Range() = default;
 
 public:
-  double GetStart () const; ///< Получить конец интервала.
-  double GetEnd   () const; ///< Получить конец интервала.
-  bool   IsValid  () const; ///< Получить конец интервала.
+  double GetStart  () const; ///< Получить конец интервала.
+  double GetEnd    () const; ///< Получить конец интервала.
+  bool   IsValid   () const; ///< Получить конец интервала.
+  double Lenght    () const; ///< Размер интервала.
 };
 }
 #endif // RANGE_H

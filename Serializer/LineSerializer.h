@@ -8,7 +8,7 @@
 */
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <Math/Line.h>
+#include "../Math/Line.h"
 #include "CurveSerializer.h"
 
 namespace Serializer {
@@ -27,9 +27,12 @@ private:
   LineSerializer( const LineSerializer &obj ) = delete;
   LineSerializer& operator=( LineSerializer &obj ) = delete;
 public:
-  virtual std::unique_ptr<Math::GeometricPrimitive> Read          ( std::istream& theInput );///< Чтение отрезка из потока.
-  /// Запись отрезка в поток.
-  virtual void                                      Write         ( std::ostream& theOutput, const Math::GeometricPrimitive& theCurve);
+  /// Чтение отрезка из потока. Данные читаются в следующем порядке: начало отрезка (Point), конец отрезка (Point).
+  /// В случае невалидных данных возвращается пустой примитив.
+  virtual std::unique_ptr<Math::Curve> Read          ( std::istream& theInput );
+  /// Запись отрезка в поток. Данные записываются в следующем порядке: начало отрезка (Point), конец отрезка (Point).
+  /// В случае невалидных данных в файл ничего не записывается.
+  virtual void                                      Write         ( std::ostream& theOutput, const Math::Curve& theCurve);
   virtual std::string                               GetHeaderName (); ///< Получение заголовка примитива отрезок.
 };
 }

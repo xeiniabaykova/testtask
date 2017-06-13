@@ -18,22 +18,23 @@ static bool tryReadHeader( std::istream& theStream, std::string& theHeader )
   theStream.read( (char*)&length, sizeof(length) );
   if ( theStream.eof() )
     return false;
-  char * aBuf = new char[length + 1];
+  char *aBuf = new char[length + 1];
+  for ( size_t i = 0; i < length +1; i++)
+    aBuf[i]='1';
   theStream.read( aBuf, length );
   aBuf[length] = '\0';
   theHeader = std::string(aBuf);
+
   delete[] aBuf;
   return true;
 
 }
 
-static void WriteHeader( std::string theHeader, std::ostream& theStream )
+static void WriteHeader( std::string theHeader, std::ofstream& theStream )
 {
-
-  size_t length = theHeader.length();
+  int length = theHeader.length();
   theStream.write( (char*)&length, sizeof(length) );
   theStream.write( theHeader.c_str(), length );
-
 }
 
 static std::string FileExtension( const std::string& path )
@@ -51,7 +52,6 @@ Serializer::Serializer()
   RegisterSerializer<LineSerializer>();
   RegisterSerializer<EllipseCurveSerializer>();
   RegisterSerializer<NURBSCurveSerializer>();
-
 }
 
 template<typename CurveSerializer>
@@ -62,7 +62,7 @@ void Serializer::RegisterSerializer()
   mySerializers[aHeaderName] = aSerializer;
 }
 
-std::unique_ptr<Math::GeometricPrimitive> Serializer::Read( std::istream& theStream )
+std::unique_ptr<Math::Curve> Serializer::Read( std::istream& theStream )
 {
   std::string aNameHeader;
   bool isPresent = tryReadHeader( theStream, aNameHeader );
@@ -71,42 +71,35 @@ std::unique_ptr<Math::GeometricPrimitive> Serializer::Read( std::istream& theStr
   auto aSerializer = mySerializers.at( aNameHeader );
   return aSerializer->Read( theStream );
 }
-void Serializer::Write( std::ostream& theStream, const Math::GeometricPrimitive& aCurve )
+void Serializer::Write( std::ofstream& theStream, const Math::Curve& aCurve )
 {
+
   std::string aNameHeader = aCurve.GetName();
   auto aSerializer = mySerializers.at( aNameHeader );
   WriteHeader( aNameHeader, theStream );
   aSerializer->Write(theStream, aCurve);
 }
 
-std::vector<std::shared_ptr<Math::GeometricPrimitive>> Serializer::ReadCurves (std::string theFileName)
+std::vector<std::shared_ptr<Math::Curve>> Serializer::ReadCurves (std::string theFileName)
 {
   std::ifstream aInputFile;
     aInputFile.open(theFileName, std::ios::binary);
 
-
-  std::vector<std::shared_ptr<Math::GeometricPrimitive>> aCurveVector;
+  std::vector<std::shared_ptr<Math::Curve>> aCurveVector;
   while (!aInputFile.eof()) {
-    std::shared_ptr<Math::GeometricPrimitive> aCurve = Read( aInputFile );
+    std::shared_ptr<Math::Curve> aCurve = Read( aInputFile );
     if (aCurve)
       aCurveVector.push_back(aCurve);
   }
   return aCurveVector;
 }
 
-void Serializer::WriteCurves (const std::vector<std::shared_ptr<Math::GeometricPrimitive>>& theCurves, std::string theFileName)
+void Serializer::WriteCurves (const std::vector<std::shared_ptr<Math::Curve>>& theCurves, std::string theFileName)
 {
-
-//  std::function<bool(std::shared_ptr<Math::GeometricPrimitive>, std::shared_ptr<Math::GeometricPrimitive>)> aCompare =
-//    [] (std::shared_ptr<Math::GeometricPrimitive> aCurveFirst, std::shared_ptr<Math::GeometricPrimitive> aCurveSecond) {
-//    //return *aCurveFirst == *aCurveSecond;
-//  };
-//  std::vector<std::shared_ptr<Math::GeometricPrimitive>> aUniqueCurves = theCurves;
-//  auto aIt = std::unique( aUniqueCurves.begin(), aUniqueCurves.end(), aCompare );
-//  aUniqueCurves.erase( aIt, aUniqueCurves.end() );
-//  std::ofstream fout;
-//  fout.open( theFileName, std::ios::binary );
-//  for ( size_t i = 0; i < aUniqueCurves.size(); i++ )
-//    Write( fout, *aUniqueCurves[i].get() );
+  std::ofstream fout;
+  fout.open( theFileName, std::ios::binary );
+  for ( size_t i = 0; i < theCurves.size(); i++ )
+    Write( fout, *theCurves[i].get() );
+  fout.close();
 }
 }

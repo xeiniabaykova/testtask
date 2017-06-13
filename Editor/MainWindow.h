@@ -14,6 +14,8 @@
 #include <QActionGroup>
 #include "MainWindowHandler.h"
 
+
+
 class QLabel;
 namespace Ui {
 class MainWindow;
@@ -24,7 +26,6 @@ class MainWindow;
 /**
 */
 ///////////////////////////////////////////////////////////////////////////////
-
 class MainWindow : public QMainWindow {
   Q_OBJECT
 private:
