@@ -250,7 +250,7 @@ void Ellipse::Scale( double xScaling, double yScaling )
 // ---
 bool Ellipse::IsValid() const
 {
-  return ( r1 > CommonConstantsMath::NULL_TOL || r2 > CommonConstantsMath::NULL_TOL );
+  return ( r1 > CommonConstantsMath::NULL_TOL && r2 > CommonConstantsMath::NULL_TOL );
 }
 
 

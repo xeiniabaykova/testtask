@@ -71,8 +71,8 @@ private:
   std::vector<Point>  PointDers              ( double t , int der,  const std::vector<std::vector<double>>& ders ) const;                                     ///<  Производные от базисных функций, помноженные на соответсвующие точки кривой.
   std::vector<double> WeightDers             ( double t, int der,  const std::vector<std::vector<double>>& ders ) const;                                      ///<  Производные от базисных функций, помноженные на соответсвующие веса кривой.
   double              CountWeight            ( int k , double x) const;                                        ///< Подсчитать значения базисных функций, умноженных на вес на отрезке x - degree.
-  double              CountWeightD           ( double x, int span )  const;                                    ///< Подсчитать значения производных базисных функций, умноженных на вес на отрезке x - degree.
-  double              CountWeightD2          ( double x, int span )  const;                                    ///< Подсчитать значения вторых производных базисных функций, умноженных на вес на отрезке x - degree
+  //double              CountWeightD           ( double x, int span )  const;                                    ///< Подсчитать значения производных базисных функций, умноженных на вес на отрезке x - degree.
+ // double              CountWeightD2          ( double x, int span )  const;                                    ///< Подсчитать значения вторых производных базисных функций, умноженных на вес на отрезке x - degree
   size_t              FindSpan               ( double x ) const;                                               ///< Найти интервал ненулевых базисных функций для парметра t.
 //ФУНКЦИЯ НУЖНА ДЛЯ ТЕСТОВ И ОТЛАДКИ
   //  double              ComputeBasicFunction   ( double x, int i ) const;                       ///< Подсчитать базисную функцию для порядка i и значения парметра x.

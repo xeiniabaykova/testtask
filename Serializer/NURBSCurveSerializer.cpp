@@ -17,7 +17,6 @@ std::string NURBSCurveSerializer::GetHeaderName()
 // ---
 std::unique_ptr<Math::Curve> NURBSCurveSerializer::Read( std::istream& theInput )
 {
-
   int numNodes;
   int numWeights;
   int numPoles;
@@ -41,7 +40,7 @@ std::unique_ptr<Math::Curve> NURBSCurveSerializer::Read( std::istream& theInput 
 
   std::vector<double> weights;
   numWeights = ReadInt( theInput );
-  for ( size_t i = 0; i < numNodes; i++ )
+  for ( size_t i = 0; i < numWeights; i++ )
   {
     weights.push_back( ReadDouble(theInput) );
   }

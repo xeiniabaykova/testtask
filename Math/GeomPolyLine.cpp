@@ -15,14 +15,9 @@ static bool IsCorrectPolylineData( const std::vector<Point>& points )
     return false;
   if ( points.size() == 2 && IsEqual(points[0], points[1]) )
 	  return false;
-  for ( size_t i = 0; i < points.size() - 1; i++ )
-    for ( size_t j = 0; j < points.size() - 1; j++ )
-      {
-        if ( i == j )
-            continue;
-         if ( IsEqual(points[i], points[j]) )
-            return false;
-       }
+  for ( size_t i = 0; i < points.size() - 2; i++ )
+    if (IsEqual(points[i], points[i+2]))
+      return false;
   return true;
 }
 }
@@ -149,6 +144,8 @@ void GeomPolyline::Translate ( double xShift, double yShift )
     for ( size_t i = 0; i < referencedPoints.size(); i++ )
       referencedPoints[i].Translate( xShift, yShift );
 	}
+  if ( !IsValid() )
+    referencedPoints.clear();
 }
 
 
@@ -162,6 +159,8 @@ void GeomPolyline::Rotate( double alpha )
     for ( size_t i = 0; i < referencedPoints.size(); i++ )
 			referencedPoints[i].Rotate(alpha);
 	}
+  if ( !IsValid() )
+    referencedPoints.clear();
 }
 
 
@@ -175,6 +174,8 @@ void GeomPolyline::Scale( double xScaling, double yScaling )
     for ( size_t i = 0; i < referencedPoints.size(); i++ )
       referencedPoints[i].Scale( xScaling, yScaling );
 	}
+  if ( !IsValid() )
+    referencedPoints.clear();
 }
 
 
