@@ -77,7 +77,7 @@ NurbsCurve::NurbsCurve( const std::vector<Point>& ppoles, const std::vector<doub
     if ( nnodes.size() == 0 )
     {
       for ( size_t i = 0; i < degree + 1; ++i ) {
-        nodes.push_back(0.);
+        nodes.push_back( 0. );
       }
       double node = 1.;
       for ( size_t i = 0; i < static_cast<size_t>( ppoles.size() - degree - 1 ); ++i ) {
@@ -221,7 +221,7 @@ void NurbsCurve::ComputeBasicFunctionD( const double x, const int i, const size_
     left[j] = x - nodes[i + 1 - j]; // считаем числитель для первого слагаемого формулы (2)
     right[j] = nodes[i + j] - x;  // считаем числитель для второго слагаемого формулы (2)
     double saved = 0.0;
-    for ( int r = 0; r < j; r++ )
+    for ( size_t r = 0; r < j; r++ )
     {
       triangleNodes[j][r] = right[r + 1] + left[j - r]; // считаем знаменатель для правого слагаемого
       double temp = triangleNodes[r][j - 1] / triangleNodes[j][r]; // счтаем частное знаменателей для текущей интерации по формуле (2)
@@ -234,11 +234,11 @@ void NurbsCurve::ComputeBasicFunctionD( const double x, const int i, const size_
   // хранение двух наиболее исользуемых столбцов разностей интервалов
   std::vector<std::vector<double>> tempders;
   tempders.resize( 2 );
-  for ( int k = 0; k < 2; k++ )
+  for ( size_t k = 0; k < 2; k++ )
     tempders[k].resize( degree + 1, 0. );
 
   // инициализируем нулевыми проивводными массив производных
-  for ( int j = 0; j <= degree; j++ )
+  for ( size_t j = 0; j <= degree; j++ )
     ders[0][j] = triangleNodes[j][degree];
 
   for ( int r = 0; r <= degree; r++ )
@@ -251,7 +251,7 @@ void NurbsCurve::ComputeBasicFunctionD( const double x, const int i, const size_
       double d = 0.0;
       int rk = r - k;
       int degk = degree - k;
-      if (r >= k)
+      if ( r >= k )
       {
         tempders[s2][0] = tempders[s1][0] / triangleNodes[degk + 1][rk];
         d = tempders[s2][0] * triangleNodes[rk][degk];
@@ -280,9 +280,7 @@ void NurbsCurve::ComputeBasicFunctionD( const double x, const int i, const size_
       }
       ders[k][r] = d;
       // меняем местами столбцы
-      int j = s1;
-      s1 = s2;
-      s2 = j;
+      std::swap( s1, s2 );
     }
   }
 
@@ -293,7 +291,8 @@ void NurbsCurve::ComputeBasicFunctionD( const double x, const int i, const size_
     for ( int j = 0; j <= degree; j++ )
       ders[k][j] = ders[k][j] * r;
     r = r * ( degree - k );
-  }}
+  }
+}
 
 
 //-----------------------------------------------------------------------------
@@ -338,7 +337,7 @@ double NurbsCurve::CountWeight( int k, double x )  const
 
   for (size_t i = 0; i <= degree; i++)
   {
-    w = w + node[i] * weights[k - degree  + i];
+    w += node[i] * weights[k - degree  + i];
   }
   return w;
 }
@@ -354,7 +353,7 @@ double NurbsCurve::CountWeightD( double t , int span)  const
   ComputeBasicFunctionD(t, span, 1, ders);
   for ( size_t i = 0; i <= degree; i++ )
   {
-    w = w + ders[1][i] * weights[span - degree + i];
+    w += ders[1][i] * weights[span - degree + i];
   }
   return w;
 }
@@ -371,7 +370,7 @@ double NurbsCurve::CountWeightD2( double t , int span)  const
   for ( size_t i = 0; i <= degree; i++ )
   {
 
-    w =  w + ders[2][i] * weights[span - degree + i];
+    w += ders[2][i] * weights[span - degree + i];
   }
   return w;
 }
@@ -411,12 +410,9 @@ Point NurbsCurve::GetPoint( double t ) const
 // ---
 std::vector<double> NurbsCurve::BasicFunctions( int i, double x) const
 {
-  std::vector<double> N;
-  N.resize( degree + 1 );
-  std::vector<double> left;
-  left.resize( degree + 1 );
-  std::vector<double> right;
-  right.resize( degree + 1 );
+  std::vector<double> N( degree + 1, 0. );
+  std::vector<double> left( degree + 1, 0. );
+  std::vector<double> right( degree + 1, 0. );
   N[0] = 1.0;
   for ( size_t j = 1; j <= degree; j++ )
   {
@@ -472,7 +468,7 @@ std::vector<double> NurbsCurve::WeightDers( double t, int der, const std::vector
     double resultWeight = 0;
     for ( size_t i = 0; i <= degree; i++ )
     {
-      resultWeight = resultWeight + weights[span - degree + i] * ders[j][i];
+      resultWeight += weights[span - degree + i] * ders[j][i];
     }
   result.push_back( resultWeight );
   }
