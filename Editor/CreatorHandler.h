@@ -32,6 +32,7 @@ public:
     CreatePolyline ///< Создается полиллиния.
   };
   TypeCurve      type; ///< Хранение типа созаваемой кривой.
+
 private:
   int                      numExpectedPoits; ///< Количество точек, необходимых для создания геометрического примитива.
   std::vector<Math::Point> points;           ///< Точки, полученные с экрана.
@@ -47,6 +48,7 @@ private:
   CreatorHandler() = delete;
   CreatorHandler( const CreatorHandler &obj ) = delete;
   CreatorHandler& operator=( CreatorHandler &obj ) = delete;
+
 public:
   void                            AddPointFromScreen  ( Math::Point point );           ///< Добавить точку с экрана в массив текущих точек.
   bool                            IsSufficientNum     () const;                        ///< Проверить, достаточно ли текущее количество точек для создания и отображения выбранной кривой.

@@ -23,9 +23,11 @@ class EllipseCurveSerializer :public CurveSerializer {
 public:
   EllipseCurveSerializer() = default;
    virtual ~EllipseCurveSerializer() = default;
+
 private:
   EllipseCurveSerializer( const EllipseCurveSerializer &obj ) = delete;
   EllipseCurveSerializer& operator=( EllipseCurveSerializer &obj ) = delete;
+
 public:
   /// Чтение эллипса из потока. Данные читаются в следующем порядке: центр (Point), главный радиус, побочный радиус, угол наклона относительно оси ох.
   /// В случае невалидных данных возвращается пустой примитив.

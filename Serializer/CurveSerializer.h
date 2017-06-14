@@ -26,9 +26,11 @@ class CurveSerializer {
 public:
   virtual ~CurveSerializer() = default;
     CurveSerializer() = default;
+
 private:
   CurveSerializer( const CurveSerializer &obj ) = delete;
   CurveSerializer& operator=( CurveSerializer &obj ) = delete;
+
 public:
   virtual std::unique_ptr<Math::Curve>              Read        ( std::istream& theInput ) = 0; ///< Чтение геометрического примитива из потока.
   /// Запись геометрического примитва в поток.

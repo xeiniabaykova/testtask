@@ -23,9 +23,11 @@ class LineSerializer:public CurveSerializer {
 public:
    LineSerializer() = default;
   virtual ~LineSerializer() = default;
+
 private:
   LineSerializer( const LineSerializer &obj ) = delete;
   LineSerializer& operator=( LineSerializer &obj ) = delete;
+
 public:
   /// Чтение отрезка из потока. Данные читаются в следующем порядке: начало отрезка (Point), конец отрезка (Point).
   /// В случае невалидных данных возвращается пустой примитив.
