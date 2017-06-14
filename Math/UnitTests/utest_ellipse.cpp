@@ -414,15 +414,15 @@ TEST(Ellipse, IsValid2)
 }
 
 
-// Правило экстраполяции: один в один взято с правила экстраполяции полилинии:
-// приведение к граничным точкам всего того, что лежит за пределами области определения
-TEST( Ellipse, Extrapole )
-{
-  Ellipse ellipse( Point(), 1., 1., 0. );
-  ASSERT_TRUE( ellipse.IsValid() );
-  EXPECT_NEAR( Math::Distance( ellipse.GetPoint( ellipse.GetRange().GetStart() - 1.7 ), ellipse.GetPoint( ellipse.GetRange().GetStart() ) ), 0.0, 1e-7 );
-  EXPECT_NEAR( Math::Distance( ellipse.GetPoint( ellipse.GetRange().GetEnd() ), ellipse.GetPoint( ellipse.GetRange().GetEnd() + 2.4 ) ), 0.0, 1e-7 );
-}
+//// Правило экстраполяции: один в один взято с правила экстраполяции полилинии:
+//// приведение к граничным точкам всего того, что лежит за пределами области определения
+//TEST( Ellipse, Extrapole )
+//{
+//  Ellipse ellipse( Point(), 1., 1., 0. );
+//  ASSERT_TRUE( ellipse.IsValid() );
+//  EXPECT_NEAR( Math::Distance( ellipse.GetPoint( ellipse.GetRange().GetStart() - 1.7 ), ellipse.GetPoint( ellipse.GetRange().GetStart() ) ), 0.0, 1e-7 );
+//  EXPECT_NEAR( Math::Distance( ellipse.GetPoint( ellipse.GetRange().GetEnd() ), ellipse.GetPoint( ellipse.GetRange().GetEnd() + 2.4 ) ), 0.0, 1e-7 );
+//}
 
 // Грубое вычисление габарита
 static void Gabarit( Curve& crv, double& rx, double& ry ) {
@@ -450,7 +450,7 @@ static void Gabarit( Curve& crv, double& rx, double& ry ) {
 }
 
 
-TEST( Ellipse, DISABLED_ScaleRotated )
+TEST( Ellipse, ScaleRotated )
 {
   Ellipse ellipse( Point(), 2., 1., Math::CommonConstantsMath::PI / 6.0 );
   ASSERT_TRUE( ellipse.IsValid() );
