@@ -238,8 +238,8 @@ void NurbsCurve::ComputeBasicFunctionD( const double x, const int i, const size_
     tempders[k].resize( degree + 1, 0. );
 
   // инициализируем нулевыми проивводными массив производных
-    for ( int j = 0; j <= degree; j++ )
-      ders[0][j] = triangleNodes[j][degree];
+  for ( int j = 0; j <= degree; j++ )
+    ders[0][j] = triangleNodes[j][degree];
 
   for ( int r = 0; r <= degree; r++ )
   {
@@ -286,17 +286,14 @@ void NurbsCurve::ComputeBasicFunctionD( const double x, const int i, const size_
     }
   }
 
-  // делим получившиеся значения на коэффициент перед квадратной скобкой в формуле (2)
+  // делим получившиеся значения на коэффициент перед квадратной скобкой в формуле (1)
   int r = degree;
   for ( int k = 1; k <= derivativeOrder; k++ )
   {
     for ( int j = 0; j <= degree; j++ )
       ders[k][j] = ders[k][j] * r;
     r = r * ( degree - k );
-  }
-
-
-}
+  }}
 
 
 //-----------------------------------------------------------------------------
@@ -501,7 +498,7 @@ Vector NurbsCurve::CountingDer( double t, int der) const
 
   std::vector<Point> dtempders; // вектор для хранения производных до порядка der
   dtempders.resize( der  + 1 );
-  for ( size_t k = 0; k <= der; k++)
+  for ( size_t k = 0; k <= der; k++ )
   {
     resultPoint = pointd[k];
     for ( size_t i = 1; i <= k; i++ )
@@ -510,6 +507,7 @@ Vector NurbsCurve::CountingDer( double t, int der) const
   }
   return Vector( dtempders[der].GetX(), dtempders[der].GetY() );
 }
+
 
 //-----------------------------------------------------------------------------
 // Вернуть производную на nurbs по параметру t.
