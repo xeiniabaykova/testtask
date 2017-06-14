@@ -3,7 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /**
   \file
-  \brief Общий класс для записи и чтения кривых.\~
+  Общий класс для записи и чтения кривых.\~
 
 */
 ////////////////////////////////////////////////////////////////////////////////
@@ -13,12 +13,13 @@
 #include <istream>
 #include <memory>
 
+
 namespace Serializer {
 ///////////////////////////////////////////////////////////////////////////////
 //
 /// Чтение и запись геометрического примитива.
-/// Чтение и запись производяться в бинарном формате.
 /**
+  Чтение и запись производятся в бинарном формате.
 */
 ///////////////////////////////////////////////////////////////////////////////
 class CurveSerializer {
@@ -29,7 +30,7 @@ private:
   CurveSerializer( const CurveSerializer &obj ) = delete;
   CurveSerializer& operator=( CurveSerializer &obj ) = delete;
 public:
-  virtual std::unique_ptr<Math::Curve> Read       ( std::istream& theInput ) = 0; ///< Чтение геометрического примитива из потока.
+  virtual std::unique_ptr<Math::Curve>              Read        ( std::istream& theInput ) = 0; ///< Чтение геометрического примитива из потока.
   /// Запись геометрического примитва в поток.
   virtual void                                      Write       ( std::ostream& theOutput, const Math::Curve& theCurve ) = 0;
   Math::Point                                       ReadPoint   ( std::istream& input ) const;                            ///< Чтение точки из потока.

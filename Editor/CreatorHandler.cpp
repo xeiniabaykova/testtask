@@ -19,10 +19,8 @@ CreatorHandler::CreatorHandler( int theNumExpectedPoits, TypeCurve theType ):
 }
 
 //-----------------------------------------------------------------------------
-/**
-  Добавление точки с экрана в массив точек.
-*/
-//---
+//  Добавить точку с экрана в массив точек.
+// ---
 void CreatorHandler::AddPointFromScreen( Math::Point point )
 {
   points.push_back( point );
@@ -30,10 +28,8 @@ void CreatorHandler::AddPointFromScreen( Math::Point point )
 
 
 //-----------------------------------------------------------------------------
-/**
-   Проверка, достаточно точек на экране выбрано для построения кривой.
-*/
-//---
+//   Проверить, достаточно точек на экране выбрано для построения кривой.
+// ---
 bool CreatorHandler::IsSufficientNum() const
 {
   return ( points.size() == numExpectedPoits );
@@ -41,54 +37,49 @@ bool CreatorHandler::IsSufficientNum() const
 
 
 //-----------------------------------------------------------------------------
-/**
-   Создает кривую по точкам в зависимости от типа.
-*/
-//---
+//   Создать кривую по точкам в зависимости от типа.
+// ---
 std::shared_ptr<Math::Curve> CreatorHandler::Create()
 {
   switch( type )
   {
-  case CreateLine:
-  {
-    return std::make_shared<Math::Line>( points );
-    break;
-  }
-
-  case CreateEllipse:
-  {
-    return std::make_shared<Math::Ellipse>( points );
-    break;
-  }   
-  case CreatePolyline:
-  {
-    return std::make_shared<Math::GeomPolyline>( points );
-     break;
-  }
-
-  case CreateNURBS:
-  {
-    std::vector<double> weights;
-    for ( size_t i = 0; i < points.size(); i++ )
-      weights.push_back(1.0 );
-
-    int degree = 3;
-    std::vector<double> nodes;
-    bool isClosed = false;
-    AddInformationNurbs( isClosed, degree ) ;
-    return std::make_shared<Math::NurbsCurve>( points, weights, nodes, isClosed, degree );
+    case CreateLine:
+    {
+      return std::make_shared<Math::Line>( points );
       break;
-  }  
+    }
+    case CreateEllipse:
+    {
+      return std::make_shared<Math::Ellipse>( points );
+      break;
+    }
+    case CreatePolyline:
+    {
+      return std::make_shared<Math::GeomPolyline>( points );
+       break;
+    }
+
+    case CreateNURBS:
+    {
+      std::vector<double> weights;
+      for ( size_t i = 0; i < points.size(); i++ )
+        weights.push_back( 1.0 );
+
+      int degree = 3;
+      std::vector<double> nodes;
+      bool isClosed = false;
+      AddInformationNurbs( isClosed, degree ) ;
+      return std::make_shared<Math::NurbsCurve>( points, weights, nodes, isClosed, degree );
+      break;
+    }
   }
   return nullptr;
 }
 
 
 //-----------------------------------------------------------------------------
-/**
-    Очистить массив точек, полученных с экрана.
-*/
-//---
+//  Очистить массив точек, полученных с экрана.
+// ---
 void CreatorHandler::ClearPoints()
 {
   points.clear();
@@ -96,15 +87,12 @@ void CreatorHandler::ClearPoints()
 
 
 //-----------------------------------------------------------------------------
-/**
-   Вызвать меню для получения информации о нурбс - кривой.
-*/
-//---
+//   Вызвать меню для получения дополнительной информации о нурбс - кривой.(степень, замкнутость)
+// ---
 void CreatorHandler::AddInformationNurbs( bool& isClosed, int& degree )
 {
   QDialog * d = new QDialog();
   QVBoxLayout * vbox = new QVBoxLayout();
-
   QLabel* Closed = new QLabel( "&Closed:");
   QLabel* DegreeLabel = new QLabel( "&Degree:");
   QLineEdit * closedEdit = new QLineEdit();

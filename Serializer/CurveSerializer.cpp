@@ -6,25 +6,21 @@
 namespace Serializer {
 
 //-----------------------------------------------------------------------------
-/**
-  Чтение точки из потока.
-*/
+// Прочитать точку из потока.Точка читается покоординатно: х, y.
 //---
 
 Math::Point CurveSerializer::ReadPoint( std::istream& input ) const
 {
-  double x = ReadDouble(input);
-  double y = ReadDouble(input);
+  double x = ReadDouble( input );
+  double y = ReadDouble( input );
   return Math::Point( x,y );
 }
 
 
 
 //-----------------------------------------------------------------------------
-/**
-  Запись точки в поток.
-*/
-//---
+//  Запись точки в поток. Точка записывается покоординатно: х, y.
+// ---
 void CurveSerializer::WritePoint( std::ostream& output, const Math::Point& point ) const
 {
   WriteDouble ( output, point.GetX() );
@@ -33,10 +29,8 @@ void CurveSerializer::WritePoint( std::ostream& output, const Math::Point& point
 
 
 //-----------------------------------------------------------------------------
-/**
-  Чтение числа с плавающей запятой из потока.
-*/
-//---
+//  Прочитать число с плавающей запятой из потока.
+// ---
 double CurveSerializer::ReadDouble( std::istream& input ) const
 {
   double value;
@@ -46,10 +40,8 @@ double CurveSerializer::ReadDouble( std::istream& input ) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Чтение целочисленного значения из потока.
-*/
-//---
+//  Прочитать целочисленное значение из потока.
+// ---
 int CurveSerializer::ReadInt( std::istream& input ) const
 {
   int value;
@@ -59,10 +51,8 @@ int CurveSerializer::ReadInt( std::istream& input ) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Запись числа с плавающей запятой в поток.
-*/
-//---
+//  Записать число с плавающей запятой в поток.
+// ---
 void CurveSerializer::WriteDouble( std::ostream& output, double value ) const
 {
   output.write( (char*)&value, sizeof value );
@@ -70,10 +60,8 @@ void CurveSerializer::WriteDouble( std::ostream& output, double value ) const
 
 
 //-----------------------------------------------------------------------------
-/**
-  Запись целочисленного значения в поток.
-*/
-//---
+//  Записать целочисленное значения в поток.
+// ---
 void CurveSerializer::WriteInt( std::ostream& output, int value ) const
 {
   output.write( (char*)&value, sizeof(value) );

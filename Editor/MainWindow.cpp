@@ -10,7 +10,7 @@
 
 
 //------------------------------------------------------------------------------
-// \ru Конструктор MainWindow. Создается вспомогательный класс windowHandler  и форма MainWindow
+// Конструктор MainWindow. Создается вспомогательный класс windowHandler  и форма MainWindow.
 // ---
 MainWindow::MainWindow( QChart *chart, QWidget *parent ) :
   windowHandler       ( chart              ),
@@ -40,6 +40,11 @@ MainWindow::~MainWindow()
   delete ui;
 }
 #ifndef QT_NO_CONTEXTMENU
+
+
+//------------------------------------------------------------------------------
+// Создание контекстного меню с пунтктами: создать, удалить кривую. Поменять цвет кривой.
+// ---
 void MainWindow::contextMenuEvent( QContextMenuEvent *event )
 {
     QMenu menu( this );

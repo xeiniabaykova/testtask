@@ -9,44 +9,42 @@
 #include <functional>
 #include <vector>
 
+
 namespace Serializer {
 namespace {
-
-static bool tryReadHeader( std::istream& theStream, std::string& theHeader )
+//-----------------------------------------------------------------------------
+//  Чтение заголовка для типа данных. Если достигнут конец файла, то возвращается false.
+// ---
+static bool tryReadHeader( std::istream& stream, std::string& header )
 {
   int length;
-  theStream.read( (char*)&length, sizeof(length) );
-  if ( theStream.eof() )
+  stream.read( (char*)&length, sizeof(length) );
+  if ( stream.eof() )
     return false;
-  char *aBuf = new char[length + 1];
-  for ( size_t i = 0; i < length +1; i++)
-    aBuf[i]='1';
-  theStream.read( aBuf, length );
-  aBuf[length] = '\0';
-  theHeader = std::string(aBuf);
+  char *buf = new char[length + 1];
+  stream.read( buf, length );
+  buf[length] = '\0';
+  header = std::string( buf );
+  delete[] buf;
 
-  delete[] aBuf;
   return true;
-
 }
 
-static void WriteHeader( std::string theHeader, std::ofstream& theStream )
+
+//-----------------------------------------------------------------------------
+//  Запись заголовка для типа данных в файл.
+// ---
+static void WriteHeader( std::string header, std::ofstream& stream )
 {
-  int length = theHeader.length();
-  theStream.write( (char*)&length, sizeof(length) );
-  theStream.write( theHeader.c_str(), length );
-}
-
-static std::string FileExtension( const std::string& path )
-{
-  size_t pos = path.rfind( '.' );
-  if ( pos <= 0 )
-    return "";
-  return path.substr( pos + 1, std::string::npos );
+  int length = header.length();
+  stream.write( (char*)&length, sizeof(length) );
+  stream.write( header.c_str(), length );
 }
 }
 
-
+//-----------------------------------------------------------------------------
+//  Созадание читателей и писателей для следующих типов: отрезок, эллипс, Nurbs - кривая.
+// ---
 Serializer::Serializer()
 {
   RegisterSerializer<LineSerializer>();
@@ -54,52 +52,73 @@ Serializer::Serializer()
   RegisterSerializer<NURBSCurveSerializer>();
 }
 
+
+//-----------------------------------------------------------------------------
+//  Созадание читаелея / писателя для типа данных.
+// ---
 template<typename CurveSerializer>
 void Serializer::RegisterSerializer()
 {
-  auto aSerializer = std::make_shared<CurveSerializer>();
-  std::string aHeaderName = aSerializer->GetHeaderName();
-  mySerializers[aHeaderName] = aSerializer;
+  auto serializer = std::make_shared<CurveSerializer>();
+  std::string headerName = serializer->GetHeaderName();
+  mySerializers[headerName] = serializer;
 }
 
-std::unique_ptr<Math::Curve> Serializer::Read( std::istream& theStream )
+
+//-----------------------------------------------------------------------------
+//  Чтение кривой из потока. Читается заголовок, затем вызывается нужный читатель для типа.
+// ---
+std::unique_ptr<Math::Curve> Serializer::Read( std::istream& stream )
 {
-  std::string aNameHeader;
-  bool isPresent = tryReadHeader( theStream, aNameHeader );
+  std::string nameHeader;
+  bool isPresent = tryReadHeader( stream, nameHeader );
   if ( !isPresent )
     return nullptr;
-  auto aSerializer = mySerializers.at( aNameHeader );
-  return aSerializer->Read( theStream );
-}
-void Serializer::Write( std::ofstream& theStream, const Math::Curve& aCurve )
-{
-
-  std::string aNameHeader = aCurve.GetName();
-  auto aSerializer = mySerializers.at( aNameHeader );
-  WriteHeader( aNameHeader, theStream );
-  aSerializer->Write(theStream, aCurve);
+  auto serializer = mySerializers.at( nameHeader );
+  return serializer->Read( stream );
 }
 
-std::vector<std::shared_ptr<Math::Curve>> Serializer::ReadCurves (std::string theFileName)
-{
-  std::ifstream aInputFile;
-    aInputFile.open(theFileName, std::ios::binary);
 
-  std::vector<std::shared_ptr<Math::Curve>> aCurveVector;
-  while (!aInputFile.eof()) {
-    std::shared_ptr<Math::Curve> aCurve = Read( aInputFile );
-    if (aCurve)
-      aCurveVector.push_back(aCurve);
+//-----------------------------------------------------------------------------
+//  Запись кривой в поток. Сначала записывается заголовок, затем вызывается нужный писатель для типа.
+// ---
+void Serializer::Write( std::ofstream& stream, const Math::Curve& curve )
+{
+  std::string nameHeader = curve.GetName();
+  auto serializer = mySerializers.at( nameHeader );
+  WriteHeader( nameHeader, stream );
+  serializer->Write(stream, curve);
+}
+
+
+//-----------------------------------------------------------------------------
+//  Чтение кривых из потока. Файл открывается в бинарном формате, кривые читаются в порядке нахождения в файле.
+// ---
+std::vector<std::shared_ptr<Math::Curve>> Serializer::ReadCurves( std::string fileName )
+{
+  std::ifstream inputFile;
+    inputFile.open( fileName, std::ios::binary );
+
+  std::vector<std::shared_ptr<Math::Curve>> curveVector;
+  while ( !inputFile.eof() )
+  {
+    std::shared_ptr<Math::Curve> curve = Read( inputFile );
+    if ( curve )
+      curveVector.push_back(curve);
   }
-  return aCurveVector;
+  return curveVector;
 }
 
-void Serializer::WriteCurves (const std::vector<std::shared_ptr<Math::Curve>>& theCurves, std::string theFileName)
+
+//-----------------------------------------------------------------------------
+//  Запись кривых в поток. Файл открывается в бинарном формате, кривые записываеются в порядке нахождения в curves.
+// ---
+void Serializer::WriteCurves( const std::vector<std::shared_ptr<Math::Curve>>& curves, std::string fileName )
 {
   std::ofstream fout;
-  fout.open( theFileName, std::ios::binary );
-  for ( size_t i = 0; i < theCurves.size(); i++ )
-    Write( fout, *theCurves[i].get() );
+  fout.open( fileName, std::ios::binary );
+  for ( size_t i = 0; i < curves.size(); i++ )
+    Write( fout, *curves[i].get() );
   fout.close();
 }
 }

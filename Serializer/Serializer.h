@@ -2,8 +2,7 @@
 #define SERIALIZER_H
 ////////////////////////////////////////////////////////////////////////////////
 /**
-  \file
-  \brief Класс для чтения или записи набора кривых в файл/ из файла.\~
+  Чтение и запись кривых из файла/ в файл.\~
 
 */
 ////////////////////////////////////////////////////////////////////////////////
@@ -14,31 +13,39 @@
 #include <string>
 #include <vector>
 #include <map>
+
+
 namespace Serializer {
-class Serializer {
 ///////////////////////////////////////////////////////////////////////////////
-//
+// Класс для чтения или записи набора кривых в файл/ из файла.
 /**
  Каждый примитив определяется по его заголовку. После него следуют данные расположенные
  в определенном порядке для каждого примитива.
 */
 ///////////////////////////////////////////////////////////////////////////////
+class Serializer {
 public:
   Serializer();
   virtual ~Serializer() = default;
+
 private:
   Serializer( const Serializer &obj ) = delete;
   Serializer& operator=( Serializer &obj ) = delete;
-public:
-  template<typename FormattedSerializer>
-  void RegisterSerializer();
 
-  std::unique_ptr<Math::Curve>                          Read ( std::istream& theStream );
-  void                                                   Write ( std::ofstream& theStream, const Math::Curve& aCurve );
-  std::vector<std::shared_ptr<Math::Curve>> ReadCurves ( std::string theFileName );
-  void                                                   WriteCurves (const std::vector<std::shared_ptr<Math::Curve>>& theCurves,std::string theFileName);
 private:
   std::map<std::string, std::shared_ptr<CurveSerializer>> mySerializers;
+
+public:
+  template<typename FormattedSerializer>
+  void                                      RegisterSerializer (); ///< Добавить читатели/писатели для всех типов кривых.
+  /// Чтение кривой из потока. Читается заголовок, затем вызывается нужный читатель для типа.
+  std::unique_ptr<Math::Curve>              Read               ( std::istream& theStream );
+  /// Запись кривой в поток. Сначала записывается заголовок, затем вызывается нужный писатель для типа.
+  void                                      Write              ( std::ofstream& theStream, const Math::Curve& aCurve );
+  /// Чтение кривых из потока. Файл открывается в бинарном формате, кривые читаются в порядке нахождения в файле.
+  std::vector<std::shared_ptr<Math::Curve>> ReadCurves         ( std::string theFileName );
+  ///Запись кривых в поток. Файл открывается в бинарном формате, кривые записываеются в порядке нахождения в curves.
+  void                                      WriteCurves        ( const std::vector<std::shared_ptr<Math::Curve>>& theCurves,std::string theFileName );
 
 };
 }

@@ -415,7 +415,7 @@ TEST(Ellipse, IsValid2)
 
 // Правило экстраполяции: один в один взято с правила экстраполяции полилинии:
 // приведение к граничным точкам всего того, что лежит за пределами области определения
-TEST( Ellipse, DISABLED_Extrapole )
+TEST( Ellipse, Extrapole )
 {
   Ellipse ellipse( Point(), 1., 1., 0. );
   ASSERT_TRUE( ellipse.IsValid() );

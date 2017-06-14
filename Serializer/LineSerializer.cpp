@@ -1,23 +1,37 @@
 #include "LineSerializer.h"
 
+
 namespace Serializer {
+//-----------------------------------------------------------------------------
+//  Получение заголовка примитва отрезок.
+// ---
 std::string LineSerializer::GetHeaderName()
 {
   return Math::Line( Math::Point(), Math::Point() ).GetName();
 }
 
-std::unique_ptr<Math::Curve> LineSerializer::Read( std::istream& theInput )
+
+//-----------------------------------------------------------------------------
+//  Чтение отрезка из потока. Данные читаются в следующем порядке: начало отрезка (Point), конец отрезка (Point).
+// В случае невалидных данных возвращается пустой примитив.
+// ---
+std::unique_ptr<Math::Curve> LineSerializer::Read( std::istream& input )
 {
-  Math::Point aPoint1;
-  Math::Point aPoint2;
-  aPoint1 = ReadPoint( theInput );
-  aPoint2 = ReadPoint( theInput );
-  return std::make_unique<Math::Line>( aPoint1, aPoint2 );
+  Math::Point point1;
+  Math::Point point2;
+  point1 = ReadPoint( input );
+  point2 = ReadPoint( input );
+  return std::make_unique<Math::Line>( point1, point2 );
 }
 
-void LineSerializer::Write ( std::ostream& theOutput, const Math::Curve& theCurve )
+
+//-----------------------------------------------------------------------------
+//  Запись отрезка в поток. Данные записываются в следующем порядке: начало отрезка (Point), конец отрезка (Point).
+// В случае невалидных данных в файл ничего не записывается.
+// ---
+void LineSerializer::Write( std::ostream& output, const Math::Curve& curve )
 {
-  WritePoint( theOutput, dynamic_cast<const Math::Line&> (theCurve).GetStartPoint() );
-  WritePoint( theOutput, dynamic_cast<const Math::Line&> (theCurve).GetEndPoint() );
+  WritePoint( output, dynamic_cast<const Math::Line&> (curve).GetStartPoint() );
+  WritePoint( output, dynamic_cast<const Math::Line&> (curve).GetEndPoint() );
 }
 }

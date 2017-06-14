@@ -13,10 +13,8 @@ DisplayedObject::DisplayedObject( std::shared_ptr<Math::Curve> curve,  QValueAxi
 {
 }
 //-----------------------------------------------------------------------------
-/**
-  Вернуть текущее состояние селекции.
-*/
-//---
+//  Вернуть текущее состояние селекции.
+// ---
 bool DisplayedObject::GetSelectionStatus()
 {
   return selected;
@@ -24,34 +22,34 @@ bool DisplayedObject::GetSelectionStatus()
 
 
 //-----------------------------------------------------------------------------
-/**
-  Изменить состояние селекции в зависимости от полученной точки.
-*/
-//---
+//  Изменить состояние селекции в зависимости от полученной точки.
+// ---
 void DisplayedObject::ModifySelectionStatus( Math::Point cursor, double precision, QColor selectedColor )
 {
   Math::GeomPolyline polyline;
   curve->GetAsPolyLine( polyline );
- if ( polyline.DistanceToPoint(cursor) < precision )
+  if ( polyline.DistanceToPoint(cursor) < precision )
     selected = !selected;
- if (selected)
+  if (selected)
    SetColor( selectedColor );
- else
+  else
    SetColor( currentColor );
 }
 
 
 //-----------------------------------------------------------------------------
-/**
-  Установить новый цвет для неселектированной кривой.
-*/
-//---
+//  Установить новый цвет для селектированной кривой.
+// ---
 void DisplayedObject::SetColor( QColor color )
 {
   currentseries->setColor( color );
   seriesRef->setColor( color );
 }
 
+
+//-----------------------------------------------------------------------------
+//  Установить новый цвет для неселектированной кривой.
+// ---
 void DisplayedObject::SetColorUnselectedCurve( QColor color )
 {
   currentseries->setColor( color );
@@ -61,10 +59,8 @@ void DisplayedObject::SetColorUnselectedCurve( QColor color )
 
 
 //-----------------------------------------------------------------------------
-/**
-  Убрать series из графика.
-*/
-//---
+//  Убрать series из графика.
+// ---
  DisplayedObject::~DisplayedObject()
 {
   currentseries->chart()->removeSeries( currentseries );
@@ -73,11 +69,9 @@ void DisplayedObject::SetColorUnselectedCurve( QColor color )
 
 
 //-----------------------------------------------------------------------------
-/**
- Добавить кривую к пространству отрисовки.
-*/
-//---
-void DisplayedObject::addCurveToChart( QChart * chart)
+// Добавить кривую к пространству отрисовки.
+// ---
+void DisplayedObject::AddCurveToChart( QChart * chart)
 {
   currentseries = new QLineSeries;
   currentseries->setColor( currentColor );
@@ -109,10 +103,8 @@ void DisplayedObject::addCurveToChart( QChart * chart)
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вернуть геометрический примитив.
-*/
-//---
+//  Вернуть геометрический примитив.
+// ---
 std::shared_ptr<Math::Curve> DisplayedObject::GetPrimitive()
 {
   return curve;

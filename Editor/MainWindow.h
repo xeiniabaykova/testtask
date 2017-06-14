@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /**
   \file
-  \brief Представление главной формы\~
+  Представление главной формы.\~
 
 */
 ////////////////////////////////////////////////////////////////////////////////
@@ -68,31 +68,32 @@ private:
 
 protected:
 #ifndef QT_NO_CONTEXTMENU
+  /// Создание контекстного меню с пунтктами: создать, удалить кривую. Поменять цвет кривой.
     void contextMenuEvent(QContextMenuEvent *event) override;
 #endif // QT_NO_CONTEXTMENU
 
 public:
-  void mousePressEvent     ( QMouseEvent *event );  /// Обработать событие клика мышкой.
+  void mousePressEvent     ( QMouseEvent *event );  ///< Обработать событие клика мышкой.
 
-  void resizeEvent         (QResizeEvent *event);   /// Обработчик события изменения размера экрана.
-  void CreateActions       ();                      /// Создать события.
-  void CreateMenus         ();                      /// Создать меню
+  void resizeEvent         (QResizeEvent *event);   ///< Обработчик события изменения размера экрана.
+  void CreateActions       ();                      ///< Создать события.
+  void CreateMenus         ();                      ///< Создать меню
 
 private slots:
-  void OnSaveFile          ();                      /// Обработать событие открытия файла.
-  void OnLoadFile          ();                      /// Обработать событие сохранения файла.
-  void OnCreatePoint       ();                      /// Обработать событие создания точки.
-  void OnCreateLine        ();                      /// Обработать событие создания линии.
-  void OnCreateEllipse     ();                      /// Обработать событие создания эллипса.
-   void OnCreateCircle     ();                      /// Обработать событие создания окружности
-  void OnCreateNurbs       ();                      /// Обработать событие создания nurbs.
-  void OnStopCreateCurve   ();                      /// Обработать событие прекращения создания кривых.
-  void OnFindIntersection  ();                      /// Обработать событие нахождения пересечения.
-  void OnDeleteCurve       ();                      /// Обработать событие удаления кривой.
-  void OnClearScreen       ();                      /// Обработать событие очистки экрана.
-  void OnCreatePolyline    ();                      /// Обработать событие создания полилинии.
-  void OnReColorCurve      ();                      /// Обработать событие изменения цвета кривой.
-  void contextMenuRequested( const QPoint& point ); /// Создать контекстное меню.
+  void OnSaveFile          ();                      ///< Обработать событие открытия файла.
+  void OnLoadFile          ();                      ///< Обработать событие сохранения файла.
+  void OnCreatePoint       ();                      ///< Обработать событие создания точки.
+  void OnCreateLine        ();                      ///< Обработать событие создания линии.
+  void OnCreateEllipse     ();                      ///< Обработать событие создания эллипса.
+   void OnCreateCircle     ();                      ///< Обработать событие создания окружности
+  void OnCreateNurbs       ();                      ///< Обработать событие создания nurbs.
+  void OnStopCreateCurve   ();                      ///< Обработать событие прекращения создания кривых.
+  void OnFindIntersection  ();                      ///< Обработать событие нахождения пересечения.
+  void OnDeleteCurve       ();                      ///< Обработать событие удаления кривой.
+  void OnClearScreen       ();                      ///< Обработать событие очистки экрана.
+  void OnCreatePolyline    ();                      ///< Обработать событие создания полилинии.
+  void OnReColorCurve      ();                      ///< Обработать событие изменения цвета кривой.
+  void contextMenuRequested( const QPoint& point ); ///< Создать контекстное меню.
 
 };
 

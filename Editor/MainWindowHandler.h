@@ -61,23 +61,23 @@ private:
 public:
 public:
  // void CreatePoint            ();                         ///< создать и отобразить точку
-  void CreateLine             ();                         ///< Создать и отобразить отрезок.
-  void CreateEllipse          ();                         ///< Создать и отобразить эллипс.
-  void CreateCircle           ();                         ///< Создать и отобразить окружность.
-  void CreateNurbs            ();                         ///< Создать и отобразить nurbs.
-  void LoadFile               ();                         ///< Загрузить кривые из файла.
-  void SaveFile               ();                          ///< Сохранить кривые в файл.
-  void CreatePolyline         ();                         ///< Создать и отобразить полилинию.
-  void CreateCurve            ();                         ///< Создать кривую.
-  void MouseEvent             ( QMouseEvent *event );     ///< Обработать событие клика мышкой.
-  void StopCreateCurve        ();                         ///< Обработать ожидание создания кривой.
-  void ResizeEvent            ( QResizeEvent *event );    ///< Обработать изменение размера окна.
-  void StateExpect            ( QMouseEvent *event );     ///< Обработать ожидаение клика мышкой при отсуствии создания кривых.
-  void ChangeColor            ( QColor color );           ///< Обработать изменение цвета кривой.
-  void DeleteCurve            ();                         ///< Обработать удаление кривой.
-  void CreateEmptySeries      ();                         ///< КОСТЫЛЬ! необходим для верной работы функции map to value.
-  void ClearScreen            ();                         ///< Обработать очистку экрана.
-  void CreateChart            ();                          ///< Обработать создание экрана.
+  void CreateLine             ();                              ///< Создать и отобразить отрезок.
+  void CreateEllipse          ();                              ///< Создать и отобразить эллипс.
+  void CreateCircle           ();                              ///< Создать и отобразить окружность.
+  void CreateNurbs            ();                              ///< Создать и отобразить nurbs.
+  void LoadFile               ();                              ///< Загрузить кривые из файла.
+  void SaveFile               ();                              ///< Сохранить кривые в файл.
+  void CreatePolyline         ();                              ///< Создать и отобразить полилинию.
+  void CreateCurve            ();                              ///< Создать кривую.
+  void MouseEvent             ( QMouseEvent *event );          ///< Обработать событие клика мышкой.
+  void StopCreateCurve        ();                              ///< Обработать ожидание создания кривой.
+  void ResizeEvent            ( QResizeEvent *event );         ///< Обработать изменение размера окна.
+  void StateExpect            ( QMouseEvent *event );          ///< Обработать ожидаение клика мышкой при отсуствии создания кривых.
+  void ChangeColor            ( QColor color );                ///< Обработать изменение цвета кривой.
+  void DeleteCurve            ();                              ///< Обработать удаление кривой.
+  void CreateEmptySeries      ();                              ///< КОСТЫЛЬ! необходим для верной работы функции map to value.
+  void ClearScreen            ();                              ///< Обработать очистку экрана.
+  void CreateChart            ();                              ///< Обработать создание экрана.
   void CreateRefPoint         ( Math::Point point );           ///< Отобразить точку, выбранную пользователем.
   void AddInformationNurbs    ( bool& isClosed, int& degree ); /// Вызвать меню для получения информации о нурбс - кривой.
 

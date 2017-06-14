@@ -6,7 +6,7 @@
 
 namespace Editor {
 //------------------------------------------------------------------------------
-// \ru создается диалоговое окно открытия файла
+// Cоздается диалоговое окно открытия файла.
 // ---
 void FileIO::Open( std::vector<std::shared_ptr<Math::Curve>>& inputObj )
 {
@@ -28,7 +28,7 @@ void FileIO::Open( std::vector<std::shared_ptr<Math::Curve>>& inputObj )
 
 
 //------------------------------------------------------------------------------
-// \ru создается диалоговое окно сохранения файла
+// Cоздается диалоговое окно сохранения файла.
 // ---
 void FileIO::Save( const std::vector<std::shared_ptr<Math::Curve>>& savedObj )
 {

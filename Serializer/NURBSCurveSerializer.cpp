@@ -9,7 +9,7 @@ std::string NURBSCurveSerializer::GetHeaderName()
 std::unique_ptr<Math::Curve> NURBSCurveSerializer::Read( std::istream& theInput )
 {
 
-  int  numNodes;
+  int numNodes;
   int numWeights;
   int numPoles;
   int degree;

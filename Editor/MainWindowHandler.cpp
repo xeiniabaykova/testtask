@@ -13,11 +13,10 @@
 
 namespace Editor {
 //-----------------------------------------------------------------------------
-/**
-  Конструктор MainWindowHandler
-*/
-//---
-MainWindowHandler::MainWindowHandler (QChart * chart):
+// Конструктор MainWindowHandler. Устанавилвается цвет селектирования кривой,
+// состояние формы, окно для рисования графика.
+// ---
+MainWindowHandler::MainWindowHandler(QChart * chart):
   chart         ( chart             ),
   state         ( StateExpectAction ),
   selectedColor ( 10, 50, 255 )
@@ -28,12 +27,9 @@ MainWindowHandler::MainWindowHandler (QChart * chart):
 
 
 //-----------------------------------------------------------------------------
-/**
-  Задается необходимое количество точек - 2
-  Создается объект для создания геометрического представления отрезка.
-
-*/
-//--
+//  Задается необходимое количество точек - 2
+//  Создается объект для создания геометрического представления отрезка.
+// ---
 void MainWindowHandler::CreateLine()
 {
   state = StateCreateCurve;
@@ -42,12 +38,9 @@ void MainWindowHandler::CreateLine()
 
 
 //-----------------------------------------------------------------------------
-/**
-  Задается необходимое количество точек - 3
-  Создается объект для создания геометрического представления эллипса
-
-*/
-//--
+//  Задается необходимое количество точек - 3
+//  Создается объект для создания геометрического представления эллипса
+// ---
 void MainWindowHandler::CreateEllipse()
 {
   geomCreator = std::make_shared<CreatorHandler>( 3, CreatorHandler::CreateEllipse );
@@ -56,12 +49,9 @@ void MainWindowHandler::CreateEllipse()
 
 
 //-----------------------------------------------------------------------------
-/**
-  Задается необходимое количество точек - 2
-  Создается объект для создания геометрического представления окружности
-
-*/
-//---
+//  Задается необходимое количество точек - 2
+//  Создается объект для создания геометрического представления окружности
+// ---
 void MainWindowHandler::CreateCircle()
 {
   state = StateCreateCurve;
@@ -70,12 +60,9 @@ void MainWindowHandler::CreateCircle()
 
 
 //-----------------------------------------------------------------------------
-/**
-  \ru задается необходимое количество точек - -1
-  \ru создается объект для создания геометрического представления nurbs
-
-*/
-//---
+// Задается необходимое количество точек - -1
+// Создается объект для создания геометрического представления nurbs
+// ---
 void MainWindowHandler::CreateNurbs()
 {
   state = StateCreateLine;
@@ -84,10 +71,8 @@ void MainWindowHandler::CreateNurbs()
 
 
 //-----------------------------------------------------------------------------
-/**
-  функции обработки события создания полилнии
-*/
-//---
+// Функции обработки события создания полилнии
+// ---
 void MainWindowHandler::CreatePolyline()
 {
   state = StateCreateLine;
@@ -96,11 +81,9 @@ void MainWindowHandler::CreatePolyline()
 
 
 //-----------------------------------------------------------------------------
-/**
-  Создается объект для открытия файла.
-  Запускается окно открытия файла.
-*/
-//---
+//  Создается объект для открытия файла.
+//  Запускается окно открытия файла.
+// ---
 void MainWindowHandler::LoadFile()
 {
   FileIO open;
@@ -109,26 +92,24 @@ void MainWindowHandler::LoadFile()
   for ( size_t i = 0; i < inputObj.size(); i++ )
   {
     std::shared_ptr<DisplayedObject> curve = std::make_shared<DisplayedObject>( inputObj[i], axisX, axisY );
-   curve->addCurveToChart( chart );
+    curve->AddCurveToChart( chart );
     displayedCurves.push_back( curve );
   }
 }
 
 
 //-----------------------------------------------------------------------------
-/**
-  Создается объект для сохранения файла.
-  Запускается окно сохранения файла.
-*/
-//---
-void MainWindowHandler::SaveFile( )
+// Создается объект для сохранения файла.
+// Запускается окно сохранения файла.
+// ---
+void MainWindowHandler::SaveFile()
 {
   std::vector<std::shared_ptr<Math::Curve>> savedCurves;
 
   for ( size_t i = 0; i < displayedCurves.size(); i++ )
   {
     std::shared_ptr<Math::Curve> curve = displayedCurves[i]->GetPrimitive();
-     savedCurves.push_back( curve  );
+    savedCurves.push_back( curve  );
   }
 
   FileIO save;
@@ -137,20 +118,23 @@ void MainWindowHandler::SaveFile( )
 
 
 //-----------------------------------------------------------------------------
-/**
-  Вызывается метод создания кривой по точкам.
-  Обнуляется массив точек полученных с экрана.
-*/
-//---
+//  Вызывается метод создания кривой по точкам.
+//  Обнуляется массив точек полученных с экрана.
+// ---
 void MainWindowHandler::CreateCurve()
 {
   std::shared_ptr<Math::Curve> primitive = geomCreator->Create();
   std::shared_ptr<DisplayedObject> curve = std::make_shared<DisplayedObject>( primitive, axisX, axisY );
-  curve->addCurveToChart( chart );
+  curve->AddCurveToChart( chart );
   displayedCurves.push_back( curve );
   tempSeriesReferenced->clear();
 }
 
+
+//-----------------------------------------------------------------------------
+//  Остановка создания кривых.Создается кривая, режим переключается в режим ожидания действия.
+//  Обнуляется массив точек полученных с экрана.
+// ---
 void MainWindowHandler::StopCreateCurve()
 {
   if ( state == StateCreateLine )
@@ -160,14 +144,12 @@ void MainWindowHandler::StopCreateCurve()
   state = StateExpectAction;
 }
 
-//-----------------------------------------------------------------------------
-/**
-  \ru обработка события клика мышкой
-  \ru если количество точек достаточно для создания крвой, то она создается
-  \ru если недостаточно, точка добавляется в массив
-*/
-//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
+//  Обработка события клика мышкой:
+// если количество точек достаточно для создания крвой, то она создается,
+// если недостаточно, точка добавляется в массив.
+// ---
 void MainWindowHandler::MouseEvent( QMouseEvent *event )
 {
   if ( event->buttons() == Qt::RightButton )
@@ -198,7 +180,7 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
       StateExpect ( event );
     }
   else
-    if (state == StopCreatePolyline)
+    if ( state == StopCreatePolyline )
     {
       CreateCurve();
       geomCreator->ClearPoints();
@@ -208,11 +190,9 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
 
 
 //-----------------------------------------------------------------------------
-/**
-  обработка ожидания действия:
-  если можно селектировать кривую - селектируем кривую
-  если нельзя - убираем все селкции
-*/
+//  Обработка ожидания действия:
+//  если можно селектировать кривую - селектируем кривую.
+//  если кривая селектированна, то убираем селелекцию.
 //-----------------------------------------------------------------------------
 void MainWindowHandler::StateExpect( QMouseEvent *event )
 {
@@ -224,23 +204,19 @@ void MainWindowHandler::StateExpect( QMouseEvent *event )
 
 
 //-----------------------------------------------------------------------------
-/**
-  функции изменения цвета кривой
-*/
-//-----------------------------------------------------------------------------
+//  Изменить цвет селектированной кривой
+//---
 void MainWindowHandler::ChangeColor( QColor color )
 {
   for ( size_t i = 0; i < displayedCurves.size(); i++ )
-   if ( displayedCurves[i]->GetSelectionStatus() )
-     displayedCurves[i]->SetColorUnselectedCurve( color );
+    if ( displayedCurves[i]->GetSelectionStatus() )
+      displayedCurves[i]->SetColorUnselectedCurve( color );
 }
 
 
 //-----------------------------------------------------------------------------
-/**
-  функция удаления кривой
-*/
-//-----------------------------------------------------------------------------
+//  Удалить селектированные кривые.
+//---
 void MainWindowHandler::DeleteCurve()
 {
   for ( size_t i = 0; i < displayedCurves.size(); i++ )
@@ -252,10 +228,8 @@ void MainWindowHandler::DeleteCurve()
 
 
 //-----------------------------------------------------------------------------
-/**
-  функции обработки события изменения размера окна
-*/
-//-----------------------------------------------------------------------------
+//  Обработать изменение размера окна.
+//---
 void MainWindowHandler::ResizeEvent( QResizeEvent* )
 {
   QRect rec = QApplication::desktop()->screenGeometry();
@@ -267,10 +241,8 @@ void MainWindowHandler::ResizeEvent( QResizeEvent* )
 
 
 //-----------------------------------------------------------------------------
-/**
-  КОСТЫЛЬ! для верной работы функции maptovalue
-*/
-//-----------------------------------------------------------------------------
+//  КОСТЫЛЬ! для верной работы функции maptovalue
+//---
 void MainWindowHandler::CreateEmptySeries()
 {
   QLineSeries *series = new QLineSeries;
@@ -281,9 +253,7 @@ void MainWindowHandler::CreateEmptySeries()
 
 
 //-----------------------------------------------------------------------------
-/**
-   Обработка события очистки экрана.
-*/
+//   Обработать событие очистки экрана.
 //---
 void MainWindowHandler::ClearScreen()
 { 
@@ -293,9 +263,7 @@ void MainWindowHandler::ClearScreen()
 
 
 //-----------------------------------------------------------------------------
-/**
-   Обработка события очистки экрана.
-*/
+//  Обработать очистку экрана.
 //---
 void MainWindowHandler::CreateChart()
 {
@@ -328,9 +296,7 @@ void MainWindowHandler::CreateChart()
 
 
 //-----------------------------------------------------------------------------
-/**
-   Отобразить точку, выбранную пользователем.
-*/
+//   Отобразить точку, выбранную пользователем.
 //---
 void MainWindowHandler::CreateRefPoint( Math::Point point )
 {
@@ -338,6 +304,4 @@ void MainWindowHandler::CreateRefPoint( Math::Point point )
   tempSeriesReferenced->setMarkerShape( QScatterSeries::MarkerShapeCircle );
   tempSeriesReferenced->setMarkerSize( 15.0 );
 }
-
-
 }
