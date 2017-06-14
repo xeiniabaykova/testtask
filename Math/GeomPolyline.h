@@ -26,14 +26,16 @@ class GeomPolyline: public Curve
 {
 private:
  std::vector<Point> referencedPoints;
+
 public:
  /**  \brief Конструктор полилинии по опорным точкам.
    \param[in] Points - опорные точки .\~
  */
- //---
+ // ---
   GeomPolyline( const std::vector<Point>& thePoints );
   GeomPolyline();
   virtual ~GeomPolyline() = default;
+
 private:
   GeomPolyline( const GeomPolyline &obj ) = delete;
   GeomPolyline& operator=( GeomPolyline &obj ) = delete;

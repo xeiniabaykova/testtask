@@ -10,14 +10,15 @@
 #define VECTOR_H
 
 #include "GeometricPrimitive.h"
+
+
 namespace Math {
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+//
+/// Класс, представляющий собой двумерный вектор.
 /**
-
-   Класс, представляющий собой двумерный вектор. \~
-
 */
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 class Vector: public GeometricPrimitive
 {
 private:
@@ -29,6 +30,7 @@ public:
   Vector( double x, double y );
   Vector( const Vector& point );
   virtual ~Vector() = default;
+
 public:
   virtual void Translate  ( double xShift, double yShift );      ///< Сдвинуть по осям x, y на xShift, yShift .
   virtual void Rotate     ( double alpha );                      ///< Повернуть на угол alpha относительно начала координат.

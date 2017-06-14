@@ -396,6 +396,7 @@ TEST(Ellipse, Scale2)
 
 TEST(Ellipse, IsValid)
 {
+
   Ellipse ellipse(Point(2., 1.), 1., 4., 0.);
   EXPECT_TRUE( ellipse.IsValid() );
   ellipse.Scale( 2., 0.2 );

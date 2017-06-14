@@ -25,9 +25,11 @@ class GeometricPrimitive {
 public:
   GeometricPrimitive() = default;
   virtual ~GeometricPrimitive  () = default;
+
 private:
   GeometricPrimitive( const GeometricPrimitive &obj ) = delete;
   GeometricPrimitive& operator=( GeometricPrimitive &obj ) = delete;
+
 public:
   virtual void        Translate ( double xShift, double yShift ) = 0;    ///< Сдвиг по оси x на xShift, по оси y на yShift.
   virtual void        Rotate    ( double alpha ) = 0;                    ///< Повернуть относительно начала координат на угол alpha.

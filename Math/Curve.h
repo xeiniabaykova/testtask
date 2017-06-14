@@ -47,10 +47,10 @@ public:
   virtual void               GetAsPolyLine       ( GeomPolyline &polyLine, double accuracy = CommonConstantsMath::PRECISION_POLYLINE ) const;
   virtual bool               IsClosed            () const = 0;  /// Проверяется замкнутость геометрического примитива.
 //protected:
-   double                     FixParametr         ( double t ) const;        ///< Получить по параметру t, паремтр, врходящий в область определения для геометрического примитива.
+   double                     FixParametr        ( double t ) const;        ///< Получить по параметру t, паремтр, врходящий в область определения для геометрического примитива.
 private:
   /// Расчитывается параметрический шаг по кривой, позволяющий апроксимировать кривую с необходимой точностью.
-  double CountingStep                   ( double tCurrent , double accuracy = CommonConstantsMath::PRECISION_POLYLINE ) const;
+  double CountingStep                            ( double tCurrent , double accuracy = CommonConstantsMath::PRECISION_POLYLINE ) const;
 
 };
 }

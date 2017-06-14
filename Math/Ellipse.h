@@ -32,6 +32,7 @@ private:
   double r1;     ///< Главный радиус.
   double r2;     ///< Побочный радиус.
   double alpha;  ///< Угол между главной осью и осью х.
+
 public:
   /**  \brief  Создать эллипс по массиву точек.
     \param[in] Points[0] - Центр эллипса .\~
@@ -53,6 +54,7 @@ public:
 private:
   Ellipse( const Ellipse &obj ) = delete;
   Ellipse& operator=( Ellipse &obj ) = delete;
+
 public:
   virtual Point              GetPoint            ( double t ) const;                   ///< Вернуть точку на кривой по параметру t.
   virtual Range              GetRange            () const;                             ///< Вернуть границы параметра для эллипса : [0, 2 * pi].
