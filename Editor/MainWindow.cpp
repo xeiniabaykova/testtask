@@ -66,16 +66,14 @@ void MainWindow::contextMenuEvent( QContextMenuEvent *event )
 }
 #endif // QT_NO_CONTEXTMENU
 
-//-----------------------------------------------------------------------------
-/**
-    \ru создаются меню : "File" с подменю "Open" "Save",
-    \ru "Curves" с подменю "Create point", "Create Line", "Create Ellipse",
-    \ru "Create Nurbs", "Create Circle"
-    \ru "Options" с подменю "DeleteCurve" "Find Intersection"
-    \ru "Screen"  с подменю "Clear Screen"
 
-*/
 //-----------------------------------------------------------------------------
+//  Создаются меню : "File" с подменю "Open" "Save",
+//  "Curves" с подменю "Create point", "Create Line", "Create Ellipse",
+//    "Create Nurbs", "Create Circle"
+//    "Options" с подменю "DeleteCurve" "Find Intersection"
+//    "Screen"  с подменю "Clear Screen".
+// ---
 void MainWindow::CreateMenus()
 {
   importExportMenu = menuBar()->addMenu( tr("&File") );
@@ -100,13 +98,10 @@ void MainWindow::CreateMenus()
 
 
 //-----------------------------------------------------------------------------
-/**
-   cоздаются действия для пунктов меню:
-   "save", "load", "create point", "create line", "create ellipse", "create Circle"
-   create nurbs", "delete curve", "find intersection", "Clear Screen"
-
-*/
-//-----------------------------------------------------------------------------
+//   Создаются действия для пунктов меню:
+//   "save", "load", "create point", "create line", "create ellipse", "create Circle"
+//   create nurbs", "delete curve", "find intersection", "Clear Screen".
+// ---
 void MainWindow::CreateActions()
 {
   saveAct = new QAction( tr("&Save"), this );
@@ -166,11 +161,8 @@ void MainWindow::CreateActions()
 
 
 //-----------------------------------------------------------------------------
-/**
-   \ru обработчик события пункта меню "save"
-
-*/
-//-----------------------------------------------------------------------------
+//  Обработчик события пункта меню "save"
+// ---
 void MainWindow::OnSaveFile()
 {
   windowHandler.SaveFile();
@@ -178,11 +170,9 @@ void MainWindow::OnSaveFile()
 
 
 //-----------------------------------------------------------------------------
-/**
-   \ru обработчик события пункта меню "load"
-
-*/
-//-----------------------------------------------------------------------------
+//
+//  Обработчик события пункта меню "load"
+// ---
 void MainWindow::OnLoadFile()
 {
   windowHandler.LoadFile();
@@ -190,11 +180,8 @@ void MainWindow::OnLoadFile()
 
 
 //-----------------------------------------------------------------------------
-/**
-   \ru обработчик события пункта меню "create point"
-
-*/
-//-----------------------------------------------------------------------------
+//  Обработчик события пункта меню "create point"
+// ---
 void MainWindow::OnCreatePoint()
 {
   createPointAct->setCheckable( true );
@@ -203,11 +190,8 @@ void MainWindow::OnCreatePoint()
 
 
 //-----------------------------------------------------------------------------
-/**
-   \ru обработчик события пункта меню "create line"
-
-*/
-//-----------------------------------------------------------------------------
+// Обработчик события пункта меню "create line".
+// ---
 void MainWindow::OnCreateLine()
 {
   createLineAct->setCheckable( true );
@@ -217,11 +201,8 @@ void MainWindow::OnCreateLine()
 
 
 //-----------------------------------------------------------------------------
-/**
-   \ru обработчик события пункта меню "create ellipse"
-
-*/
-//-----------------------------------------------------------------------------
+// Обработчик события пункта меню "create ellipse"
+// ---
 void MainWindow::OnCreateEllipse()
 {
   createEllipseAct->setCheckable( true );
@@ -231,11 +212,8 @@ void MainWindow::OnCreateEllipse()
 
 
 //-----------------------------------------------------------------------------
-/**
-   \ru обработчик события пункта меню "create circle"
-
-*/
-//-----------------------------------------------------------------------------
+//  Обработчик события пункта меню "create circle".
+// ---
 
 void MainWindow::OnCreateCircle()
 {
@@ -247,11 +225,8 @@ void MainWindow::OnCreateCircle()
 
 
 //-----------------------------------------------------------------------------
-/**
-   \ru обработчик события пункта меню "create nurbs"
-
-*/
-//-----------------------------------------------------------------------------
+// обработчик события пункта меню "create nurbs".
+//---
 void MainWindow::OnCreateNurbs()
 {
 
@@ -262,11 +237,8 @@ void MainWindow::OnCreateNurbs()
 
 
 //-----------------------------------------------------------------------------
-/**
-   \ru обработчик события пункта меню "Stop create curve"
-
-*/
-//-----------------------------------------------------------------------------
+//   Обработчик события пункта меню "Stop create curve".
+// ---
 void MainWindow::OnStopCreateCurve()
 {
 
@@ -277,11 +249,8 @@ void MainWindow::OnStopCreateCurve()
 
 
 //-----------------------------------------------------------------------------
-/**
-   \ru обработчик события пункта меню "find intersection"
-
-*/
-//-----------------------------------------------------------------------------
+//Обработчик события пункта меню "find intersection"
+// ---
 void MainWindow::OnFindIntersection()
 {
 
@@ -289,11 +258,8 @@ void MainWindow::OnFindIntersection()
 
 
 //-----------------------------------------------------------------------------
-/**
-   \ru обработчик события пункта меню "clear screen"
-
-*/
-//-----------------------------------------------------------------------------
+//Обработчик события пункта меню "clear screen".
+// ---
 void MainWindow::OnClearScreen()
 {
   windowHandler.ClearScreen();
@@ -301,11 +267,8 @@ void MainWindow::OnClearScreen()
 
 
 //-----------------------------------------------------------------------------
-/**
-   \ru обработчик события пункта меню "delete curve"
-
-*/
-//-----------------------------------------------------------------------------
+//  Обработчик события пункта меню "delete curve".
+// ---
 void MainWindow::OnDeleteCurve()
 {
   createPolylineAct->setCheckable( false );
@@ -322,11 +285,8 @@ void MainWindow::OnCreatePolyline()
 
 
 //-----------------------------------------------------------------------------
-/**
-   \ru обработчик события клика мышки
-
-*/
-//-----------------------------------------------------------------------------
+// Обработчик события клика мышки.
+// ---
 void MainWindow::mousePressEvent( QMouseEvent *event )
 {
   windowHandler.MouseEvent( event );
@@ -334,11 +294,8 @@ void MainWindow::mousePressEvent( QMouseEvent *event )
 
 
 //-----------------------------------------------------------------------------
-/**
-   \ru обработчик события изменения цвета кривой
-
-*/
-//-----------------------------------------------------------------------------
+// Обработчик события изменения цвета кривой.
+// ---
 void MainWindow::OnReColorCurve()
 {
   QDialog * d = new QDialog();
@@ -382,11 +339,8 @@ void MainWindow::OnReColorCurve()
 }
 
 //-----------------------------------------------------------------------------
-/**
-   \ru обработчик изменения размера окна
-
-*/
-//-----------------------------------------------------------------------------
+// Обработчик изменения размера окна.
+// ---
 void MainWindow::resizeEvent( QResizeEvent *event )
 {
   windowHandler.ResizeEvent ( event );
@@ -394,10 +348,8 @@ void MainWindow::resizeEvent( QResizeEvent *event )
 
 
 //-----------------------------------------------------------------------------
-/**
-   \ru обработчик контекстного меню
-*/
-//-----------------------------------------------------------------------------
+// Обработчик контекстного меню.
+// ---
 void MainWindow::ContextMenuRequested( const QPoint& point )
 {
   contextMenu->popup( mapToGlobal(point) );
