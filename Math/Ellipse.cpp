@@ -1,6 +1,7 @@
 #include "Ellipse.h"
 #include <vector>
 #include <cmath>
+#include <limits>
 #include "CommonConstantsMath.h"
 
 

@@ -1,5 +1,6 @@
 #include "NurbsCurve.h"
 #include <cmath>
+#include <limits>
 
 namespace Math {
 
