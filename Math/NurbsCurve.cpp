@@ -294,9 +294,9 @@ void NurbsCurve::ComputeBasicFunctionD( const double x, const int i, const size_
 
   // делим получившиеся значения на коэффициент перед квадратной скобкой в формуле (1)
   int r = degree;
-  for ( int k = 1; k <= derivativeOrder; k++ )
+  for ( size_t k = 1; k <= derivativeOrder; k++ )
   {
-    for ( int j = 0; j <= degree; j++ )
+    for ( size_t j = 0; j <= degree; j++ )
       ders[k][j] = ders[k][j] * r;
     r = r * ( degree - k );
   }
@@ -492,7 +492,7 @@ std::vector<double> NurbsCurve::WeightDers( double t, int der, const std::vector
     {
       resultWeight += weights[span - degree + i] * ders[j][i];
     }
-  result.push_back( resultWeight );
+    result.push_back( resultWeight );
   }
   return result;
 }
