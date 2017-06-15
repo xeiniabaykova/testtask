@@ -2,8 +2,8 @@
 
 namespace Math {
 
-const double CommonConstantsMath::PI = 3.14159265358979323846;  ///<Число Pi.
-const double CommonConstantsMath::PRECISION_POLYLINE = 0.001;  ///< Нулевая точность. Считаем, что данной погрешностью можно пренебречь, и все, что меньше этого числа, равно нулю.
-const double CommonConstantsMath::NULL_TOL = 1e-7;             ///< Точность создания полилинии.
+const double CommonConstantsMath::PI = 3.14159265358979323846;  ///<Р§РёСЃР»Рѕ Pi.
+const double CommonConstantsMath::PRECISION_POLYLINE = 0.001;  ///< РќСѓР»РµРІР°СЏ С‚РѕС‡РЅРѕСЃС‚СЊ. РЎС‡РёС‚Р°РµРј, С‡С‚Рѕ РґР°РЅРЅРѕР№ РїРѕРіСЂРµС€РЅРѕСЃС‚СЊСЋ РјРѕР¶РЅРѕ РїСЂРµРЅРµР±СЂРµС‡СЊ, Рё РІСЃРµ, С‡С‚Рѕ РјРµРЅСЊС€Рµ СЌС‚РѕРіРѕ С‡РёСЃР»Р°, СЂР°РІРЅРѕ РЅСѓР»СЋ.
+const double CommonConstantsMath::NULL_TOL = 1e-7;             ///< РўРѕС‡РЅРѕСЃС‚СЊ СЃРѕР·РґР°РЅРёСЏ РїРѕР»РёР»РёРЅРёРё.
 
 }
