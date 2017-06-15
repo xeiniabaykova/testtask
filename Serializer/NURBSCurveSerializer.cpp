@@ -25,7 +25,7 @@ std::unique_ptr<Math::Curve> NURBSCurveSerializer::Read( std::istream& theInput 
   numPoles = ReadInt( theInput );
 // Чтение опорных точек.
   std::vector<Math::Point> controlPoints; 
-  for (size_t i = 0; i < numPoles; i++)
+  for ( size_t i = 0; i < numPoles; i++ )
   {
     controlPoints.push_back ( ReadPoint(theInput) );
   }

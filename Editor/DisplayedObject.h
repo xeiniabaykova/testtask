@@ -26,13 +26,13 @@ namespace Editor {
 struct DisplayedObject
 {
 private:
-  QColor                              currentColor;  ///< Цвет неслектированной кривой.
-  bool                                selected;      ///< Свойство селектированности кривой.
-  QLineSeries*                        currentseries; ///< Series с точками.
-  QScatterSeries*                     seriesRef;     ///< Series с опорными точками.
-  std::shared_ptr<Math::Curve>        curve;         ///< Геометрическая кривая.
-  QValueAxis*                         axisX;         ///< Ось ох.
-  QValueAxis*                         axisY;         ///< Ось оy.
+  QColor                       currentColor;  ///< Цвет неслектированной кривой.
+  bool                         selected;      ///< Свойство селектированности кривой.
+  QLineSeries*                 currentseries; ///< Series с точками.
+  QScatterSeries*              seriesRef;     ///< Series с опорными точками.
+  std::shared_ptr<Math::Curve> curve;         ///< Геометрическая кривая.
+  QValueAxis*                  axisX;         ///< Ось ох.
+  QValueAxis*                  axisY;         ///< Ось оy.
 
 public:
   DisplayedObject() = default;

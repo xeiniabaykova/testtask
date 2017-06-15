@@ -172,7 +172,7 @@ NurbsCurve::NurbsCurve( const std::vector<Point>& ppoles, const std::vector<doub
 
 
 //-----------------------------------------------------------------------------
-//  Найти интервал ненулевых базисных функций для парметра t.
+//  Найти интервал ненулевых базисных функций для парметра x.
 // ---
 size_t NurbsCurve::FindSpan( double x ) const
 {
@@ -372,7 +372,7 @@ double NurbsCurve::CountWeight( int k, double x )  const
 ////-----------------------------------------------------------------------------
 ////  Подсчитать значения производных базисных функций, умноженных на вес на отрезке x - degree.
 //// ---
-//double NurbsCurve::CountWeightD( double t , int span)  const
+//double NurbsCurve::CountWeightD( double x , int span)  const
 //{
 //  double w = 0.0;
 //  std::vector<std::vector<double>> ders;
@@ -388,7 +388,7 @@ double NurbsCurve::CountWeight( int k, double x )  const
 ////-----------------------------------------------------------------------------
 ////  Подсчитать значения вторых производных базисных функций, умноженных на вес на отрезке x - degree.
 //// ---
-//double NurbsCurve::CountWeightD2( double t , int span)  const
+//double NurbsCurve::CountWeightD2( double x , int span)  const
 //{
 //  double w = 0.0;
 //  std::vector<std::vector<double>> ders;
