@@ -1,3 +1,5 @@
+#ifndef LINE_H
+#define LINE_H
 ////////////////////////////////////////////////////////////////////////////////
 /**
   \file
@@ -5,9 +7,6 @@
 
 */
 ////////////////////////////////////////////////////////////////////////////////
-
-#ifndef LINE_H
-#define LINE_H
 #include "Curve.h"
 #include "Point.h"
 #include <vector>
@@ -50,20 +49,20 @@ public:
   virtual ~Line() = default;
 
 public:
-  virtual Point              GetPoint            ( double t ) const;                                             ///< Вернуть точку по параметру t.
-  virtual Vector             GetDerivative       ( double t ) const;                                             ///< Вернуть производную линнии по параметру t.
-  virtual Vector             Get2Derivative      ( double t ) const;                                             ///< Вернуть вторую производную на линии по параметру t.
-  virtual Range              GetRange            () const;                                                       ///< Вернуть парметризацию  параметризация от [0, 1].
-  virtual void               GetAsPolyLine       ( GeomPolyline &polyLine, double ) const;                       ///< Вернуть полилинию для линии (это две точки - начало и конец).
-  virtual void               Translate           ( double xShift, double yShift );                               ///< Сдвинуть по осям x, y.
-  virtual void               Rotate              ( double alpha );                                               ///< Повернуть на угол alpha относительно начала координат.
-  virtual void               Scale               ( double xScaling, double yScaling );                           ///< Маштабировать по оси х на xScaling, по оси y на yScaling.
-  virtual bool               IsClosed            () const;
-  std::string                GetName             () const;                                                       ///< Вернуть имя, используемое при записи отрезка в файл.
-  bool                       IsValid             () const;                                                       ///< Проверка на корректность отрезка (начальная и конечная точка не совпадают).
-  virtual std::vector<Point> GetReferensedPoints () const;                                                       ///< Вернуть опорные точки, использованные для построения отрезка.
-  Point                      GetStartPoint       () const;
-  Point                      GetEndPoint         () const;
+  virtual Point              GetPoint            ( double t ) const;                       ///< Вернуть точку по параметру t.
+  virtual Vector             GetDerivative       ( double t ) const;                       ///< Вернуть производную линнии по параметру t.
+  virtual Vector             Get2Derivative      ( double t ) const;                       ///< Вернуть вторую производную на линии по параметру t.
+  virtual Range              GetRange            () const;                                 ///< Вернуть парметризацию  параметризация от [0, 1].
+  virtual void               GetAsPolyLine       ( GeomPolyline &polyLine, double ) const; ///< Вернуть полилинию для линии (это две точки - начало и конец).
+  virtual void               Translate           ( double xShift, double yShift );         ///< Сдвинуть по осям x, y.
+  virtual void               Rotate              ( double alpha );                         ///< Повернуть на угол alpha относительно начала координат.
+  virtual void               Scale               ( double xScaling, double yScaling );     ///< Маштабировать по оси х на xScaling, по оси y на yScaling.
+  virtual bool               IsClosed            () const;                                 ///< Отрезок всегда не замкунут.
+  std::string                GetName             () const;                                 ///< Вернуть имя, используемое при записи отрезка в файл.
+  bool                       IsValid             () const;                                 ///< Проверка на корректность отрезка (начальная и конечная точка не совпадают).
+  virtual std::vector<Point> GetReferensedPoints () const;                                 ///< Вернуть опорные точки, использованные для построения отрезка.
+  Point                      GetStartPoint       () const;                                 ///< Вернуть начальную точку отрезка.
+  Point                      GetEndPoint         () const;                                 ///< Вернуть начальную точку отрезка.
   double                     DistanceToPoint     ( Point point ) const;                   ///< Вернуть расстояние от точки до прямой.
 
 private:

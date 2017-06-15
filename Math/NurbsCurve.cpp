@@ -206,40 +206,21 @@ void NurbsCurve::ComputeBasicFunctionD( const double x, const int i, const size_
 {
 
   // формула для подсчета производной от базисной функции порядка i и значения параметра x имеет вид:
-  // ders_(i,degree)^(derivativeOrder) = degree/(degree - derivativeOrder)* [(x - nodes_i)/ (nodes_(i+degree) - nodes_i)
-  // * ders^(derivativeOrder)_(i, degree - 1) + (nodes_(i + degree + 1) - x)/ (nodes_(i + degree +1) - nodes_(i+1)) * ders^(derivativeOrder)_(i + 1, degree-1)]; (1)
+  // triangleNodes^(triangleNodes)_(r, degree) = r * sum(k =0, k =triangleNodes) {tempders[k][r] * triangleNodes_(r, degree - k)}(4)
+  // tempders - коэффициенты в формуле (4), вычисляются по формуле:
+  // r < k
+  //  tempders[k][j]  для triangleNodes^(triangleNodes)_(r, degree)
+  //  tempders[k][j] = ( tempders[ k - 1][j] - tempders[ k -1 ][j - 1] ) / triangleNodes[degree - k + 1][r - k + j];
+  // если  r >= k, то   tempders[k][0] = tempders[k - 1][0] / triangleNodes[ k -1 + 1][r - k];
+  // храним только значения tempders для текущей и предыдущей итерации, т.к другие значения не используются
+
 
   ders.resize( derivativeOrder + 1 );
   for ( size_t k = 0; k < ders.size(); k++ )
     ders[k].resize( degree + 1 );
 
-  std::vector<std::vector<double>> triangleNodes; // хранение базисных функций
-  triangleNodes.resize( degree + 1 );
-  for ( size_t k = 0; k < triangleNodes.size(); k++ )
-    triangleNodes[k].resize( degree + 1 );
-  triangleNodes[0][0] = 1.0;
-
-
-  std::vector<double> left( degree + 1, 0. );
-  std::vector<double> right( degree + 1, 0. );
-  // cчитаем полный треугольник от базисных функций по формуле:
-  // N_(i,k)(x) = (x - u_i)/(u(i + k) - u_i) * N_(i, k-1)(x) + (u_(i+k) - x)/(u_(i+k+1) - u_(i+1))*N_(i+1, k-1)(x)  (2)
-  for ( size_t j = 1; j <= degree; j++ )
-  {
-    left[j] = x - nodes[i + 1 - j]; // считаем числитель для первого слагаемого формулы (2)
-    right[j] = nodes[i + j] - x;  // считаем числитель для второго слагаемого формулы (2)
-    double saved = 0.0;
-    for ( size_t r = 0; r < j; r++ )
-    {
-      triangleNodes[j][r] = right[r + 1] + left[j - r]; // считаем знаменатель для правого слагаемого
-      double temp = triangleNodes[r][j - 1] / triangleNodes[j][r]; // счтаем частное знаменателей для текущей интерации по формуле (2)
-      triangleNodes[r][j] = saved + right[r + 1] * temp;
-      saved = left[j - r] * temp;
-    }
-    triangleNodes[j][j] = saved; // отдельно обработываем случай диагонального элемента
-  }
-
-  // хранение двух наиболее исользуемых столбцов разностей интервалов
+   std::vector<std::vector<double>> triangleNodes = BasicTriangleNodes( i, x );
+  // хранение двух наиболее исользуемых сто
   std::vector<std::vector<double>> tempders;
   tempders.resize( 2 );
   for ( size_t k = 0; k < 2; k++ )
@@ -251,9 +232,10 @@ void NurbsCurve::ComputeBasicFunctionD( const double x, const int i, const size_
 
   for ( int r = 0; r <= degree; r++ )
   {
-    int s1 = 0; // первый столбец в массиве разностей интервалов
-    int s2 = 1; // второй стобец в массиве разностей интервалов
+    int s1 = 0; // строка со значениями коэффициентов на предыдущей итерации
+    int s2 = 1; // строка со значениями коэффициентов на текущей итерации
     tempders[0][0] = 1.0;
+    // вычисляем k-ю производную, используя значения, k-1 производной
     for ( int k = 1; k <= derivativeOrder; k++ )
     {
       double d = 0.0;
@@ -264,6 +246,7 @@ void NurbsCurve::ComputeBasicFunctionD( const double x, const int i, const size_
         tempders[s2][0] = tempders[s1][0] / triangleNodes[degk + 1][rk];
         d = tempders[s2][0] * triangleNodes[rk][degk];
       }
+      // находим промежуток, на котором будем считать базисные функции
       int j1 = 0;
       if ( rk >= -1 )
         j1 = 1;
@@ -274,7 +257,7 @@ void NurbsCurve::ComputeBasicFunctionD( const double x, const int i, const size_
         j2 = k - 1;
       else
         j2 = degree - r;
-      //
+      // обходим треугольник ненулевых базисных функция для k -й производной
       for ( size_t j = j1; j <= j2; j++ )
       {
         tempders[s2][j] = ( tempders[s1][j] - tempders[s1][j - 1] ) /
@@ -287,12 +270,11 @@ void NurbsCurve::ComputeBasicFunctionD( const double x, const int i, const size_
         d += tempders[s2][k] * triangleNodes[r][degk];
       }
       ders[k][r] = d;
-      // меняем местами столбцы
       std::swap( s1, s2 );
     }
   }
 
-  // делим получившиеся значения на коэффициент перед квадратной скобкой в формуле (1)
+  // делим получившиеся значения на коэффициент перед квадратной скобкой в формуле (4)
   int r = degree;
   for ( size_t k = 1; k <= derivativeOrder; k++ )
   {
@@ -300,6 +282,42 @@ void NurbsCurve::ComputeBasicFunctionD( const double x, const int i, const size_
       ders[k][j] = ders[k][j] * r;
     r = r * ( degree - k );
   }
+}
+
+
+//-----------------------------------------------------------------------------
+//  Подсчитать полный треугольник базисных функций для отрезка i, и параметра t.
+// ---
+std::vector<std::vector<double>> NurbsCurve::BasicTriangleNodes( int i, double t ) const
+{
+  std::vector<std::vector<double>> triangleNodes; // храниение треугольника базисных функций. triangleNodes[i][j] - N_(i,j)(x)
+  triangleNodes.resize( degree + 1 );
+  for ( size_t k = 0; k < triangleNodes.size(); k++ )
+    triangleNodes[k].resize( degree + 1 );
+  triangleNodes[0][0] = 1.0;
+
+  std::vector<double> left( degree + 1, 0. );
+  std::vector<double> right( degree + 1, 0. );
+  //N_(i,k)(x) = (x - u_i)/(u(i + k) - u_i) * N_(i, k-1)(x) + (u_(i+k) - x)/(u_(i+k+1) - u_(i+1))*N_(i+1, k-1)(x)  (2)
+  // cчитаем полный треугольник от базисных функций по формуле:
+  // triangleNodes_(i - j, r) = left[j + 1]/(right[degree - j]+ left[j + 1]) * triangleNodes_(i-j, r - 1) + (3)
+  //  right[j - 1]/(right[j - 1]+ left[degree -j + 1]) * triangleNodes_(i - j + 1, r - 1)
+  // эта формула взята из "the nurbs book", она эквивалентна вычислению базисных функций по определению (2)
+  for ( size_t j = 1; j <= degree; j++ )
+  {
+    left[j] = t - nodes[i + 1 - j]; // считаем числитель для первого слагаемого формулы (3)
+    right[j] = nodes[i + j] - t;  // считаем числитель для второго слагаемого формулы (3)
+    double saved = 0.0;
+    for ( size_t r = 0; r < j; r++ )
+    {
+      triangleNodes[j][r] = right[r + 1] + left[j - r]; // считаем знаменатель для правого слагаемого
+      double temp = triangleNodes[r][j - 1] / triangleNodes[j][r]; // счтаем частное знаменателей для текущей интерации по формуле (3)
+      triangleNodes[r][j] = saved + right[r + 1] * temp;
+      saved = left[j - r] * temp;
+    }
+    triangleNodes[j][j] = saved; // отдельно обработываем случай диагонального элемента
+  }
+  return triangleNodes;
 }
 
 
@@ -392,16 +410,19 @@ Point NurbsCurve::GetPoint( double t ) const
   if ( IsValid() )
   {
     double currentT = FixParametr(t);
+    // находим ненулевой интервал для параметра t
     int span = FindSpan(currentT);
+    // cчитаем на этом интервале базисные функции, помноженные на веса, принадлежащие этому интервалу
     double weightNurbs = CountWeight(span, currentT);
     Point resultPoint( 0.0, 0.0 );
+    // находим значения базисных функций, принадлежащих этому интервалу
     std::vector<double> node = BasicFunctions(span, currentT);
-
+   // находим точку по определеню nurbs - кривой
     for ( int i = 0; i <= degree; i++ )
     {
       resultPoint = resultPoint + poles[span - degree + i] * node[i] * weights[span - degree + i];
     }
-    if ( fabs(weightNurbs) <CommonConstantsMath::NULL_TOL )
+    if ( fabs(weightNurbs) < CommonConstantsMath::NULL_TOL )
       return  Point( std::numeric_limits<double>::max(), std::numeric_limits<double>::max() );
     else
       return Point( resultPoint * ( 1. / weightNurbs) );
@@ -418,7 +439,10 @@ Point NurbsCurve::GetPoint( double t ) const
 // ---
 std::vector<double> NurbsCurve::BasicFunctions( int i, double x) const
 {
-  // считаем ненулевые базисные функции по формуле : N_(i,k)(x) = (x - u_i)/(u(i + k) - u_i) * N_(i, k-1)(x) + (u_(i+k) - x)/(u_(i+k+1) - u_(i+1))*N_(i+1, k-1)(x)  (3)
+  // cчитаем вектор значений базисных функций от x - degree до x по формуле:
+  // triangleNodes_(i - j, r) = left[j + 1]/(right[degree - j]+ left[j + 1]) * triangleNodes_(i-j, r - 1) + (3)
+  //  right[j - 1]/(right[j - 1]+ left[degree -j + 1]) * triangleNodes_(i - j + 1, r - 1)
+  // считаем ненулевые базисные функции по формуле :
   std::vector<double> N( degree + 1, 0. );
   std::vector<double> left( degree + 1, 0. );
   std::vector<double> right( degree + 1, 0. );

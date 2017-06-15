@@ -1,3 +1,5 @@
+#ifndef ELLIPSE_H
+#define ELLIPSE_H
 ////////////////////////////////////////////////////////////////////////////////
 /**
   \file
@@ -5,9 +7,6 @@
 
 */
 ////////////////////////////////////////////////////////////////////////////////
-#ifndef ELLIPSE_H
-#define ELLIPSE_H
-
 #include "Curve.h"
 #include "Point.h"
 #include "Range.h"
@@ -64,7 +63,7 @@ public:
   virtual void               Rotate              ( double alpha );                     ///< Повернуть относительно начала координат на угол alpha.
   virtual void               Scale               ( double xScaling, double yScaling ); ///< Масштабировать на xScaling по оси x, на yScaling по оси у.
   virtual std::vector<Point> GetReferensedPoints () const;                             ///< Вернуть опорные точки, использованные для построения эллипса.
-  virtual bool               IsClosed            () const;
+  virtual bool               IsClosed            () const;                             ///< Эллипс по умолчанию - замкунтая фигура.
   bool                       IsValid             () const;                             ///< Проверить корректность эллипса: считаем, что если оба радиуса не равны нулю, то эллипс корректен.
   double                     GetMajorRadius      () const;                             ///< Вернуть гравный радиус.
   double                     GetMinorRadius      () const;                             ///< Вернуть побочный радиус.

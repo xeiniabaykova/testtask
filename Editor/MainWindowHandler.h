@@ -1,3 +1,5 @@
+#ifndef MAINWINDOWHANDLER_H
+#define MAINWINDOWHANDLER_H
 ////////////////////////////////////////////////////////////////////////////////
 /**
   \file
@@ -5,10 +7,6 @@
 
 */
 ////////////////////////////////////////////////////////////////////////////////
-
-#ifndef MAINWINDOWHANDLER_H
-#define MAINWINDOWHANDLER_H
-
 #include <QtCharts/QChartView>
 #include <QtCharts/QScatterSeries>
 #include <QtCharts/QValueAxis>

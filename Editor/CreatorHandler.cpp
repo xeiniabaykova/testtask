@@ -58,7 +58,6 @@ std::shared_ptr<Math::Curve> CreatorHandler::Create()
       return std::make_shared<Math::GeomPolyline>( points );
        break;
     }
-
     case CreateNURBS:
     {
       std::vector<double> weights;

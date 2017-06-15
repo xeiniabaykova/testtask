@@ -1,13 +1,11 @@
+#ifndef DISPLAYEDCURVE_H
+#define DISPLAYEDCURVE_H
 ////////////////////////////////////////////////////////////////////////////////
 /**
   \file
    Хранение отображаемой кривой: полилиния, опорные точки и series\~
 */
 ////////////////////////////////////////////////////////////////////////////////
-
-#ifndef DISPLAYEDCURVE_H
-#define DISPLAYEDCURVE_H
-
 #include <Math/GeometricPrimitive.h>
 #include <QtCharts/QChart>
 #include <QtCharts/QLineSeries>

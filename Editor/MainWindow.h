@@ -1,3 +1,5 @@
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 ////////////////////////////////////////////////////////////////////////////////
 /**
   \file
@@ -5,15 +7,10 @@
 
 */
 ////////////////////////////////////////////////////////////////////////////////
-
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
 #include <QMainWindow>
 #include <QtCharts/QChartView>
 #include <QActionGroup>
 #include "MainWindowHandler.h"
-
 
 
 class QLabel;
