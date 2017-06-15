@@ -43,6 +43,7 @@ public:
   */
   //---
   CreatorHandler( int theNumExpectedPoits, TypeCurve theType );
+
 private:
   CreatorHandler() = delete;
   CreatorHandler( const CreatorHandler &obj ) = delete;

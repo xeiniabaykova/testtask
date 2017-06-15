@@ -235,7 +235,7 @@ void NurbsCurve::ComputeBasicFunctionD( const double x, const int i, const size_
     int s1 = 0; // строка со значениями коэффициентов на предыдущей итерации
     int s2 = 1; // строка со значениями коэффициентов на текущей итерации
     tempders[0][0] = 1.0;
-    // вычисляем k-ю производную, используя значения, k-1 производной
+    // вычисляем k-ю производную, используя значения k-1 производной
     for ( int k = 1; k <= derivativeOrder; k++ )
     {
       double d = 0.0;
@@ -417,7 +417,7 @@ Point NurbsCurve::GetPoint( double t ) const
     Point resultPoint( 0.0, 0.0 );
     // находим значения базисных функций, принадлежащих этому интервалу
     std::vector<double> node = BasicFunctions(span, currentT);
-   // находим точку по определеню nurbs - кривой
+   // находим точку по определению nurbs - кривой
     for ( int i = 0; i <= degree; i++ )
     {
       resultPoint = resultPoint + poles[span - degree + i] * node[i] * weights[span - degree + i];

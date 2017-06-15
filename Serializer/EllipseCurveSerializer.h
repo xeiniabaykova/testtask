@@ -31,11 +31,11 @@ private:
 public:
   /// Чтение эллипса из потока. Данные читаются в следующем порядке: центр (Point), главный радиус, побочный радиус, угол наклона относительно оси ох.
   /// В случае невалидных данных возвращается пустой примитив.
-  virtual std::unique_ptr<Math::Curve>             Read          ( std::istream& input );///< Чтение эллипса из потока.
+  virtual std::unique_ptr<Math::Curve> Read          ( std::istream& input );///< Чтение эллипса из потока.
   /// Запись эллипса в поток. Данные записываются в следующем порядке: центр (Point), главный радиус, побочный радиус, угол наклона относительно оси ох.
   /// В случае невалидных данных в файл ничего не записывается.
-  virtual void                                     Write         ( std::ostream& output, const Math::Curve& curve );
-  virtual std::string                              GetHeaderName ();///< Получение заголовка примитва эллпипс.
+  virtual void                         Write         ( std::ostream& output, const Math::Curve& curve );
+  virtual std::string                  GetHeaderName ();///< Получение заголовка примитва эллпипс.
 };
 }
 #endif

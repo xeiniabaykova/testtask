@@ -25,13 +25,14 @@ namespace Editor {
 */
 ///////////////////////////////////////////////////////////////////////////////
 class MainWindowHandler {
+  /// Тип состояния приложения
   enum CurrentState
   {
-    StateCreateCurve,
-    StateExpectAction,
-    StateFindIntersecion,
-    StateCreateLine,
-    StopCreatePolyline
+    StateExpectAction,   /// Ожидание действия.
+    StateCreateCurve,    /// Создание кривой.
+    StateFindIntersecion, /// Нахождение пересечения.
+    StateCreateLine,      /// Остановка создания кривой по точкам.
+    StopCreatePolyline    /// Остановка создания кривой.
   };
 
 private:

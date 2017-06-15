@@ -33,6 +33,7 @@ private:
   std::shared_ptr<Math::Curve>        curve;         ///< Геометрическая кривая.
   QValueAxis*                         axisX;         ///< Ось ох.
   QValueAxis*                         axisY;         ///< Ось оy.
+
 public:
   DisplayedObject() = default;
   virtual ~DisplayedObject();
@@ -43,9 +44,11 @@ public:
   */
   //---
   DisplayedObject( std::shared_ptr<Math::Curve> curve,  QValueAxis* axisX,  QValueAxis* axisY );
+
 private:
   DisplayedObject( const DisplayedObject &obj ) = delete;
   DisplayedObject& operator=( DisplayedObject &obj ) = delete;
+
  public:
   void                         AddCurveToChart         ( QChart * chart );                                             ///< Добавить кривую к пространству отрисовки.
   bool                         GetSelectionStatus      ();                                                             ///< Получить информацию о селектированности кривой
