@@ -1,7 +1,7 @@
 #include "CurveSerializer.h"
 
 #include <cinttypes>
-#include <cstdio>
+
 
 namespace Serializer {
 
