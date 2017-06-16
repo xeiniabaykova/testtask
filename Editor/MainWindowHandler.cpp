@@ -21,7 +21,6 @@ MainWindowHandler::MainWindowHandler(QChart * chart):
   state         ( StateExpectAction ),
   selectedColor ( 10, 50, 255 )
 {
-
   CreateChart();
 }
 

@@ -30,7 +30,7 @@ void DisplayedObject::ModifySelectionStatus( Math::Point cursor, double precisio
   curve->GetAsPolyLine( polyline );
   if ( polyline.DistanceToPoint(cursor) < precision )
     selected = !selected;
-  if (selected)
+  if ( selected )
    SetColor( selectedColor );
   else
    SetColor( currentColor );

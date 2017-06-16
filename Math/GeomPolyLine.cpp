@@ -71,7 +71,7 @@ Range GeomPolyline::GetRange() const
 {
 	if (IsValid())
 	{
-		return Range(0.0, referencedPoints.size() - 1);
+    return Range( 0.0, referencedPoints.size() - 1 );
 	}
 	else
 		return Range( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
@@ -162,7 +162,7 @@ void GeomPolyline::Rotate( double alpha )
 	if (IsValid())
 	{
     for ( size_t i = 0; i < referencedPoints.size(); i++ )
-			referencedPoints[i].Rotate(alpha);
+      referencedPoints[i].Rotate( alpha );
 	}
   if ( !IsValid() )
     referencedPoints.clear();

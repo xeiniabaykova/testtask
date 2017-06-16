@@ -46,7 +46,7 @@ void Curve::GetAsPolyLine( GeomPolyline &polyLine, double accuracy ) const
 // ---
 void Curve::FixParameter( double& t ) const
 {
-  Range range = GetRange();
+  const Range range = GetRange();
   if ( IsClosed() )
   {   
     while ( t < range.GetStart() )

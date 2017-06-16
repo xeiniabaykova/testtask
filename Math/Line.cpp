@@ -84,9 +84,9 @@ Vector Line::Get2Derivative( double ) const
 void Line::GetAsPolyLine(GeomPolyline &polyLine, double) const
 {
 	std::vector<Point> points;
-	points.push_back(startPoint);
-	points.push_back(endPoint);
-	polyLine.Init( points);
+  points.push_back( startPoint );
+  points.push_back( endPoint );
+  polyLine.Init( points );
 
 }
 
@@ -151,15 +151,27 @@ std::vector<Point> Line::GetReferensedPoints() const
   return refPoints;
 }
 
+
+//-----------------------------------------------------------------------------
+//  Вернуть начальную точку отрезка.
+// ---
 Point Line::GetStartPoint() const
 {
   return startPoint;
 }
+
+//-----------------------------------------------------------------------------
+//  Вернуть конечную точку отрезка.
+// ---
 Point Line::GetEndPoint() const
 {
   return endPoint;
 }
 
+
+//-----------------------------------------------------------------------------
+//  Вернуть замкунтость отрезка.
+// ---
 bool Line::IsClosed() const
 {
   return false;
@@ -171,19 +183,19 @@ bool Line::IsClosed() const
 // ---
 double Line::DistanceToPoint( Point point ) const
 {
-   Vector v = endPoint - startPoint;
-   Vector w = point - startPoint;
+   const Vector v = endPoint - startPoint;
+   const Vector w = point - startPoint;
 
-   double c1 = v * w;
+   const double c1 = v * w;
    if ( c1 <= 0 )
        return Distance( point, startPoint );
 
-   double c2 = v * v;
+   const double c2 = v * v;
    if ( c2 <= c1 )
        return Distance( point, endPoint );
 
-   double b = c1 / c2;
-   Point Pb = startPoint + v * b;
+   const double b = c1 / c2;
+   const Point Pb = startPoint + v * b;
    return Distance( point, Pb );
 
 }

@@ -52,22 +52,25 @@ std::unique_ptr<Math::Curve> NURBSCurveSerializer::Read( std::istream& theInput 
 // ---
  void NURBSCurveSerializer::Write( std::ostream& theOutput, const Math::Curve& theCurve )
  {
-  const Math::NurbsCurve& nurbsCurve =  static_cast<const Math::NurbsCurve&>( theCurve );
-  const auto poles = static_cast<const Math::NurbsCurve&>( theCurve ).GetPoles();
-  WriteSize_t( theOutput, poles.size() );
-  for ( size_t i = 0; i < poles.size(); i++ )
+  const Math::NurbsCurve* nurbsCurve = static_cast<const Math::NurbsCurve*>( &theCurve );
+  if ( nurbsCurve != nullptr )
   {
-    WritePoint ( theOutput, poles[i] );
-  }
-  const auto weights = static_cast<const Math::NurbsCurve&>( theCurve ).GetWeights();
+    const auto poles = nurbsCurve->GetPoles();
+    WriteSize_t( theOutput, poles.size() );
+    for ( size_t i = 0; i < poles.size(); i++ )
+    {
+      WritePoint ( theOutput, poles[i] );
+    }
+    const auto weights = nurbsCurve->GetWeights();
 
-  WriteSize_t( theOutput, weights.size() );
-  for ( size_t i = 0; i < weights.size(); i++ )
-  {
-    WriteDouble( theOutput, weights[i] );
+    WriteSize_t( theOutput, weights.size() );
+    for ( size_t i = 0; i < weights.size(); i++ )
+    {
+      WriteDouble( theOutput, weights[i] );
+    }
+    WriteSize_t( theOutput,nurbsCurve->Degree() );
+    WriteSize_t( theOutput,nurbsCurve->IsClosed() );
   }
-  WriteSize_t( theOutput,static_cast<const Math::NurbsCurve&> (theCurve).Degree() );
-  WriteSize_t( theOutput,static_cast<const Math::NurbsCurve&> (theCurve).IsClosed() );
 
 }
 }

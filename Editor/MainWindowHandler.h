@@ -59,7 +59,6 @@ private:
 
 public:
 public:
- // void CreatePoint            ();                         ///< создать и отобразить точку
   void CreateLine             ();                              ///< Создать и отобразить отрезок.
   void CreateEllipse          ();                              ///< Создать и отобразить эллипс.
   void CreateCircle           ();                              ///< Создать и отобразить окружность.

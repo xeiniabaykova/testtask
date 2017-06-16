@@ -36,12 +36,15 @@ std::unique_ptr<Math::Curve> PolylineSerializer::Read( std::istream& theInput )
 // ---
  void PolylineSerializer::Write( std::ostream& theOutput, const Math::Curve& theCurve )
  {
-  const Math::GeomPolyline& nurbsCurve =  static_cast<const Math::GeomPolyline&>( theCurve );
-  const auto points= static_cast<const Math::GeomPolyline&>( theCurve ).GetReferensedPoints();
-  WriteSize_t( theOutput, points.size() );
-  for ( size_t i = 0; i < points.size(); i++ )
+  const Math::GeomPolyline* nurbsCurve =  static_cast<const Math::GeomPolyline*>( &theCurve );
+  if ( nurbsCurve != nullptr )
   {
-    WritePoint ( theOutput, points[i] );
+    const auto points = nurbsCurve.GetReferensedPoints();
+    WriteSize_t( theOutput, points.size() );
+    for ( size_t i = 0; i < points.size(); i++ )
+    {
+      WritePoint ( theOutput, points[i] );
+    }
   }
 
 }

@@ -66,10 +66,10 @@ void Vector::Rotate( double alpha )
 {
 	if ( this->IsValid() && !std::isinf(alpha) )
 	{
-    double cosAlpha = cos( alpha );
-    double sinAlpha = sin( alpha );
-		double oldx = x;
-		double oldy = y;
+    const double cosAlpha = cos( alpha );
+    const double sinAlpha = sin( alpha );
+    const double oldx = x;
+    const double oldy = y;
 		x = oldx * cosAlpha - oldy * sinAlpha;
 		y = oldx * sinAlpha + oldy * cosAlpha;
 	}

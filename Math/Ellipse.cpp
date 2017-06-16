@@ -63,12 +63,12 @@ static bool IsCorrectCircleData( Point point1, Point point2 )
 //-----------------------------------------------------------------------------
 // Конструктор Ellipse по двум радиусам и углу наклона отностительно главной оси.
 // ---
-Ellipse::Ellipse(Point thecenter, double ther1, double ther2, double thealpha) :
-	Curve(),
-	center(Point(0.0, 0.0)),
-	r1(0.0),
-	r2(0.0),
-	alpha(0.0)
+Ellipse::Ellipse( Point thecenter, double ther1, double ther2, double thealpha ) :
+  Curve  (  ),
+  center( Point(0.0, 0.0) ),
+  r1    ( 0.0 ),
+  r2    ( 0.0),
+  alpha ( 0.0)
 {
 	if ( ther1 > CommonConstantsMath::NULL_TOL && ther2 > CommonConstantsMath::NULL_TOL )
 	{
@@ -203,7 +203,7 @@ void Ellipse::Translate( double xShift, double yShift )
 {
   if ( IsValid() )
   {
-  center.Translate( xShift, yShift );
+    center.Translate( xShift, yShift );
   }
 }
 
@@ -216,7 +216,7 @@ void Ellipse::Rotate( double alphaAng )
   if ( IsValid() )
   {
 	  center.Rotate( alphaAng );
-      alpha = alpha + alphaAng;
+    alpha = alpha + alphaAng;
   }
 }
 
@@ -305,29 +305,10 @@ std::vector<Point> Ellipse::GetReferensedPoints() const
     std::vector<Point> refPoints;
     refPoints.push_back( center );
     return refPoints;
-  } else
+  }
+  else
     return std::vector<Point>();
 }
-
-
-////-----------------------------------------------------------------------------
-////	 Возращает параметр, преобразованный к области определения параметра [0, 2pi], используя свойство переодичности кривой.
-//// ---
-//double Ellipse::FixedParameter( double t ) const
-//{
-//  if ( IsValid() )
-//  {
-//    Range range = GetRange();
-
-//    while ( t < range.GetStart() )
-//      t += range.GetEnd() - range.GetStart();
-//    while ( t > range.GetEnd() )
-//      t -= range.GetEnd() - range.GetStart();
-//    return t;
-//  }
-//  else
-//    return std::numeric_limits<double>::infinity();
-//}
 
 
 //-----------------------------------------------------------------------------

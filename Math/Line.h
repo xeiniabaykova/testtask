@@ -57,12 +57,12 @@ public:
   virtual void               Translate           ( double xShift, double yShift );         ///< Сдвинуть по осям x, y.
   virtual void               Rotate              ( double alpha );                         ///< Повернуть на угол alpha относительно начала координат.
   virtual void               Scale               ( double xScaling, double yScaling );     ///< Маштабировать по оси х на xScaling, по оси y на yScaling.
-  virtual bool               IsClosed            () const;                                 ///< Отрезок всегда не замкунут.
+  virtual bool               IsClosed            () const;                                 ///< Вернуть замкнутость отрезка. Отрезок всегда не замкунут.
   std::string                GetName             () const;                                 ///< Вернуть имя, используемое при записи отрезка в файл.
-  bool                       IsValid             () const;                                 ///< Проверка на корректность отрезка (начальная и конечная точка не совпадают).
+  bool                       IsValid             () const;                                 ///< Проверить корректность отрезка (начальная и конечная точка не совпадают).
   virtual std::vector<Point> GetReferensedPoints () const;                                 ///< Вернуть опорные точки, использованные для построения отрезка.
   Point                      GetStartPoint       () const;                                 ///< Вернуть начальную точку отрезка.
-  Point                      GetEndPoint         () const;                                 ///< Вернуть начальную точку отрезка.
+  Point                      GetEndPoint         () const;                                 ///< Вернуть конечную точку отрезка.
   double                     DistanceToPoint     ( Point point ) const;                    ///< Вернуть расстояние от точки до прямой.
 
 private:

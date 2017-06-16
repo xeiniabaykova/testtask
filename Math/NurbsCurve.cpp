@@ -109,70 +109,6 @@ NurbsCurve::NurbsCurve( const std::vector<Point>& ppoles, const std::vector<doub
 
 
 //-----------------------------------------------------------------------------
-//  Подсчитать базисную функцию для порядка i и значения парметра x.
-// ---
-//double NurbsCurve::ComputeBasicFunction( double x, int i) const
-//{
-//  double result = 0.;
-//  std::vector<double> N;
-//  N.resize( degree + 1 );
-
-//  // Если считаем базисную функцию нулевого порядка, и x принадлежит параметрическому интервалу, на котором
-//  // функция не равна нулю, то возвращаем 1.
-//  if ( (i == 0 && x == nodes[0]) ||
-//    (i == nodes.size() - degree - 2 && x == nodes[nodes.size() - 1]) )
-//  {
-//    return 1.0;
-//  }
-
-//  // Если считаем базисную функцию нулевого порядка и х не принадлежит параметрическому интервалу, на котором
-//  // функция не равна нулю, то возвращаем 1.
-//  if ( x < nodes[i] || x >= nodes[i + degree + 1] )
-//  {
-//    return 0.0;
-//  }
-
-//  // Заполняем перевый уровень треугольника базисных функций: на интервале, которому принадлежит x, базисная функция равна единице,
-//  // на остальных интервалах базисная функция равна нулю.
-//  for ( size_t j = 0; j <= degree; j++ )
-//  {
-//    if ( x >= nodes[i + j] && x < nodes[i + j + 1] )
-//      N[j] = 1.0;
-//    else
-//      N[j] = 0.0;
-//  }
-//  // Считаем треугольник базисных функций.
-//  for ( size_t k = 1; k <= degree; k++ )
-//  {
-//    double saved = 0.0;
-//    if ( N[0] == 0.0 )
-//      saved = 0.0; // в случае нулевого правого элемента сохраненная сумма равна нулю
-//    else
-//      saved = ( (x - nodes[i]) * N[0]) / (nodes[i + k] - nodes[i] ); // в случае ненулевого правого элемента расчитываем первое слагаемое формулы:
-//    // https://wikimedia.org/api/rest_v1/media/math/render/svg/c3c122619a162127d00e225df14573786778abb6
-//    for ( size_t j = 0; j < degree - k + 1; j++ )
-//    {
-//      const double uLeft = nodes[i + j + 1]; // Запоминаем опорные узлы для формулы
-//      const double uRight = nodes[i + j + k + 1]; //
-//      if ( N[j + 1] == 0.0 ) // если правое левое слагаемое формулы равно нулю
-//      {
-//        N[j] = saved;
-//        saved = 0.0;
-//      }
-//      else
-//      { // если оба слагаемых формулы не равны нулю, высчитываем по ней следующий элемент
-//        double temp = N[j + 1] / ( uRight - uLeft );
-//        N[j] = saved + ( uRight - x ) * temp;
-//        saved = ( x - uLeft ) * temp;
-//      }
-//    }
-//  }
-//  return N[0]; // возвращаем результат
-
-//}
-
-
-//-----------------------------------------------------------------------------
 //  Найти интервал ненулевых базисных функций для парметра x.
 // ---
 size_t NurbsCurve::FindSpan( double x ) const
@@ -368,39 +304,6 @@ double NurbsCurve::CountWeight( size_t k, double x )  const
   }
   return w;
 }
-
-
-////-----------------------------------------------------------------------------
-////  Подсчитать значения производных базисных функций, умноженных на вес на отрезке x - degree.
-//// ---
-//double NurbsCurve::CountWeightD( double x , int span)  const
-//{
-//  double w = 0.0;
-//  std::vector<std::vector<double>> ders;
-//  ComputeBasicFunctionD(t, span, 1, ders);
-//  for ( size_t i = 0; i <= degree; i++ )
-//  {
-//    w += ders[1][i] * weights[span - degree + i];
-//  }
-//  return w;
-//}
-
-
-////-----------------------------------------------------------------------------
-////  Подсчитать значения вторых производных базисных функций, умноженных на вес на отрезке x - degree.
-//// ---
-//double NurbsCurve::CountWeightD2( double x , int span)  const
-//{
-//  double w = 0.0;
-//  std::vector<std::vector<double>> ders;
-//  ComputeBasicFunctionD(t, span, 2, ders);
-//  for ( size_t i = 0; i <= degree; i++ )
-//  {
-
-//    w += ders[2][i] * weights[span - degree + i];
-//  }
-//  return w;
-//}
 
 
 //-----------------------------------------------------------------------------

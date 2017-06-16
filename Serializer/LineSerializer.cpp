@@ -31,8 +31,11 @@ std::unique_ptr<Math::Curve> LineSerializer::Read( std::istream& input )
 // ---
 void LineSerializer::Write( std::ostream& output, const Math::Curve& curve )
 {
-  const Math::Line& lineCurve =  dynamic_cast<const Math::Line&> (curve);
-  WritePoint( output, lineCurve.GetStartPoint() );
-  WritePoint( output, lineCurve.GetEndPoint() );
+  const Math::Line* lineCurve =  dynamic_cast<const Math::Line*>( &curve );
+  if ( lineCurve != nullptr )
+  {
+    WritePoint( output, lineCurve->GetStartPoint() );
+    WritePoint( output, lineCurve->GetEndPoint() );
+  }
 }
 }
