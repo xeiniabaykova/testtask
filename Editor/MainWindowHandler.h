@@ -78,8 +78,6 @@ public:
   void ClearScreen            ();                              ///< Обработать очистку экрана.
   void CreateChart            ();                              ///< Обработать создание экрана.
   void CreateRefPoint         ( Math::Point point );           ///< Отобразить точку, выбранную пользователем.
-  void AddInformationNurbs    ( bool& isClosed, int& degree ); /// Вызвать меню для получения информации о нурбс - кривой.
-
 };
 }
 #endif // MAINWINDOWHANDLER_H

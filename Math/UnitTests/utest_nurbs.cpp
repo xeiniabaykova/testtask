@@ -25,8 +25,8 @@ static std::shared_ptr<NurbsCurve> NurbsWithEqualWeights( bool isClosed )
    std::vector<double> weights {1, 1, 1, 1, 1, 1, 1, 1};
 	std::vector<double> nodes {0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5};
 	std::vector<double> closedNodes {-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-	return isClosed ? std::make_shared<NurbsCurve>( poles, weights, closedNodes, true, 3 )
-									: std::make_shared<NurbsCurve>( poles, weights, nodes, false, 3 );
+	return isClosed ? std::make_shared<NurbsCurve>( poles, weights, true, 3 )
+									: std::make_shared<NurbsCurve>( poles, weights, false, 3 );
 }
 
 static std::shared_ptr<NurbsCurve> NurbsWithNonEqualWeights( bool )
@@ -35,7 +35,7 @@ static std::shared_ptr<NurbsCurve> NurbsWithNonEqualWeights( bool )
 														Point(19., 5.), Point(24.1, 10.), Point(21., -3.), Point(14.3, -0.7), Point(11., 2.)};
   std::vector<double> weights {0.5, 1.5, 0.75, 1.25, 0.35, 1.15, 0.15, 0.85, 1.1, 1.7};
 	std::vector<double> nodes {0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 6, 6, 6, 6};
-	return std::make_shared<NurbsCurve>( poles, weights, nodes, false, 4 );
+	return std::make_shared<NurbsCurve>( poles, weights, false, 4 );
 }
 
 TEST(NurbsEqualWeightsNotClosed, GetPoint)

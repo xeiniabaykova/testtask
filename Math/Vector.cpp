@@ -199,10 +199,10 @@ double Vector::Lenght() const
 //----------------------------------------------------------------------------
 //   Проверить вектора на параллельность.
 // ---
-bool Vector::IsCollinear( Vector vector ) const
+bool Vector::IsCollinear( Vector vector, double accuracy ) const
 {
   // векорное произведение
-  return ( VectorMult(vector) < CommonConstantsMath::NULL_TOL );
+  return ( std::fabs( VectorMult(vector) ) < accuracy );
 
 }
 //----------------------------------------------------------------------------

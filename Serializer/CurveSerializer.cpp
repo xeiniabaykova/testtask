@@ -42,9 +42,9 @@ double CurveSerializer::ReadDouble( std::istream& input ) const
 //-----------------------------------------------------------------------------
 //  Прочитать целочисленное значение из потока.
 // ---
-int CurveSerializer::ReadInt( std::istream& input ) const
+size_t CurveSerializer::ReadSize_t( std::istream& input ) const
 {
-  int value;
+  size_t value;
   input.read( (char*)&value, sizeof value );
   return value;
 }
@@ -62,7 +62,7 @@ void CurveSerializer::WriteDouble( std::ostream& output, double value ) const
 //-----------------------------------------------------------------------------
 //  Записать целочисленное значения в поток.
 // ---
-void CurveSerializer::WriteInt( std::ostream& output, int value ) const
+void CurveSerializer::WriteSize_t( std::ostream& output, size_t value ) const
 {
   output.write( (char*)&value, sizeof(value) );
 }

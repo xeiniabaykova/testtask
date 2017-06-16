@@ -63,7 +63,7 @@ public:
   virtual std::vector<Point> GetReferensedPoints () const;                                 ///< Вернуть опорные точки, использованные для построения отрезка.
   Point                      GetStartPoint       () const;                                 ///< Вернуть начальную точку отрезка.
   Point                      GetEndPoint         () const;                                 ///< Вернуть начальную точку отрезка.
-  double                     DistanceToPoint     ( Point point ) const;                   ///< Вернуть расстояние от точки до прямой.
+  double                     DistanceToPoint     ( Point point ) const;                    ///< Вернуть расстояние от точки до прямой.
 
 private:
   Line( const Line &obj ) = delete;

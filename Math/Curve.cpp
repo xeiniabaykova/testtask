@@ -34,29 +34,32 @@ void Curve::GetAsPolyLine( GeomPolyline &polyLine, double accuracy ) const
     polyLinePoints.push_back( GetPoint(t) );
     t += CountingStep( t, accuracy);
   }
+  if ( !IsEqual(polyLinePoints.back() - GetPoint(GetRange().GetEnd()), Point(0.,0.)) )
+       polyLinePoints.push_back( GetPoint(GetRange().GetEnd()) );
    polyLine.Init( polyLinePoints );
+
 }
 
 
 //-----------------------------------------------------------------------------
 //	Получить по параметру t, паремтр, врходящий в область определения для геоме6трического примитива.
 // ---
-double Curve::FixParametr( double t ) const
+void Curve::FixParameter( double& t ) const
 {
   Range range = GetRange();
-  if ( !IsClosed() )
-  {
-    if ( t < range.GetStart() )
-      t = range.GetStart();
-    if ( t > range.GetEnd() )
-      t = range.GetEnd();
-  } else
-  {
+  if ( IsClosed() )
+  {   
     while ( t < range.GetStart() )
       t += range.Lenght();
     while ( t > range.GetEnd() )
       t -= range.Lenght();
   }
-  return t;
+  else
+  {
+    if ( t < range.GetStart() )
+      t = range.GetStart();
+    if ( t > range.GetEnd() )
+      t = range.GetEnd();
+  }
 }
 }

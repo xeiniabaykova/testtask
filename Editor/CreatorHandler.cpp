@@ -12,7 +12,7 @@
 
 namespace Editor {
 
-CreatorHandler::CreatorHandler( int theNumExpectedPoits, TypeCurve theType ):
+CreatorHandler::CreatorHandler( ptrdiff_t theNumExpectedPoits, TypeCurve theType ):
   numExpectedPoits            ( theNumExpectedPoits ),
   type                        ( theType )
 {
@@ -64,11 +64,11 @@ std::shared_ptr<Math::Curve> CreatorHandler::Create()
       for ( size_t i = 0; i < points.size(); i++ )
         weights.push_back( 1.0 );
 
-      int degree = 3;
+      size_t degree = 3;
       std::vector<double> nodes;
       bool isClosed = false;
       AddInformationNurbs( isClosed, degree ) ;
-      return std::make_shared<Math::NurbsCurve>( points, weights, nodes, isClosed, degree );
+      return std::make_shared<Math::NurbsCurve>( points, weights, isClosed, degree );
       break;
     }
   }
@@ -88,7 +88,7 @@ void CreatorHandler::ClearPoints()
 //-----------------------------------------------------------------------------
 //   Вызвать меню для получения дополнительной информации о нурбс - кривой.(степень, замкнутость)
 // ---
-void CreatorHandler::AddInformationNurbs( bool& isClosed, int& degree )
+void CreatorHandler::AddInformationNurbs( bool& isClosed, size_t& degree ) const
 {
   QDialog * d = new QDialog();
   QVBoxLayout * vbox = new QVBoxLayout();

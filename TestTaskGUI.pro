@@ -45,7 +45,8 @@ SOURCES += main.cpp\
     Math/Curve.cpp \
     Serializer/Serializer.cpp \
     Serializer/EllipseCurveSerializer.cpp \
-    Serializer/NURBSCurveSerializer.cpp
+    Serializer/NURBSCurveSerializer.cpp \
+    Serializer/PolylineSerializer.cpp
 
 HEADERS  += Editor/MainWindow.h \
     Editor/FileIO.h \
@@ -70,7 +71,8 @@ HEADERS  += Editor/MainWindow.h \
     Math/Curve.h \
     Serializer/Serializer.h \
     Serializer/EllipseCurveSerializer.h \
-    Serializer/NURBSCurveSerializer.h
+    Serializer/NURBSCurveSerializer.h \
+    Serializer/PolylineSerializer.h
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../Qt/5.8/msvc2015_64/lib/ -lQt5Charts

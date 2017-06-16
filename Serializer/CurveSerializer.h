@@ -32,15 +32,15 @@ private:
   CurveSerializer& operator=( CurveSerializer &obj ) = delete;
 
 public:
-  virtual std::unique_ptr<Math::Curve> Read        ( std::istream& theInput ) = 0; ///< Чтение геометрического примитива из потока.
-  /// Запись геометрического примитва в поток.
+  virtual std::unique_ptr<Math::Curve> Read        ( std::istream& theInput ) = 0; ///< Прочитать геометрический примитив из потока.
+  /// Записать геометрический примитив в поток.
   virtual void                         Write       ( std::ostream& theOutput, const Math::Curve& theCurve ) = 0;
-  Math::Point                          ReadPoint   ( std::istream& input ) const;                            ///< Чтение точки из потока.
-  void                                 WritePoint  ( std::ostream& output, const Math::Point& point ) const; ///< Запись точки в поток.
-  double                               ReadDouble  ( std::istream& input ) const;                            ///< Чтение числа с плавающей запятой из потока.
-  int                                  ReadInt     ( std::istream& input ) const;                            ///< Чтение целочисленного значения из потока.
-  void                                 WriteInt    ( std::ostream& output, int value ) const;                ///< Запись целочисленного значения в поток.
-  void                                 WriteDouble ( std::ostream& otutput, double value ) const;            ///< Запись числа с плавающей запятой в поток.
+  Math::Point                          ReadPoint   ( std::istream& input ) const;                            ///< Прочитать точку из потока.
+  void                                 WritePoint  ( std::ostream& output, const Math::Point& point ) const; ///< Записать точку в поток.
+  double                               ReadDouble  ( std::istream& input ) const;                            ///< Прочитать число с плавающей запятой из потока.
+  size_t                               ReadSize_t  ( std::istream& input ) const;                            ///< Прочитать целочисленное значение из потока.
+  void                                 WriteSize_t ( std::ostream& output, size_t value ) const;                ///< Записать целочисленное значение в поток.
+  void                                 WriteDouble ( std::ostream& otutput, double value ) const;            ///< Записать число с плавающей запятой в поток.
 };
 
 }

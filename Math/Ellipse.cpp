@@ -23,7 +23,7 @@ static bool IsCirclePoints( Point point1, Point point2, Point point3 )
 //-----------------------------------------------------------------------------
 //  Проверка нахождения трех точек на одной линии.
 // ---
-static bool PointsOneLine( Point point1, Point point2, Point point3 )
+static bool IsPointsOneLine( Point point1, Point point2, Point point3 )
 {
   return ( Vector(point1 - point2).IsCollinear(Vector(point2 - point3)) );
 }
@@ -32,12 +32,12 @@ static bool PointsOneLine( Point point1, Point point2, Point point3 )
 //-----------------------------------------------------------------------------
 // Проверка правильности данных для построения эллипса.
 // ---
-static bool CorrectEllipseData( Point point1, Point point2, Point point3 )
+static bool IsCorrectEllipseData( Point point1, Point point2, Point point3 )
 {
   return  !( (IsEqual(point1, point2)  ||
               IsEqual(point2, point3)  ||
               IsEqual(point1, point3)) ||
-              (PointsOneLine(point1, point2, point3)) );
+              (IsPointsOneLine(point1, point2, point3)) );
 
 }
 
@@ -45,7 +45,7 @@ static bool CorrectEllipseData( Point point1, Point point2, Point point3 )
 //-----------------------------------------------------------------------------
 // Проверка правильности данных для построения окружности.
 // ---
-static bool CorrectCircleData( Point point1, Point point2 )
+static bool IsCorrectCircleData( Point point1, Point point2 )
 {
   return !( IsEqual(point1, point2) );
 }
@@ -92,43 +92,38 @@ Ellipse::Ellipse ( const std::vector<Point>& points ):
 	// если точки 2, то это - окружность, создаем окружность
   if ( points.size() == 2 )
   {
-    if ( CorrectCircleData(points[0], points[1]) )
+    if ( IsCorrectCircleData(points[0], points[1]) )
     {
-		center = points[0];
-    Point pointV( points[1] );
-    Vector v = pointV - center;
-    double r = v.Lenght();
-		r1 = r;
-		r2 = r;
-		alpha = 0;
+      center = points[0];
+      const Vector v = points[1] - center;
+      const double r = v.Lenght();
+      r1 = r;
+      r2 = r;
+      alpha = 0;
     }
   }
   else if ( points.size() >= 3 )
   {
-    if ( CorrectEllipseData(points[0], points[1], points[2]) )
+    if ( IsCorrectEllipseData(points[0], points[1], points[2]) )
 	  {
-      // комментарии
 		  center = points[0];
-      Point pointV( points[1] );
-		  double x = pointV.GetX() - center.GetX();
-		  double y = pointV.GetY() - center.GetY();
-      double axisA = sqrt( x * x + y * y );
-      alpha = atan2( y, x );
-		  r1 = axisA;
-      //vector
+      // вектор главной оси эллипса
+      const Vector v  = points[1] - center;
+      // угол наклона между главной осью эллипса и осью ох
+      alpha = atan2( v.GetY(), v.GetX() );
+      r1 = v.Lenght();
+
       Point newCoordPoint (std::fabs((points[2] - center).GetX()), std::fabs((points[2] - center).GetY()));
       newCoordPoint.Rotate( alpha );
 
-      double axisB = ( sqrt(fabs((newCoordPoint.GetY()) * (newCoordPoint.GetY()) /
+      r2 = ( sqrt(fabs((newCoordPoint.GetY()) * (newCoordPoint.GetY()) /
         (1 - (newCoordPoint.GetX()) * (newCoordPoint.GetX()) / (r1 * r1)))) );
-		  r2 = axisB;
 	  }
     else if ( IsCirclePoints(points[0], points[1], points[2]) )
 	  {
-      double r = Distance( points[0], points[1] );
 		  center = points[0];
 		  alpha = 0;
-		  r1 = r2 = r;
+      r1 = r2 = Distance( points[0], points[1] );
 	  }
   
   }
@@ -142,9 +137,8 @@ Point Ellipse::GetPoint( double t ) const
 {
   if ( IsValid() )
   {
-    double tcurrent = FixParametr( t );
-
-    Point point( r1 * cos(tcurrent), r2 * sin(tcurrent) );
+    FixParameter( t );
+    Point point( r1 * cos(t), r2 * sin(t) );
     point.Rotate( alpha );
     return center + point;
   }
@@ -175,12 +169,12 @@ Vector Ellipse::GetDerivative( double t ) const
 {
   if ( IsValid() )
 	{
-    double tcurrent = FixParametr( t );
-    Vector vector( r1 * -sin(tcurrent), r2 * cos(tcurrent) );
+    FixParameter( t );
+    Vector vector( r1 * -sin(t), r2 * cos(t) );
     vector.Rotate( alpha );
 		return vector;
 	}
-	else
+  else
     return Vector(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
@@ -192,12 +186,12 @@ Vector Ellipse::Get2Derivative( double t ) const
 {
   if ( IsValid() )
 	{
-    double tcurrent = FixParametr( t );
-    Vector vector( -r1 * cos(tcurrent), -r2 * sin(tcurrent) );
+    FixParameter( t );
+    Vector vector( -r1 * cos(t), -r2 * sin(t) );
     vector.Rotate( alpha );
 		return vector;
 	}
-	else
+  else
     Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
@@ -336,6 +330,10 @@ std::vector<Point> Ellipse::GetReferensedPoints() const
 //}
 
 
+//-----------------------------------------------------------------------------
+//  Вернуть опорные точки, использованные для построения эллипса.
+//  Это точка центра.
+// ---
 bool Ellipse::IsClosed() const
 {
 	return true;

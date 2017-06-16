@@ -110,7 +110,22 @@ Point Point::operator * (double param) const
   if ( IsValid() )
   {
     return Point( x * param, y * param);
-  } else
+  }
+  else
+    return Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
+}
+
+
+//-----------------------------------------------------------------------------
+// Разделить точку на скаляр.
+// ---
+Point Point::operator / (double param) const
+{
+  if ( IsValid() && fabs(param) > CommonConstantsMath::NULL_TOL  )
+  {
+    return Point( x / param, y / param);
+  }
+  else
     return Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
 }
 
@@ -123,7 +138,8 @@ Vector Point::operator - (Point point) const
   if ( IsValid() && point.IsValid() )
   {
     return Vector( x - point.GetX(), y - point.GetY() );
-  } else
+  }
+  else
     return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
 }
 
@@ -136,7 +152,8 @@ Point Point::operator + ( Point point ) const
   if ( IsValid() && point.IsValid() )
   {
     return Point( x + point.GetX(), y + point.GetY());
-  } else
+  }
+  else
     return Point( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
@@ -149,7 +166,8 @@ Point Point::operator + ( Vector vector ) const
   if ( IsValid() && vector.IsValid() )
   {
     return Point( x + vector.GetX(), y + vector.GetY() );
-  } else
+  }
+  else
     return Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
@@ -163,6 +181,17 @@ Point Point::operator = ( Point point )
   y = point.GetY();
   return *this;
 }
+
+//-----------------------------------------------------------------------------
+//  Присвоить к текущей точке другую точку.
+// ---
+Point Point::operator += ( Point point )
+{
+  x += point.x;
+  y += point.y;
+  return *this;
+}
+
 
 
 //-----------------------------------------------------------------------------
@@ -201,3 +230,5 @@ bool IsEqual( Point point1, Point point2 )
     && fabs(point1.GetY() - point2.GetY()) < CommonConstantsMath::NULL_TOL );
 }
 }
+
+

@@ -38,14 +38,14 @@ private:
 public:
   template<typename FormattedSerializer>
   void                                      RegisterSerializer (); ///< Добавить читатели/писатели для всех типов кривых.
-  /// Чтение кривой из потока. Читается заголовок, затем вызывается нужный читатель для типа.
-  std::unique_ptr<Math::Curve>              Read               ( std::istream& theStream );
-  /// Запись кривой в поток. Сначала записывается заголовок, затем вызывается нужный писатель для типа.
-  void                                      Write              ( std::ofstream& theStream, const Math::Curve& aCurve );
-  /// Чтение кривых из потока. Файл открывается в бинарном формате, кривые читаются в порядке нахождения в файле.
-  std::vector<std::shared_ptr<Math::Curve>> ReadCurves         ( std::string theFileName );
-  ///Запись кривых в поток. Файл открывается в бинарном формате, кривые записываеются в порядке нахождения в curves.
-  void                                      WriteCurves        ( const std::vector<std::shared_ptr<Math::Curve>>& theCurves,std::string theFileName );
+  /// Прочитать кривую из потока. Прочитать заголовок, затем вызывается нужный читатель для типа.
+  std::unique_ptr<Math::Curve>              Read               ( std::istream& theStream ) const;
+  /// Записать кривую в поток. Сначала записывается заголовок, затем вызывается нужный писатель для типа.
+  void                                      Write              ( std::ofstream& theStream, const Math::Curve& aCurve ) const;
+  /// Прочитать кривые из потока. Файл открывается в бинарном формате, кривые читаются в порядке нахождения в файле.
+  std::vector<std::shared_ptr<Math::Curve>> ReadCurves         ( std::string theFileName ) const;
+  ///Записать кривые в поток. Файл открывается в бинарном формате, кривые записываеются в порядке нахождения в curves.
+  void                                      WriteCurves        ( const std::vector<std::shared_ptr<Math::Curve>>& theCurves,std::string theFileName ) const;
 
 };
 }

@@ -16,8 +16,11 @@ static bool IsCorrectPolylineData( const std::vector<Point>& points )
   if ( points.size() == 2 && IsEqual(points[0], points[1]) )
 	  return false;
   for ( size_t i = 0; i < points.size() - 2; i++ )
-    if (IsEqual(points[i], points[i+2]))
+    if ( IsEqual(points[i], points[i+2]) || IsEqual(points[i], points[i+1]) )
       return false;
+  // две последние точки обрабатываем отдельно, проверяем что они не совпадают
+  if ( IsEqual(points[points.size() - 1], points[points.size() - 2]) )
+    return false;
   return true;
 }
 }
@@ -82,16 +85,17 @@ Point GeomPolyline::GetPoint( double t ) const
 {
 	if ( IsValid() ) 
 	{
-    double tcurrent = FixParametr(t);
-		double leftParam = 0.0;
-    tcurrent = std::modf( tcurrent, &leftParam );
+    FixParameter(t);
+    double leftParam = 0.0;
+    t = std::modf( t, &leftParam );
+    leftParam = static_cast<size_t>( leftParam );
     if ( leftParam >= referencedPoints.size() - 1 )
 		{
       return  Point( referencedPoints[referencedPoints.size() - 1] );
 		}
 		Point startPoint( referencedPoints[leftParam] );
 		Vector derection = referencedPoints[leftParam + 1] - referencedPoints[leftParam];
-    return startPoint + derection * tcurrent;
+    return startPoint + derection * t;
 	}
 	else
 		return Point( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
@@ -105,9 +109,10 @@ Vector GeomPolyline::GetDerivative( double t ) const
 {
   if ( IsValid() )
 	{
-    double tcurrent = FixParametr( t );
+    FixParameter( t );
 		double leftParam = 0.0;
-    std::modf( tcurrent, &leftParam );
+    std::modf( t, &leftParam );
+    leftParam = static_cast<size_t>( leftParam );
     if ( leftParam >= referencedPoints.size() - 1 )
 		{
       return  ( referencedPoints[referencedPoints.size() - 1] - referencedPoints[referencedPoints.size() - 2] );
@@ -185,15 +190,14 @@ void GeomPolyline::Scale( double xScaling, double yScaling )
 double GeomPolyline::DistanceToPoint ( Point point ) const
 {
   double minDistance = std::numeric_limits<double>::max();
+  double currentDistance = std::numeric_limits<double>::max();
 	if ( IsValid() )
 	{
-    for ( size_t j = 1; j < referencedPoints.size(); j++ )
+    for ( size_t j = 1; j < referencedPoints.size() && currentDistance > CommonConstantsMath::NULL_TOL; j++ )
 		{
-      double currentDistance = Line( referencedPoints[j - 1], referencedPoints[j]).DistanceToPoint( point );
+      currentDistance = Line( referencedPoints[j - 1], referencedPoints[j]).DistanceToPoint( point );
       if ( currentDistance < minDistance )
 				minDistance = currentDistance;
-      if ( currentDistance <CommonConstantsMath::NULL_TOL )
-        break;
 		}		
 	}
   return minDistance;
@@ -214,11 +218,12 @@ bool GeomPolyline::IsValid() const
 // ---
 std::vector<Point> GeomPolyline::GetReferensedPoints() const
 {
+  std::vector<Point> refPoints;
   if ( IsValid() )
 	{
-		std::vector<Point> refPoints = referencedPoints;
-		return refPoints;
+    refPoints = referencedPoints;
 	}
+  return refPoints;
 }
 
 
@@ -242,9 +247,13 @@ std::string GeomPolyline::GetName() const
   return "Polyline";
 }
 
+
+//-----------------------------------------------------------------------------
+//  Вернуть имя, используемое при записи полилинии в файл.
+// ---
 bool GeomPolyline::IsClosed() const
 {
-  return ( std::fabs(Distance(referencedPoints[referencedPoints.size() - 2], referencedPoints[referencedPoints.size() - 1]))
+  return ( Distance(referencedPoints[referencedPoints.size() - 1], referencedPoints[0])
       < CommonConstantsMath::NULL_TOL );
 }
 }

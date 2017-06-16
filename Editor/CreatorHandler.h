@@ -33,7 +33,7 @@ public:
   TypeCurve      type; ///< Хранение типа созаваемой кривой.
 
 private:
-  int                      numExpectedPoits; ///< Количество точек, необходимых для создания геометрического примитива.
+  ptrdiff_t                numExpectedPoits; ///< Количество точек, необходимых для создания геометрического примитива.
   std::vector<Math::Point> points;           ///< Точки, полученные с экрана.
 
 public:
@@ -42,7 +42,7 @@ public:
       \param[in]  creator - указатель на создателя геометрического примитива\~
   */
   //---
-  CreatorHandler( int theNumExpectedPoits, TypeCurve theType );
+  CreatorHandler( ptrdiff_t theNumExpectedPoits, TypeCurve theType );
 
 private:
   CreatorHandler() = delete;
@@ -54,7 +54,7 @@ public:
   bool                            IsSufficientNum     () const;                        ///< Проверить, достаточно ли текущее количество точек для создания и отображения выбранной кривой.
   std::shared_ptr<Math::Curve>    Create              ();                              ///< Создать геометрический примитив.
   void                            ClearPoints         ();                              ///< Очистить массив точек, полученных с экрана.
-  void                            AddInformationNurbs ( bool& isClosed, int& degree ); ///< Вызвать меню для получения информации о нурбс - кривой.
+  void                            AddInformationNurbs ( bool& isClosed, size_t& degree ) const; ///< Вызвать меню для получения информации о нурбс - кривой.
 };
 }
 #endif // CREATORHANDLER_H

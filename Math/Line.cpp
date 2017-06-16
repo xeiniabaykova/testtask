@@ -54,9 +54,9 @@ Range Line::GetRange() const
 // ---
 Point Line::GetPoint( double t ) const
 {
-  double tcurrent = FixParametr( t );
+  FixParameter( t );
   Vector direction = endPoint - startPoint;
-  return startPoint + direction * tcurrent;
+  return startPoint + direction * t;
 }
 
 

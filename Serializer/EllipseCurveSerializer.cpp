@@ -31,9 +31,11 @@ std::unique_ptr<Math::Curve> EllipseCurveSerializer::Read( std::istream& input )
 // ---
 void EllipseCurveSerializer::Write( std::ostream& output, const Math::Curve& curve )
 {
-  WritePoint( output, dynamic_cast<const Math::Ellipse&>(curve).GetCenter() );
-  WriteDouble( output, dynamic_cast<const Math::Ellipse&>(curve).GetMajorRadius() );
-  WriteDouble( output, dynamic_cast<const Math::Ellipse&>(curve).GetMinorRadius() );
-  WriteDouble( output, dynamic_cast<const Math::Ellipse&>(curve).GetAlpha() );
+  const Math::Ellipse& ellipseCurve = dynamic_cast<const Math::Ellipse&>(curve);
+  WritePoint( output, ellipseCurve.GetCenter() );
+  WriteDouble( output, ellipseCurve.GetMajorRadius() );
+  WriteDouble( output, ellipseCurve.GetMinorRadius() );
+  WriteDouble( output, ellipseCurve.GetAlpha() );
+
 }
 }

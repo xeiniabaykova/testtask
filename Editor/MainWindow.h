@@ -69,7 +69,7 @@ protected:
 public:
   void mousePressEvent     ( QMouseEvent *event );  ///< Обработать событие клика мышкой.
 
-  void resizeEvent         ( QResizeEvent *event);   ///< Обработчик события изменения размера экрана.
+  void resizeEvent         ( QResizeEvent *event);   ///< Обработать события изменения размера экрана.
   void CreateActions       ();                      ///< Создать события.
   void CreateMenus         ();                      ///< Создать меню
 
