@@ -462,3 +462,20 @@ TEST( Ellipse, ScaleRotated )
   EXPECT_NEAR( gabarits[0] * 2, gabarits[2], 0.5 );
   EXPECT_NEAR( gabarits[1], gabarits[3], 0.5 );
 }
+
+
+TEST( Ellipse, ScaleUnscale )
+{
+  const double r1 = 2.0, r2 = 1.0, alpha = Math::CommonConstantsMath::PI / 6.0;
+  Ellipse ellipse( Point(), r1, r2, alpha );
+  ASSERT_TRUE( ellipse.IsValid() );
+  const double scaleF = 2.0, rScaleF = 1.0 / scaleF;
+  ellipse.Scale( scaleF, 1.0 );
+  ellipse.Scale( rScaleF, 1.0 );
+
+  const double tol = 1e-5;
+
+  EXPECT_NEAR( ellipse.GetMajorRadius(), r1, tol );
+  EXPECT_NEAR( ellipse.GetMinorRadius(), r2, tol );
+  EXPECT_NEAR( ellipse.GetAlpha(), alpha, tol );
+}
