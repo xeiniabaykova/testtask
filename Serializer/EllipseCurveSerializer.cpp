@@ -20,8 +20,7 @@ std::unique_ptr<Math::Curve> EllipseCurveSerializer::Read( std::istream& input )
   Math::Point center = ReadPoint( input );
   double radius1 = ReadDouble( input );
   double radius2 = ReadDouble( input );
-  double alpha = ReadDouble( input );
-  return std::make_unique<Math::Ellipse>( center, radius1, radius2, alpha );
+  return std::make_unique<Math::Ellipse>( center, radius1, radius2);
 }
 
 
@@ -37,7 +36,6 @@ void EllipseCurveSerializer::Write( std::ostream& output, const Math::Curve& cur
     WritePoint( output, ellipseCurve->GetCenter() );
     WriteDouble( output, ellipseCurve->GetMajorRadius() );
     WriteDouble( output, ellipseCurve->GetMinorRadius() );
-    WriteDouble( output, ellipseCurve->GetAlpha() );
   }
 
 }

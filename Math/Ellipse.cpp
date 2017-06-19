@@ -65,17 +65,21 @@ static bool IsCorrectCircleData( Point point1, Point point2 )
 // ---
 Ellipse::Ellipse( Point thecenter, double ther1, double ther2, double thealpha ) :
   Curve  (  ),
-  center( Point(0.0, 0.0) ),
-  r1    ( 0.0 ),
-  r2    ( 0.0),
-  alpha ( 0.0)
+  center ( Point(0.0, 0.0) ),
+  r1     ( 0.0 ),
+  r2     ( 0.0),
+  axisX  ( 0.0, 0.0 ),
+  axisY  ( 0.0, 0.0 )
 {
 	if ( ther1 > CommonConstantsMath::NULL_TOL && ther2 > CommonConstantsMath::NULL_TOL )
 	{
 		r1 = ther1;
 		r2 = ther2;
 		center = thecenter;
-		alpha = thealpha;
+        axisX = Vector( center.GetX() + r1, center.GetY() );
+        axisX.Rotate( thealpha );
+        axisY = Vector( center.GetX(),  center.GetY() + r2 );
+        axisY.Rotate( thealpha + CommonConstantsMath::PI/2. );
 	}		
 }
 
@@ -87,7 +91,8 @@ Ellipse::Ellipse ( const std::vector<Point>& points ):
   center ( Point(0.0,0.0) ),
   r1     ( 0.0 ),
   r2     ( 0.0 ),
-  alpha  ( 0.0 )
+  axisX  ( 0.0, 0.0 ),
+  axisY  ( 0.0, 0.0 )
 {  
 	// если точки 2, то это - окружность, создаем окружность
   if ( points.size() == 2 )
@@ -95,35 +100,37 @@ Ellipse::Ellipse ( const std::vector<Point>& points ):
     if ( IsCorrectCircleData(points[0], points[1]) )
     {
       center = points[0];
-      const Vector v = points[1] - center;
-      const double r = v.Lenght();
+      axisX = points[1] - center;
+      const double r = axisX.Lenght();
       r1 = r;
       r2 = r;
-      alpha = 0;
     }
   }
   else if ( points.size() >= 3 )
   {
     if ( IsCorrectEllipseData(points[0], points[1], points[2]) )
 	  {
-		  center = points[0];
+      center = points[0];
       // вектор главной оси эллипса
-      const Vector v  = points[1] - center;
-      // угол наклона между главной осью эллипса и осью ох
-      alpha = atan2( v.GetY(), v.GetX() );
-      r1 = v.Lenght();
+      axisX = points[1] - center;
+      double alpha = atan2( axisY.GetY(), axisX.GetX() );
+      r1 = axisX.Lenght();
 
-      Point newCoordPoint (std::fabs((points[2] - center).GetX()), std::fabs((points[2] - center).GetY()));
+      Point newCoordPoint( std::fabs((points[2] - center).GetX()), std::fabs((points[2] - center).GetY()) );
       newCoordPoint.Rotate( alpha );
 
       r2 = ( sqrt(fabs((newCoordPoint.GetY()) * (newCoordPoint.GetY()) /
         (1 - (newCoordPoint.GetX()) * (newCoordPoint.GetX()) / (r1 * r1)))) );
+      Point coordPointMinorAxis( r2 * cos(180. - alpha ), r2 * sin(180. - alpha) );
+      axisY = center - coordPointMinorAxis;
 	  }
     else if ( IsCirclePoints(points[0], points[1], points[2]) )
 	  {
-		  center = points[0];
-		  alpha = 0;
-      r1 = r2 = Distance( points[0], points[1] );
+          center = points[0];
+          axisX = points[1] - center;
+          axisY = axisX;
+          axisY.Rotate( atan2(axisX.GetX(), axisX.GetY()) + CommonConstantsMath::PI );
+          r1 = r2 = Distance( points[0], points[1] );
 	  }
   
   }
@@ -138,9 +145,9 @@ Point Ellipse::GetPoint( double t ) const
   if ( IsValid() )
   {
     FixParameter( t );
-    Point point( r1 * cos(t), r2 * sin(t) );
-    point.Rotate( alpha );
-    return center + point;
+    Vector vector = axisX * r1 * cos(t) + axisY *  r2 * sin(t);
+
+    return center + vector;
   }
   else
     Point( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
@@ -157,7 +164,7 @@ Range Ellipse::GetRange() const
 	{
 	  return Range( 0.0, 2.0 * CommonConstantsMath::PI );
 	}
-	else
+  else
     Range( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
@@ -169,10 +176,9 @@ Vector Ellipse::GetDerivative( double t ) const
 {
   if ( IsValid() )
 	{
-    FixParameter( t );
-    Vector vector( r1 * -sin(t), r2 * cos(t) );
-    vector.Rotate( alpha );
-		return vector;
+        FixParameter( t );
+        Vector vector = axisX * r1 * -sin(t) + axisY *  r2 * cos(t);
+            return vector;
 	}
   else
     return Vector(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
@@ -186,10 +192,9 @@ Vector Ellipse::Get2Derivative( double t ) const
 {
   if ( IsValid() )
 	{
-    FixParameter( t );
-    Vector vector( -r1 * cos(t), -r2 * sin(t) );
-    vector.Rotate( alpha );
-		return vector;
+      FixParameter( t );
+      Vector vector = axisX * r1 * -cos(t) + axisY *  r2 * -sin(t);
+        return vector;
 	}
   else
     Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
@@ -216,7 +221,8 @@ void Ellipse::Rotate( double alphaAng )
   if ( IsValid() )
   {
 	  center.Rotate( alphaAng );
-    alpha = alpha + alphaAng;
+      axisX.Rotate( alphaAng );
+      axisY.Rotate( alphaAng );
   }
 }
 
@@ -228,14 +234,9 @@ void Ellipse::Scale( double xScaling, double yScaling )
 {
   if ( IsValid() )
   {	
-    Vector R1( cos(alpha), sin(alpha) );
-    Vector R2( -sin(alpha), cos( alpha) );
 	  center.Scale( xScaling, yScaling );
-	  R1.Scale( xScaling, yScaling );
-	  R2.Scale( xScaling, yScaling );
-    r1 *= R1.Lenght();
-    r2 *= R2.Lenght();
-    alpha = atan2( R1.GetY(), R1.GetX() );
+      axisX.Scale( xScaling, yScaling );
+      axisY.Scale( xScaling, yScaling );
   }
 }
 
@@ -273,15 +274,6 @@ double Ellipse::GetMajorRadius() const
 double Ellipse::GetMinorRadius() const
 {
   return r2;
-}
-
-
-//-----------------------------------------------------------------------------
-//  Вернуть угол наклона относительно оси ох.
-// ---
-double Ellipse::GetAlpha() const
-{
-  return alpha;
 }
 
 

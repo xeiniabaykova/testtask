@@ -25,8 +25,8 @@ public:
   virtual ~PolylineSerializer() = default;
 
 private:
-  PolylineSerializer( const LineSerializer &obj ) = delete;
-  PolylineSerializer& operator=( LineSerializer &obj ) = delete;
+  PolylineSerializer( const PolylineSerializer &obj ) = delete;
+  PolylineSerializer& operator=( PolylineSerializer &obj ) = delete;
 
 public:
   /// Чтение полилинии из потока. Данные читаются в следующем порядке: количество точек, точки (Point).
