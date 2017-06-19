@@ -311,4 +311,9 @@ bool Ellipse::IsClosed() const
 {
 	return true;
 }
+
+double Ellipse::GetAlpha() const
+{
+  return alpha;
+}
 }
