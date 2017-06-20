@@ -22,24 +22,26 @@ Point::Point( double theX, double theY):
 // ---
 Point::Point(const Point& point):
   GeometricPrimitive(),
-  x(0),
-  y(0)
+  x                 (0),
+  y                 (0)
 {
 	x = point.GetX();
 	y = point.GetY();
 }
+
 
 //----------------------------------------------------------------------------
 //  Коструктор создания точки из вектора.
 // ---
 Point::Point(const Vector& vector):
   GeometricPrimitive(),
-  x(0),
-  y(0)
+  x                 (0),
+  y                 (0)
 {
   x = vector.GetX();
   y = vector.GetY();
 }
+
 
 //----------------------------------------------------------------------------
 //  Сдвинуть по осям x, y.

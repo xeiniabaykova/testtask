@@ -36,13 +36,14 @@ static double Bin( size_t n, size_t k )
 //  Примитивная проверка для корректности данных длшя nurbs - кривой.
 // ---
 static bool IsCorrectNurbs( const std::vector<Point>& ppoles, const std::vector<double>& wweights,
-                            bool iisClosed, size_t ddegree )
+                           size_t ddegree )
 {
   return !( ppoles.size() == 0 && ppoles.size() != wweights.size()
       && ppoles.size() < static_cast<size_t>(ddegree - 1) );
 
 }
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -69,7 +70,7 @@ NurbsCurve::NurbsCurve( const std::vector<Point>& ppoles, const std::vector<doub
   degree   ()
 {
 
-  if ( (IsCorrectNurbs(ppoles, wweights, iisClosed, ddegree)) )
+  if ( (IsCorrectNurbs(ppoles, wweights, ddegree)) )
   {
     poles = ppoles;
     weights = wweights;
@@ -86,16 +87,19 @@ NurbsCurve::NurbsCurve( const std::vector<Point>& ppoles, const std::vector<doub
       {
         nodes.push_back( -static_cast<std::ptrdiff_t>(i) );
       }
-      for ( size_t i = 0; i <= ppoles.size() + degree ; ++i ) {
+      for ( size_t i = 0; i <= ppoles.size() + degree ; ++i )
+      {
         nodes.push_back( i );
       }
-      } else
-      {
-        for ( size_t i = 0; i < degree + 1; ++i ) {
+    } else
+    {
+        for ( size_t i = 0; i < degree + 1; ++i )
+        {
           nodes.push_back( 0. );
         }
         double node = 1.;
-        for ( size_t i = 0; i < static_cast<size_t>( ppoles.size() - degree - 1 ); ++i ) {
+        for ( size_t i = 0; i < static_cast<size_t>( ppoles.size() - degree - 1 ); ++i )
+        {
           nodes.push_back( node );
           node += 1.;
         }
@@ -103,7 +107,7 @@ NurbsCurve::NurbsCurve( const std::vector<Point>& ppoles, const std::vector<doub
           nodes.push_back( node );
         }
 
-      }
+     }
 
   }
 }
@@ -332,7 +336,7 @@ Point NurbsCurve::GetPoint( double t ) const
   }
   else
     return
-        Point( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
+      Point( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 

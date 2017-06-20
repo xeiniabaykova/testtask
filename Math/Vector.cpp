@@ -66,12 +66,12 @@ void Vector::Rotate( double alpha )
 {
 	if ( this->IsValid() && !std::isinf(alpha) )
 	{
-    const double cosAlpha = cos( alpha );
-    const double sinAlpha = sin( alpha );
-    const double oldx = x;
-    const double oldy = y;
-		x = oldx * cosAlpha - oldy * sinAlpha;
-		y = oldx * sinAlpha + oldy * cosAlpha;
+      const double cosAlpha = cos( alpha );
+      const double sinAlpha = sin( alpha );
+      const double oldx = x;
+      const double oldy = y;
+      x = oldx * cosAlpha - oldy * sinAlpha;
+      y = oldx * sinAlpha + oldy * cosAlpha;
 	}
 }
 
@@ -99,10 +99,10 @@ Vector Vector::operator * ( double param  ) const
 {
 	if ( this->IsValid() && !std::isinf(param) )
 	{
-		return Vector(x * param, y * param);
+      return Vector(x * param, y * param);
 	}
 	else
-		return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
+      return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
@@ -114,10 +114,10 @@ Vector Vector::operator - ( Vector vector ) const
 {
 	if (vector.IsValid() && this->IsValid())
 	{
-		return Vector(x - vector.GetX(), y - vector.GetY());
+      return Vector(x - vector.GetX(), y - vector.GetY());
 	}
 	else
-		return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
+      return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
@@ -129,10 +129,10 @@ Vector Vector::operator + ( Vector vector ) const
 {
   if ( vector.IsValid() && this->IsValid() )
 	{
-    return Vector( x + vector.GetX(), y + vector.GetY() );
+      return Vector( x + vector.GetX(), y + vector.GetY() );
 	}
 	else
-		return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
+      return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
@@ -144,12 +144,12 @@ Vector Vector::operator = ( Vector vector )
 {
   if ( vector.IsValid() && this->IsValid() )
 	{
-		x = vector.GetX();
-		y = vector.GetY();
-		return *this;
+      x = vector.GetX();
+      y = vector.GetY();
+      return *this;
 	}
 	else
-		return Vector(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
+      return Vector(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
 }
 
 

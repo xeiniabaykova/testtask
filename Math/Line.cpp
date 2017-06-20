@@ -17,8 +17,8 @@ Line::Line( Point theStartPoint, Point theEndPoint ):
 {
   if ( !IsEqual(theStartPoint, theEndPoint) )
 	{
-     startPoint = theStartPoint;
-     endPoint = theEndPoint;
+      startPoint = theStartPoint;
+      endPoint = theEndPoint;
 	}
 }
 
@@ -39,6 +39,7 @@ Line::Line( const std::vector<Point>& points ):
     endPoint = points[1];
   }
 }
+
 
 //-----------------------------------------------------------------------------
 //  Возращаются границы параметра t для прямой: [0, 1].
@@ -83,7 +84,7 @@ Vector Line::Get2Derivative( double ) const
 // ---
 void Line::GetAsPolyLine(GeomPolyline &polyLine, double) const
 {
-	std::vector<Point> points;
+  std::vector<Point> points;
   points.push_back( startPoint );
   points.push_back( endPoint );
   polyLine.Init( points );

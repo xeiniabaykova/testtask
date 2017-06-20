@@ -57,8 +57,6 @@ void MainWindow::contextMenuEvent( QContextMenuEvent *event )
     reColorAct->setStatusTip( tr("stop sreating curve") );
     connect( reColorAct, &QAction::triggered, this, &MainWindow::OnReColorCurve );
 
-
-
     menu.addAction( stopCreateCurveAct );
     menu.addAction( reColorAct );
     menu.addAction( deleteCurveAct );
