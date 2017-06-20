@@ -4,12 +4,10 @@
 
 namespace Editor {
 
-DisplayedObject::DisplayedObject( std::shared_ptr<Math::Curve> curve,  QValueAxis* axisX,  QValueAxis* axisY ):
+DisplayedObject::DisplayedObject( std::shared_ptr<Math::Curve> curve ):
   currentColor ( 51, 0, 51 ),
   selected     ( false ),
-  curve        ( curve ),
-  axisX        ( axisX ),
-  axisY        ( axisY )
+  curve        ( curve )
 {
 }
 //-----------------------------------------------------------------------------
@@ -94,10 +92,10 @@ void DisplayedObject::AddCurveToChart( QChart * chart)
   chart->addSeries( seriesRef );
 
 
-  currentseries->attachAxis( axisX );
-  currentseries->attachAxis( axisY );
-  seriesRef->attachAxis( axisX );
-  seriesRef->attachAxis( axisY );
+  currentseries->attachAxis( chart->axisX() );
+  currentseries->attachAxis( chart->axisY() );
+  seriesRef->attachAxis( chart->axisX() );
+  seriesRef->attachAxis( chart->axisY() );
 }
 
 

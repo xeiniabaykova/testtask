@@ -90,7 +90,7 @@ void MainWindowHandler::LoadFile()
   open.Open( inputObj );
   for ( size_t i = 0; i < inputObj.size(); i++ )
   {
-    std::shared_ptr<DisplayedObject> curve = std::make_shared<DisplayedObject>( inputObj[i], axisX, axisY );
+    std::shared_ptr<DisplayedObject> curve = std::make_shared<DisplayedObject>( inputObj[i] );
     curve->AddCurveToChart( chart );
     displayedCurves.push_back( curve );
   }
@@ -123,7 +123,7 @@ void MainWindowHandler::SaveFile()
 void MainWindowHandler::CreateCurve()
 {
   std::shared_ptr<Math::Curve> primitive = geomCreator->Create();
-  std::shared_ptr<DisplayedObject> curve = std::make_shared<DisplayedObject>( primitive, axisX, axisY );
+  std::shared_ptr<DisplayedObject> curve = std::make_shared<DisplayedObject>( primitive );
   curve->AddCurveToChart( chart );
   displayedCurves.push_back( curve );
   tempSeriesReferenced->clear();
@@ -266,11 +266,11 @@ void MainWindowHandler::ClearScreen()
 //---
 void MainWindowHandler::CreateChart()
 {
-  axisX = new QValueAxis;
+  QValueAxis *axisX = new QValueAxis;
   axisX->setRange( 0, 10 );
   chart->addAxis( axisX, Qt::AlignBottom );
 
-  axisY = new QValueAxis;
+  QValueAxis *axisY = new QValueAxis;
   axisY->setRange( 0, 10 );
   chart->addAxis( axisY, Qt::AlignLeft );
   chart->legend()->setVisible(false);

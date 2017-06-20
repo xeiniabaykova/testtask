@@ -41,8 +41,6 @@ private:
   std::shared_ptr<CreatorHandler>               geomCreator;           ///< Объект для создания геометрического примитива.
   CurrentState                                  state;                 ///< Объект для хранения текущего состояния окна.
   std::vector<std::shared_ptr<DisplayedObject>> displayedCurves;       ///< Набор графиков, отображенных на экране.
-  QValueAxis                                    *axisX;                ///< Ось Оу.
-  QValueAxis                                    *axisY;                ///< Ось Ох.
   QScatterSeries                                *tempSeriesReferenced; ///< Объект для отображения точек, выбранных пользователем.
 
 public:

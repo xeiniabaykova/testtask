@@ -31,8 +31,6 @@ private:
   QLineSeries*                 currentseries; ///< Series с точками.
   QScatterSeries*              seriesRef;     ///< Series с опорными точками.
   std::shared_ptr<Math::Curve> curve;         ///< Геометрическая кривая.
-  QValueAxis*                  axisX;         ///< Ось ох.
-  QValueAxis*                  axisY;         ///< Ось оy.
 
 public:
   DisplayedObject() = default;
@@ -43,7 +41,7 @@ public:
     \param[in]  axisX - ось оy.\~
   */
   //---
-  DisplayedObject( std::shared_ptr<Math::Curve> curve,  QValueAxis* axisX,  QValueAxis* axisY );
+  DisplayedObject( std::shared_ptr<Math::Curve> curve );
 
 private:
   DisplayedObject( const DisplayedObject &obj ) = delete;
