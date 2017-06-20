@@ -34,7 +34,7 @@ void Curve::GetAsPolyLine( GeomPolyline &polyLine, double accuracy ) const
     polyLinePoints.push_back( GetPoint(t) );
     t += CountingStep( t, accuracy);
   }
-  if ( !IsEqual(polyLinePoints.back() - GetPoint(GetRange().GetEnd()), Point(0.,0.)) )
+  if ( !IsEqual(polyLinePoints.back(),  GetPoint(GetRange().GetEnd())) )
        polyLinePoints.push_back( GetPoint(GetRange().GetEnd()) );
    polyLine.Init( polyLinePoints );
 

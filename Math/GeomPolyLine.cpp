@@ -40,6 +40,7 @@ GeomPolyline::GeomPolyline():
 {
 }
 
+
 //-----------------------------------------------------------------------------
 //  Конструктор полилинии по опорным точкам. Если точки удовлетворяют условию корректности: их количество не равно нулю и нет совпадающих точек,
 //  то создается полилиния по воходым точкам. Считаем, что точки в полилинию добаляются в том же порядке, что и находятся в входном массиве.
@@ -50,6 +51,7 @@ GeomPolyline::GeomPolyline( const std::vector<Point>& thePoints ):
 {
  Init( thePoints );
 }
+
 
 //-----------------------------------------------------------------------------
 //  Инициализация полилинии по опорным точкам. Если точки удовлетворяют условию корректности: их количество не равно нулю и нет совпадающих точек,
@@ -131,7 +133,7 @@ Vector GeomPolyline::Get2Derivative( double ) const
 {
   if ( IsValid() )
 	{
-    return Vector( 0.0, 0.0 );
+	  return Vector( 0.0, 0.0 );
 	} 
 	else 
 		return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
@@ -187,7 +189,7 @@ void GeomPolyline::Scale( double xScaling, double yScaling )
 //-----------------------------------------------------------------------------
 // Вернуть расстояние от точки до полилинии.
 // ---
-double GeomPolyline::DistanceToPoint ( Point point ) const
+double GeomPolyline::DistanceToPoint( Point point ) const
 {
   double minDistance = std::numeric_limits<double>::max();
   double currentDistance = std::numeric_limits<double>::max();
