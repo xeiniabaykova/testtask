@@ -43,11 +43,20 @@ public:
   Ellipse ( const std::vector<Point>& points );
   /**  \brief Создать эллипс по двум радиусам и центральной точке.
     \param[in] Center - ентр эллипса .\~
-    \param[in] R1 - главный радиус .\~
-    \param[in] R2 - побочный радиус .\~
+    \param[in] r1 - главный радиус .\~
+    \param[in] r2 - побочный радиус .\~
   */
   //---
   Ellipse ( Point center, double r1, double r2, double alpha );
+  /**  \brief Создать эллипс по двум радиусам и центральной точке и двум улам наклона осей относительно ох.
+    \param[in] Center - ентр эллипса .\~
+    \param[in] r1 - главный радиус .\~
+    \param[in] r2 - побочный радиус .\~
+    \param[in] alphaMajor - Угол между главной осью эллипса и осью ох .\~
+     \param[in] alphaMajor - Угол между побочной осью эллипса и осью ох .\~
+  */
+  //---
+  Ellipse ( Point center, double r1, double r2, double alphaMajor, double alphaMinor );
   Ellipse () = default;
   virtual ~Ellipse() = default;
 

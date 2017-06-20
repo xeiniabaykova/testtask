@@ -17,7 +17,7 @@ namespace {
 // ---
 static bool TryReadHeader( std::istream& stream, std::string& header )
 {
-  size_t length = 0;
+  size_t length;
   stream.read( (char*)&length, sizeof(length) );
   if ( stream.eof() )
     return false;

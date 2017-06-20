@@ -69,15 +69,38 @@ Ellipse::Ellipse( Point thecenter, double ther1, double ther2, double thealpha )
   r1             ( 0.0 ),
   r2             ( 0.0),
   alphaMajorAxis ( 0.0),
-  alphaMinorAxis ( 0.0){
-	if ( ther1 > CommonConstantsMath::NULL_TOL && ther2 > CommonConstantsMath::NULL_TOL )
-	{
-		r1 = ther1;
-		r2 = ther2;
-		center = thecenter;
-		alphaMajorAxis = thealpha;
-		alphaMinorAxis = alphaMajorAxis + CommonConstantsMath::PI / 2.;
-	}		
+  alphaMinorAxis ( 0.0)
+{
+  if ( ther1 > CommonConstantsMath::NULL_TOL && ther2 > CommonConstantsMath::NULL_TOL )
+    {
+      r1 = ther1;
+      r2 = ther2;
+      center = thecenter;
+      alphaMajorAxis = thealpha;
+      alphaMinorAxis = alphaMajorAxis + CommonConstantsMath::PI / 2.;
+    }
+}
+
+
+//-----------------------------------------------------------------------------
+// Конструктор Ellipse по двум радиусам и углу наклона отностительно главной оси.
+// ---
+Ellipse::Ellipse ( Point thecenter, double ther1, double ther2, double alphaMajor, double alphaMinor ):
+  Curve          (  ),
+  center         ( Point(0.0, 0.0) ),
+  r1             ( 0.0 ),
+  r2             ( 0.0),
+  alphaMajorAxis ( 0.0),
+  alphaMinorAxis ( 0.0)
+{
+  if ( ther1 > CommonConstantsMath::NULL_TOL && ther2 > CommonConstantsMath::NULL_TOL )
+  {
+    r1 = ther1;
+    r2 = ther2;
+    center = thecenter;
+    alphaMajorAxis = alphaMajor;
+    alphaMinorAxis = alphaMinor;
+  }
 }
 
 //-----------------------------------------------------------------------------
