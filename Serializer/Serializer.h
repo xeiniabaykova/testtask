@@ -46,7 +46,10 @@ public:
   std::vector<std::shared_ptr<Math::Curve>> ReadCurves         ( std::string theFileName ) const;
   ///Записать кривые в поток. Файл открывается в бинарном формате, кривые записываеются в порядке нахождения в curves.
   void                                      WriteCurves        ( const std::vector<std::shared_ptr<Math::Curve>>& theCurves,std::string theFileName ) const;
-
+  /// Прочитать версию читателя - писателя.
+  std::string                               ReadVersion        (  std::istream& theStream ) const;
+   /// Записать версию читателя - писателя.
+  void                                      WriteVersion       (  std::ofstream& stream ) const;
 };
 }
 #endif // SERIALIZER_H

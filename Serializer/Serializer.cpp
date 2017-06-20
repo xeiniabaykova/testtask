@@ -1,6 +1,7 @@
 #include "Serializer.h"
 #include "EllipseCurveSerializer.h"
 #include "NURBSCurveSerializer.h"
+#include "PolylineSerializer.h"
 #include "LineSerializer.h"
 #include <algorithm>
 #include <istream>
@@ -48,6 +49,7 @@ static void WriteHeader( std::string header, std::ofstream& stream )
 Serializer::Serializer()
 {
   RegisterSerializer<LineSerializer>();
+  RegisterSerializer<PolylineSerializer>();
   RegisterSerializer<EllipseCurveSerializer>();
   RegisterSerializer<NURBSCurveSerializer>();
 }
@@ -86,6 +88,7 @@ std::unique_ptr<Math::Curve> Serializer::Read( std::istream& stream ) const
 // ---
 void Serializer::Write( std::ofstream& stream, const Math::Curve& curve ) const
 {
+  WriteVersion( stream );
   std::string nameHeader = curve.GetName();
   const auto serializer = mySerializers.find( nameHeader );
   if ( serializer != mySerializers.end() )
@@ -103,6 +106,7 @@ std::vector<std::shared_ptr<Math::Curve>> Serializer::ReadCurves( std::string fi
 {
   std::ifstream inputFile;
     inputFile.open( fileName, std::ios::binary );
+    ReadVersion( inputFile );
 
   std::vector<std::shared_ptr<Math::Curve>> curveVector;
   while ( !inputFile.eof() )
@@ -125,5 +129,36 @@ void Serializer::WriteCurves( const std::vector<std::shared_ptr<Math::Curve>>& c
   for ( size_t i = 0; i < curves.size(); i++ )
     Write( fout, *curves[i] );
   fout.close();
+}
+
+
+//-----------------------------------------------------------------------------
+//  Прочитать версию читателя - писателя.
+// ---
+
+std::string Serializer::ReadVersion(  std::istream& stream ) const
+{
+  size_t length;
+  stream.read( (char*)&length, sizeof(length) );
+  if ( stream.eof() )
+    return false;
+  char *buf = new char[length + 1];
+  stream.read( buf, length );
+  buf[length] = '\0';
+  std::string version = std::string( buf );
+  delete[] buf;
+  return version;
+
+}
+
+//-----------------------------------------------------------------------------
+//  Записать версию читателя - писателя.
+// ---
+void Serializer::WriteVersion( std::ofstream& stream ) const
+{
+  std::string version ="V1";
+  const size_t length = version.length();
+  stream.write( (char*)&length, sizeof(length) );
+  stream.write( version.c_str(), length );
 }
 }
