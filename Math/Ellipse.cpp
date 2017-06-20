@@ -72,8 +72,8 @@ Ellipse::Ellipse( Point thecenter, double ther1, double ther2, double thealpha )
   alphaMinorAxis ( 0.0){
 	if ( ther1 > CommonConstantsMath::NULL_TOL && ther2 > CommonConstantsMath::NULL_TOL )
 	{
-		r1 = 1.;
-		r2 = 1.;
+		r1 = ther1;
+		r2 = ther2;
 		center = thecenter;
 		alphaMajorAxis = thealpha;
 		alphaMinorAxis = alphaMajorAxis + CommonConstantsMath::PI / 2.;
@@ -123,8 +123,6 @@ Ellipse::Ellipse ( const std::vector<Point>& points ):
 
       r2 = ( sqrt(fabs((newCoordPoint.GetY()) * (newCoordPoint.GetY()) /
         (1 - (newCoordPoint.GetX()) * (newCoordPoint.GetX()) / (r1 * r1)))) );
-      Point coordPointMinorAxis( r2 * cos(180. - alpha ), r2 * sin(180. - alpha) );
-      axisY = center - coordPointMinorAxis;
 	  }
     else if ( IsCirclePoints(points[0], points[1], points[2]) )
 	  {
@@ -339,10 +337,5 @@ std::vector<Point> Ellipse::GetReferensedPoints() const
 bool Ellipse::IsClosed() const
 {
 	return true;
-}
-
-double Ellipse::GetAlpha() const
-{
-  return alpha;
 }
 }
