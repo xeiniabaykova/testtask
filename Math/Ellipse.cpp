@@ -73,13 +73,13 @@ Ellipse::Ellipse( Point thecenter, double ther1, double ther2, double thealpha )
 {
 	if ( ther1 > CommonConstantsMath::NULL_TOL && ther2 > CommonConstantsMath::NULL_TOL )
 	{
-		r1 = ther1;
-		r2 = ther2;
+		r1 = 1.;
+		r2 = 1.;
 		center = thecenter;
-        axisX = Vector( center.GetX() + r1, center.GetY() );
+        axisX = Vector( ther1, 0.);
         axisX.Rotate( thealpha );
-        axisY = Vector( center.GetX(),  center.GetY() + r2 );
-        axisY.Rotate( thealpha + CommonConstantsMath::PI/2. );
+        axisY = Vector( 0., ther2 );
+        axisY.Rotate( thealpha );
 	}		
 }
 
@@ -102,8 +102,8 @@ Ellipse::Ellipse ( const std::vector<Point>& points ):
       center = points[0];
       axisX = points[1] - center;
       const double r = axisX.Lenght();
-      r1 = r;
-      r2 = r;
+      r1 = 1.0;
+      r2 = 1.0;
     }
   }
   else if ( points.size() >= 3 )
