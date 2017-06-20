@@ -37,7 +37,9 @@ void EllipseCurveSerializer::Write( std::ostream& output, const Math::Curve& cur
     WritePoint( output, ellipseCurve->GetCenter() );
     WriteDouble( output, ellipseCurve->GetMajorRadius() );
     WriteDouble( output, ellipseCurve->GetMinorRadius() );
-    WriteDouble( output, ellipseCurve->GetAlpha() );
+    WriteDouble( output, ellipseCurve->GetAlphaMajorAxis() );
+	WriteDouble(output, ellipseCurve->GetAlphaMinorAxis());
+
   }
 
 }

@@ -333,7 +333,7 @@ TEST(PolylineTest, PolylineConstitution)
 	points5[2].Translate(5.0, 10.0);
 	points5[3].Translate(2.0, 30.0);
 	GeomPolyline polyline5(points5);
-	EXPECT_TRUE(polyline5.IsValid()); // ����������� ���������� ����� �����������
+	EXPECT_FALSE(polyline5.IsValid()); // ����������� ���������� ����� �����������
 
 	std::vector<Point> points6(5, Point());
 	points6[1].Translate(5.0, 10.0);
@@ -384,7 +384,7 @@ TEST(PolylineTest, PolylineInit)
 	points5[3].Translate(2.0, 30.0);
 	GeomPolyline polyline5;
 	polyline5.Init(points5);
-	EXPECT_TRUE(polyline5.IsValid()); // совпадающие внутренние точки допустимы
+	EXPECT_FALSE(polyline5.IsValid()); // совпадающие внутренние точки допустимы
 
 	std::vector<Point> points6(5, Point());
 	points6[1].Translate(5.0, 10.0);

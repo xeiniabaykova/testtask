@@ -30,11 +30,9 @@ private:
   Point center;  ///< Центр.
   double r1;     ///< Главный радиус.
   double r2;     ///< Побочный радиус.
-  double alpha;  ///< Угол между главной осью и осью х.
-//  double alphaMinorAxis;
-  Vector axisX;
-  Vector axisY;
 
+  double alphaMajorAxis;  ///< Угол между главной осью и осью х.
+  double alphaMinorAxis; ///< Угол между побочной осью и осью x.
 public:
   /**  \brief  Создать эллипс по массиву точек.
     \param[in] Points[0] - Центр эллипса .\~
@@ -71,7 +69,8 @@ public:
   bool                       IsValid             () const;                             ///< Проверить корректность эллипса: считаем, что если оба радиуса не равны нулю, то эллипс корректен.
   double                     GetMajorRadius      () const;                             ///< Вернуть гравный радиус.
   double                     GetMinorRadius      () const;                             ///< Вернуть побочный радиус.
-  double                     GetAlpha            () const;                             ///< Вернуть угол наклона относительно оси ох.
+  double                     GetAlphaMajorAxis   () const;                             ///< Вернуть угол наклона главной оси относительно оси ох.
+  double                     GetAlphaMinorAxis   () const;                             ///< Вернуть угол наклона побочной оси относительно оси ох.
   Point                      GetCenter           () const;                             ///< Вернуть центр эллипса.
 
 };
