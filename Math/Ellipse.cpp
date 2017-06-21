@@ -141,8 +141,8 @@ Ellipse::Ellipse ( const std::vector<Point>& points ):
 	    alphaMinorAxis = alphaMajorAxis + CommonConstantsMath::PI / 2.;
       r1 = v.Lenght();
 
-      Point newCoordPoint( std::fabs((points[2] - center).GetX()), std::fabs((points[2] - center).GetY()) );
-      newCoordPoint.Rotate( alphaMajorAxis );
+      Point newCoordPoint( (points[2] - center).GetX(), (points[2] - center).GetY() );
+      newCoordPoint.Rotate( -alphaMajorAxis );
 
       r2 = ( sqrt(fabs((newCoordPoint.GetY()) * (newCoordPoint.GetY()) /
         (1 - (newCoordPoint.GetX()) * (newCoordPoint.GetX()) / (r1 * r1)))) );
