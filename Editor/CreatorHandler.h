@@ -33,7 +33,7 @@ public:
   TypeCurve      type; ///< Хранение типа созаваемой кривой.
 
 private:
-  ptrdiff_t                numExpectedPoits; ///< Количество точек, необходимых для создания геометрического примитива.
+  std::ptrdiff_t           numExpectedPoits; ///< Количество точек, необходимых для создания геометрического примитива.
   std::vector<Math::Point> points;           ///< Точки, полученные с экрана.
 
 public:
@@ -42,7 +42,7 @@ public:
       \param[in]  creator - указатель на создателя геометрического примитива\~
   */
   //---
-  CreatorHandler( ptrdiff_t theNumExpectedPoits, TypeCurve theType );
+  CreatorHandler( std::ptrdiff_t theNumExpectedPoits, TypeCurve theType );
 
 private:
   CreatorHandler() = delete;

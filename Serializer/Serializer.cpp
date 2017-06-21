@@ -141,7 +141,7 @@ std::string Serializer::ReadVersion(  std::istream& stream ) const
   size_t length;
   stream.read( (char*)&length, sizeof(length) );
   if ( stream.eof() )
-    return false;
+    return std::string("");
   char *buf = new char[length + 1];
   stream.read( buf, length );
   buf[length] = '\0';

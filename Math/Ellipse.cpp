@@ -137,8 +137,8 @@ Ellipse::Ellipse ( const std::vector<Point>& points ):
       // вектор главной оси эллипса
       const Vector v  = points[1] - center;
       // угол наклона между главной осью эллипса и осью ох
-	  alphaMajorAxis = atan2( v.GetY(), v.GetX() );
-	  alphaMinorAxis = alphaMajorAxis + CommonConstantsMath::PI / 2.;
+	    alphaMajorAxis = atan2( v.GetY(), v.GetX() );
+	    alphaMinorAxis = alphaMajorAxis + CommonConstantsMath::PI / 2.;
       r1 = v.Lenght();
 
       Point newCoordPoint( std::fabs((points[2] - center).GetX()), std::fabs((points[2] - center).GetY()) );

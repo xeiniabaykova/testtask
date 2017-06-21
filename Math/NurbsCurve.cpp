@@ -2,6 +2,7 @@
 #include <cmath>
 #include <limits>
 
+using namespace std;
 namespace Math {
 
 
@@ -83,7 +84,7 @@ NurbsCurve::NurbsCurve( const std::vector<Point>& ppoles, const std::vector<doub
       }
       for ( size_t i = degree; i > 0; --i )
       {
-        nodes.push_back( -static_cast<ptrdiff_t>(i) );
+        nodes.push_back( -static_cast<std::ptrdiff_t>(i) );
       }
       for ( size_t i = 0; i <= ppoles.size() + degree ; ++i ) {
         nodes.push_back( i );
@@ -167,7 +168,7 @@ void NurbsCurve::ComputeBasicFunctionD( const double& t, const size_t& i, const 
   for ( size_t j = 0; j <= degree; j++ )
     ders[0][j] = triangleNodes[j][degree];
 
-  for ( ptrdiff_t r = 0; r <= degree; r++ )
+  for ( std::ptrdiff_t r = 0; r <= degree; r++ )
   {
     size_t s1 = 0; // строка со значениями коэффициентов на предыдущей итерации
     size_t s2 = 1; // строка со значениями коэффициентов на текущей итерации

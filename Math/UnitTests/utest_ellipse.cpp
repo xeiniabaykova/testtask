@@ -209,6 +209,9 @@ TEST(Ellipse, Construct5Points)
 {
   std::vector<Point> points { Point(0., 0.), Point(1.2, 2.5), Point(0.5, 1.7), Point(1.2, 2.5), Point(1.2, 2.5) };
   const Ellipse ellipse( points );
+  GeomPolyline poly;
+  ellipse.GetAsPolyLine(poly);
+  EXPECT_NEAR(poly.DistanceToPoint(points[2]), 0., 1.e-2);
   EXPECT_TRUE( ellipse.IsValid() );
 }
 

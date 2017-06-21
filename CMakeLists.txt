@@ -1,11 +1,7 @@
 cmake_minimum_required(VERSION 3.7)
 project(TestTask1)
-set (CMAKE_PREFIX_PATH "C:\\Qt\\5.8\\msvc2015_64")
+#set (CMAKE_PREFIX_PATH "C:\\Qt\\5.8\\msvc2015_64")
 set(CMAKE_CXX_STANDARD 14)
-
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 option(UTESTS "Build with Utests" OFF)
 if (UTESTS)
@@ -26,6 +22,10 @@ endif(UTESTS)
 
 option(EDITOR "Compile Editor" OFF)
 if (EDITOR)
+	set(CMAKE_AUTOMOC ON)
+	set(CMAKE_AUTOUIC ON)
+	set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 	find_package(Qt5Core REQUIRED)
 	find_package(Qt5Charts REQUIRED)
 	find_package(Qt5Gui REQUIRED)
@@ -94,6 +94,8 @@ set(SOURCE_FILES
 		Serializer/EllipseCurveSerializer.h
 		Serializer/NURBSCurveSerializer.cpp
 		Serializer/NURBSCurveSerializer.h
+		Serializer/PolylineSerializer.cpp
+		Serializer/PolylineSerializer.h
 		Serializer/Serializer.cpp
 		Serializer/Serializer.h
 		)
