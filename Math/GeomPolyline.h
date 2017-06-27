@@ -24,6 +24,7 @@ class GeomPolyline: public Curve
 {
 private:
  std::vector<Point> referencedPoints;
+ std::vector<Point> referemcedParams;
 
 public:
  /**  \brief Конструктор полилинии по опорным точкам.
@@ -54,6 +55,7 @@ public:
   bool                IsValid             () const;                                          ///< Проверить корректность полилинии: нет совпадающих точек, количество точек не равно нулю.
   std::vector<Point>  GetReferensedPoints () const;                                          ///< Вернуть опорные точки, использованные для построения полилинии.
   virtual std::string GetName             () const;                                          ///< Вернуть имя, используемое при записи полилинии в файл.
+  virtual CurveType   GetType             () const;
 };
 }
 #endif // GEOMPOLYLINE_H

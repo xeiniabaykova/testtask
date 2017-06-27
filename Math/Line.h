@@ -15,6 +15,7 @@
 
 
 namespace Math {
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 /// Класс геометрического представления отрезка.
@@ -64,6 +65,7 @@ public:
   Point                      GetStartPoint       () const;                                 ///< Вернуть начальную точку отрезка.
   Point                      GetEndPoint         () const;                                 ///< Вернуть конечную точку отрезка.
   double                     DistanceToPoint     ( Point point ) const;                    ///< Вернуть расстояние от точки до прямой.
+  virtual CurveType          GetType             () const;
 
 private:
   Line( const Line &obj ) = delete;

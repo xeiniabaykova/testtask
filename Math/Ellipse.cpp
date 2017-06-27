@@ -125,8 +125,8 @@ Ellipse::Ellipse ( const std::vector<Point>& points ):
       const double r = v.Lenght();
       r1 = r;
       r2 = r;
-	  alphaMajorAxis = 0.;
-	  alphaMinorAxis = CommonConstantsMath::PI / 2.;
+      alphaMajorAxis = 0.;
+      alphaMinorAxis = CommonConstantsMath::PI / 2.;
     }
   }
   else if ( points.size() >= 3 )
@@ -360,4 +360,12 @@ bool Ellipse::IsClosed() const
 {
 	return true;
 }
+
+Curve::CurveType Ellipse::GetType() const
+{
+  if ( fabs(r1 - r2) < CommonConstantsMath::NULL_TOL &&  fabs(alphaMajorAxis - alphaMinorAxis) == CommonConstantsMath::PI/2. )
+    return Curve::CircleType;
+  else return Curve::EllipseType;
+}
+
 }

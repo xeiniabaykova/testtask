@@ -231,6 +231,12 @@ bool IsEqual( Point point1, Point point2 )
   return( fabs(point1.GetX() - point2.GetX()) < CommonConstantsMath::NULL_TOL
     && fabs(point1.GetY() - point2.GetY()) < CommonConstantsMath::NULL_TOL );
 }
+
+
+bool Point::operator ==( Point point ) const
+{
+	return IsEqual( *this, point );
+}
 }
 
 

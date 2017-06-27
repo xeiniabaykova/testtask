@@ -34,6 +34,7 @@ public:
   virtual ~Range() = default;
 
 public:
+  void   SetRange  ( double theStart, double theEnd );
   double GetStart  () const; ///< Получить начало интервала.
   double GetEnd    () const; ///< Получить конец интервала.
   bool   IsValid   () const; ///< Верунть правильность интервала.

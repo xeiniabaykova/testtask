@@ -55,4 +55,11 @@ double Range::Lenght() const
 {
   return end - start;
 }
+
+
+void Range::SetRange( double theStart, double theEnd )
+{
+  start = theStart;
+  end = theEnd;
+}
 }

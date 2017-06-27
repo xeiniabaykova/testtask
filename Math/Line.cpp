@@ -2,6 +2,7 @@
 #include "CommonConstantsMath.h"
 #include "GeomPolyline.h"
 #include <cmath>
+#include "Intersector.h"
 
 namespace Math {
 
@@ -200,4 +201,11 @@ double Line::DistanceToPoint( Point point ) const
    return Distance( point, Pb );
 
 }
+
+
+Curve::CurveType Line::GetType() const
+{
+  return Curve::LineType;
+}
+
 }

@@ -575,4 +575,10 @@ std::vector<Point> NurbsCurve::GetReferensedPoints() const
 {
   return poles;
 }
+
+
+Curve::CurveType NurbsCurve::GetType() const
+{
+  return Curve::NurbsType;
+}
 }

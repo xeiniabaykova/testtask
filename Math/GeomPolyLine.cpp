@@ -258,4 +258,9 @@ bool GeomPolyline::IsClosed() const
   return ( Distance(referencedPoints[referencedPoints.size() - 1], referencedPoints[0])
       < CommonConstantsMath::NULL_TOL );
 }
+
+Curve::CurveType GeomPolyline::GetType() const
+{
+  return Curve::PolylineType;
+}
 }

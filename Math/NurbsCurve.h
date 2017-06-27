@@ -62,7 +62,7 @@ public:
   size_t                      Degree                 () const;                             ///< Вернуть степень Nurbs - кривой.
   std::string                 GetName                () const;                             ///< Вернуть имя, используемое для записи примитива в файл.
   bool                        IsValid                () const;                             ///< Проверить правильность кривой.
-
+  virtual CurveType           GetType                () const;
 private:
   std::vector<double>              BasicFunctions     ( size_t i, double t ) const;  ///< Подсчитать значения базисных функций на отрезке x - degree.
   Vector                           CountingDer        ( double t, size_t der ) const;  ///<  Посдчитать производную порядка der.

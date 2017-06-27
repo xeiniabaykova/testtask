@@ -86,6 +86,8 @@ set(SOURCE_FILES
 		Math/Range.h
 		Math/Vector.cpp
 		Math/Vector.h
+		Math/Intersector.h
+		Math/Intersector.cpp
 		Serializer/CurveSerializer.h
 		Serializer/CurveSerializer.cpp
 		Serializer/LineSerializer.h

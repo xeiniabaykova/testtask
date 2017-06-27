@@ -24,18 +24,23 @@ double Curve::CountingStep( double tCurrent, double accuracy) const
 //  Возвращает полилинию для геометрического примитива с точностью accuracy.
 // Точки, составляющие полилинию, расчитываются с помощью функции countingStep.
 // ---
-void Curve::GetAsPolyLine( GeomPolyline &polyLine, double accuracy ) const
+void Curve::GetAsPolyLine( GeomPolyline &polyLine, std::vector<double>& refParam, double accuracy) const
 {
   std::vector<Point> polyLinePoints;
+
   double t = GetRange().GetStart();
 
   while ( t <= GetRange().GetEnd() )
   {
+    refParam.push_back(t);
     polyLinePoints.push_back( GetPoint(t) );
     t += CountingStep( t, accuracy);
   }
-  if ( !IsEqual(polyLinePoints.back(), GetPoint(GetRange().GetEnd())) )
-       polyLinePoints.push_back( GetPoint(GetRange().GetEnd()) );
+  if (!IsEqual(polyLinePoints.back(), GetPoint(GetRange().GetEnd())))
+  {
+    polyLinePoints.push_back(GetPoint(GetRange().GetEnd()));
+    refParam.push_back( GetRange().GetEnd() );
+  }
    polyLine.Init( polyLinePoints );
 
 }

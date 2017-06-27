@@ -81,6 +81,12 @@ public:
   double                     GetAlphaMajorAxis   () const;                             ///< Вернуть угол наклона главной оси относительно оси ох.
   double                     GetAlphaMinorAxis   () const;                             ///< Вернуть угол наклона побочной оси относительно оси ох.
   Point                      GetCenter           () const;                             ///< Вернуть центр эллипса.
+  virtual CurveType          GetType             () const;
+
+
+  /////
+
+  ///////
 
 };
 }
