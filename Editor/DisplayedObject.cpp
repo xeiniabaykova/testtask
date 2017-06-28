@@ -10,6 +10,8 @@ DisplayedObject::DisplayedObject( std::shared_ptr<Math::Curve> curve ):
   curve        ( curve )
 {
 }
+
+
 //-----------------------------------------------------------------------------
 //  Вернуть текущее состояние селекции.
 // ---
