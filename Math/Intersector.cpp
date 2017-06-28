@@ -300,7 +300,9 @@ std::vector<Point> IntersectGeneralCase( const Curve& curve1, const Curve& curve
     double paramcurve2;
     std::modf( startPoints[i].GetX(), &paramcurve1 );
     std::modf( startPoints[i].GetY(), &paramcurve2 );
-    intersectPoints.push_back( NewtonMethod( curve1, curve2, Point(refcurve1[static_cast<int>(paramcurve1)], refcurve2[static_cast<int>(paramcurve2)])) );
+    Point intersectPoint = NewtonMethod( curve1, curve2, Point(refcurve1[static_cast<int>(paramcurve1)], refcurve2[static_cast<int>(paramcurve2)]));
+    if ( Distance( curve1.GetPoint(intersectPoint.GetX()), curve2.GetPoint(intersectPoint.GetY())) < CommonConstantsMath::NULL_TOL )
+          intersectPoints.push_back( intersectPoint );
 	}
   return intersectPoints;
 }

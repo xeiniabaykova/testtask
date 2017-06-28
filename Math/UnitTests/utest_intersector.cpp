@@ -87,12 +87,12 @@ TEST(Nurbs, 1Intersect)
   std::vector<double> weights{ 1, 1, 1, 1, 1, 1, 1, 1 };
   std::vector<double> nodes{ 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
   std::vector<double> closedNodes{ -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-  NurbsCurve curve1(poles, weights, false, 3);
-  NurbsCurve curve2(poles2, weights, false, 3);
+  NurbsCurve curve1( poles, weights, false, 3 );
+  NurbsCurve curve2( poles2, weights, false, 3 );
 
   std::vector<Math::Point> points = Math::IntersectGeneralCase( curve1, curve2 );
-  EXPECT_FALSE(points.empty());
-  EXPECT_TRUE(Math::IsEqual(curve1.GetPoint(points[0].GetX()), curve2.GetPoint(points[0].GetY())));
+  EXPECT_FALSE( points.empty() );
+  EXPECT_TRUE( Math::IsEqual(curve1.GetPoint(points[0].GetX()), curve2.GetPoint(points[0].GetY())) );
 
 }
 
@@ -130,6 +130,9 @@ TEST(Nurbs, 3Intersect)
     Point( 0.038, 6.909 ),  Point( 1.012, 8.633 ), 
     Point( 1.147, 8.300 ), Point( 0.9645, 7.1057 ), Point( 1.464, 8.026 ), Point( 1.437, 6.518 ),  Point (1.888, 7.879 ) };
 
+  std::vector<Point> poles4{ Point(10.598, 5.65), Point(10.367, 8.584), Point(13.636, 8.075), Point(11.635, 8.839),
+    Point(11.786, 9.857) };
+
 
   std::vector<double> weights{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1 ,1, 1, 1, 1, 1, 1 };
   NurbsCurve curve1( poles, weights, true, 6 );
@@ -151,6 +154,10 @@ TEST(Nurbs, 3Intersect)
   EXPECT_TRUE(Math::IsEqual(curve1.GetPoint(points[3].GetX()), curve3.GetPoint(points[3].GetY())));
   EXPECT_TRUE(Math::IsEqual(curve1.GetPoint(points[4].GetX()), curve3.GetPoint(points[4].GetY())));
 
+  /// случай, когда пересечения кривых нет
+  NurbsCurve curve4(poles4, weights, false, 3);
+  points = Math::IntersectGeneralCase(curve1, curve4);
+  EXPECT_TRUE(points.empty());
 
 
 }
