@@ -2,7 +2,10 @@
 #include "Line.h"
 #include "Ellipse.h"
 #include "GeomPolyline.h"
+#include <unordered_set>
 #include <algorithm>
+#include <iostream>
+#include <set>
 namespace Math {
 namespace {
 
@@ -144,13 +147,20 @@ ptrdiff_t FindIntersection( double u0, double u1, double  v0, double v1, double*
 
 
 //-----------------------------------------------------------------------------
-//  Найти пересечение двух отрезковю
+//  Найти пересечение двух отрезков.
 // ---
-std::vector<Point> IntersectLines( const Curve& curve1, const Curve& curve2 )
+bool IntersectLines( const Curve& curve1, const Curve& curve2, Point &thePoint )
 {
   std::vector<Point> IntersectPoints;
   const Math::Line* lineCurveFirst =  dynamic_cast<const Math::Line*>( &curve1 );
   const Math::Line* lineCurveSecound =  dynamic_cast<const Math::Line*>( &curve2 );
+  if ((fabs(lineCurveFirst->GetStartPoint().GetX()) > 10e7)
+    || (fabs(lineCurveFirst->GetStartPoint().GetY()) > 10e7)
+    || (fabs(lineCurveSecound->GetStartPoint().GetX()) > 10e7)
+    || (fabs(lineCurveSecound->GetStartPoint().GetY()) > 10e7))
+    return false;
+
+  
 
   const Point P0 = lineCurveFirst->GetStartPoint();
   const Vector V0 = lineCurveFirst->GetEndPoint() - lineCurveFirst->GetStartPoint();
@@ -169,15 +179,15 @@ std::vector<Point> IntersectLines( const Curve& curve1, const Curve& curve2 )
     const double s = distanceStart.VectorMult( V1 ) / krossDirecting;
     if( s < 0 || s > 1 )
     {
-      return IntersectPoints;
+      return false;
     }
     const double t = distanceStart.VectorMult( V0 ) / krossDirecting;
     if( t < 0 || t > 1)
     {
-      return IntersectPoints;
+      return false;
     }
-    IntersectPoints.push_back(Point( t, s ) );
-    return IntersectPoints;
+    thePoint = lineCurveFirst->GetPoint(s);
+    return true;
 
  } else
   {
@@ -186,7 +196,7 @@ std::vector<Point> IntersectLines( const Curve& curve1, const Curve& curve2 )
     double  sqrKross = kross * kross;
     if ( sqrKross > sqrLen0 * sqrLenE *CommonConstantsMath::NULL_TOL )
     {
-      return IntersectPoints;
+      return false;
     }
     const double s0 = V0 * distanceStart / sqrLen0;
     const double s1 = ( s0 + V0 * V1 )/sqrLen0;
@@ -196,9 +206,269 @@ std::vector<Point> IntersectLines( const Curve& curve1, const Curve& curve2 )
     size_t imax = FindIntersection( 0.0, 1.0, smin, smax, w );
     for ( size_t i = 0; i < imax; ++i )
       IntersectPoints.push_back( P0 + V0 * w[i] );
-    return IntersectPoints;
+     thePoint = IntersectPoints[0];
+     return false;
   }
 
+}
+
+
+void FindSegments( std::set<PointEvent,SortByX>& Q, Point testPoint, std::vector<PointEvent>& L, std::vector<PointEvent>& R, std::vector<PointEvent>& I )
+{
+  L.clear();
+  R.clear();
+  I.clear();
+  for (auto it = Q.begin();it !=Q.end(); it++)
+  {
+    if ( ((fabs(it->point.GetX() - testPoint.GetX())) < CommonConstantsMath::NULL_TOL )
+      && it->point.GetX() < it->otherPoint.GetX() )
+      L.push_back(*it);
+    if (((fabs(it->point.GetX() - testPoint.GetX())) < CommonConstantsMath::NULL_TOL)
+      && it->point.GetX() > it->otherPoint.GetX())
+      R.push_back(*it);
+    if (it->numOfSegment == -1)
+      I.push_back(*it);
+  }
+
+}
+
+PointEvent FindUpper(const std::set<PointEvent>& T)
+{
+  PointEvent event(Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity()),
+    Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity()), 0, typeEvent::NonValid );
+  for (auto it = T.begin(); it != T.end(); it++)
+  {
+    if (it->point.GetY() > event.point.GetY())
+      event = *it;
+  }
+  return event;
+}
+PointEvent FindLower(const std::set<PointEvent>& T)
+{
+  PointEvent event(Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity()),
+    Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity()), 0, typeEvent::NonValid );
+  for (auto it = T.begin(); it != T.end(); it++)
+  {
+    if (it->point.GetY() < event.point.GetY())
+      event = *it;
+  }
+  return event;
+
+}
+
+bool FindAbscissa( PointEvent thePoint, std::multiset<PointEvent, SortByX>& Q )
+{
+ 
+  for (auto it = Q.begin(); it != Q.end(); it++)
+  {
+    if (IsEqual(it->point, thePoint.point))
+      return true;
+  }
+  return false;
+
+}
+void FindNeighbors( PointEvent& upper, PointEvent& lower, const std::set<PointEvent>& T,const PointEvent& point )
+{
+  upper.point = Point(point.point.GetX(), std::numeric_limits<double>::lowest());
+  lower.point = Point(point.point.GetX(), std::numeric_limits<double>::max());
+  for (auto it = T.begin(); it != T.end(); it++)
+  {
+    if (it->point.GetY() < upper.point.GetY() && it->point.GetY() > point.point.GetY())
+      upper = *it;
+    if (it->point.GetY() > lower.point.GetY() && it->point.GetY() < point.point.GetY())
+      lower = *it;
+  }
+}
+bool IsXinSegment(const Line& line, double x)
+{
+  if (line.GetStartPoint().GetX() > line.GetEndPoint().GetX())
+    return (line.GetEndPoint().GetX() <= x && x <= line.GetStartPoint().GetX());
+  else
+    return (line.GetEndPoint().GetX() >= x && x >= line.GetStartPoint().GetX());
+}
+
+double GetYFromX(const Line& line, double x)
+{
+  double x1 = line.GetStartPoint().GetX();
+  double y1 = line.GetStartPoint().GetY();
+
+  double x2 = line.GetEndPoint().GetX();
+  double y2 = line.GetEndPoint().GetY();
+
+  double ch = -(x1*y2 - x2*y1) - x*(y1 - y2);
+  return ch / (x2 - x1);
+}
+
+bool FindNeighborUpper(Line& upper, const std::vector<Line>& T, const PointEvent& point)
+{
+  bool result = false;
+  upper = Line(Point(-std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity()),
+    Point(-std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity()));
+  Line currentLine(point.point, point.otherPoint);
+  for (auto it = T.begin(); it != T.end(); it++)
+  {
+    if (IsXinSegment(*it, point.point.GetX()))
+    {
+      
+      double currentY = GetYFromX(*it, point.point.GetX());
+      if (currentY >= upper.GetStartPoint().GetY() && currentY >= point.point.GetY()
+        && !(currentLine == *it ))
+      {
+        upper = *it;
+        result = true;
+      }
+    }
+  }
+  return result;
+}
+
+bool FindNeighborsLower( Line& lower, const std::vector<Line>& T, const PointEvent& point )
+{
+  bool result = false;
+  lower = Line( Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity()),
+    Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity()) );
+  for ( auto it = T.begin(); it != T.end(); it++ )
+  {
+    if ( IsXinSegment(*it, point.point.GetX()) )
+    {
+    
+      double currentY = GetYFromX(*it, point.point.GetX());
+      Line currentLine(point.point, point.otherPoint);
+      if (currentY <= lower.GetStartPoint().GetY() && currentY <= point.point.GetY()
+        && !(currentLine == *it))
+      {
+        lower = *it;
+        result = true;
+      }
+    }
+  }
+  return result;
+}
+void ProcessPoint(std::multiset<PointEvent, SortByX>& Q, std::vector<Line>& T, std::vector<PointEvent>&L,
+  std::vector<PointEvent>&R, std::vector<PointEvent>&I, PointEvent point, std::vector<PointEvent>& intersectionPoints,
+  std::vector<Point>& result )
+{
+  if (point.type == typeEvent::Left)
+  {
+    T.push_back(Line(point.point, point.otherPoint));
+    Line lower;
+
+    if (FindNeighborsLower(lower, T, point))
+    {
+      Point newPoint;
+      if (IntersectLines(lower, Line(point.point, point.otherPoint), newPoint))
+      {
+        PointEvent event(newPoint, newPoint, 0, typeEvent::Intersection);
+        event.s1 = Line(point.point, point.otherPoint);
+        event.s2 = lower;
+        intersectionPoints.push_back(event);
+      }
+    }
+    Line upper;
+    if (FindNeighborUpper(upper, T, point))
+    {
+      Point newPoint;
+      if (IntersectLines(upper, Line(point.point, point.otherPoint), newPoint))
+      {
+        PointEvent event(newPoint, newPoint, 0, typeEvent::Intersection);
+        event.s1 = upper;
+        event.s2 = Line(point.point, point.otherPoint);
+        intersectionPoints.push_back(event);
+      }
+    }
+
+  }
+  else if (point.type == typeEvent::Right)
+  {
+    Line lower;
+    Line upper;
+    if ( FindNeighborsLower(lower, T, point) && FindNeighborUpper(upper, T, point))
+    {
+      Point newPoint;
+      if (IntersectLines(upper,lower, newPoint))
+      {
+        if (newPoint.GetX() > point.point.GetX())
+        {
+          PointEvent event(newPoint, newPoint, 0, typeEvent::Intersection);
+          intersectionPoints.push_back(event);
+        }
+
+      }
+    }
+
+  }
+  else
+  {
+    Line s1 = point.s1;
+    Line s2 = point.s2;
+    Line lower;
+    Line upper;
+    if ( FindNeighborsLower(lower, T, PointEvent(s1.GetStartPoint(), s1.GetEndPoint(), 0, typeEvent::Left)) )
+    {
+      Point newPoint;
+      if (IntersectLines(lower, s1, newPoint))
+      {
+        PointEvent event(newPoint, newPoint, 0, typeEvent::Intersection);
+        intersectionPoints.push_back(event);
+      }
+    }
+    if ( FindNeighborUpper(upper, T, PointEvent(s2.GetStartPoint(), s2.GetEndPoint(), 0, typeEvent::Left)))
+    {
+      Point newPoint;
+      if (IntersectLines(upper, s2, newPoint))
+      {
+        PointEvent event(newPoint, newPoint, 0, typeEvent::Intersection);
+        intersectionPoints.push_back(event);
+      }
+    }
+    auto it = std::find(T.begin(), T.end(), s1);
+    auto it2 = std::find(T.begin(), T.end(), s2);
+    if ( it != T.end() && it2 != T.end() )
+      std::iter_swap(it, it2);
+
+  }
+  for (int i = 0; i < intersectionPoints.size(); i++)
+  {
+    result.push_back(intersectionPoints[i].point);
+    if (!FindAbscissa(intersectionPoints[i], Q))
+    {  
+      Q.insert(intersectionPoints[i]);
+   }
+  }
+  intersectionPoints.clear();
+}
+
+
+std::vector<Point> segmentsIntersections( std::vector<Line> segments )
+{
+  std::vector<Point> result;
+  std::vector<PointEvent> intersectPoints;
+
+  std::multiset<PointEvent, SortByX> Q;
+  std::vector<Line> T;
+  std::vector<PointEvent> L;
+  std::vector<PointEvent>R;
+  std::vector<PointEvent> I;
+
+  for (int i = 0; i < segments.size(); i++)
+  {
+    Q.insert( PointEvent(segments[i].GetStartPoint(), segments[i].GetEndPoint(),i, typeEvent::Left) );
+    Q.insert( PointEvent(segments[i].GetEndPoint(), segments[i].GetStartPoint(), i, typeEvent::Right) );
+  }
+
+ // 1) Инициализируются Q и T.В Q заносятся все концы отрезков, упорядоченные по координате x, при этом, если две точки совпали,
+//  то левая конечная точка отрезка помещается перед правой.Если совпали только x, то точка с меньшим y является меньшей.
+ //   T ← ∅
+
+  while ( !Q.empty() )
+  {
+    PointEvent currentPoint = *Q.begin();
+    
+    Q.erase(Q.begin());
+    ProcessPoint( Q, T, L, R, I, currentPoint, intersectPoints, result );
+   
+  }
+  return result;
 }
 
 
@@ -212,23 +482,26 @@ std::vector<Point> IntersectPolylinePolyline( const Curve& curve1, const Curve& 
   std::vector<Point> refPointsFirst = lineCurveFirst->GetReferensedPoints();
   const Math::GeomPolyline* lineCurveSecound =  dynamic_cast<const Math::GeomPolyline*>( &curve2 );
   std::vector<Point> refPointsSecound = lineCurveSecound->GetReferensedPoints();
-  for ( size_t i = 1; i < refPointsFirst.size(); i++ )
+  for (size_t i = 1; i < refPointsFirst.size(); i++)
   {
-    Line firstLine( refPointsFirst[i -1], refPointsFirst[i]);
-    for ( size_t j = 1; j < refPointsSecound.size(); j++ )
+    Line firstLine(refPointsFirst[i - 1], refPointsFirst[i]);
+    for (size_t j = 1; j < refPointsSecound.size(); j++)
     {
-     std::vector<Point> currentPoints = IntersectLines( Line(refPointsSecound[j - 1], refPointsSecound[j]), firstLine );	 
-     for (size_t k = 0; k < currentPoints.size(); k++)
-		 {
-       Point currentPoint( i + currentPoints[k].GetX() -1., j + currentPoints[k].GetY() -1.);
-       auto result = std::find( std::begin( intersectPoints ), std::end( intersectPoints ), currentPoint );
-       if ( result == std::end( intersectPoints ) )
-       intersectPoints.push_back( currentPoint );
-		 }
+      Point point;
+      if ( IntersectLines(Line(refPointsSecound[j - 1], refPointsSecound[j]), firstLine, point) )
+      {
+        Point currentPoint(i + point.GetX() - 1., j + point.GetY() - 1.);
+        auto result = std::find(std::begin(intersectPoints), std::end(intersectPoints), currentPoint);
+        if (result == std::end(intersectPoints))
+          intersectPoints.push_back(currentPoint);
+
+      }
     }
   }
   return intersectPoints;
 }
+
+
 
 
 //-----------------------------------------------------------------------------
@@ -281,7 +554,7 @@ Point NewtonMethod( const Curve& curve1, const Curve& curve2, Point startValue )
 //-----------------------------------------------------------------------------
 //  Запустить общий случай нахождения пересечения кривых.
 // ---
-std::vector<Point> IntersectGeneralCase( const Curve& curve1, const Curve& curve2 )
+std::vector<Point> IntersectGeneralCaseSimple( const Curve& curve1, const Curve& curve2 )
 {
 	GeomPolyline polylinePoints1;
   std::vector<double> refcurve1;
@@ -292,6 +565,7 @@ std::vector<Point> IntersectGeneralCase( const Curve& curve1, const Curve& curve
 	curve2.GetAsPolyLine(polylinePoints2, refcurve2);
 
 	std::vector<Point> startPoints = IntersectPolylinePolyline( polylinePoints1, polylinePoints2 );
+ // std::cout << "Points col:" << startPoints.size() << std::endl;
 	std::vector<Point> intersectPoints;
 
   for ( size_t i = 0; i < startPoints.size(); i++)
@@ -308,7 +582,33 @@ std::vector<Point> IntersectGeneralCase( const Curve& curve1, const Curve& curve
 }
 
 
+std::vector<Point> IntersectGeneralCase(const Curve& curve1, const Curve& curve2)
+{
+  GeomPolyline polylinePoints1;
+  std::vector<double> refcurve1;
+  curve1.GetAsPolyLine(polylinePoints1, refcurve1);
 
+  GeomPolyline polylinePoints2;
+  std::vector<double> refcurve2;
+  curve2.GetAsPolyLine(polylinePoints2, refcurve2);
+
+//  std::vector<Point> startPoints = IntersectPolylinePolylineBentleyOttmannAlgorithm(polylinePoints1, polylinePoints2);
+  // std::cout << "Points col:" << startPoints.size() << std::endl;
+  std::vector<Point> intersectPoints;
+
+ /* for (size_t i = 0; i < startPoints.size(); i++)
+  {
+    double paramcurve1;
+    double paramcurve2;
+    std::modf(startPoints[i].GetX(), &paramcurve1);
+    std::modf(startPoints[i].GetY(), &paramcurve2);
+    Point intersectPoint = NewtonMethod(curve1, curve2, Point(refcurve1[static_cast<int>(paramcurve1)], refcurve2[static_cast<int>(paramcurve2)]));
+    if (Distance(curve1.GetPoint(intersectPoint.GetX()), curve2.GetPoint(intersectPoint.GetY())) < CommonConstantsMath::NULL_TOL)
+      intersectPoints.push_back(intersectPoint);
+  }*/
+  return intersectPoints;
+
+}
 //-----------------------------------------------------------------------------
 //  В зависимости от типа кривой запустить нужный алгоритм для поиска пересечения.
 // ---
@@ -323,8 +623,12 @@ std::vector<Point> IntersectCurves( const Curve& curve1, const Curve& curve2 )
     case Curve::LineType :
       switch ( typeCurve2 )
       {
-      case Curve::LineType :
-        return IntersectLines( curve1, curve2 );
+      case Curve::LineType: {
+        Point point;
+        if ( IntersectLines(curve1, curve2, point) )
+          intersectCurves.push_back( point );
+        return intersectCurves;
+      }
       case Curve::PolylineType :
         return IntersectLinePolyline( curve1, curve2 );
       case Curve::CircleType :
@@ -355,6 +659,7 @@ std::vector<Point> IntersectCurves( const Curve& curve1, const Curve& curve2 )
     break;
 
   }
+  return intersectCurves;
 }
 
 

@@ -226,7 +226,7 @@ double Distance( Point point1, Point point2 )
 //-----------------------------------------------------------------------------
 //  Проверить точки на эквивалентность с точностью CommonConstantsMath::NULL_TOL.
 // ---
-bool IsEqual( Point point1, Point point2 )
+bool IsEqual( Point point1, const Point point2 )
 {
   return( fabs(point1.GetX() - point2.GetX()) < CommonConstantsMath::NULL_TOL
     && fabs(point1.GetY() - point2.GetY()) < CommonConstantsMath::NULL_TOL );

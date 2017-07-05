@@ -30,7 +30,7 @@ private:
   Point endPoint;  ///< Конечная точка отрезка.
 
 public:
-   Line() = delete;
+   Line() = default;
    /**  \brief Создать отрезок по вектору из точек.
      \param[in] points - набор точек .\~
       Если количество точек в массиве меньше двух, то отрезок не создается.
@@ -66,10 +66,20 @@ public:
   Point                      GetEndPoint         () const;                                 ///< Вернуть конечную точку отрезка.
   double                     DistanceToPoint     ( Point point ) const;                    ///< Вернуть расстояние от точки до прямой.
   virtual CurveType          GetType             () const;
+  bool                       operator==          (const Line& obj) const;
 
-private:
-  Line( const Line &obj ) = delete;
-  Line& operator=( Line &obj ) = delete;
+public:
+  Line(const Line &obj)
+  {
+    startPoint = obj.startPoint;
+    endPoint = obj.endPoint;
+  }
+  Line& operator=(const Line &obj)
+  {
+    startPoint = obj.startPoint;
+    endPoint = obj.endPoint;
+    return *this;
+  }
 
 };
 }

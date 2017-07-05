@@ -39,6 +39,7 @@ public:
   double GetEnd    () const; ///< Получить конец интервала.
   bool   IsValid   () const; ///< Верунть правильность интервала.
   double Lenght    () const; ///< Длина интервала.
+  void   Revert    ();
 };
 }
 #endif // RANGE_H

@@ -233,7 +233,7 @@ std::vector<Point> GeomPolyline::GetReferensedPoints() const
 //-----------------------------------------------------------------------------
 // Вернуть полилилния для полилинии - это полилиния.
 // ---
-void GeomPolyline::GetAsPolyLine( GeomPolyline &polyLine, double ) const
+void GeomPolyline::GetAsPolyLine( GeomPolyline &polyLine, std::vector<double>& refParam, double accuracy ) const
 {
 	polyLine.Init( referencedPoints );
 

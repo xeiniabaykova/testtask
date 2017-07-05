@@ -32,7 +32,7 @@ private:
   size_t              degree;  ///< Степень кривой.
 
 private:
-  NurbsCurve(const NurbsCurve &obj) = delete;
+ 
   NurbsCurve& operator=(NurbsCurve &obj) = delete;
 public:
   NurbsCurve() = default;

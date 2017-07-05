@@ -1,5 +1,6 @@
 #include "Range.h"
 #include <cmath>
+#include <algorithm>
 
 namespace Math {
 //-----------------------------------------------------------------------------
@@ -62,4 +63,10 @@ void Range::SetRange( double theStart, double theEnd )
   start = theStart;
   end = theEnd;
 }
+
+void Range::Revert()
+{
+  std::swap( start, end );
+}
+
 }

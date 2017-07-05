@@ -208,4 +208,9 @@ Curve::CurveType Line::GetType() const
   return Curve::LineType;
 }
 
+bool Line::operator==(const Line& obj) const
+{
+  return IsEqual(startPoint, obj.GetStartPoint()) && IsEqual(endPoint, obj.GetEndPoint());
+}
+
 }
