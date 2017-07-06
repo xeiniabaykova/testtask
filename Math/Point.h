@@ -49,6 +49,7 @@ public:
   bool         operator == ( Point point ) const;                ///< Проверить точки на эквивалентность.
   bool         operator <  ( Point point ) const;                ///< Сравнить точки в лексикографическом порядке.
   std::string  GetName     () const;                             ///< Вернуть имя, используемое при записи точки в файл.
+  double       operator *  ( Point param ) const;                ///< Получить скалярное произведение двух точек.
 };
 
  double Distance ( Point point1, Point point2 ); ///< Найти расстояние между точками.

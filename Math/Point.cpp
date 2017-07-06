@@ -253,6 +253,15 @@ bool Point::operator < ( Point point ) const
     return true;
   return ( point.GetY() < GetY() );
 }
+
+
+//-----------------------------------------------------------------------------
+//  Получить скалярное произведение двух точек.
+// ---
+double Point::operator * ( Point point ) const
+{
+  return x * point.x + y * point.y;
+}
 }
 
 
