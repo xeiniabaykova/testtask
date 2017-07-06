@@ -46,7 +46,8 @@ public:
   Point        operator +  ( Vector vector ) const;              ///< Сложить ветор и точку. По определению, это точка.
   Point        operator =  ( Point point );                      ///< Прировнять одну точку к другой точке.
   bool         IsValid     () const;                             ///< Проверить точки точки на правильность.
-  bool         operator == ( Point point ) const;                             ///< Проверить точки на эквивалентность.
+  bool         operator == ( Point point ) const;                ///< Проверить точки на эквивалентность.
+  bool         operator <  ( Point point ) const;                ///< Сравнить точки в лексикографическом порядке.
   std::string  GetName     () const;                             ///< Вернуть имя, используемое при записи точки в файл.
 };
 

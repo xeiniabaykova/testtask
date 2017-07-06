@@ -8,31 +8,46 @@
 #include <memory>
 #include <ctime>
 
-//// в простейшем случае точка пересечения находится верно
-//TEST(Line, Intersect1Point)
-//{
-//	// пересечение двух прямых
-//	Math::Line line1( Math::Point(1., 1.), Math::Point(3., 3.) );
-//	Math::Line line2( Math::Point(3., 1.), Math::Point(1., 3.) );
-//	std::vector<Math::Point> points = Math::IntersectLines(line1, line2);
-//	EXPECT_FALSE( points.empty() );
-//	EXPECT_TRUE( Math::IsEqual(line1.GetPoint(points[0].GetX()), line2.GetPoint(points[0].GetY())) );
-//	// начало одной прямой - конец другой прямой
-//	Math::Line line3( Math::Point(3.,1.), Math::Point(5., 1.) );
-//	points = Math::IntersectLines(line3, line2);
-//	EXPECT_FALSE(points.empty());
-//	EXPECT_TRUE( Math::IsEqual(line3.GetPoint(points[0].GetX()), line2.GetPoint(points[0].GetY())));
-//}
-//
-//// если пересечения нет, возвращаем пустоту
-//TEST(Line, NoIntersect)
-//{
-//	Math::Line line1(Math::Point(1., 3.), Math::Point(3., 3.));
-//	Math::Line line2(Math::Point(1., 1.), Math::Point(3., 1.));
-//	std::vector<Math::Point> points = Math::IntersectLines(line1, line2);
-//	EXPECT_TRUE(points.empty());
-//}
-//
+template<typename T>
+bool compare(std::vector<T>& v1, std::vector<T>& v2)
+{
+  std::sort(v1.begin(), v1.end());
+  std::sort(v2.begin(), v2.end());
+  return v1 == v2;
+}
+// в простейшем случае точка пересечения находится верно
+TEST(Line, Intersect1Point)
+{
+	// пересечение двух прямых
+	Math::Line line1( Math::Point(1., 1.), Math::Point(3., 3.) );
+	Math::Line line2( Math::Point(3., 1.), Math::Point(1., 3.) );
+  Math::Point point;
+	bool haveIntersect = Math::IntersectLines( line1, line2, point );
+	EXPECT_TRUE( haveIntersect );
+	EXPECT_TRUE( Math::IsEqual( Math::Point(2.,2.), point) );
+	// начало одной прямой - конец другой прямой
+	Math::Line line3( Math::Point(3.,1.), Math::Point(5., 1.) );
+  haveIntersect = Math::IntersectLines(line3, line2, point);
+  EXPECT_TRUE(haveIntersect);
+	EXPECT_TRUE( Math::IsEqual(Math::Point( 3., 1. ), point ) );
+  // отрезки лежат на одной прямой, начало одного - конец другого
+  Math::Line line4(Math::Point(3., 3.), Math::Point(4., 4.));
+  haveIntersect = Math::IntersectLines(line1, line4, point);
+  EXPECT_TRUE(haveIntersect);
+  EXPECT_TRUE(Math::IsEqual(Math::Point(3., 3.), point));
+
+}
+
+// если пересечения нет, возвращаем пустоту
+TEST(Line, NoIntersect)
+{
+	Math::Line line1(Math::Point(1., 3.), Math::Point(3., 3.));
+	Math::Line line2(Math::Point(1., 1.), Math::Point(3., 1.));
+  Math::Point point;
+  bool haveIntersect = Math::IntersectLines(line1, line2, point);
+	EXPECT_FALSE( haveIntersect );
+}
+
 using namespace Math;
 TEST(GeomPolyline, Intersect1Point)
 {
@@ -225,7 +240,7 @@ TEST(GeomPolyline, Intersect1Point)
 using namespace Math;
 TEST(Nurbs, 15Intersect)
 {
- /* std::vector<Point> poles{
+  std::vector<Point> poles{
     Point(0.185, 8.7904), Point(0.5131, 7.908), Point(1.238, 7.350), Point(1.630, 7.223), Point(2.103,7.135), Point(2.463, 7.1939),
     Point(2.614, 7.4289), Point(2.6141, 7.722), Point(2.468, 8.163), Point(2.307, 8.85259),  Point(2.195, 8.7218), Point(2.0231, 8.976),Point(1.845, 9.1429),
     Point(1.598, 9.260), Point(1.260, 9.36), Point(0.5507, 9.3682),Point(0.235, 9.2507) };
@@ -417,7 +432,7 @@ TEST(Nurbs, 15Intersect)
   int time = (clock() - t) / CLOCKS_PER_SEC;
   std::cout << time;
   std::cin.get();
-  std::cin.get();*/
+  std::cin.get();
 }
 
 TEST(segmenttest, Intersector)
@@ -433,61 +448,122 @@ TEST(segmenttest, Intersector)
 }
 TEST(SegmentsIntersectionsTest, lineCurveFirst)
 {
+  
   // простейший случай: разные начала и концы ( не совпадают ни по х, ни по у), пересечения нет
-  std::vector<Line> segments;
-  segments.push_back(Line(Point(2.0, 2.0), Point(4.0, 5.0)));
-  segments.push_back(Line(Point(6.0, 2.0), Point(8.0, 5.0)));
-  std::vector<Point> points = segmentsIntersections(segments);
+  std::vector<Math::Point> refPointsPolyline1;
+  std::vector<Math::Point> refPointsPolyline2;
+  std::vector<Line> segments1;
+  std::vector<Line> segments2;
+  refPointsPolyline1.push_back( Point(2.0, 2.0) );
+  refPointsPolyline1.push_back( Point(4.0, 5.0) );
+  refPointsPolyline2.push_back( Point(6.0, 2.0) );
+  refPointsPolyline2.push_back( Point(8.0, 5.0) );
+  Math::GeomPolyline polyline1(refPointsPolyline1);
+  Math::GeomPolyline polyline2(refPointsPolyline2);
+ 
+  std::vector<Point> points = segmentsIntersections( &polyline1, &polyline2 );
+  std::vector<Point> testpoints = IntersectPolylinePolyline(polyline1, polyline2);
   EXPECT_TRUE( points.empty());
+  EXPECT_TRUE(compare(points, testpoints));
   // простейший случай: разные начала и концы ( не совпадают ни по х, ни по у), пересечение есть
-  segments.clear();
-  points.clear();
-  segments.push_back(Line(Point(2.0, 2.0), Point(4.0, 5.0)));
-  segments.push_back(Line(Point(1.0, 5.0), Point(4.0, 2.0)));
-  points = segmentsIntersections(segments);
+  refPointsPolyline1.clear();
+  refPointsPolyline2.clear();
+
+  refPointsPolyline1.push_back(Point(2.0, 2.0));
+  refPointsPolyline1.push_back(Point(4.0, 5.0));
+  refPointsPolyline2.push_back(Point(1.0, 5.0));
+  refPointsPolyline2.push_back(Point(4.0, 2.0));
+  polyline1.Init( refPointsPolyline1 );
+  polyline2.Init( refPointsPolyline2 );
+  points = segmentsIntersections( &polyline1, &polyline2 );
+  testpoints = IntersectPolylinePolyline(polyline1, polyline2);
   EXPECT_FALSE(points.empty());
+  EXPECT_TRUE(compare(points, testpoints));
+
   // концы отрезков совпадают
-  segments.clear();
-  points.clear();
-  segments.push_back(Line(Point(1.0, 3.0), Point(3.0, 1.0)));
-  segments.push_back(Line(Point(1.0, 1.0), Point(3.0, 1.0)));
-  points = segmentsIntersections(segments);
+  refPointsPolyline1.clear();
+  refPointsPolyline2.clear();
+
+  refPointsPolyline1.push_back(Point(1.0, 3.0));
+  refPointsPolyline1.push_back(Point(3.0, 1.0));
+  refPointsPolyline2.push_back(Point(1.0, 1.0));
+  refPointsPolyline2.push_back(Point(3.0, 1.0));
+  polyline1.Init(refPointsPolyline1);
+  polyline2.Init(refPointsPolyline2);
+  points = segmentsIntersections(&polyline1, &polyline2);
+  testpoints = IntersectPolylinePolyline(polyline1, polyline2);
   EXPECT_FALSE(points.empty());
+  EXPECT_TRUE(compare(points, testpoints));
+
 
   // пересечение вертикального и горизонтального отрезков
-  segments.clear();
-  points.clear();
-  segments.push_back(Line(Point(2.0, 1.0), Point(2.0, 3.0)));
-  segments.push_back(Line(Point(1.0, 1.0), Point(3.0, 1.0)));
-  points = segmentsIntersections(segments);
+
+  refPointsPolyline1.clear();
+  refPointsPolyline2.clear();
+
+  refPointsPolyline1.push_back(Point(2.0, 1.0));
+  refPointsPolyline1.push_back(Point(2.0, 3.0));
+  refPointsPolyline2.push_back(Point(1.0, 1.0));
+  refPointsPolyline2.push_back(Point(3.0, 1.0));
+  polyline1.Init(refPointsPolyline1);
+  polyline2.Init(refPointsPolyline2);
+  points = segmentsIntersections(&polyline1, &polyline2);
+  testpoints = IntersectPolylinePolyline(polyline1, polyline2);
   EXPECT_FALSE(points.empty());
+  EXPECT_TRUE(compare(points, testpoints));
+
+  refPointsPolyline1.clear();
+  refPointsPolyline2.clear();
 
 
-  segments.clear();
-  points.clear();
-  segments.push_back(Line(Point(2.0, 1.0), Point(2.0, 3.0)));
-  segments.push_back(Line(Point(1.0, 1.0), Point(3.0, 1.0)));
-  points = segmentsIntersections(segments);
-  EXPECT_FALSE(points.empty());
-
-  std::vector<Math::Point> refPointsPolyline1;
   refPointsPolyline1.push_back(Math::Point(0., 0.));
   refPointsPolyline1.push_back(Math::Point(1., 1.));
   refPointsPolyline1.push_back(Math::Point(2., 1.));
   refPointsPolyline1.push_back(Math::Point(2., 2.));
   refPointsPolyline1.push_back(Math::Point(2., 3.));
   refPointsPolyline1.push_back(Math::Point(3., 3.));
-  Math::GeomPolyline polyline1(refPointsPolyline1);
+  polyline1.Init(refPointsPolyline1);
 
-  std::vector<Math::Point> refPointsPolyline2;
+
   refPointsPolyline2.push_back(Math::Point(0., 3.));
   refPointsPolyline2.push_back(Math::Point(0., 2.));
   refPointsPolyline2.push_back(Math::Point(2., 2.));
   refPointsPolyline2.push_back(Math::Point(3., 1.));
   refPointsPolyline2.push_back(Math::Point(3., 2.));
   refPointsPolyline2.push_back(Math::Point(5., 2.));
-  Math::GeomPolyline polyline2(refPointsPolyline2);
-  points = segmentsIntersections(polyline1.GetReferensedPoints(), polyline2.GetReferensedPoints());
+  polyline2.Init(refPointsPolyline2);
+  points = segmentsIntersections(&polyline1, &polyline2);
+  testpoints = IntersectPolylinePolyline(polyline1, polyline2);
+  EXPECT_TRUE(compare(points, testpoints));
+
+  refPointsPolyline1.clear();
+  refPointsPolyline2.clear();
+
+  refPointsPolyline1.push_back(Point(-0.051047823750671684, 8.8687561214495592));
+  refPointsPolyline1.push_back(Point(0.2122514777001612, 8.7610186092066602));
+  refPointsPolyline1.push_back(Point(0.45943041375604515, 9.5151811949069547));
+  refPointsPolyline1.push_back(Point(0.76034390112842565, 8.3986287952987269));
+  refPointsPolyline1.push_back(Point(0.94841483073616339, 9.3192948090107741));
+  refPointsPolyline1.push_back(Point(1.1794734013970984, 8.2125367286973567));
+  refPointsPolyline1.push_back(Point(1.5341214400859753, 8.9862879529872686));
+  refPointsPolyline1.push_back(Point(1.8081676518001075, 7.9578844270323215));
+  refPointsPolyline1.push_back(Point(2.2326706072004301, 8.8295788442703245));
+  polyline1.Init(refPointsPolyline1);
+
+  refPointsPolyline2.push_back(Point(0.077915099408919941, 9.4955925563173373));
+  refPointsPolyline2.push_back(Point(0.34658785599140246, 8.6728697355533804));
+  refPointsPolyline2.push_back(Point(0.74959699086512632, 9.3095004897159654));
+  refPointsPolyline2.push_back(Point(0.92154755507791508, 8.5357492654260536));
+  refPointsPolyline2.push_back(Point(1.2815690488984417, 9.2311459353574925));
+  refPointsPolyline2.push_back(Point(1.3729177861364859, 8.2713026444662106));
+  refPointsPolyline2.push_back(Point(1.969371305749597, 8.7610186092066602));
+  refPointsPolyline2.push_back(Point(2.184309511015583, 8.1831537708129289));
+  polyline2.Init(refPointsPolyline2);
+
+  points = segmentsIntersections(&polyline1, &polyline2);
+  testpoints = IntersectPolylinePolyline(polyline1, polyline2);
+  EXPECT_TRUE(compare(points, testpoints));
+
 
 
 

@@ -17,8 +17,8 @@ std::vector<Point> IntersectPolylinePolyline( const Curve& curve1, const Curve& 
 /// Запустить общий алгоритм пересечения кривых.
 std::vector<Point> IntersectGeneralCase( const Curve& curve1, const Curve& curve2 );
 std::vector<Point> segmentsIntersections(std::vector<Line> segments);
-std::vector<Point> segmentsIntersections(const std::vector<Point>& polyline1,
-  const std::vector<Point>& polyline2);
+std::vector<Point> segmentsIntersections( const Math::GeomPolyline* polyline1,
+  const Math::GeomPolyline* polyline2 );
 
 //std::vector<Point> IntersectPolylinePolylineBentleyOttmannAlgorithm( const Curve& curve1, const Curve& curve2 );
 }

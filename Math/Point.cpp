@@ -9,10 +9,10 @@ namespace Math {
 //-----------------------------------------------------------------------------
 // Коструктор Point.
 // ---
-Point::Point( double theX, double theY):
+Point::Point(double theX, double theY) :
   GeometricPrimitive(),
-  x                 ( theX ),
-  y                 ( theY )
+  x(theX),
+  y(theY)
 {
 }
 
@@ -20,23 +20,23 @@ Point::Point( double theX, double theY):
 //----------------------------------------------------------------------------
 //  Коструктор копии.
 // ---
-Point::Point(const Point& point):
+Point::Point(const Point& point) :
   GeometricPrimitive(),
-  x                 (0),
-  y                 (0)
+  x(0),
+  y(0)
 {
-	x = point.GetX();
-	y = point.GetY();
+  x = point.GetX();
+  y = point.GetY();
 }
 
 
 //----------------------------------------------------------------------------
 //  Коструктор создания точки из вектора.
 // ---
-Point::Point(const Vector& vector):
+Point::Point(const Vector& vector) :
   GeometricPrimitive(),
-  x                 (0),
-  y                 (0)
+  x(0),
+  y(0)
 {
   x = vector.GetX();
   y = vector.GetY();
@@ -46,9 +46,9 @@ Point::Point(const Vector& vector):
 //----------------------------------------------------------------------------
 //  Сдвинуть по осям x, y.
 // ---
-void Point::Translate( double xShift, double yShift )
+void Point::Translate(double xShift, double yShift)
 {
-  if ( IsValid() )
+  if (IsValid())
   {
     x += xShift;
     y += yShift;
@@ -59,12 +59,12 @@ void Point::Translate( double xShift, double yShift )
 //----------------------------------------------------------------------------
 //  Повернуть на угол alpha относительно начала координат.
 // ---
-void Point::Rotate( double alpha )
+void Point::Rotate(double alpha)
 {
-  if ( IsValid() )
+  if (IsValid())
   {
-    const double cosAlpha = cos( alpha );
-    const double sinAlpha = sin( alpha );
+    const double cosAlpha = cos(alpha);
+    const double sinAlpha = sin(alpha);
     const double oldx = x;
     const double oldy = y;
     x = oldx * cosAlpha - oldy * sinAlpha;
@@ -76,9 +76,9 @@ void Point::Rotate( double alpha )
 //----------------------------------------------------------------------------
 //  Маштабировать по оси х на xScaling, по оси y на yScaling.
 // ---
-void Point::Scale(  double xScaling, double yScaling  )
+void Point::Scale(double xScaling, double yScaling)
 {
-  if ( IsValid() )
+  if (IsValid())
   {
     x *= xScaling;
     y *= yScaling;
@@ -91,7 +91,7 @@ void Point::Scale(  double xScaling, double yScaling  )
 // ---
 double Point::GetX() const
 {
-	return x;
+  return x;
 }
 
 
@@ -100,7 +100,7 @@ double Point::GetX() const
 // ---
 double Point::GetY() const
 {
-	return y;
+  return y;
 }
 
 
@@ -109,9 +109,9 @@ double Point::GetY() const
 // ---
 Point Point::operator * (double param) const
 {
-  if ( IsValid() )
+  if (IsValid())
   {
-    return Point( x * param, y * param);
+    return Point(x * param, y * param);
   }
   else
     return Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
@@ -123,9 +123,9 @@ Point Point::operator * (double param) const
 // ---
 Point Point::operator / (double param) const
 {
-  if ( IsValid() && fabs(param) > CommonConstantsMath::NULL_TOL  )
+  if (IsValid() && fabs(param) > CommonConstantsMath::NULL_TOL)
   {
-    return Point( x / param, y / param);
+    return Point(x / param, y / param);
   }
   else
     return Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
@@ -137,47 +137,47 @@ Point Point::operator / (double param) const
 // ---
 Vector Point::operator - (Point point) const
 {
-  if ( IsValid() && point.IsValid() )
+  if (IsValid() && point.IsValid())
   {
-    return Vector( x - point.GetX(), y - point.GetY() );
+    return Vector(x - point.GetX(), y - point.GetY());
   }
   else
-    return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
+    return Vector(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
 }
 
 
 //-----------------------------------------------------------------------------
 //  Сложить две точки.
 // ---
-Point Point::operator + ( Point point ) const
+Point Point::operator + (Point point) const
 {
-  if ( IsValid() && point.IsValid() )
+  if (IsValid() && point.IsValid())
   {
-    return Point( x + point.GetX(), y + point.GetY());
+    return Point(x + point.GetX(), y + point.GetY());
   }
   else
-    return Point( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
+    return Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
 }
 
 
 //-----------------------------------------------------------------------------
 //  Сложить ветор и точку. По определению, это точка.
 // ---
-Point Point::operator + ( Vector vector ) const
+Point Point::operator + (Vector vector) const
 {
-  if ( IsValid() && vector.IsValid() )
+  if (IsValid() && vector.IsValid())
   {
-    return Point( x + vector.GetX(), y + vector.GetY() );
+    return Point(x + vector.GetX(), y + vector.GetY());
   }
   else
-    return Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
+    return Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
 }
 
 
 //-----------------------------------------------------------------------------
 //  Прировнять одну точку к другой точке.
 // ---
-Point Point::operator = ( Point point )
+Point Point::operator = (Point point)
 {
   x = point.GetX();
   y = point.GetY();
@@ -187,7 +187,7 @@ Point Point::operator = ( Point point )
 //-----------------------------------------------------------------------------
 //  Присвоить к текущей точке другую точку.
 // ---
-Point Point::operator += ( Point point )
+Point Point::operator += (Point point)
 {
   x += point.x;
   y += point.y;
@@ -201,7 +201,7 @@ Point Point::operator += ( Point point )
 // ---
 bool Point::IsValid() const
 {
-  return !( std::isinf(x) || std::isinf(y) );
+  return !(std::isinf(x) || std::isinf(y));
 }
 
 
@@ -216,26 +216,42 @@ std::string Point::GetName() const
 //-----------------------------------------------------------------------------
 // Найти расстояние между точками.
 // ---
-double Distance( Point point1, Point point2 )
+double Distance(Point point1, Point point2)
 {
-  return sqrt( (point1 - point2).GetX() * (point1 - point2).GetX() +
-               (point1 - point2).GetY() * (point1 - point2).GetY() );
+  return sqrt((point1 - point2).GetX() * (point1 - point2).GetX() +
+    (point1 - point2).GetY() * (point1 - point2).GetY());
 }
 
 
 //-----------------------------------------------------------------------------
 //  Проверить точки на эквивалентность с точностью CommonConstantsMath::NULL_TOL.
 // ---
-bool IsEqual( Point point1, const Point point2 )
+bool IsEqual(Point point1, const Point point2)
 {
-  return( fabs(point1.GetX() - point2.GetX()) < CommonConstantsMath::NULL_TOL
-    && fabs(point1.GetY() - point2.GetY()) < CommonConstantsMath::NULL_TOL );
+  return(fabs(point1.GetX() - point2.GetX()) < CommonConstantsMath::NULL_TOL
+    && fabs(point1.GetY() - point2.GetY()) < CommonConstantsMath::NULL_TOL);
 }
 
 
-bool Point::operator ==( Point point ) const
+//-----------------------------------------------------------------------------
+//  Проверить точки на эквивалентность с точностью CommonConstantsMath::NULL_TOL.
+// ---
+bool Point::operator ==(Point point) const
 {
-	return IsEqual( *this, point );
+  return IsEqual(*this, point);
+}
+
+
+//-----------------------------------------------------------------------------
+//  Сравнить точки в лексикографическом порядке.
+// ---
+bool Point::operator < ( Point point ) const
+{
+  if ( point.GetX() > GetX() )
+    return false;
+  if ( point.GetX() < GetX() )
+    return true;
+  return ( point.GetY() < GetY() );
 }
 }
 
