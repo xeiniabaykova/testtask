@@ -122,7 +122,7 @@ Ellipse::Ellipse ( const std::vector<Point>& points ):
     {
       center = points[0];
       const Vector v = points[1] - center;
-      const double r = v.Lenght();
+      const double r = v.Lenght();   
       r1 = r;
       r2 = r;
       alphaMajorAxis = 0.;
