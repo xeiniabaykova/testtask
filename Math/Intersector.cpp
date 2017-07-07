@@ -7,121 +7,121 @@
 #include <iostream>
 #include <set>
 namespace Math {
-namespace {
+  namespace {
 
-//-----------------------------------------------------------------------------
-//  Найти значение матрицы Гессе для квадрата расстояния между кривыми в точке (t1, t2).
-// ---
-std::vector<std::vector<double>> CountingHessian( const Curve& curve1, const Curve& curve2, double t1, double t2 )
-{
-  const double x1 = curve1.GetPoint( t1 ).GetX();
-  const double y1 = curve1.GetPoint( t1 ).GetY();
-  const double x1d = curve1.GetDerivative( t1 ).GetX();
-  const double y1d = curve1.GetDerivative( t1 ).GetY();
-  const double x1dd = curve1.Get2Derivative( t1 ).GetX();
-  const double y1dd = curve1.Get2Derivative( t1 ).GetY();
+  //-----------------------------------------------------------------------------
+  //  Найти значение матрицы Гессе для квадрата расстояния между кривыми в точке (t1, t2).
+  // ---
+  std::vector<std::vector<double>> CountingHessian(const Curve& curve1, const Curve& curve2, double t1, double t2)
+  {
+    const double x1 = curve1.GetPoint(t1).GetX();
+    const double y1 = curve1.GetPoint(t1).GetY();
+    const double x1d = curve1.GetDerivative(t1).GetX();
+    const double y1d = curve1.GetDerivative(t1).GetY();
+    const double x1dd = curve1.Get2Derivative(t1).GetX();
+    const double y1dd = curve1.Get2Derivative(t1).GetY();
 
-  const double x2 = curve2.GetPoint( t2 ).GetX();
-  const double y2 = curve2.GetPoint( t2 ).GetY();
-  const double x2d = curve2.GetDerivative( t2 ).GetX();
-  const double y2d = curve2.GetDerivative( t2 ).GetY();
-  const double x2dd = curve2.Get2Derivative( t2 ).GetX();
-  const double y2dd = curve2.Get2Derivative( t2 ).GetY();
+    const double x2 = curve2.GetPoint(t2).GetX();
+    const double y2 = curve2.GetPoint(t2).GetY();
+    const double x2d = curve2.GetDerivative(t2).GetX();
+    const double y2d = curve2.GetDerivative(t2).GetY();
+    const double x2dd = curve2.Get2Derivative(t2).GetX();
+    const double y2dd = curve2.Get2Derivative(t2).GetY();
 
-  const double F11 = x1dd * 2. * ( x1 - x2 ) + 2. * x1d * x1d + y1dd * 2. * ( y1 - y2 ) + 2. * y1d * y1d;
-  const double F12 = -2. * x2d * x1d - 2. * y2d * y1d;
-  const double F21 = -2. *x1d * x2d - 2. * y1d * y2d;
-  const double F22 = -2. * ( x1 - x2 ) * x2dd + 2.* x2d * x2d - 2. * ( y1 - y2 ) * y2dd + 2. * y2d * y2d;
+    const double F11 = x1dd * 2. * (x1 - x2) + 2. * x1d * x1d + y1dd * 2. * (y1 - y2) + 2. * y1d * y1d;
+    const double F12 = -2. * x2d * x1d - 2. * y2d * y1d;
+    const double F21 = -2. *x1d * x2d - 2. * y1d * y2d;
+    const double F22 = -2. * (x1 - x2) * x2dd + 2.* x2d * x2d - 2. * (y1 - y2) * y2dd + 2. * y2d * y2d;
 
-  std::vector<std::vector <double>> hessian;
-  hessian.resize( 2 );
-  hessian[0].resize( 2 );
-  hessian[1].resize( 2 );
-  hessian[0][0] = F11;
-  hessian[0][1] = F12;
-  hessian[1][0] = F21;
-  hessian[1][1] = F22;
-  return hessian;
+    std::vector<std::vector <double>> hessian;
+    hessian.resize(2);
+    hessian[0].resize(2);
+    hessian[1].resize(2);
+    hessian[0][0] = F11;
+    hessian[0][1] = F12;
+    hessian[1][0] = F21;
+    hessian[1][1] = F22;
+    return hessian;
+  }
+
+
+  //-----------------------------------------------------------------------------
+  //  Вернуть обратную матрицу. Предполагается, что матрица невырождена.
+  // ---
+  std::vector<std::vector<double>> InverseMatrix(const std::vector<std::vector<double>>& matrix)
+  {
+    std::vector<std::vector<double>> result( 2, std::vector<double>(2) );
+    const double determinant = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+    result[0][0] = matrix[1][1] / determinant;
+    result[0][1] = -matrix[1][0] / determinant;
+    result[1][0] = -matrix[0][1] / determinant;
+    result[1][1] = matrix[0][0] / determinant;
+    return result;
+  }
+
+
+  //-----------------------------------------------------------------------------
+  //  Вернуть градиент для квадрата расстояния между кривыми в заданной точке.
+  // ---
+  Vector Gradient(const Curve& curve1, const Curve& curve2, Point point)
+  {
+    Point point1 = curve1.GetPoint(point.GetX());
+    Vector grad1 = curve1.GetDerivative(point.GetX());
+
+    Point point2 = curve2.GetPoint(point.GetY());
+    Vector grad2 = curve2.GetDerivative(point.GetY());
+    double aResultT1 = 2.0 * (point1.GetX() - point2.GetX()) * grad1.GetX() + 2.0 * (point1.GetY() - point2.GetY()) * grad1.GetY();
+    double aResultT2 = 2.0 * (point2.GetX() - point1.GetX()) * grad2.GetX() + 2.0 * (point2.GetY() - point1.GetY()) * grad2.GetY();
+    return Vector(aResultT1, aResultT2);
+  }
+
+
+  //-----------------------------------------------------------------------------
+  //  Провести одну итерацию метода Ньютона.
+  // ---
+  Point NewtonMethodIteration(const Curve& curve1, const Curve& curve2, Point start)
+  {
+    auto invHessian = InverseMatrix(CountingHessian(curve1, curve2, start.GetX(), start.GetY()));
+    const Vector grad = Gradient(curve1, curve2, start);
+    const Point step(invHessian[0][0] * -grad.GetX() + invHessian[0][1] * -grad.GetY(), invHessian[1][0] *
+      -grad.GetX() + invHessian[1][1] * -grad.GetY());
+    return start + step;
+  }
+
+
+  //-----------------------------------------------------------------------------
+  // Проверить, содержит ли отрезок точку с координатой х.
+  // ---
+  bool IsXinSegment(const Line& line, double x)
+  {
+    return (x - line.GetStartPoint().GetX()) * (line.GetEndPoint().GetX() - x) >= 0;
+  }
+
+
+  //-----------------------------------------------------------------------------
+  // Проверить, содержит ли отрезок точку с координатой y.
+  // ---
+  bool IsYinSegment(const Line& line, double y)
+  {
+
+    return (y - line.GetStartPoint().GetY()) * (line.GetEndPoint().GetY() - y) >= 0;
+  }
+
+
+  //-----------------------------------------------------------------------------
+  //  Проверить принадлежность текущей точки отрезку.
+  // ---
+  bool ISPointInSegment(const Point& testPoint, const Line& line)
+  {
+    const double a = line.GetEndPoint().GetY() - line.GetStartPoint().GetY();
+    const double b = line.GetStartPoint().GetX() - line.GetEndPoint().GetX();
+    const double c = -a * line.GetStartPoint().GetX() - b * line.GetStartPoint().GetY();
+    if (fabs(a * testPoint.GetX() + b * testPoint.GetY() + c) > CommonConstantsMath::NULL_TOL)
+      return false;
+
+    return IsYinSegment(line, testPoint.GetY()) && IsYinSegment(line, testPoint.GetX());
+  }
 }
-
-
-//-----------------------------------------------------------------------------
-//  Вернуть обратную матрицу. Предполагается, что матрица невырождена.
-// ---
-std::vector<std::vector<double>> InverseMatrix( const std::vector<std::vector<double>>& matrix )
-{
-  std::vector<std::vector<double>> result( 2, std::vector<double>(2) );
-  const double determinant = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
-  result[0][0] = matrix[1][1] / determinant;
-  result[0][1] = -matrix[1][0] / determinant;
-  result[1][0] = -matrix[0][1] / determinant;
-  result[1][1] = matrix[0][0] / determinant;
-  return result;
-}
-
-
-//-----------------------------------------------------------------------------
-//  Вернуть градиент для квадрата расстояния между кривыми в заданной точке.
-// ---
-Vector Gradient( const Curve& curve1, const Curve& curve2, Point point )
-{
-  Point point1 = curve1.GetPoint( point.GetX() );
-  Vector grad1 = curve1.GetDerivative( point.GetX() );
-
-  Point point2 = curve2.GetPoint( point.GetY() );
-  Vector grad2 = curve2.GetDerivative( point.GetY());
-  double aResultT1 = 2.0 * ( point1.GetX() - point2.GetX() ) * grad1.GetX() + 2.0 * ( point1.GetY() - point2.GetY() ) * grad1.GetY();
-  double aResultT2 = 2.0 * ( point2.GetX() - point1.GetX() ) * grad2.GetX() + 2.0 * ( point2.GetY() - point1.GetY() ) * grad2.GetY();
-  return Vector( aResultT1, aResultT2 );
-}
-
-
-//-----------------------------------------------------------------------------
-//  Провести одну итерацию метода Ньютона.
-// ---
-Point NewtonMethodIteration( const Curve& curve1, const Curve& curve2, Point start )
-{
-  auto invHessian = InverseMatrix( CountingHessian(curve1, curve2, start.GetX(), start.GetY()) );
-  const Vector grad = Gradient( curve1, curve2, start );
-  const Point step( invHessian[0][0] * -grad.GetX() + invHessian[0][1] * -grad.GetY(), invHessian[1][0] *
-    -grad.GetX() + invHessian[1][1] * -grad.GetY() );
-  return start + step;
-}
-
-}
-//-----------------------------------------------------------------------------
-// Проверить, содержит ли отрезок точку с координатой х.
-// ---
-bool IsXinSegment( const Line& line, double x )
-{
-  return ( x - line.GetStartPoint().GetX()) * (line.GetEndPoint().GetX() - x ) >= 0;
-}
-
-
-//-----------------------------------------------------------------------------
-// Проверить, содержит ли отрезок точку с координатой y.
-// ---
-bool IsYinSegment( const Line& line, double y )
-{
-
-  return ( y - line.GetStartPoint().GetY()) * (line.GetEndPoint().GetY() - y ) >= 0;
-}
-
-
-//-----------------------------------------------------------------------------
-//  Проверить принадлежность текущей точки отрезку.
-// ---
-bool ISPointInSegment( const Point& testPoint, const Line& line )
-{
-  const double a = line.GetEndPoint().GetY() - line.GetStartPoint().GetY();
-  const double b = line.GetStartPoint().GetX() - line.GetEndPoint().GetX();
-  const double c = -a * line.GetStartPoint().GetX() - b * line.GetStartPoint().GetY();
-  if ( fabs(a * testPoint.GetX() + b * testPoint.GetY() + c) > CommonConstantsMath::NULL_TOL )
-    return false;
-
-  return IsYinSegment( line, testPoint.GetY() ) && IsYinSegment( line, testPoint.GetX() );
-}
-
 
 //-----------------------------------------------------------------------------
 //  Найти пересечение полилинии и окружности.
@@ -261,10 +261,10 @@ enum typeEvent {
 // ---
 struct LineData 
 {
-  Line                      line;
-  const Math::GeomPolyline* polyline;
-  size_t                    numParam;
-  double                   leftParam;
+  Line                      line;     // Отрезок.
+  const Math::GeomPolyline* polyline; // Полилиния, которой принадлежит отрезок.
+  size_t                    numParam; // Номер полилинии в списке полилиний.
+  double                   leftParam; // Параметр исходной кривой, соответсующий отрезку полилинии.
   LineData() = default;
   LineData      ( Line theLine, const Math::GeomPolyline* thePolyline, double theLeftParam, size_t thenumParam ) :
       line      ( theLine ),
@@ -278,6 +278,8 @@ struct LineData
     return obj.line == line && obj.polyline == polyline;
   }
 };
+
+
 //-----------------------------------------------------------------------------
 //  Вспомогательная структура для алгоритма быстрого пересечения отрезков.
 // Хранится точка текущего события, тип события, номер сегмента (возможно, больше не нужно)
@@ -285,9 +287,9 @@ struct LineData
 // ---
 struct PointEvent
 {
-  typeEvent type;
-  Point     point;
-  LineData  s1;
+  typeEvent type; // Тип точки события.
+  Point     point; // Точка события.
+  LineData  s1;   // Отрезок, соответствующий точке события.
   LineData  s2;
   PointEvent () : point( 0., 0. ) {}
   PointEvent ( Point thePoint, LineData theS1, typeEvent theType ) :
@@ -371,7 +373,6 @@ void FindNeighbors( PointEvent& upper, PointEvent& lower, const std::set<PointEv
       lower = *it;
   }
 }
-
 
 
 
@@ -687,7 +688,6 @@ std::vector<Point> IntersectPolylinePolyline(const Curve& curve1, const Curve& c
 }
 
 
-
 //-----------------------------------------------------------------------------
 //  Найти пересечение отрезка и полилинии.
 // ---
@@ -763,7 +763,8 @@ Point NewtonMethod( const Curve& curve1, const Curve& curve2, Point startValue )
   size_t numiteration = 10;
   Point currentPoint = startValue;
   Point newPoint;
-  for ( size_t i = 0; i < numiteration; i++ ) {
+  for ( size_t i = 0; i < numiteration; i++ ) 
+  {
     newPoint = NewtonMethodIteration( curve1, curve2, currentPoint );
     if ( fabs(Distance(newPoint, currentPoint)) < CommonConstantsMath::NULL_TOL )
       break;
