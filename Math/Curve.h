@@ -52,7 +52,7 @@ public:
   virtual Vector             GetDerivative       ( double t ) const = 0; ///< Вернуть производную точки точки на кривой по параметру t.
   virtual Vector             Get2Derivative      ( double t ) const = 0; ///< Вернуть вторую производную точки точки на кривой по параметру t.
   /// Вернуть полилинию для геометрического примитива с точностью accuracy. Точки, составляющие полилинию, расчитываются с помощью функции countingStep.
-  virtual void               GetAsPolyLine       ( GeomPolyline &polyLine, std::vector<double>& refParam = std::vector<double>(), double accuracy = CommonConstantsMath::PRECISION_POLYLINE) const;
+  virtual void               GetAsPolyLine       ( GeomPolyline &polyLine, double accuracy = CommonConstantsMath::PRECISION_POLYLINE) const;
   virtual bool               IsClosed            () const = 0;  /// Проверить замкнутость геометрического примитива.
   virtual CurveType          GetType             () const = 0;  /// Получить тип кривой.
 

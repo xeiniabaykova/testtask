@@ -49,7 +49,10 @@ GeomPolyline::GeomPolyline( const std::vector<Point>& thePoints ):
    Curve(),
   referencedPoints()
 {
- Init( thePoints );
+  std::vector<double> refParams;
+  for ( size_t i = 0; i < thePoints.size(); i++ )
+    refParams.push_back(static_cast<double>(i));
+ Init( thePoints, refParams );
 }
 
 
@@ -57,12 +60,20 @@ GeomPolyline::GeomPolyline( const std::vector<Point>& thePoints ):
 //  Инициализация полилинии по опорным точкам. Если точки удовлетворяют условию корректности: их количество не равно нулю и нет совпадающих точек,
 //  то создается полилиния по воходым точкам. Считаем, что точки в полилинию добаляются в том же порядке, что и находятся в входном массиве.
 // ---
-void GeomPolyline::Init( const std::vector<Point>& theReferencedPoints )
+void GeomPolyline::Init( const std::vector<Point>& theReferencedPoints, const std::vector<double>& theRefParams )
 {
 	referencedPoints.clear();
+  
   if ( IsCorrectPolylineData(theReferencedPoints) )
   {	 
     referencedPoints = theReferencedPoints;
+   
+    if (theRefParams.empty())
+      for (size_t i = 0; i < theReferencedPoints.size(); i++)
+        referemcedParams.push_back(static_cast<double>(i));
+    else 
+      referemcedParams = theRefParams;
+
   }
 }
 
@@ -235,7 +246,12 @@ std::vector<Point> GeomPolyline::GetReferensedPoints() const
 // ---
 void GeomPolyline::GetAsPolyLine( GeomPolyline &polyLine, std::vector<double>& refParam, double accuracy ) const
 {
-	polyLine.Init( referencedPoints );
+  std::vector<double> referemcedParams;
+  for (size_t i = 0; i < referencedPoints.size(); i++)
+  {
+    referemcedParams.push_back(static_cast<double>(i) );  
+  }
+  polyLine.Init( referencedPoints, referemcedParams );
 
 }
 
@@ -259,6 +275,14 @@ bool GeomPolyline::IsClosed() const
       < CommonConstantsMath::NULL_TOL );
 }
 
+
+//-----------------------------------------------------------------------------
+//  Получить значения параметра исходной кривой по которому строилась полилилния.
+// ---
+std::vector<double> GeomPolyline::GetReferensedParams() const
+{
+  return referemcedParams;
+}
 Curve::CurveType GeomPolyline::GetType() const
 {
   return Curve::PolylineType;

@@ -30,6 +30,7 @@ private:
   Point endPoint;  ///< Конечная точка отрезка.
 
 public:
+   Line( const Line &obj );
    Line() = default;
    /**  \brief Создать отрезок по вектору из точек.
      \param[in] points - набор точек .\~
@@ -65,22 +66,10 @@ public:
   Point                      GetStartPoint       () const;                                 ///< Вернуть начальную точку отрезка.
   Point                      GetEndPoint         () const;                                 ///< Вернуть конечную точку отрезка.
   double                     DistanceToPoint     ( Point point ) const;                    ///< Вернуть расстояние от точки до прямой.
-  virtual CurveType          GetType             () const;
-  bool                       operator==          (const Line& obj) const;
-
-public:
-  Line(const Line &obj)
-  {
-    startPoint = obj.startPoint;
-    endPoint = obj.endPoint;
-  }
-  Line& operator=(const Line &obj)
-  {
-    startPoint = obj.startPoint;
-    endPoint = obj.endPoint;
-    return *this;
-  }
-
+  virtual CurveType          GetType             () const;                                 ///< Вернуть тип кривой. 
+  bool                       operator==          ( const Line& obj) const;                 ///< Сравнить отрезки на эквивалентность.
+  Line&                      operator=           ( const Line &obj);                       ///< Присвоить один отрезок другому отрезку.
 };
+double Distance( const Line& line1, const Line& line2, Point& closestPoint );                ///< Вернуть расстояние между отрезками.
 }
 #endif // LINE_H

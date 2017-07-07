@@ -23,8 +23,8 @@ namespace Math {
 class GeomPolyline: public Curve
 {
 private:
- std::vector<Point> referencedPoints;
- std::vector<Point> referemcedParams;
+ std::vector<Point>  referencedPoints;
+ std::vector<double> referemcedParams;
 
 public:
  /**  \brief Конструктор полилинии по опорным точкам.
@@ -40,7 +40,7 @@ private:
   GeomPolyline& operator=( GeomPolyline &obj ) = delete;
 
 public:
-  void                Init                ( const std::vector<Point>& theReferencedPoints ); ///< Заменить опорные точки в полилинии.
+  void                Init                ( const std::vector<Point>& theReferencedPoints, const std::vector<double>& refParam = std::vector<double>() ); ///< Заменить опорные точки в полилинии.
   virtual Point       GetPoint            ( double t ) const;                                ///< Вернуть точку по параметру t.
   virtual Vector      GetDerivative       ( double t ) const;                                ///< Вернуть производную линнии по параметру t.
   virtual Vector      Get2Derivative      ( double t ) const;                                ///< Вернуть вторую производную на линии по параметру t.
@@ -53,6 +53,7 @@ public:
   virtual void        GetAsPolyLine       ( GeomPolyline &polyLine, std::vector<double>& refParam = std::vector<double>(), double accuracy = CommonConstantsMath::PRECISION_POLYLINE ) const;
   double              DistanceToPoint     ( Point point ) const;                             ///< Вернуть расстояние от точки до полилинии.
   bool                IsValid             () const;                                          ///< Проверить корректность полилинии: нет совпадающих точек, количество точек не равно нулю.
+  std::vector<double> GetReferensedParams() const;                                           ///< Получить значения параметра исходной кривой по которому строилась полилилния.
   std::vector<Point>  GetReferensedPoints () const;                                          ///< Вернуть опорные точки, использованные для построения полилинии.
   virtual std::string GetName             () const;                                          ///< Вернуть имя, используемое при записи полилинии в файл.
   virtual CurveType   GetType             () const;

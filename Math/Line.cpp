@@ -2,6 +2,7 @@
 #include "CommonConstantsMath.h"
 #include "GeomPolyline.h"
 #include <cmath>
+#include <algorithm>
 #include "Intersector.h"
 
 namespace Math {
@@ -21,6 +22,27 @@ Line::Line( Point theStartPoint, Point theEndPoint ):
       startPoint = theStartPoint;
       endPoint = theEndPoint;
 	}
+}
+
+
+//-----------------------------------------------------------------------------
+//   Коструктор копии Line. Записывается начальная точка и конечная точка.
+// ---
+Line::Line(const Line &obj)
+{
+  startPoint = obj.startPoint;
+  endPoint = obj.endPoint;
+}
+
+
+//-----------------------------------------------------------------------------
+//   Присвоить один отрезок другому отрезку.
+// ---
+Line& Line::operator=(const Line &obj)
+{
+  startPoint = obj.startPoint;
+  endPoint = obj.endPoint;
+  return *this;
 }
 
 
@@ -211,6 +233,19 @@ Curve::CurveType Line::GetType() const
 bool Line::operator==(const Line& obj) const
 {
   return IsEqual(startPoint, obj.GetStartPoint()) && IsEqual(endPoint, obj.GetEndPoint());
+}
+
+//-----------------------------------------------------------------------------
+//  Вернуть расстояние между отрезками.
+// ---
+double Distance( const Line& line1, const Line& line2, Point& closestPoint )
+{
+  if (line1.DistanceToPoint(line2.GetStartPoint()) > line1.DistanceToPoint(line2.GetEndPoint()))
+    closestPoint = line2.GetStartPoint();
+  else
+    closestPoint = line2.GetEndPoint();
+  return( std::min(line1.DistanceToPoint(line2.GetStartPoint()) , line1.DistanceToPoint(line2.GetEndPoint())) );
+
 }
 
 }

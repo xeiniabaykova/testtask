@@ -263,10 +263,14 @@ struct LineData
 {
   Line                      line;
   const Math::GeomPolyline* polyline;
+  size_t                    numParam;
+  double                   leftParam;
   LineData() = default;
-  LineData     ( Line theLine, const Math::GeomPolyline* thePolyline ) :
-      line     ( theLine ),
-      polyline ( thePolyline )
+  LineData      ( Line theLine, const Math::GeomPolyline* thePolyline, double theLeftParam, size_t thenumParam ) :
+      line      ( theLine ),
+      polyline  ( thePolyline ),
+      leftParam ( theLeftParam),
+      numParam  ( thenumParam )
   {}
 
   bool operator==( const LineData& obj ) const
@@ -393,7 +397,7 @@ bool FindNeighborUpper( LineData& upper, const std::vector<LineData>& T, const L
 {
   bool result = false;
   upper = LineData( Line(Point(-std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity()),
-    Point(-std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity())), 0 );
+    Point(-std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity())), 0, 0, 0 );
 
   const double x = line.line.GetStartPoint().GetX();
   const double y = line.line.GetStartPoint().GetY();
@@ -401,8 +405,12 @@ bool FindNeighborUpper( LineData& upper, const std::vector<LineData>& T, const L
   for ( auto it = T.begin(); it != T.end(); ++it )
   {
     if ( IsXinSegment(it->line, x) )
-    {      
-      double currentY = GetYFromX( it->line, x );
+    {  
+      double currentY = 0.;
+      if (it->line.GetStartPoint().GetX() == it->line.GetEndPoint().GetX())
+        currentY = std::max(it->line.GetStartPoint().GetY(), it->line.GetEndPoint().GetY());
+      else
+        currentY = GetYFromX(it->line, x);
       if ( currentY >= upper.line.GetStartPoint().GetY() && currentY > y  && !(line.line == it->line) )
       {
         upper = *it;
@@ -421,7 +429,7 @@ bool FindNeighborsLower( LineData& lower, const std::vector<LineData>& T, const 
 {
   bool result = false;
   lower = LineData( Line( Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity()),
-    Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity())), 0 );
+    Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity())), 0, 0, 0 );
 
   const double x = line.line.GetStartPoint().GetX();
   const double y = line.line.GetStartPoint().GetY();
@@ -430,8 +438,12 @@ bool FindNeighborsLower( LineData& lower, const std::vector<LineData>& T, const 
   {
     if ( IsXinSegment(it->line, x) )
     {
-      const double currentY = GetYFromX(it->line, x);
-      if ( currentY <= lower.line.GetStartPoint().GetY() && fabs(currentY - y) < CommonConstantsMath::NULL_TOL && !(line.polyline == it->polyline) )
+      double currentY = 0.;
+      if (it->line.GetStartPoint().GetX() == it->line.GetEndPoint().GetX())
+        currentY = std::min( it->line.GetStartPoint().GetY(), it->line.GetEndPoint().GetY() );
+      else
+        currentY = GetYFromX(it->line, x);
+      if ( currentY <= lower.line.GetStartPoint().GetY() && currentY < y && !(line.polyline == it->polyline) )
       {
         lower = *it;
         result = true;
@@ -447,7 +459,7 @@ bool FindNeighborsLower( LineData& lower, const std::vector<LineData>& T, const 
 // Обработать точку события.
 // ---
 void ProcessPoint( std::multiset<PointEvent, SortByX>& Q, std::vector<LineData>& T, PointEvent point, std::vector<PointEvent>& intersectionPoints,
-  std::vector<Point>& result )
+  std::vector<Point>& result, std::vector<std::pair<double,double>>& params )
 {
   if ( point.type == typeEvent::Left )
   {
@@ -457,7 +469,7 @@ void ProcessPoint( std::multiset<PointEvent, SortByX>& Q, std::vector<LineData>&
     if ( FindNeighborsLower(lower, T, point.s1) )
     {
       Point newPoint;
-      if ( lower.polyline != point.s1.polyline && IntersectLines( lower.line, point.s1.line, newPoint) )
+      if ( lower.polyline != point.s1.polyline &&(IntersectLines(lower.line, point.s1.line, newPoint) ||  fabs(Distance( lower.line, point.s1.line, newPoint) < CommonConstantsMath::NULL_TOL)) )
       {
         PointEvent event( newPoint, point.s1, typeEvent::Intersection );
         event.s2 = lower;
@@ -468,7 +480,7 @@ void ProcessPoint( std::multiset<PointEvent, SortByX>& Q, std::vector<LineData>&
     if ( FindNeighborUpper(upper, T, point.s1) )
     {
       Point newPoint;
-      if ( upper.polyline != point.s1.polyline && IntersectLines(upper.line, point.s1.line, newPoint) )
+      if ( upper.polyline != point.s1.polyline && ( IntersectLines(upper.line, point.s1.line, newPoint) ||(fabs (Distance(upper.line, point.s1.line, newPoint))  < CommonConstantsMath::NULL_TOL )) )
       {
        PointEvent event( newPoint, upper, typeEvent::Intersection );
        event.s2 = point.s1;
@@ -483,7 +495,7 @@ void ProcessPoint( std::multiset<PointEvent, SortByX>& Q, std::vector<LineData>&
     if ( FindNeighborsLower( lower, T, point.s1) && FindNeighborUpper(upper, T, point.s1) )
     {
       Point newPoint;
-      if ( lower.polyline != upper.polyline && IntersectLines( upper.line,lower.line, newPoint) )
+      if ( lower.polyline != upper.polyline && (IntersectLines(upper.line, point.s1.line, newPoint) || fabs(Distance( upper.line,lower.line, newPoint) < CommonConstantsMath::NULL_TOL)) )
       {
         if ( newPoint.GetX() > point.point.GetX() )
         {
@@ -504,7 +516,7 @@ void ProcessPoint( std::multiset<PointEvent, SortByX>& Q, std::vector<LineData>&
     if ( FindNeighborUpper(lower, T, s1) )
     {
       Point newPoint;
-      if ( lower.polyline != s1.polyline &&  IntersectLines(lower.line, s1.line, newPoint) )
+      if ( lower.polyline != s1.polyline && (IntersectLines(lower.line, point.s1.line, newPoint) || fabs(Distance(lower.line, s1.line, newPoint) < CommonConstantsMath::NULL_TOL)) )
       {
         PointEvent event( newPoint, upper, typeEvent::Intersection );
         event.s2 = lower;
@@ -514,7 +526,7 @@ void ProcessPoint( std::multiset<PointEvent, SortByX>& Q, std::vector<LineData>&
     if ( FindNeighborsLower(upper, T, s2) )
     {
       Point newPoint;
-      if ( lower.polyline != s2.polyline && IntersectLines(upper.line, s2.line, newPoint) )
+      if ( lower.polyline != s2.polyline && (IntersectLines(upper.line, point.s1.line, newPoint) ||  fabs(Distance(upper.line, s2.line, newPoint) < CommonConstantsMath::NULL_TOL)) )
       {
         PointEvent event( newPoint, upper, typeEvent::Intersection );
         event.s2 = point.s1;
@@ -530,6 +542,10 @@ void ProcessPoint( std::multiset<PointEvent, SortByX>& Q, std::vector<LineData>&
   for ( size_t i = 0; i < intersectionPoints.size(); ++i )
   {
     result.push_back( intersectionPoints[i].point );
+    if ( intersectionPoints[i].s1.numParam < intersectionPoints[i].s2.numParam )
+      params.push_back(std::make_pair(intersectionPoints[i].s1.leftParam, intersectionPoints[i].s2.leftParam));
+    else 
+      params.push_back(std::make_pair(intersectionPoints[i].s2.leftParam, intersectionPoints[i].s1.leftParam));
     if ( !FindAbscissa(intersectionPoints[i], Q) )
     {  
       Q.insert( intersectionPoints[i] );
@@ -542,7 +558,7 @@ void ProcessPoint( std::multiset<PointEvent, SortByX>& Q, std::vector<LineData>&
 //-----------------------------------------------------------------------------
 //  Найти пересечение отрезков. !!! СЕЙЧАС НЕ РАБОТАЕТ, ПОПРАВИТЬ ДЛЯ ТЕСТОВ
 // ---
-std::vector<Point> segmentsIntersections( std::vector<Line> segments )
+std::vector<Point> SegmentsIntersections( std::vector<Line> segments , std::vector<std::pair<double, double>>& params )
 {
   std::vector<Point> result;
   std::vector<PointEvent> intersectPoints;
@@ -565,13 +581,13 @@ std::vector<Point> segmentsIntersections( std::vector<Line> segments )
   {
     PointEvent currentPoint = *Q.begin();   
     Q.erase( Q.begin() );
-    ProcessPoint( Q, T, currentPoint, intersectPoints, result );
+    ProcessPoint( Q, T, currentPoint, intersectPoints, result, params );
   }
   return result;
 }
 
-std::vector<Point> segmentsIntersections( const Math::GeomPolyline* polyline1,
-  const Math::GeomPolyline* polyline2 )
+std::vector<Point> SegmentsIntersections( const Math::GeomPolyline* polyline1,
+  const Math::GeomPolyline* polyline2, std::vector<std::pair<double,double>>& params )
 {
   std::vector<Point> result;
   std::vector<PointEvent> intersectPoints;
@@ -579,18 +595,20 @@ std::vector<Point> segmentsIntersections( const Math::GeomPolyline* polyline1,
   std::multiset<PointEvent, SortByX> Q;
   std::vector<LineData> T;
   std::vector<Point> polylinePoints1 = polyline1->GetReferensedPoints();
+  std::vector<double> refParams1 = polyline1->GetReferensedParams();
   std::vector<Point> polylinePoints2 = polyline2->GetReferensedPoints();
+  std::vector<double> refParams2 = polyline2->GetReferensedParams();
 
   for ( size_t i = 1; i < polylinePoints1.size(); ++i )
   {
-    LineData currentLine( Line(polylinePoints1[i - 1], polylinePoints1[i]), polyline1 );
+    LineData currentLine( Line(polylinePoints1[i - 1], polylinePoints1[i]), polyline1, refParams1[i], 1 );
     Q.insert( PointEvent(polylinePoints1[i - 1], currentLine, typeEvent::Left) );
     Q.insert( PointEvent(polylinePoints1[i], currentLine, typeEvent::Right) );
   }
 
   for ( size_t i = 1; i < polylinePoints2.size(); ++i )
   {
-    LineData currentLine( Line(polylinePoints2[i - 1], polylinePoints2[i]), polyline2 );
+    LineData currentLine( Line(polylinePoints2[i - 1], polylinePoints2[i]), polyline2, refParams2[i], 2 );
     Q.insert( PointEvent(polylinePoints2[i - 1], currentLine, typeEvent::Left) );
     Q.insert( PointEvent(polylinePoints2[i], currentLine, typeEvent::Right) );
   }
@@ -600,11 +618,14 @@ std::vector<Point> segmentsIntersections( const Math::GeomPolyline* polyline1,
   {
     PointEvent currentPoint = *Q.begin();
     Q.erase( Q.begin() );
-    ProcessPoint( Q, T, currentPoint, intersectPoints, result );
+    ProcessPoint( Q, T, currentPoint, intersectPoints, result, params );
   }
   // убираем совпадающие точки, если они есть
   std::set<Point> s( result.begin(), result.end() );
   result.assign( s.begin(), s.end() );
+
+  std::set<std::pair<double,double>> s1(params.begin(), params.end());
+  params.assign( s1.begin(), s1.end() );
   return result;
 }
 
@@ -613,12 +634,16 @@ std::vector<Point> segmentsIntersections( const Math::GeomPolyline* polyline1,
 //  Найти пересечение двух полилиний. Это тривиальный случай: перебираем попарно все полилинии, сравниваем отреки.
 // Необходим для подтверждения корректности быстрого алгоритма.
 // ---
-std::vector<Point> IntersectPolylinePolyline( const Curve& curve1, const Curve& curve2 )
+std::vector<Point> IntersectPolylinePolyline( const Curve& curve1, const Curve& curve2, std::vector<std::pair<double, double>>& resultParams )
 {
   std::vector<Point> intersectPoints;
   const Math::GeomPolyline* lineCurveFirst =  dynamic_cast<const Math::GeomPolyline*>( &curve1 );
   std::vector<Point> refPointsFirst = lineCurveFirst->GetReferensedPoints();
   const Math::GeomPolyline* lineCurveSecound =  dynamic_cast<const Math::GeomPolyline*>( &curve2 );
+
+  std::vector<double> refParams1 = lineCurveFirst->GetReferensedParams();
+  std::vector<double> refParams2 = lineCurveSecound->GetReferensedParams();
+
   std::vector<Point> refPointsSecound = lineCurveSecound->GetReferensedPoints();
   for ( size_t i = 1; i < refPointsFirst.size(); ++i )
   {
@@ -629,8 +654,11 @@ std::vector<Point> IntersectPolylinePolyline( const Curve& curve1, const Curve& 
       if ( IntersectLines(Line(refPointsSecound[j - 1], refPointsSecound[j]), firstLine, point) )
       {
         auto result = std::find( std::begin(intersectPoints), std::end(intersectPoints), point );
-        if (result == std::end( intersectPoints) )
-          intersectPoints.push_back( point );
+        if ( result == std::end(intersectPoints) )
+        {
+          intersectPoints.push_back(point);
+          resultParams.push_back( std::make_pair(refParams1[i], refParams2[j]) );
+        }
       }
     }
   }
@@ -639,6 +667,16 @@ std::vector<Point> IntersectPolylinePolyline( const Curve& curve1, const Curve& 
   return intersectPoints;
 }
 
+
+//-----------------------------------------------------------------------------
+//  Найти пересечение двух полилиний. Это тривиальный случай: перебираем попарно все полилинии, сравниваем отреки.
+// Необходим для подтверждения корректности быстрого алгоритма.
+// ---
+std::vector<Point> IntersectPolylinePolyline(const Curve& curve1, const Curve& curve2)
+{
+    std::vector<std::pair<double, double>> resultParams;
+    return  IntersectPolylinePolyline( curve1, curve2, resultParams );
+}
 
 
 
@@ -735,22 +773,19 @@ std::vector<Point> IntersectGeneralCaseSimple( const Curve& curve1, const Curve&
 {
 	GeomPolyline polylinePoints1;
   std::vector<double> refcurve1;
-	curve1.GetAsPolyLine( polylinePoints1, refcurve1 );
+	curve1.GetAsPolyLine( polylinePoints1);
 
 	GeomPolyline polylinePoints2;
   std::vector<double> refcurve2;
-	curve2.GetAsPolyLine( polylinePoints2, refcurve2 );
+	curve2.GetAsPolyLine( polylinePoints2 );
+  std::vector<std::pair<double, double>> params;
 
-	std::vector<Point> startPoints = IntersectPolylinePolyline( polylinePoints1, polylinePoints2 );
+	std::vector<Point> startPoints = IntersectPolylinePolyline( polylinePoints1, polylinePoints2, params );
 	std::vector<Point> intersectPoints;
 
-  for ( size_t i = 0; i < startPoints.size(); i++ )
+  for ( size_t i = 0; i < params.size(); i++ )
 	{
-    double paramcurve1;
-    double paramcurve2;
-    std::modf( startPoints[i].GetX(), &paramcurve1 );
-    std::modf( startPoints[i].GetY(), &paramcurve2 );
-    Point intersectPoint = NewtonMethod( curve1, curve2, Point(refcurve1[static_cast<int>(paramcurve1)], refcurve2[static_cast<int>(paramcurve2)]) );
+    Point intersectPoint = NewtonMethod( curve1, curve2, Point(params[i].first, params[i].second) );
     if ( Distance( curve1.GetPoint(intersectPoint.GetX()), curve2.GetPoint(intersectPoint.GetY())) < CommonConstantsMath::NULL_TOL )
           intersectPoints.push_back( intersectPoint );
 	}
@@ -765,22 +800,19 @@ std::vector<Point> IntersectGeneralCase( const Curve& curve1, const Curve& curve
 {
   GeomPolyline polylinePoints1;
   std::vector<double> refcurve1;
-  curve1.GetAsPolyLine( polylinePoints1, refcurve1 );
+  curve1.GetAsPolyLine( polylinePoints1 );
 
   GeomPolyline polylinePoints2;
   std::vector<double> refcurve2;
-  curve2.GetAsPolyLine( polylinePoints2, refcurve2 );
+  curve2.GetAsPolyLine( polylinePoints2 );
 
-  std::vector<Point> startPoints = segmentsIntersections( &polylinePoints1, &polylinePoints2 );
+  std::vector<std::pair<double, double>> params;
+  std::vector<Point> startPoints = SegmentsIntersections( &polylinePoints1, &polylinePoints2, params );
   std::vector<Point> intersectPoints;
 
-  for (size_t i = 0; i < startPoints.size(); i++)
+  for ( size_t i = 0; i < params.size(); i++ )
   {
-    double paramcurve1;
-    double paramcurve2;
-    std::modf(startPoints[i].GetX(), &paramcurve1);
-    std::modf(startPoints[i].GetY(), &paramcurve2);
-    Point intersectPoint = NewtonMethod( curve1, curve2, Point(refcurve1[static_cast<int>(paramcurve1)], refcurve2[static_cast<int>(paramcurve2)]) );
+    Point intersectPoint = NewtonMethod( curve1, curve2, Point(params[i].first, params[i].second) );
     if ( Distance(curve1.GetPoint(intersectPoint.GetX()), curve2.GetPoint(intersectPoint.GetY())) < CommonConstantsMath::NULL_TOL )
       intersectPoints.push_back( intersectPoint );
   }
