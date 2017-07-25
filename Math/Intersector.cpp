@@ -7,120 +7,120 @@
 #include <iostream>
 #include <set>
 namespace Math {
-  namespace {
+namespace {
 
-  //-----------------------------------------------------------------------------
-  //  Найти значение матрицы Гессе для квадрата расстояния между кривыми в точке (t1, t2).
-  // ---
-  std::vector<std::vector<double>> CountingHessian(const Curve& curve1, const Curve& curve2, double t1, double t2)
-  {
-    const double x1 = curve1.GetPoint(t1).GetX();
-    const double y1 = curve1.GetPoint(t1).GetY();
-    const double x1d = curve1.GetDerivative(t1).GetX();
-    const double y1d = curve1.GetDerivative(t1).GetY();
-    const double x1dd = curve1.Get2Derivative(t1).GetX();
-    const double y1dd = curve1.Get2Derivative(t1).GetY();
+//-----------------------------------------------------------------------------
+//  Найти значение матрицы Гессе для квадрата расстояния между кривыми в точке (t1, t2).
+// ---
+std::vector<std::vector<double>> CountingHessian(const Curve& curve1, const Curve& curve2, double t1, double t2)
+{
+  const double x1 = curve1.GetPoint(t1).GetX();
+  const double y1 = curve1.GetPoint(t1).GetY();
+  const double x1d = curve1.GetDerivative(t1).GetX();
+  const double y1d = curve1.GetDerivative(t1).GetY();
+  const double x1dd = curve1.Get2Derivative(t1).GetX();
+  const double y1dd = curve1.Get2Derivative(t1).GetY();
 
-    const double x2 = curve2.GetPoint(t2).GetX();
-    const double y2 = curve2.GetPoint(t2).GetY();
-    const double x2d = curve2.GetDerivative(t2).GetX();
-    const double y2d = curve2.GetDerivative(t2).GetY();
-    const double x2dd = curve2.Get2Derivative(t2).GetX();
-    const double y2dd = curve2.Get2Derivative(t2).GetY();
+  const double x2 = curve2.GetPoint(t2).GetX();
+  const double y2 = curve2.GetPoint(t2).GetY();
+  const double x2d = curve2.GetDerivative(t2).GetX();
+  const double y2d = curve2.GetDerivative(t2).GetY();
+  const double x2dd = curve2.Get2Derivative(t2).GetX();
+  const double y2dd = curve2.Get2Derivative(t2).GetY();
 
-    const double F11 = x1dd * 2. * (x1 - x2) + 2. * x1d * x1d + y1dd * 2. * (y1 - y2) + 2. * y1d * y1d;
-    const double F12 = -2. * x2d * x1d - 2. * y2d * y1d;
-    const double F21 = -2. *x1d * x2d - 2. * y1d * y2d;
-    const double F22 = -2. * (x1 - x2) * x2dd + 2.* x2d * x2d - 2. * (y1 - y2) * y2dd + 2. * y2d * y2d;
+  const double F11 = x1dd * 2. * (x1 - x2) + 2. * x1d * x1d + y1dd * 2. * (y1 - y2) + 2. * y1d * y1d;
+  const double F12 = -2. * x2d * x1d - 2. * y2d * y1d;
+  const double F21 = -2. *x1d * x2d - 2. * y1d * y2d;
+  const double F22 = -2. * (x1 - x2) * x2dd + 2.* x2d * x2d - 2. * (y1 - y2) * y2dd + 2. * y2d * y2d;
 
-    std::vector<std::vector <double>> hessian;
-    hessian.resize(2);
-    hessian[0].resize(2);
-    hessian[1].resize(2);
-    hessian[0][0] = F11;
-    hessian[0][1] = F12;
-    hessian[1][0] = F21;
-    hessian[1][1] = F22;
-    return hessian;
-  }
-
-
-  //-----------------------------------------------------------------------------
-  //  Вернуть обратную матрицу. Предполагается, что матрица невырождена.
-  // ---
-  std::vector<std::vector<double>> InverseMatrix(const std::vector<std::vector<double>>& matrix)
-  {
-    std::vector<std::vector<double>> result( 2, std::vector<double>(2) );
-    const double determinant = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
-    result[0][0] = matrix[1][1] / determinant;
-    result[0][1] = -matrix[1][0] / determinant;
-    result[1][0] = -matrix[0][1] / determinant;
-    result[1][1] = matrix[0][0] / determinant;
-    return result;
-  }
+  std::vector<std::vector <double>> hessian;
+  hessian.resize(2);
+  hessian[0].resize(2);
+  hessian[1].resize(2);
+  hessian[0][0] = F11;
+  hessian[0][1] = F12;
+  hessian[1][0] = F21;
+  hessian[1][1] = F22;
+  return hessian;
+}
 
 
-  //-----------------------------------------------------------------------------
-  //  Вернуть градиент для квадрата расстояния между кривыми в заданной точке.
-  // ---
-  Vector Gradient(const Curve& curve1, const Curve& curve2, Point point)
-  {
-    Point point1 = curve1.GetPoint(point.GetX());
-    Vector grad1 = curve1.GetDerivative(point.GetX());
-
-    Point point2 = curve2.GetPoint(point.GetY());
-    Vector grad2 = curve2.GetDerivative(point.GetY());
-    double aResultT1 = 2.0 * (point1.GetX() - point2.GetX()) * grad1.GetX() + 2.0 * (point1.GetY() - point2.GetY()) * grad1.GetY();
-    double aResultT2 = 2.0 * (point2.GetX() - point1.GetX()) * grad2.GetX() + 2.0 * (point2.GetY() - point1.GetY()) * grad2.GetY();
-    return Vector(aResultT1, aResultT2);
-  }
-
-
-  //-----------------------------------------------------------------------------
-  //  Провести одну итерацию метода Ньютона.
-  // ---
-  Point NewtonMethodIteration(const Curve& curve1, const Curve& curve2, Point start)
-  {
-    auto invHessian = InverseMatrix(CountingHessian(curve1, curve2, start.GetX(), start.GetY()));
-    const Vector grad = Gradient(curve1, curve2, start);
-    const Point step(invHessian[0][0] * -grad.GetX() + invHessian[0][1] * -grad.GetY(), invHessian[1][0] *
-      -grad.GetX() + invHessian[1][1] * -grad.GetY());
-    return start + step;
-  }
+//-----------------------------------------------------------------------------
+//  Вернуть обратную матрицу. Предполагается, что матрица невырождена.
+// ---
+std::vector<std::vector<double>> InverseMatrix(const std::vector<std::vector<double>>& matrix)
+{
+  std::vector<std::vector<double>> result( 2, std::vector<double>(2) );
+  const double determinant = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+  result[0][0] = matrix[1][1] / determinant;
+  result[0][1] = -matrix[1][0] / determinant;
+  result[1][0] = -matrix[0][1] / determinant;
+  result[1][1] = matrix[0][0] / determinant;
+  return result;
+}
 
 
-  //-----------------------------------------------------------------------------
-  // Проверить, содержит ли отрезок точку с координатой х.
-  // ---
-  bool IsXinSegment(const Line& line, double x)
-  {
-    return (x - line.GetStartPoint().GetX()) * (line.GetEndPoint().GetX() - x) >= 0;
-  }
+//-----------------------------------------------------------------------------
+//  Вернуть градиент для квадрата расстояния между кривыми в заданной точке.
+// ---
+Vector Gradient(const Curve& curve1, const Curve& curve2, Point point)
+{
+  Point point1 = curve1.GetPoint(point.GetX());
+  Vector grad1 = curve1.GetDerivative(point.GetX());
+
+  Point point2 = curve2.GetPoint(point.GetY());
+  Vector grad2 = curve2.GetDerivative(point.GetY());
+  double aResultT1 = 2.0 * (point1.GetX() - point2.GetX()) * grad1.GetX() + 2.0 * (point1.GetY() - point2.GetY()) * grad1.GetY();
+  double aResultT2 = 2.0 * (point2.GetX() - point1.GetX()) * grad2.GetX() + 2.0 * (point2.GetY() - point1.GetY()) * grad2.GetY();
+  return Vector(aResultT1, aResultT2);
+}
 
 
-  //-----------------------------------------------------------------------------
-  // Проверить, содержит ли отрезок точку с координатой y.
-  // ---
-  bool IsYinSegment(const Line& line, double y)
-  {
+//-----------------------------------------------------------------------------
+//  Провести одну итерацию метода Ньютона.
+// ---
+Point NewtonMethodIteration(const Curve& curve1, const Curve& curve2, Point start)
+{
+  auto invHessian = InverseMatrix(CountingHessian(curve1, curve2, start.GetX(), start.GetY()));
+  const Vector grad = Gradient(curve1, curve2, start);
+  const Point step(invHessian[0][0] * -grad.GetX() + invHessian[0][1] * -grad.GetY(), invHessian[1][0] *
+    -grad.GetX() + invHessian[1][1] * -grad.GetY());
+  return start + step;
+}
 
-    return (y - line.GetStartPoint().GetY()) * (line.GetEndPoint().GetY() - y) >= 0;
-  }
+
+//-----------------------------------------------------------------------------
+// Проверить, содержит ли отрезок точку с координатой х.
+// ---
+bool IsXinSegment(const Line& line, double x)
+{
+  return (x - line.GetStartPoint().GetX()) * (line.GetEndPoint().GetX() - x) >= 0;
+}
 
 
-  //-----------------------------------------------------------------------------
-  //  Проверить принадлежность текущей точки отрезку.
-  // ---
-  bool ISPointInSegment(const Point& testPoint, const Line& line)
-  {
-    const double a = line.GetEndPoint().GetY() - line.GetStartPoint().GetY();
-    const double b = line.GetStartPoint().GetX() - line.GetEndPoint().GetX();
-    const double c = -a * line.GetStartPoint().GetX() - b * line.GetStartPoint().GetY();
-    if (fabs(a * testPoint.GetX() + b * testPoint.GetY() + c) > CommonConstantsMath::NULL_TOL)
-      return false;
+//-----------------------------------------------------------------------------
+// Проверить, содержит ли отрезок точку с координатой y.
+// ---
+bool IsYinSegment(const Line& line, double y)
+{
 
-    return IsYinSegment(line, testPoint.GetY()) && IsYinSegment(line, testPoint.GetX());
-  }
+  return (y - line.GetStartPoint().GetY()) * (line.GetEndPoint().GetY() - y) >= 0;
+}
+
+
+//-----------------------------------------------------------------------------
+//  Проверить принадлежность текущей точки отрезку.
+// ---
+bool ISPointInSegment(const Point& testPoint, const Line& line)
+{
+  const double a = line.GetEndPoint().GetY() - line.GetStartPoint().GetY();
+  const double b = line.GetStartPoint().GetX() - line.GetEndPoint().GetX();
+  const double c = -a * line.GetStartPoint().GetX() - b * line.GetStartPoint().GetY();
+  if (fabs(a * testPoint.GetX() + b * testPoint.GetY() + c) > CommonConstantsMath::NULL_TOL)
+    return false;
+
+  return IsYinSegment(line, testPoint.GetY()) && IsYinSegment(line, testPoint.GetX());
+}
 }
 
 //-----------------------------------------------------------------------------
@@ -394,46 +394,50 @@ double GetYFromX( const Line& line, double x )
 //-----------------------------------------------------------------------------
 // Получить для текущей точки события верхнего соседа.
 // ---
-bool FindNeighborUpper( LineData& upper, const std::vector<LineData>& T, const LineData& line )
+bool FindNeighborUpper( std::vector<LineData>& upper, const std::vector<LineData>& T, const PointEvent& point )
 {
-  bool result = false;
-  upper = LineData( Line(Point(-std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity()),
-    Point(-std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity())), 0, 0, 0 );
-
-  const double x = line.line.GetStartPoint().GetX();
-  const double y = line.line.GetStartPoint().GetY();
+  double minumum = -std::numeric_limits<double>::infinity();
+ 
+  const double x = point.point.GetX();
+  const double y = point.point.GetY();
 
   for ( auto it = T.begin(); it != T.end(); ++it )
   {
-    if ( IsXinSegment(it->line, x) )
+    if ( IsXinSegment(it->line, x) && it->polyline != point.s1.polyline )
     {  
       double currentY = 0.;
-      if (it->line.GetStartPoint().GetX() == it->line.GetEndPoint().GetX())
+      if ( it->line.GetStartPoint().GetX() == it->line.GetEndPoint().GetX() )
         currentY = std::max(it->line.GetStartPoint().GetY(), it->line.GetEndPoint().GetY());
       else
         currentY = GetYFromX(it->line, x);
-      if ( currentY >= upper.line.GetStartPoint().GetY() && currentY > y  && !(line.line == it->line) )
+      if ( currentY > y  && !(point.s1.numParam == it->numParam)  )
       {
-        upper = *it;
-        result = true;
+        if ( currentY == minumum )
+          upper.push_back(*it);
+
+        else if (fabs(currentY - y) < fabs(minumum - y))
+        {
+          upper.clear();
+          upper.push_back(*it);
+          minumum = currentY;
+        }
+     
       }
     }
   }
-  return result;
+  return !upper.empty();
 }
 
 
 //-----------------------------------------------------------------------------
 // Получить для текущей точки события нижнего соседа.
 // ---
-bool FindNeighborsLower( LineData& lower, const std::vector<LineData>& T, const LineData& line )
+bool FindNeighborsLower( std::vector<LineData>& lower, const std::vector<LineData>& T, const PointEvent& point )
 {
-  bool result = false;
-  lower = LineData( Line( Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity()),
-    Point(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity())), 0, 0, 0 );
+  double maximum = std::numeric_limits<double>::infinity();
 
-  const double x = line.line.GetStartPoint().GetX();
-  const double y = line.line.GetStartPoint().GetY();
+  const double x = point.point.GetX();
+  const double y = point.point.GetY();
 
   for ( auto it = T.begin(); it != T.end(); ++it )
   {
@@ -444,14 +448,21 @@ bool FindNeighborsLower( LineData& lower, const std::vector<LineData>& T, const 
         currentY = std::min( it->line.GetStartPoint().GetY(), it->line.GetEndPoint().GetY() );
       else
         currentY = GetYFromX(it->line, x);
-      if ( currentY <= lower.line.GetStartPoint().GetY() && currentY < y && !(line.polyline == it->polyline) )
+      if (  currentY < y && !(point.s1.numParam == it->numParam) )
       {
-        lower = *it;
-        result = true;
+      if (fabs(currentY - maximum) < CommonConstantsMath::NULL_TOL)
+        lower.push_back(*it);
+        else if ( fabs(currentY - y) < fabs(maximum  - y) )
+        {
+          lower.clear();
+          lower.push_back(*it);
+          maximum = currentY;
+        }
+      
       }
     }
   }
-  return result;
+  return !lower.empty();
 }
 
 
@@ -462,81 +473,97 @@ bool FindNeighborsLower( LineData& lower, const std::vector<LineData>& T, const 
 void ProcessPoint( std::multiset<PointEvent, SortByX>& Q, std::vector<LineData>& T, PointEvent point, std::vector<PointEvent>& intersectionPoints,
   std::vector<Point>& result, std::vector<std::pair<double,double>>& params )
 {
-  if ( point.type == typeEvent::Left )
+  if (point.type == typeEvent::Left)
   {
-    T.push_back( point.s1 );
-    LineData lower;
+    T.push_back(point.s1);
+    std::vector<LineData> lower;
 
-    if ( FindNeighborsLower(lower, T, point.s1) )
+    if (FindNeighborsLower(lower, T, point))
     {
       Point newPoint;
-      if ( lower.polyline != point.s1.polyline &&(IntersectLines(lower.line, point.s1.line, newPoint) ||
-                                                  fabs(Distance( lower.line, point.s1.line, newPoint) < CommonConstantsMath::NULL_TOL)) )
+      for (int i = 0; i < lower.size(); i++)
       {
-        PointEvent event( newPoint, point.s1, typeEvent::Intersection );
-        event.s2 = lower;
-        intersectionPoints.push_back( event );
-      }
-    }
-    LineData upper;
-    if ( FindNeighborUpper(upper, T, point.s1) )
-    {
-      Point newPoint;
-      if ( upper.polyline != point.s1.polyline && ( IntersectLines(upper.line, point.s1.line, newPoint) ||
-                                                    (fabs (Distance(upper.line, point.s1.line, newPoint))  < CommonConstantsMath::NULL_TOL )) )
-      {
-       PointEvent event( newPoint, upper, typeEvent::Intersection );
-       event.s2 = point.s1;
-       intersectionPoints.push_back( event );
-      }
-    }
-  }
-  else if ( point.type == typeEvent::Right )
-  {
-    LineData lower;
-    LineData upper;
-    if ( FindNeighborsLower( lower, T, point.s1) && FindNeighborUpper(upper, T, point.s1) )
-    {
-      Point newPoint;
-      if ( lower.polyline != upper.polyline && (IntersectLines(upper.line, point.s1.line, newPoint) ||
-                                                fabs(Distance( upper.line,lower.line, newPoint) < CommonConstantsMath::NULL_TOL)) )
-      {
-        if ( newPoint.GetX() > point.point.GetX() )
+        if (lower[i].polyline != point.s1.polyline && (IntersectLines(lower[i].line, point.s1.line, newPoint)
+          /* fabs(Distance( lower.line, point.s1.line, newPoint) < CommonConstantsMath::NULL_TOL))*/))
         {
-          PointEvent event( newPoint, upper, typeEvent::Intersection );
-          event.s2 = lower;
-          intersectionPoints.push_back( event );
+          PointEvent event(newPoint, point.s1, typeEvent::Intersection);
+          event.s2 = lower[i];
+          intersectionPoints.push_back(event);
         }
       }
     }
-
+    std::vector<LineData> upper;
+    if (FindNeighborUpper(upper, T, point))
+    {
+      for ( size_t i = 0; i < upper.size(); i++ )
+      {
+      Point newPoint;
+      if (upper[i].polyline != point.s1.polyline && (IntersectLines(upper[i].line, point.s1.line, newPoint)
+        /*(fabs (Distance(upper.line, point.s1.line, newPoint))  < CommonConstantsMath::NULL_TOL )*/))
+      {
+        PointEvent event(newPoint, upper[i], typeEvent::Intersection);
+        event.s2 = point.s1;
+        intersectionPoints.push_back(event);
+      }
+    }
+  }
+  }
+  else if ( point.type == typeEvent::Right )
+  {
+    std::vector<LineData> lower;
+    std::vector<LineData> upper;
+    if (FindNeighborsLower(lower, T, point) && FindNeighborUpper(upper, T, point))
+    {
+      Point newPoint;
+      for ( size_t i = 0; i < lower.size(); i++ )
+        for (size_t j = 0; j < upper.size(); j++)
+        {
+          if (lower[i].polyline != upper[j].polyline && (IntersectLines(upper[j].line, lower[i].line, newPoint)
+            /*fabs(Distance( upper.line,lower.line, newPoint) < CommonConstantsMath::NULL_TOL)*/))
+          {
+            if (newPoint.GetX() > point.point.GetX())
+            {
+              PointEvent event(newPoint, upper[j], typeEvent::Intersection);
+              event.s2 = lower[i];
+              intersectionPoints.push_back(event);
+            }
+          }
+    }
+    }
+    T.erase( std::remove_if(T.begin(), T.end(), [&](LineData line) {return line.line.GetEndPoint() == point.point;}), T.end() );
   }
   else
   {
     LineData s1 = point.s1;
     LineData s2 = point.s2;
-    LineData lower;
-    LineData upper;
-    if ( FindNeighborUpper(lower, T, s1) )
+    std::vector<LineData> lower;
+    std::vector<LineData> upper;
+    if (FindNeighborUpper(lower, T, PointEvent(s1.line.GetStartPoint(), s1, typeEvent::Left)))
     {
-      Point newPoint;
-      if ( lower.polyline != s1.polyline && (IntersectLines(lower.line, point.s1.line, newPoint) ||
-                                             fabs(Distance(lower.line, s1.line, newPoint) < CommonConstantsMath::NULL_TOL)) )
+      for ( size_t i = 0; i < lower.size(); i++ )
       {
-        PointEvent event( newPoint, upper, typeEvent::Intersection );
-        event.s2 = lower;
-        intersectionPoints.push_back( event );
+        Point newPoint;
+        if (lower[i].polyline != s1.polyline && (IntersectLines(lower[i].line, point.s1.line, newPoint)
+          /* fabs(Distance(lower.line, s1.line, newPoint) < CommonConstantsMath::NULL_TOL))*/))
+        {
+          PointEvent event(newPoint, lower[i], typeEvent::Intersection);
+          event.s2 = lower[i];
+          intersectionPoints.push_back(event);
+        }
       }
     }
-    if ( FindNeighborsLower(upper, T, s2) )
+    if (FindNeighborsLower(upper, T, PointEvent(s2.line.GetStartPoint(), s2, typeEvent::Left)))
     {
-      Point newPoint;
-      if ( lower.polyline != s2.polyline && (IntersectLines(upper.line, point.s1.line, newPoint) ||
-                                             fabs(Distance(upper.line, s2.line, newPoint) < CommonConstantsMath::NULL_TOL)) )
+      for (size_t i = 0; i < upper.size(); i++)
       {
-        PointEvent event( newPoint, upper, typeEvent::Intersection );
-        event.s2 = point.s1;
-        intersectionPoints.push_back( event );
+        Point newPoint;
+        if (upper[i].polyline != s2.polyline && (IntersectLines(upper[i].line, point.s2.line, newPoint)
+          /* fabs(Distance(upper.line, s2.line, newPoint) < CommonConstantsMath::NULL_TOL))*/))
+        {
+          PointEvent event(newPoint, upper[i], typeEvent::Intersection);
+          event.s2 = point.s1;
+          intersectionPoints.push_back(event);
+        }
       }
     }
     auto it = std::find( T.begin(), T.end(), s1 );
@@ -609,23 +636,40 @@ std::vector<Point> SegmentsIntersections( const Math::GeomPolyline* polyline1,
   std::vector<Point> polylinePoints2 = polyline2->GetReferensedPoints();
   std::vector<double> refParams2 = polyline2->GetReferensedParams();
 
-  for ( size_t i = 1; i < polylinePoints1.size(); ++i )
+  for ( size_t i = 0; i < polylinePoints1.size() - 1; ++i )
   {
-    LineData currentLine( Line(polylinePoints1[i - 1], polylinePoints1[i]), polyline1, refParams1[i], 1 );
-    Q.insert( PointEvent(polylinePoints1[i - 1], currentLine, typeEvent::Left) );
-    Q.insert( PointEvent(polylinePoints1[i], currentLine, typeEvent::Right) );
+    LineData currentLine( Line(polylinePoints1[i], polylinePoints1[i + 1]), polyline1, refParams1[i], 1 );
+    if (polylinePoints1[i].GetX() < polylinePoints1[i + 1].GetX())
+    {
+      Q.insert(PointEvent(polylinePoints1[i], currentLine, typeEvent::Left));
+      Q.insert(PointEvent(polylinePoints1[i + 1], currentLine, typeEvent::Right));
+    }
+    else
+    {
+      Q.insert(PointEvent(polylinePoints1[i], currentLine, typeEvent::Right));
+      Q.insert(PointEvent(polylinePoints1[i + 1], currentLine, typeEvent::Left));
+    }
   }
 
-  for ( size_t i = 1; i < polylinePoints2.size(); ++i )
+  for ( size_t i = 0; i < polylinePoints2.size() - 1; ++i )
   {
-    LineData currentLine( Line(polylinePoints2[i - 1], polylinePoints2[i]), polyline2, refParams2[i], 2 );
-    Q.insert( PointEvent(polylinePoints2[i - 1], currentLine, typeEvent::Left) );
-    Q.insert( PointEvent(polylinePoints2[i], currentLine, typeEvent::Right) );
+    LineData currentLine( Line(polylinePoints2[i], polylinePoints2[i + 1]), polyline2, refParams2[i], 2 );
+    if ( polylinePoints2[i].GetX() < polylinePoints2[i + 1].GetX() )
+    {
+      Q.insert( PointEvent(polylinePoints2[i], currentLine, typeEvent::Left) );
+      Q.insert( PointEvent(polylinePoints2[i + 1], currentLine, typeEvent::Right) );
+    }
+    else
+    {
+      Q.insert( PointEvent(polylinePoints2[i], currentLine, typeEvent::Right) );
+      Q.insert( PointEvent(polylinePoints2[i + 1], currentLine, typeEvent::Left) );
+    }
   }
 
   while ( !Q.empty() )
   {
     PointEvent currentPoint = *Q.begin();
+
     Q.erase( Q.begin() );
     ProcessPoint( Q, T, currentPoint, intersectPoints, result, params );
   }
@@ -735,7 +779,7 @@ std::vector<Point> IntersectLineCircle( const Curve& line, const Curve& circle )
 
   const double mu1 = ( -b + sqrt(bb4ac) ) / ( 2. * a );
   const double mu2 = ( -b - sqrt(bb4ac) ) / ( 2. * a );
-  if (mu1 == mu2)
+  if ( mu1 == mu2 )
   {
     result.push_back( p1 + ( p2 - p1 ) * mu1 );
     return result;
@@ -810,7 +854,7 @@ std::vector<Point> IntersectGeneralCase( const Curve& curve1, const Curve& curve
 
   GeomPolyline polylinePoints2;
   std::vector<double> refcurve2;
-  curve2.GetAsPolyLine( polylinePoints2 );
+  curve2.GetAsPolyLine( polylinePoints2);
 
   std::vector<std::pair<double, double>> params;
   SegmentsIntersections( &polylinePoints1, &polylinePoints2, params );
