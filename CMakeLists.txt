@@ -11,6 +11,7 @@ if (UTESTS)
 			Math/UnitTests/utest_ellipse.cpp
 			Math/UnitTests/utest_nurbs.cpp
 			Math/UnitTests/utest_polyline.cpp
+			Math/UnitTests/utest_intersector.cpp
 			)
 	include_directories($ENV{GTEST_ROOT}
 			$ENV{GTEST_ROOT}/include
@@ -67,6 +68,8 @@ message("EDITOR: " ${EditorSrc})
 set(SOURCE_FILES
 		${EditorSrc}
 		${UTestSrc}
+		Math/BoundingBox.cpp
+		Math/BoundingBox.h
 		Math/Curve.cpp
 		Math/Curve.h
 		Math/CommonConstantsMath.cpp

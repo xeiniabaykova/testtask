@@ -18,22 +18,22 @@ bool compare( std::vector<T>& v1, std::vector<T>& v2 )
 }
 }
 
- //в простейшем случае точка пересечения находится верно
+ //РІ РїСЂРѕСЃС‚РµР№С€РµРј СЃР»СѓС‡Р°Рµ С‚РѕС‡РєР° РїРµСЂРµСЃРµС‡РµРЅРёСЏ РЅР°С…РѕРґРёС‚СЃСЏ РІРµСЂРЅРѕ
 TEST(Line, Intersect1Point)
 {
-	// пересечение двух прямых
+	// РїРµСЂРµСЃРµС‡РµРЅРёРµ РґРІСѓС… РїСЂСЏРјС‹С…
 	Math::Line line1( Math::Point(1., 1.), Math::Point(3., 3.) );
 	Math::Line line2( Math::Point(3., 1.), Math::Point(1., 3.) );
   Math::Point point;
 	bool haveIntersect = Math::IntersectLines( line1, line2, point );
 	EXPECT_TRUE( haveIntersect );
 	EXPECT_TRUE( Math::IsEqual( Math::Point(2.,2.), point) );
-	// начало одной прямой - конец другой прямой
+	// РЅР°С‡Р°Р»Рѕ РѕРґРЅРѕР№ РїСЂСЏРјРѕР№ - РєРѕРЅРµС† РґСЂСѓРіРѕР№ РїСЂСЏРјРѕР№
 	Math::Line line3( Math::Point(3.,1.), Math::Point(5., 1.) );
   haveIntersect = Math::IntersectLines(line3, line2, point);
   EXPECT_TRUE( haveIntersect );
 	EXPECT_TRUE( Math::IsEqual(Math::Point( 3., 1. ), point ) );
-  // отрезки лежат на одной прямой, начало одного - конец другого
+  // РѕС‚СЂРµР·РєРё Р»РµР¶Р°С‚ РЅР° РѕРґРЅРѕР№ РїСЂСЏРјРѕР№, РЅР°С‡Р°Р»Рѕ РѕРґРЅРѕРіРѕ - РєРѕРЅРµС† РґСЂСѓРіРѕРіРѕ
   Math::Line line4(Math::Point(3., 3.), Math::Point(4., 4.));
   haveIntersect = Math::IntersectLines(line1, line4, point);
   EXPECT_TRUE(haveIntersect);
@@ -41,7 +41,7 @@ TEST(Line, Intersect1Point)
 
 }
 
-// если пересечения нет, возвращаем пустоту
+// РµСЃР»Рё РїРµСЂРµСЃРµС‡РµРЅРёСЏ РЅРµС‚, РІРѕР·РІСЂР°С‰Р°РµРј РїСѓСЃС‚РѕС‚Сѓ
 TEST(Line, NoIntersect)
 {
 	Math::Line line1(Math::Point(1., 3.), Math::Point(3., 3.));
@@ -220,7 +220,7 @@ TEST(Nurbs, 3Intersect)
   EXPECT_TRUE(Math::IsEqual(curve1.GetPoint(points[3].GetX()), curve3.GetPoint(points[3].GetY())));
   EXPECT_TRUE(Math::IsEqual(curve1.GetPoint(points[4].GetX()), curve3.GetPoint(points[4].GetY())));
 
-  /// случай, когда пересечения кривых нет
+  /// СЃР»СѓС‡Р°Р№, РєРѕРіРґР° РїРµСЂРµСЃРµС‡РµРЅРёСЏ РєСЂРёРІС‹С… РЅРµС‚
   NurbsCurve curve4(poles4, weights, false, 3);
   points = Math::IntersectGeneralCase(curve1, curve4);
   EXPECT_TRUE(points.empty());
@@ -441,7 +441,7 @@ TEST(segmenttest, Intersector)
 //TEST(SegmentsIntersectionsTest, lineCurveFirst)
 //{
 //  
-//  // простейший случай: разные начала и концы ( не совпадают ни по х, ни по у), пересечения нет
+//  // РїСЂРѕСЃС‚РµР№С€РёР№ СЃР»СѓС‡Р°Р№: СЂР°Р·РЅС‹Рµ РЅР°С‡Р°Р»Р° Рё РєРѕРЅС†С‹ ( РЅРµ СЃРѕРІРїР°РґР°СЋС‚ РЅРё РїРѕ С…, РЅРё РїРѕ Сѓ), РїРµСЂРµСЃРµС‡РµРЅРёСЏ РЅРµС‚
 //  std::vector<Math::Point> refPointsPolyline1;
 //  std::vector<Math::Point> refPointsPolyline2;
 //  std::vector<Line> segments1;
@@ -457,7 +457,7 @@ TEST(segmenttest, Intersector)
 //  std::vector<Point> testpoints = IntersectPolylinePolyline(polyline1, polyline2);
 //  EXPECT_TRUE( points.empty());
 //  EXPECT_TRUE(compare(points, testpoints));
-//  // простейший случай: разные начала и концы ( не совпадают ни по х, ни по у), пересечение есть
+//  // РїСЂРѕСЃС‚РµР№С€РёР№ СЃР»СѓС‡Р°Р№: СЂР°Р·РЅС‹Рµ РЅР°С‡Р°Р»Р° Рё РєРѕРЅС†С‹ ( РЅРµ СЃРѕРІРїР°РґР°СЋС‚ РЅРё РїРѕ С…, РЅРё РїРѕ Сѓ), РїРµСЂРµСЃРµС‡РµРЅРёРµ РµСЃС‚СЊ
 //  refPointsPolyline1.clear();
 //  refPointsPolyline2.clear();
 //
@@ -473,7 +473,7 @@ TEST(segmenttest, Intersector)
 //  EXPECT_FALSE(points.empty());
 //  EXPECT_TRUE(compare(points, testpoints));
 //
-//  // концы отрезков совпадают
+//  // РєРѕРЅС†С‹ РѕС‚СЂРµР·РєРѕРІ СЃРѕРІРїР°РґР°СЋС‚
 //  refPointsPolyline1.clear();
 //  refPointsPolyline2.clear();
 //
@@ -490,7 +490,7 @@ TEST(segmenttest, Intersector)
 //  EXPECT_TRUE(compare(points, testpoints));
 //
 //
-//  // пересечение вертикального и горизонтального отрезков
+//  // РїРµСЂРµСЃРµС‡РµРЅРёРµ РІРµСЂС‚РёРєР°Р»СЊРЅРѕРіРѕ Рё РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕРіРѕ РѕС‚СЂРµР·РєРѕРІ
 //
 //  refPointsPolyline1.clear();
 //  refPointsPolyline2.clear();
@@ -567,31 +567,31 @@ TEST( LineCircleIntersection, Intersection )
   Math::Ellipse ellipse( Math::Point(2., 2.), 2., 2.,0. );
   Math::Line line( Math::Point(0., 4.), Math::Point(4., 4.) );
 
-  // одна точка пересечения
+  // РѕРґРЅР° С‚РѕС‡РєР° РїРµСЂРµСЃРµС‡РµРЅРёСЏ
   std::vector<Math::Point> point = Math::IntersectLineCircle( line, ellipse );
   EXPECT_TRUE( point.size() == 1 );
   EXPECT_TRUE( IsEqual(point[0], Math::Point(2., 4.)) );
 
-  // две точки пересечения
+  // РґРІРµ С‚РѕС‡РєРё РїРµСЂРµСЃРµС‡РµРЅРёСЏ
   Math::Line line2(Math::Point(0., 4.), Math::Point(4., 0.));
   point = Math::IntersectLineCircle(line2, ellipse);
   EXPECT_TRUE( point.size() == 2 );
   EXPECT_TRUE(IsEqual(point[0], Math::Point(3.41421356, 0.58578643762)));
   EXPECT_TRUE(IsEqual(point[1], Math::Point(0.58578643762690485, 3.4142135623)));
 
-  // нет точек пересечения
+  // РЅРµС‚ С‚РѕС‡РµРє РїРµСЂРµСЃРµС‡РµРЅРёСЏ
   Math::Line line3(Math::Point(5., 4.), Math::Point(7., 8.));
   point = Math::IntersectLineCircle(line3, ellipse);
   EXPECT_TRUE(point.size() == 0);
 
-  // начало отрезка - на границе окружности
+  // РЅР°С‡Р°Р»Рѕ РѕС‚СЂРµР·РєР° - РЅР° РіСЂР°РЅРёС†Рµ РѕРєСЂСѓР¶РЅРѕСЃС‚Рё
   Math::Line line4(Math::Point(2., 4.), Math::Point(2., 8.));
   point = Math::IntersectLineCircle(line4, ellipse);
   EXPECT_TRUE(point.size() == 1);
   EXPECT_TRUE(IsEqual(point[0], Math::Point(2., 4.)));
 
 
-  // Те же самые тесты, но пересечение находится не аналитически, а с помошью общего алгоритма.
+  // РўРµ Р¶Рµ СЃР°РјС‹Рµ С‚РµСЃС‚С‹, РЅРѕ РїРµСЂРµСЃРµС‡РµРЅРёРµ РЅР°С…РѕРґРёС‚СЃСЏ РЅРµ Р°РЅР°Р»РёС‚РёС‡РµСЃРєРё, Р° СЃ РїРѕРјРѕС€СЊСЋ РѕР±С‰РµРіРѕ Р°Р»РіРѕСЂРёС‚РјР°.
   std::vector<Math::Point> pointsTest = Math::IntersectGeneralCase( line, ellipse );
   point = Math::IntersectLineCircle( line, ellipse );
   EXPECT_TRUE(compare(point, pointsTest));
