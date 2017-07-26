@@ -595,7 +595,20 @@ TEST( LineCircleIntersection, Intersection )
   std::vector<Math::Point> pointsTest = Math::IntersectGeneralCase( line, ellipse );
   point = Math::IntersectLineCircle( line, ellipse );
   EXPECT_TRUE(compare(point, pointsTest));
+}
 
 
+TEST(Intersection, NurbsNurbsSym)
+{
+  std::vector<double> weights(5, 1.);
+  std::vector<Math::Point> refPoints {Math::Point(2., 2.), Math::Point(4., 5.), Math::Point(8.5, 7.),
+                                      Math::Point(4., 9.), Math::Point(2., 12.)};
 
+  Math::NurbsCurve nurbs1(refPoints, weights, false, 4);
+
+  refPoints[0] = Math::Point(8., 2.); refPoints[1] = Math::Point(6., 5.); refPoints[2] = Math::Point(1.5, 7.);
+  refPoints[3] = Math::Point(6., 9.); refPoints[4] = Math::Point(8., 12.);
+  Math::NurbsCurve nurbs2(refPoints, weights, false, 4);
+  auto intersections = Math::IntersectGeneralCase( nurbs1, nurbs2 );
+  EXPECT_EQ(intersections.size(), 2);
 }
