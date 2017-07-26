@@ -7,8 +7,8 @@
 */
 ////////////////////////////////////////////////////////////////////////////////
 #include "CurveSerializer.h"
-#include "Math/GeometricPrimitive.h"
-#include "Math/Curve.h"
+#include "GeometricPrimitive.h"
+#include "Curve.h"
 #include <memory>
 #include <string>
 #include <vector>

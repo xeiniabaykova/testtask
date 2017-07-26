@@ -50,7 +50,7 @@ public:
   virtual void        Rotate              ( double alpha );                                  ///< Повернуть полинию на угол alphaAng относительно начала координат.
   virtual void        Scale               ( double XScaling, double YScaling );              ///< Масштабировать на xScaling по оси x, на yScaling по оси у.
   /// Вернуть полилинию для полилинии (это и есть сама полилиния).
-  virtual void        GetAsPolyLine       ( GeomPolyline &polyLine, std::vector<double>& refParam = std::vector<double>(), double accuracy = CommonConstantsMath::PRECISION_POLYLINE ) const;
+  virtual void        GetAsPolyLine       ( GeomPolyline &polyLine, std::vector<double>& refParam, double accuracy = CommonConstantsMath::PRECISION_POLYLINE ) const;
   double              DistanceToPoint     ( Point point ) const;                             ///< Вернуть расстояние от точки до полилинии.
   bool                IsValid             () const;                                          ///< Проверить корректность полилинии: нет совпадающих точек, количество точек не равно нулю.
   std::vector<double> GetReferensedParams() const;                                           ///< Получить значения параметра исходной кривой по которому строилась полилилния.
