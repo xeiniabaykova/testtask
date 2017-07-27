@@ -139,8 +139,8 @@ TEST(Ellipse, 2Intersect)
   Math::Line line(Math::Point(-2., 1.), Math::Point(0., 0.));
   std::vector<Math::Point> points = Math::IntersectGeneralCase(ellipse1, ellipse2);
   EXPECT_FALSE(points.empty());
- // EXPECT_TRUE(Math::IsEqual(ellipse1.GetPoint(points[0].GetX()), ellipse2.GetPoint(points[0].GetY())));
-//  EXPECT_TRUE(Math::IsEqual(ellipse1.GetPoint(points[1].GetX()), ellipse2.GetPoint(points[1].GetY())));
+  EXPECT_TRUE(Math::IsEqual(ellipse1.GetPoint(points[0].GetX()), ellipse2.GetPoint(points[0].GetY())));
+  EXPECT_TRUE(Math::IsEqual(ellipse1.GetPoint(points[1].GetX()), ellipse2.GetPoint(points[1].GetY())));
 
 }
 using namespace Math;
@@ -207,8 +207,8 @@ TEST(Nurbs, 3Intersect)
 
   std::vector<Math::Point> points = Math::IntersectGeneralCase(curve1, curve2);
   EXPECT_TRUE(points.empty());
- // EXPECT_TRUE(Math::IsEqual(curve1.GetPoint(points[0].GetX()), curve2.GetPoint(points[0].GetY())));
- // EXPECT_TRUE(Math::IsEqual(curve1.GetPoint(points[1].GetX()), curve2.GetPoint(points[1].GetY())));
+  EXPECT_TRUE(Math::IsEqual(curve1.GetPoint(points[0].GetX()), curve2.GetPoint(points[0].GetY())));
+  EXPECT_TRUE(Math::IsEqual(curve1.GetPoint(points[1].GetX()), curve2.GetPoint(points[1].GetY())));
 
   NurbsCurve curve3(poles3, weights, false, 3);
 
