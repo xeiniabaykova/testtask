@@ -6,6 +6,7 @@
 #include "../Intersector.h"
 #include "../NurbsCurve.h"
 #include <memory>
+#include <algorithm>
 #include <ctime>
 
 namespace {
@@ -36,6 +37,12 @@ TEST(Line, Intersect1Point)
   // отрезки лежат на одной прямой, начало одного - конец другого
   Math::Line line4(Math::Point(3., 3.), Math::Point(4., 4.));
   haveIntersect = Math::IntersectLines(line1, line4, point);
+  EXPECT_TRUE(haveIntersect);
+  EXPECT_TRUE(Math::IsEqual(Math::Point(3., 3.), point));
+
+  // Совпадение начала
+  Math::Line line5(Math::Point(3., 3.), Math::Point(2., 2.));
+  haveIntersect = Math::IntersectLines(line5, line4, point);
   EXPECT_TRUE(haveIntersect);
   EXPECT_TRUE(Math::IsEqual(Math::Point(3., 3.), point));
 
