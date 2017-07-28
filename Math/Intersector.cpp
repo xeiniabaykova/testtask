@@ -18,17 +18,27 @@ namespace {
 // ---
 std::vector<std::vector<double>> CountingHessian(const Curve& curve1, const Curve& curve2, double t1, double t2)
 {
-  const double x1 = curve1.GetPoint(t1).GetX();
-  const double y1 = curve1.GetPoint(t1).GetY();
-  const double x1d = curve1.GetDerivative(t1).GetX();
-  const double y1d = curve1.GetDerivative(t1).GetY();
-  const double x1dd = curve1.Get2Derivative(t1).GetX();
-  const double y1dd = curve1.Get2Derivative(t1).GetY();
+	const Point t1Point = curve1.GetPoint( t1 );
+  const double x1 = t1Point.GetX();
+  const double y1 = t1Point.GetY();
 
-  const double x2 = curve2.GetPoint(t2).GetX();
-  const double y2 = curve2.GetPoint(t2).GetY();
-  const double x2d = curve2.GetDerivative(t2).GetX();
-  const double y2d = curve2.GetDerivative(t2).GetY();
+	const Point t1PointD = curve1.GetDerivative( t1 );
+  const double x1d = t1PointD.GetX();
+  const double y1d = t1PointD.GetY();
+
+	const Point t1Point2D = curve1.Get2Derivative( t1 );
+  const double x1dd = t1Point2D.GetX();
+  const double y1dd = t1Point2D.GetY();
+
+	const Point t2Point = curve2.GetPoint( t2 );
+  const double x2 = t2Point.GetX();
+  const double y2 = t2Point.GetY();
+
+	const Point t2PointD = curve2.GetDerivative( t2 );
+  const double x2d = t2PointD.GetX();
+  const double y2d = t2PointD.GetY();
+
+	const Point t2Point2D = curve2.Get2Derivative( t2 );
   const double x2dd = curve2.Get2Derivative(t2).GetX();
   const double y2dd = curve2.Get2Derivative(t2).GetY();
 
@@ -37,10 +47,7 @@ std::vector<std::vector<double>> CountingHessian(const Curve& curve1, const Curv
   const double F21 = -2. *x1d * x2d - 2. * y1d * y2d;
   const double F22 = -2. * (x1 - x2) * x2dd + 2.* x2d * x2d - 2. * (y1 - y2) * y2dd + 2. * y2d * y2d;
 
-  std::vector<std::vector <double>> hessian;
-  hessian.resize(2);
-  hessian[0].resize(2);
-  hessian[1].resize(2);
+  std::vector<std::vector <double>> hessian( 2, std::vector<double>(2) );
   hessian[0][0] = F11;
   hessian[0][1] = F12;
   hessian[1][0] = F21;
@@ -85,10 +92,10 @@ Vector Gradient( const Curve& curve1, const Curve& curve2, Point point )
 // ---
 Point NewtonMethodIteration( const Curve& curve1, const Curve& curve2, Point start )
 {
-  auto invHessian = InverseMatrix(CountingHessian(curve1, curve2, start.GetX(), start.GetY()));
-  const Vector grad = Gradient(curve1, curve2, start);
-  const Point step(invHessian[0][0] * -grad.GetX() + invHessian[0][1] * -grad.GetY(), invHessian[1][0] *
-    -grad.GetX() + invHessian[1][1] * -grad.GetY());
+  auto invHessian = InverseMatrix( CountingHessian(curve1, curve2, start.GetX(), start.GetY()) );
+  const Vector grad = Gradient( curve1, curve2, start );
+  const Point step( invHessian[0][0] * -grad.GetX() + invHessian[0][1] * -grad.GetY(), invHessian[1][0] *
+    -grad.GetX() + invHessian[1][1] * -grad.GetY() );
   return start + step;
 }
 
@@ -112,7 +119,7 @@ bool IsYinSegment( const Line& line, double y )
 
 
 //-----------------------------------------------------------------------------
-//  Проверить принадлежность текущей точки отрезку.
+//  Проверить принадлежность текущей точки отрезку. 
 // ---
 bool ISPointInSegment( const Point& testPoint, const Line& line )
 {
@@ -234,14 +241,15 @@ struct LineData
   size_t                    numParam; // Номер полилинии в списке полилиний.
   double                    leftParam; // Параметр исходной кривой, соответсующий отрезку полилинии.
   size_t                    indexNumber; // Номер линии в списке линий.
+	double                    key;
 
   LineData() = default;
-  LineData      ( Line theLine, const GeomPolyline* thePolyline, double theLeftParam, size_t thenumParam, size_t theIndexNumber ) :
+  LineData      ( Line theLine, const GeomPolyline* thePolyline, double theLeftParam, size_t thenumParam, double theKey ) :
       line        ( theLine ),
       polyline    ( thePolyline ),
       leftParam   ( theLeftParam),
       numParam    ( thenumParam ),
-      indexNumber ( theIndexNumber )
+			key         ( theKey )
   {}
 
   bool operator==( const LineData& obj ) const
@@ -260,15 +268,14 @@ struct PointEvent
 {
   typeEvent type; // Тип точки события.
   Point     point; // Точка события.
-  LineData  s1;   // Отрезок, соответствующий точке события.
-  LineData  s2;
+  LineData  *s1;   // Отрезок, соответствующий точке события.
+  LineData  *s2;
   size_t    indexNumber; // Номер отрезка, которому принадлежит эта точка.
   PointEvent () : point( 0., 0. ) {}
-  PointEvent ( Point thePoint, LineData theS1, typeEvent theType, size_t theIndexNumber ) :
+  PointEvent ( Point thePoint, LineData *theS1, typeEvent theType ) :
     point       ( thePoint ),
     type        ( theType ),
-    s1          ( theS1 ),
-    indexNumber ( theIndexNumber )
+    s1          ( theS1 )
    {}
   PointEvent& operator = ( const PointEvent &obj )
   {
@@ -280,34 +287,6 @@ struct PointEvent
   bool operator == ( PointEvent rhs ) const
   {
     return ( IsEqual(point, rhs.point) );
-  }
-};
-
-
-struct PointHash {
-  size_t operator() ( const PointEvent &point ) const
-  {
-    return (size_t)( point.point.GetX() * 100 + point.point.GetY() );
-  }
-};
-
-
-//inline bool operator == ( const PointEvent lhs, const PointEvent rhs ) 
-//{
-//  return ( IsEqual(lhs.point, rhs.point) );
-//}
-//-----------------------------------------------------------------------------
-//  Функтор лексиграфического упорядочивания точек по возрастанию.
-// ---
-struct SortByX
-{
-  inline bool operator () ( const PointEvent &lhs, const PointEvent& rhs ) const
-  {
-    if ( lhs.point.GetX() > rhs.point.GetX() )
-      return false;
-    if ( lhs.point.GetX() < rhs.point.GetX() )
-      return true;
-    return ( lhs.point.GetY() < rhs.point.GetY() );
   }
 };
 
@@ -326,6 +305,74 @@ double GetYFromX(const Line& line, double x)
   double ch = -(x1 * y2 - x2 * y1) - x * (y1 - y2);
   return ch / (x2 - x1);
 }
+
+bool IsLexLess(Point lhs, Point rhs)
+{
+  if (lhs.GetX() > rhs.GetX())
+    return false;
+  if (lhs.GetX() < rhs.GetX())
+    return true;
+  return (lhs.GetY() < rhs.GetY());
+}
+//-----------------------------------------------------------------------------
+//  Функтор лексиграфического упорядочивания точек по возрастанию.
+// ---
+struct SortByX
+{
+  inline bool operator () (const PointEvent &lhs, const PointEvent& rhs) const
+  {
+    Point endPointLhs = lhs.s1->line.GetEndPoint();
+    Point endPointRhs = rhs.s1->line.GetEndPoint();
+    if (lhs.point.GetX() == rhs.point.GetX() && lhs.point.GetY() == rhs.point.GetY()
+      && endPointRhs.GetX() == endPointLhs.GetX() && endPointRhs.GetY() == endPointLhs.GetY())
+      return false;
+    else if ( lhs.point.GetX() == rhs.point.GetX() && lhs.point.GetY() == rhs.point.GetY() )
+    {
+      double endX = 0.0;
+      if (endPointLhs.GetX() < endPointRhs.GetX())
+      {
+        endX = endPointLhs.GetX();
+        double y = GetYFromX(rhs.s1->line, endX);
+        return (y < endPointLhs.GetY());
+      }
+      else
+      {
+        endX = endPointRhs.GetX();
+        double y = GetYFromX(lhs.s1->line, endX);
+        return (y > endPointRhs.GetY());
+      }
+
+    }   
+    else return IsLexLess(lhs.point, rhs.point);
+  }
+};
+
+
+struct KeySort
+{
+  inline bool operator () (const LineData* lhs, const LineData* rhs) const
+  {
+    /*  если один ключ меньше другого.возвращаем true
+      иначе если они равны, то возвращаем результат сравнения точек.
+      иначе возвращаем false*/
+
+      /*  типа "если первая точка первого отрезка лексикографически меньше
+          первой точки второго, то вернуть true, иначе если они равны то вернуть, меньше ли вторая точка первого отрезхка второй точки второго отрезка*/
+    if (lhs->key < rhs->key)
+      return true;
+    else if (lhs->key == rhs->key)
+    {
+      if (IsLexLess(lhs->line.GetStartPoint(), rhs->line.GetStartPoint()))
+        return true;
+      else if (IsLexLess(rhs->line.GetStartPoint(), lhs->line.GetStartPoint()))
+        return false;
+      else
+        return IsLexLess(lhs->line.GetEndPoint(), rhs->line.GetEndPoint());
+    }
+    else
+      return false;
+  }
+};
 
 struct SortByY
 {
@@ -351,7 +398,7 @@ struct SortByY
       {
         endX = endPointRhs.GetX();
         double y = GetYFromX( lhs.line, endX );
-        return (y > endPointRhs.GetY());
+        return ( y > endPointRhs.GetY() );
       }
     }
     double startX = 0.0;
@@ -368,7 +415,7 @@ struct SortByY
     else
     {
       startX = startPointRhs.GetX();
-      double y = GetYFromX( lhs.line, startX);
+      double y = GetYFromX( lhs.line, startX );
       return ( y > startPointRhs.GetY() );
     }
   }
@@ -390,205 +437,154 @@ bool FindAbscissa( PointEvent thePoint, std::multiset<PointEvent, SortByX>& Q )
 
 
 //-----------------------------------------------------------------------------
-// Найти верхнего и нижнего соседа для текущей точки события.
-// ---
-void FindNeighbors( PointEvent& upper, PointEvent& lower, const std::set<PointEvent>& T,const PointEvent& point )
-{/*
-  upper.point = Point( point.point.GetX(), std::numeric_limits<double>::lowest() );
-  lower.point = Point( point.point.GetX(), std::numeric_limits<double>::max() );
-
-  for ( auto it = T.begin(); it != T.end(); it++ )
-  {
-    if ( it->point.GetY() < upper.point.GetY() && it->point.GetY() > point.point.GetY() )
-      upper = *it;
-    if ( it->point.GetY() > lower.point.GetY() && it->point.GetY() < point.point.GetY() )
-      lower = *it;
-  }*/
-}
-
-
-
-//-----------------------------------------------------------------------------
 // Получить для текущей точки события верхнего соседа.
 // ---
-bool FindNeighborUpper( std::vector<LineData>& upper, const std::set<LineData, SortByY>& T, const LineData& line )
+bool FindNeighborUpper( LineData*& upper, std::set<LineData*, KeySort>& T, const std::set<LineData*, KeySort>::iterator it )
 {
-  auto it = T.find( line );
-  if ( it == T.end() )
-    for ( auto iter = T.begin(); iter != T.end();iter++ )
-      if ( iter->indexNumber == line.indexNumber )
-      {
-        it = iter; break;
-      }
-  auto minusIt = it; minusIt++;
-  if ( minusIt != T.end() )
-    upper.push_back( *(minusIt) );
-  return !upper.empty();
+  auto plusIt = it; 
+  plusIt--;
+  if ( plusIt != T.end() )
+  {
+    upper = *plusIt;
+    return true;
+  }
+  else
+    return false;
+  
 }
 
 
 //-----------------------------------------------------------------------------
 // Получить для текущей точки события нижнего соседа.
 // ---
-bool FindNeighborsLower( std::vector<LineData>& lower, std::set<LineData, SortByY>& T, const LineData& line )
+bool FindNeighborsLower( LineData*& lower, std::set<LineData*, KeySort>& T, const std::set<LineData*, KeySort>::iterator it )
 {
-  auto it = T.find( line );
-  if ( it == T.end() )
-    for ( auto iter = T.begin(); iter != T.end(); iter++ )
-      if ( iter->indexNumber == line.indexNumber )
-      {
-        it = iter; break;
-      }
-  auto plusIt = it; plusIt--;
-  if ( plusIt != T.end() )
-    lower.push_back( *(plusIt) );
-  return !lower.empty();
+  auto minusIt = it; 
+  minusIt--;
+  if ( minusIt != T.end() )
+  {
+    lower = *minusIt;
+    return true;
+  } 
+  else
+    return false;
 }
 
 
 
-void DeleteCurrentLine( std::set<LineData, SortByY>& T, const PointEvent& point )
+void DeleteCurrentLine( std::set<LineData, SortByY>& T, const std::set<LineData*, KeySort>::iterator it )
 {
-  for ( auto iter = T.begin(); iter != T.end(); )
-  {
-    if ( iter->indexNumber == point.indexNumber )
-    {
-      T.erase( iter++ );
-      break;
-    }
-    else
-    {
-      ++iter;
-    }
-  }
+
 }
 
 //-----------------------------------------------------------------------------
 // Обработать точку события.
 // ---
-void ProcessPoint( std::multiset<PointEvent, SortByX>& Q, std::set<LineData, SortByY>& T, PointEvent point,
+void ProcessPoint( std::multiset<PointEvent, SortByX>& Q, std::set<LineData*, KeySort>& T, PointEvent point,
   std::vector<PointEvent>& intersectionPoints, std::vector<Point>& result, std::vector<std::pair<double,double>>& params )
 {
   if ( point.type == typeEvent::Left )
   {
-  auto it = T.insert( point.s1 );
-    std::vector<LineData> lower;
+    point.s1->key = point.point.GetY();
+    auto it = T.insert( point.s1 ).first;
 
-    if ( FindNeighborsLower(lower, T, point.s1) )
+    LineData* lower = nullptr;
+    if ( FindNeighborsLower(lower, T, it) )
     {
       Point newPoint;
-      for ( size_t i = 0; i < lower.size(); i++ )
+      if ( lower->polyline != point.s1->polyline && (IntersectLines(lower->line, point.s1->line, newPoint )
+        /* fabs(Distance( lower.line, point.s1.line, newPoint) < CommonConstantsMath::NULL_TOL))*/) )
       {
-        if ( lower[i].polyline != point.s1.polyline && (IntersectLines(lower[i].line, point.s1.line, newPoint)
-          /* fabs(Distance( lower.line, point.s1.line, newPoint) < CommonConstantsMath::NULL_TOL))*/))
-        {
-          PointEvent event( newPoint, point.s1, typeEvent::Intersection, 0 );
-          event.s2 = lower[i];
-          intersectionPoints.push_back(event);
-        }
+        PointEvent event( newPoint, point.s1, typeEvent::Intersection );
+        event.s2 = lower;
+        intersectionPoints.push_back( event );
       }
+
     }
-    std::vector<LineData> upper;
-    if ( FindNeighborUpper(upper, T, point.s1) )
+    LineData* upper = nullptr;
+    if ( FindNeighborUpper(upper, T, it) )
     {
-      for ( size_t i = 0; i < upper.size(); i++ )
-      {
       Point newPoint;
-      if (upper[i].polyline != point.s1.polyline && (IntersectLines(upper[i].line, point.s1.line, newPoint)
-        /*(fabs (Distance(upper.line, point.s1.line, newPoint))  < CommonConstantsMath::NULL_TOL )*/))
+      if ( upper->polyline != point.s1->polyline && (IntersectLines(upper->line, point.s1->line, newPoint)
+        /*(fabs (Distance(upper.line, point.s1.line, newPoint))  < CommonConstantsMath::NULL_TOL )*/) )
       {
-        PointEvent event( newPoint, upper[i], typeEvent::Intersection, 0 );
+        PointEvent event( newPoint, upper, typeEvent::Intersection );
         event.s2 = point.s1;
         intersectionPoints.push_back(event);
       }
-    }
   }
   }
   else if ( point.type == typeEvent::Right )
   {
-    std::vector<LineData> lower;
-    std::vector<LineData> upper;
-    if ( FindNeighborsLower(lower, T, point.s1) && FindNeighborUpper(upper, T, point.s1) )
+    LineData* lower = nullptr;
+    LineData* upper = nullptr;
+;
+    auto it = T.find( point.s1 );
+    if ( FindNeighborsLower(lower, T, it) && FindNeighborUpper(upper, T, it) )
     {
       Point newPoint;
-      for ( size_t i = 0; i < lower.size(); i++ )
-        for ( size_t j = 0; j < upper.size(); j++ )
-        {
-          if ( lower[i].polyline != upper[j].polyline && (IntersectLines(upper[j].line, lower[i].line, newPoint )
-            /*fabs(Distance( upper.line,lower.line, newPoint) < CommonConstantsMath::NULL_TOL)*/))
-          {
-            if ( newPoint.GetX() > point.point.GetX() )
-            {
-              PointEvent event( newPoint, upper[j], typeEvent::Intersection, 0 );
-              event.s2 = lower[i];
-              intersectionPoints.push_back( event );
-            }
-          }
-    }
-    }
-    DeleteCurrentLine( T, point );
-  }
-  else
-  {
-    LineData s1 = point.s1;
-    LineData s2 = point.s2;
-    std::vector<LineData> lower;
-    std::vector<LineData> upper;
-    if ( FindNeighborUpper(lower, T, s1) )
-    {
-      for ( size_t i = 0; i < lower.size(); i++ )
+      if ( lower->polyline != upper->polyline && (IntersectLines(upper->line, lower->line, newPoint)
+        /*fabs(Distance( upper.line,lower.line, newPoint) < CommonConstantsMath::NULL_TOL)*/) )
       {
-        Point newPoint;
-        if ( lower[i].polyline != s1.polyline && (IntersectLines(lower[i].line, point.s1.line, newPoint)
-          /* fabs(Distance(lower.line, s1.line, newPoint) < CommonConstantsMath::NULL_TOL))*/) )
+        if ( newPoint.GetX() > point.point.GetX() )
         {
-          PointEvent event( newPoint, lower[i], typeEvent::Intersection, 0 );
-          event.s2 = lower[i];
-          intersectionPoints.push_back(event);
-        }
-      }
-    }
-    if ( FindNeighborsLower(upper, T, s2) )
-    {
-      for ( size_t i = 0; i < upper.size(); i++ )
-      {
-        Point newPoint;
-        if ( upper[i].polyline != s2.polyline && (IntersectLines(upper[i].line, point.s2.line, newPoint)
-          /* fabs(Distance(upper.line, s2.line, newPoint) < CommonConstantsMath::NULL_TOL))*/) )
-        {
-          PointEvent event( newPoint, upper[i], typeEvent::Intersection, 0 );
-          event.s2 = point.s1;
+          PointEvent event( newPoint, upper, typeEvent::Intersection );
+          event.s2 = lower;
           intersectionPoints.push_back( event );
         }
       }
     }
-   
-    auto it = T.find( s1 );
-   
-    auto it2 = T.find(s2);
-    if ( it != T.end() && it2 != T.end() )
+    T.erase( it );
+  }
+  else
+  {
+    LineData* s1 = point.s1;
+    auto itS1 = T.find( point.s1 );
+    LineData* s2 = point.s2;
+    auto itS2 = T.find( point.s2 );
+    LineData* lower;
+    LineData* upper;
+    if ( FindNeighborUpper(lower, T, itS1) && lower != s2 )
     {
-      s1 = *it;
-      T.erase(it);
-      it2 = T.find(s2);
-      s2 = *it2;
-      T.erase(it2);
       Point newPoint;
-      IntersectLines(s1.line, s2.line, newPoint);
-      s1.line = Line(newPoint, s1.line.GetEndPoint());
-      s2.line = Line(newPoint, s2.line.GetEndPoint());
-      T.insert(s1);
-      T.insert(s2);
+      if ( lower->polyline != s1->polyline && (IntersectLines(lower->line, point.s1->line, newPoint)
+        /* fabs(Distance(lower.line, s1.line, newPoint) < CommonConstantsMath::NULL_TOL))*/) )
+      {
+        PointEvent event( newPoint, lower, typeEvent::Intersection );
+        event.s2 = lower;
+        intersectionPoints.push_back( event );
+      }
     }
+    if ( FindNeighborsLower(upper, T, itS2) && upper != s1 )
+    {
+      Point newPoint;
+      if ( upper->polyline != s2->polyline && (IntersectLines(upper->line, point.s2->line, newPoint)
+        /* fabs(Distance(upper.line, s2.line, newPoint) < CommonConstantsMath::NULL_TOL))*/) )
+      {
+        PointEvent event( newPoint, upper, typeEvent::Intersection );
+        event.s2 = point.s1;
+        intersectionPoints.push_back( event );
+      }
+    }
+    
+    s1 = *itS1;
+    T.erase( itS1 );
+    s2 = *itS2;
+    T.erase( itS2 );
+    double key = s1->key;
+    s1->key = s2->key;
+    s2->key = key;
+    T.insert( s1 );
+    T.insert( s2 );
 
   }
   for ( size_t i = 0; i < intersectionPoints.size(); ++i )
   {
     result.push_back( intersectionPoints[i].point );
-    if ( intersectionPoints[i].s1.numParam < intersectionPoints[i].s2.numParam )
-      params.push_back( std::make_pair(intersectionPoints[i].s1.leftParam, intersectionPoints[i].s2.leftParam) );
+    if ( intersectionPoints[i].s1->numParam < intersectionPoints[i].s2->numParam )
+      params.push_back( std::make_pair(intersectionPoints[i].s1->leftParam, intersectionPoints[i].s2->leftParam) );
     else 
-      params.push_back( std::make_pair(intersectionPoints[i].s2.leftParam, intersectionPoints[i].s1.leftParam) );
+      params.push_back( std::make_pair(intersectionPoints[i].s2->leftParam, intersectionPoints[i].s1->leftParam) );
     if ( !FindAbscissa(intersectionPoints[i], Q) )
     {  
       Q.insert( intersectionPoints[i] );
@@ -607,7 +603,7 @@ std::vector<Point> SegmentsIntersections( std::vector<Line> segments , std::vect
   std::vector<PointEvent> intersectPoints;
 
   std::multiset<PointEvent, SortByX> Q;
-  std::set<LineData, SortByY> T;
+  std::set<LineData*, KeySort> T;
 
   for ( size_t i = 0; i < segments.size(); ++i )
   {
@@ -630,25 +626,28 @@ std::vector<Point> SegmentsIntersections( std::vector<Line> segments , std::vect
 //-----------------------------------------------------------------------------
 //  Добавить в множество точек событий опорные точки полилинии.
 // ---
-void CollectEventPoints( const Math::GeomPolyline* polyline, std::multiset<PointEvent, SortByX>& Q, size_t numPoliline, size_t numIndex )
+void CollectEventPoints( std::vector<LineData>& lines, const Math::GeomPolyline* polyline, 
+		std::multiset<PointEvent, SortByX>& Q, size_t numPoliline )
 {
   std::vector<Point> polylinePoints = polyline->GetReferensedPoints();
   std::vector<double> refParams = polyline->GetReferensedParams();
+  size_t start = lines.size();
   for ( size_t i = 0; i < polylinePoints.size() - 1; ++i )
   {
     if ( polylinePoints[i].GetX() < polylinePoints[i + 1].GetX() )
     {
-      LineData currentLine( Line(polylinePoints[i], polylinePoints[i + 1]), polyline, refParams[i], numPoliline, i + numIndex );
-      Q.insert( PointEvent(polylinePoints[i], currentLine, typeEvent::Left, i + numIndex) );
-      Q.insert( PointEvent(polylinePoints[i + 1], currentLine, typeEvent::Right, i + numIndex) );
+				lines.push_back( LineData( Line(polylinePoints[i], polylinePoints[i + 1]), polyline, refParams[i], numPoliline, 0.) );
     }
     else
     {
-      LineData currentLine( Line(polylinePoints[i + 1], polylinePoints[i]), polyline, refParams[i], numPoliline, i + numIndex );
-      Q.insert( PointEvent(polylinePoints[i], currentLine, typeEvent::Right, i + numIndex) );
-      Q.insert( PointEvent(polylinePoints[i + 1], currentLine, typeEvent::Left, i + numIndex) );
+				lines.push_back( LineData(Line(polylinePoints[i + 1], polylinePoints[i]), polyline, refParams[i], numPoliline, 0.) );
     }
   }
+	for ( size_t i = start; i < lines.size(); ++i )
+	{
+			Q.insert( PointEvent(lines[i].line.GetStartPoint(), &lines[i], typeEvent::Left) );
+			Q.insert( PointEvent(lines[i].line.GetEndPoint(), &lines[i], typeEvent::Right) );
+	}
 
 }
 
@@ -662,10 +661,11 @@ std::vector<Point> SegmentsIntersections( const Math::GeomPolyline* polyline1,
   std::vector<PointEvent> intersectPoints;
 
   std::multiset<PointEvent, SortByX> Q;
-  std::set<LineData, SortByY> T;
-
-  CollectEventPoints( polyline1, Q, 1, 0 );
-  CollectEventPoints( polyline2, Q, 2, polyline1->GetReferensedPoints().size() );
+  std::set<LineData*, KeySort> T;
+  std::vector<LineData> lines;
+  lines.reserve( polyline1->GetReferensedPoints().size() + polyline2->GetReferensedPoints().size() );
+  CollectEventPoints( lines, polyline1, Q, 1 );
+  CollectEventPoints( lines,polyline2, Q, 2 );
 
   while ( !Q.empty() )
   {
@@ -679,7 +679,7 @@ std::vector<Point> SegmentsIntersections( const Math::GeomPolyline* polyline1,
   std::set<Point> s( result.begin(), result.end() );
   result.assign( s.begin(), s.end() );
 
-  std::set<std::pair<double,double>> s1( params.begin(), params.end());
+  std::set<std::pair<double,double>> s1( params.begin(), params.end() );
   params.assign( s1.begin(), s1.end() );
   return result;
 }
@@ -798,7 +798,6 @@ std::vector<Point> IntersectLineCircle( const Curve& line, const Curve& circle )
     return result;
   }
 }
-
 
 
 //-----------------------------------------------------------------------------

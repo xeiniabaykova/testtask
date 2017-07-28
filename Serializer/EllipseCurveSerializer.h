@@ -7,7 +7,7 @@
 
 */
 ////////////////////////////////////////////////////////////////////////////////
-#include "Ellipse.h"
+#include "Math/Ellipse.h"
 #include "CurveSerializer.h"
 #include <ostream>
 
