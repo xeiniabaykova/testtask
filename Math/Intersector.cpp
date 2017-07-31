@@ -52,6 +52,14 @@ std::vector<std::vector<double>> CountingHessian ( const Curve& curve1, const Cu
   hessian[0][1] = F12;
   hessian[1][0] = F21;
   hessian[1][1] = F22;
+  const double determinant = hessian[0][0] * hessian[1][1] - hessian[0][1] * hessian[1][0];
+  if ( fabs(determinant) < CommonConstantsMath::NULL_TOL )
+  {
+    hessian[0][0] = 1.;
+    hessian[0][1] = 0;
+    hessian[1][0] = 0;
+    hessian[1][1] = 1.;
+  }
   return hessian;
 }
 
@@ -209,6 +217,16 @@ bool IntersectLines( const Curve& curve1, const Curve& curve2, Point& thePoint )
         thePoint = end1;
         return true;
       }
+      if ( IsEqual( end2, end1 ) )
+      {
+        thePoint = end1;
+        return true;
+      }
+      if ( IsEqual( start1, start2 ) )
+      {
+        thePoint = start1;
+        return true;
+      }
       return false;
     }
     return false;
@@ -253,10 +271,10 @@ struct LineData
     key ( theKey )
   {}
 
-  bool operator==( const LineData& obj ) const
-  {
-    return obj.line == line && obj.polyline == polyline;
-  }
+  //bool operator==( const LineData& obj ) const
+  //{
+  //  return obj.line == line && obj.polyline == polyline;
+  //}
 };
 
 
@@ -270,7 +288,7 @@ struct PointEvent
   typeEvent type; // Тип точки события.
   Point     point; // Точка события.
   LineData  *s1;   // Отрезок, соответствующий точке события.
-  LineData  *s2;
+  LineData  *s2;   // Если точка события является точкой пересечения, то храним второй отрезок тоже.
   size_t    indexNumber; // Номер отрезка, которому принадлежит эта точка.
   PointEvent(): point( 0., 0. ) {}
   PointEvent( Point thePoint, LineData *theS1, typeEvent theType ):
@@ -278,17 +296,17 @@ struct PointEvent
     type( theType ),
     s1( theS1 )
   {}
-  PointEvent& operator = ( const PointEvent &obj )
-  {
-    type = obj.type;
-    point = obj.point;
-    s1 = obj.s1;
-    s2 = obj.s2;
-  }
-  bool operator == ( PointEvent rhs ) const
-  {
-    return IsEqual( point, rhs.point );
-  }
+  //PointEvent& operator = ( const PointEvent &obj )
+  //{
+  //  type = obj.type;
+  //  point = obj.point;
+  //  s1 = obj.s1;
+  //  s2 = obj.s2;
+  //}
+  //bool operator == ( PointEvent rhs ) const
+  //{
+  //  return IsEqual( point, rhs.point );
+  //}
 };
 
 
@@ -608,38 +626,38 @@ void CollectEventPoints( std::vector<LineData>& lines, const Math::GeomPolyline*
 
 }
 
-//-----------------------------------------------------------------------------
-//  Найти пересечение отрезков полилилинй. В параметр params записываются параметры исходных кривых, соответсвующих пересекающимся отрезкам.
-// ---
-std::vector<Point> SegmentsIntersections( const Math::GeomPolyline* polyline1,
-                                          const Math::GeomPolyline* polyline2, std::vector<std::pair<std::pair<double, double>, std::pair<size_t, size_t>>>& params )
-{
-  std::vector<Point> result;
-  std::vector<PointEvent> intersectPoints;
-
-  std::multiset<PointEvent, SortByX> Q;
-  std::set<LineData*, KeySort> T;
-  std::vector<LineData> lines;
-  lines.reserve( polyline1->GetReferensedPoints().size() + polyline2->GetReferensedPoints().size() );
-  CollectEventPoints( lines, polyline1, Q, 1 );
-  CollectEventPoints( lines, polyline2, Q, 2 );
-
-  while ( !Q.empty() )
-  {
-    PointEvent currentPoint = *Q.begin();
-
-    Q.erase( Q.begin() );
-    ProcessPoint( Q, T, currentPoint, intersectPoints, result, params );
-  }
-  // убираем совпадающие точки, если они есть
-
-  std::set<Point> s( result.begin(), result.end() );
-  result.assign( s.begin(), s.end() );
-
-  std::vector<std::pair<std::pair<double, double>, std::pair<size_t, size_t>>> s1( params.begin(), params.end() );
-  params.assign( s1.begin(), s1.end() );
-  return result;
-}
+////-----------------------------------------------------------------------------
+////  Найти пересечение отрезков полилилинй. В параметр params записываются параметры исходных кривых, соответсвующих пересекающимся отрезкам.
+//// ---
+//std::vector<Point> SegmentsIntersections( const Math::GeomPolyline* polyline1,
+//                                          const Math::GeomPolyline* polyline2, std::vector<std::pair<std::pair<double, double>, std::pair<size_t, size_t>>>& params )
+//{
+//  std::vector<Point> result;
+//  std::vector<PointEvent> intersectPoints;
+//
+//  std::multiset<PointEvent, SortByX> Q;
+//  std::set<LineData*, KeySort> T;
+//  std::vector<LineData> lines;
+//  lines.reserve( polyline1->GetReferensedPoints().size() + polyline2->GetReferensedPoints().size() );
+//  CollectEventPoints( lines, polyline1, Q, 1 );
+//  CollectEventPoints( lines, polyline2, Q, 2 );
+//
+//  while ( !Q.empty() )
+//  {
+//    PointEvent currentPoint = *Q.begin();
+//
+//    Q.erase( Q.begin() );
+//    ProcessPoint( Q, T, currentPoint, intersectPoints, result, params );
+//  }
+//  // убираем совпадающие точки, если они есть
+//
+//  std::set<Point> s( result.begin(), result.end() );
+//  result.assign( s.begin(), s.end() );
+//
+//  std::vector<std::pair<std::pair<double, double>, std::pair<size_t, size_t>>> s1( params.begin(), params.end() );
+//  params.assign( s1.begin(), s1.end() );
+//  return result;
+//}
 
 //-----------------------------------------------------------------------------
 //  Найти пересечение отрезков полилилинй. В параметр params записываются параметры исходных кривых, соответсвующих пересекающимся отрезкам.
@@ -800,13 +818,13 @@ std::vector<Point> IntersectLineCircle( const Curve& line, const Curve& circle )
 // ---
 Point NewtonMethod( const Curve& curve1, const Curve& curve2, Point startValue )
 {
-  size_t numiteration = 10;
+  size_t numiteration = CommonConstantsMath::NUMBERNEWTONMETHOD;
   Point currentPoint = startValue;
   Point newPoint;
   for ( size_t i = 0; i < numiteration; i++ )
   {
     newPoint = NewtonMethodIteration( curve1, curve2, currentPoint );
-    if ( fabs( Distance(newPoint, currentPoint) ) < CommonConstantsMath::NULL_TOL )
+    if ( fabs( Distance(newPoint, currentPoint) ) < CommonConstantsMath::ACCURANCYMETHODNEWTON )
       break;
     currentPoint = newPoint;
   }
