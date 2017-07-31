@@ -244,10 +244,10 @@ std::vector<Point> GeomPolyline::GetReferensedPoints() const
 //-----------------------------------------------------------------------------
 // Вернуть полилилния для полилинии - это полилиния.
 // ---
-void GeomPolyline::GetAsPolyLine( GeomPolyline &polyLine, std::vector<double>& refParam, double accuracy ) const
+void GeomPolyline::GetAsPolyLine( GeomPolyline &polyLine, double accuracy ) const
 {
   std::vector<double> referemcedParams;
-  for (size_t i = 0; i < referencedPoints.size(); i++)
+  for ( size_t i = 0; i < referencedPoints.size(); i++ )
   {
     referemcedParams.push_back(static_cast<double>(i) );  
   }
