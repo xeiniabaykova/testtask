@@ -87,10 +87,10 @@ Vector Gradient( const Curve& curve1, const Curve& curve2, Point point )
   Point point1 = curve1.GetPoint ( point.GetX() );
   Vector grad1 = curve1.GetDerivative ( point.GetX() );
 
-  Point point2 = curve2.GetPoint ( point.GetY () );
-  Vector grad2 = curve2.GetDerivative ( point.GetY () );
-  double aResultT1 = 2.0 * ( point1.GetX () - point2.GetX () ) * grad1.GetX () + 2.0 * ( point1.GetY () - point2.GetY () ) * grad1.GetY ();
-  double aResultT2 = 2.0 * ( point2.GetX () - point1.GetX () ) * grad2.GetX () + 2.0 * ( point2.GetY () - point1.GetY () ) * grad2.GetY ();
+  Point point2 = curve2.GetPoint ( point.GetY() );
+  Vector grad2 = curve2.GetDerivative ( point.GetY() );
+  double aResultT1 = 2.0 * ( point1.GetX() - point2.GetX() ) * grad1.GetX() + 2.0 * ( point1.GetY() - point2.GetY() ) * grad1.GetY();
+  double aResultT2 = 2.0 * ( point2.GetX() - point1.GetX() ) * grad2.GetX() + 2.0 * ( point2.GetY() - point1.GetY() ) * grad2.GetY();
   return Vector ( aResultT1, aResultT2 );
 }
 
@@ -146,7 +146,7 @@ bool ISPointInSegment( const Point& testPoint, const Line& line )
 // ---
 std::vector<Point> IntersectPolylineCircle ( const Curve& curve1, const Curve& curve2 )
 {
-  return std::vector<Point> ();
+  return std::vector<Point>();
 }
 
 
@@ -155,7 +155,7 @@ std::vector<Point> IntersectPolylineCircle ( const Curve& curve1, const Curve& c
 // ---
 std::vector<Point> IntersectPolylineEllipse ( const Curve& curve1, const Curve& curve2 )
 {
-  return std::vector<Point> ();
+  return std::vector<Point>();
 }
 
 
@@ -294,12 +294,13 @@ struct PointEvent
 // ---
 double GetYFromX( const Line& line, double x )
 {
-  // !!! тут деление на ноль для вертикального отрезка
   double x1 = line.GetStartPoint().GetX();
   double y1 = line.GetStartPoint().GetY();
   double x2 = line.GetEndPoint().GetX();
   double y2 = line.GetEndPoint().GetY();
   double ch = -( x1 * y2 - x2 * y1 ) - x * ( y1 - y2 );
+  if ( fabs(x1 - x2) < CommonConstantsMath::NULL_TOL )
+    return y2;
   return ch / ( x2 - x1 );
 }
 
@@ -470,7 +471,7 @@ void ProcessPoint( std::multiset<PointEvent, SortByX>& Q, std::set<LineData*, Ke
     {
       Point newPoint;
       if ( lower->polyline != upper->polyline && ( IntersectLines( upper->line, lower->line, newPoint ) ||
-                                                   fabs(Distance( upper->line,lower->line, newPoint) < 2. * CommonConstantsMath::PRECISION_POLYLINE) ) )
+                                                   fabs(Distance( upper->line,lower->line, newPoint) < 2. * CommonConstantsMath::PRECISION_POLYLINE)) )
       {
         if ( newPoint.GetX() > point.point.GetX() )
         {
@@ -586,11 +587,11 @@ void CollectEventPoints( std::vector<LineData>& lines, const Math::GeomPolyline*
   {
     if ( polylinePoints[i].GetX() < polylinePoints[i + 1].GetX() )
     {
-      lines.push_back( LineData( Line( polylinePoints[i], polylinePoints[i + 1] ), polyline, refParams[i], numPoliline, 0. ) );
+      lines.push_back( LineData( Line( polylinePoints[i], polylinePoints[i + 1] ), polyline, refParams[i], numPoliline, 0.) );
     }
     else
     {
-      lines.push_back( LineData( Line( polylinePoints[i + 1], polylinePoints[i] ), polyline, refParams[i], numPoliline, 0. ) );
+      lines.push_back( LineData( Line( polylinePoints[i + 1], polylinePoints[i] ), polyline, refParams[i], numPoliline, 0.) );
     }
   }
   for ( size_t i = start; i < lines.size(); ++i )
@@ -697,13 +698,13 @@ std::vector<Point> IntersectPolylinePolyline( const Curve& curve1, const Curve& 
     for ( size_t j = 1; j < refPointsSecound.size(); ++j )
     {
       Point point;
-      if ( IntersectLines( Line( refPointsSecound[j - 1], refPointsSecound[j] ), firstLine, point ) )
+      if ( IntersectLines( Line(refPointsSecound[j - 1], refPointsSecound[j]), firstLine, point) )
       {
-        auto result = std::find( std::begin( intersectPoints ), std::end( intersectPoints ), point );
-        if ( result == std::end( intersectPoints ) )
+        auto result = std::find( std::begin(intersectPoints), std::end(intersectPoints), point );
+        if ( result == std::end(intersectPoints) )
         {
           intersectPoints.push_back( point );
-          resultParams.push_back( std::make_pair( refParams1[i], refParams2[j] ) );
+          resultParams.push_back( std::make_pair(refParams1[i], refParams2[j]) );
         }
       }
     }
@@ -759,22 +760,22 @@ std::vector<Point> IntersectLineCircle( const Curve& line, const Curve& circle )
   Vector dp = p2 - p1;
 
   double a = dp * dp;
-  double b = 2. * ( dp.GetX() * ( p1.GetX() - sc.GetX() ) + dp.GetY() * ( p1.GetY() - sc.GetY() ) );
+  double b = 2. * ( dp.GetX() * (p1.GetX() - sc.GetX()) + dp.GetY() * (p1.GetY() - sc.GetY()) );
   double c = sc * sc;
   c += p1 * p1;
   c -= 2. * ( sc * p1 );
   c -= r * r;
   double bb4ac = b * b - 4 * a * c;
-  if ( fabs( a ) < CommonConstantsMath::NULL_TOL || bb4ac < 0 )
+  if ( fabs(a) < CommonConstantsMath::NULL_TOL || bb4ac < 0 )
   {
     return result;
   }
 
-  const double mu1 = ( -b + sqrt( bb4ac ) ) / ( 2. * a );
-  const double mu2 = ( -b - sqrt( bb4ac ) ) / ( 2. * a );
+  const double mu1 = ( -b + sqrt(bb4ac) ) / ( 2. * a );
+  const double mu2 = ( -b - sqrt(bb4ac) ) / ( 2. * a );
   if ( mu1 == mu2 )
   {
-    result.push_back( p1 + ( p2 - p1 ) * mu1 );
+    result.push_back( p1 + (p2 - p1) * mu1 );
     return result;
   }
   else
@@ -851,8 +852,8 @@ std::vector<Point> IntersectGeneralCaseSimple( Curve& curve1, const Curve& curve
 
   for ( size_t i = 0; i < params.size(); i++ )
   {
-    Point intersectPoint = NewtonMethod( curve1, curve2, Point( params[i].first, params[i].second ) );
-    if ( Distance( curve1.GetPoint( intersectPoint.GetX() ), curve2.GetPoint( intersectPoint.GetY() ) ) < CommonConstantsMath::NULL_TOL )
+    Point intersectPoint = NewtonMethod( curve1, curve2, Point(params[i].first, params[i].second) );
+    if ( Distance( curve1.GetPoint(intersectPoint.GetX()), curve2.GetPoint( intersectPoint.GetY()) ) < CommonConstantsMath::NULL_TOL )
       intersectPoints.push_back( intersectPoint );
   }
   return intersectPoints;
@@ -884,61 +885,6 @@ CurveNumIntersection IntersectGeneralCase( const std::vector<Curve*> curves )
   }
   return intersectPoints;
 
-}
-
-
-//-----------------------------------------------------------------------------
-//  В зависимости от типа кривой запустить нужный алгоритм для поиска пересечения.
-// ---
-std::vector<Point> IntersectCurves( const Curve& curve1, const Curve& curve2 )
-{
-  std::vector<Point> intersectCurves;
-  Curve::CurveType typeCurve1 = curve1.GetType();
-  Curve::CurveType typeCurve2 = curve2.GetType();
-
-  /*switch ( typeCurve1 )
-  {
-    case Curve::LineType:
-      switch ( typeCurve2 )
-      {
-        case Curve::LineType:
-        {
-          Point point;
-          if ( IntersectLines( curve1, curve2, point ) )
-            intersectCurves.push_back( point );
-          return intersectCurves;
-        }
-        case Curve::PolylineType:
-          return IntersectLinePolyline( curve1, curve2 );
-        case Curve::CircleType:
-          return IntersectLineCircle( curve1, curve2 );
-        case Curve::EllipseType:
-          return IntersectLineEllipse( curve1, curve2 );
-        case Curve::NurbsType:
-          return IntersectGeneralCase( curve1, curve2 );
-      }
-    case Curve::PolylineType:
-      switch ( typeCurve2 )
-      {
-        case Curve::PolylineType:
-          return IntersectPolylinePolyline( curve1, curve2 );
-        case Curve::CircleType:
-          return IntersectPolylineCircle( curve1, curve2 );
-        case Curve::EllipseType:
-          return IntersectPolylineEllipse( curve1, curve2 );
-        case Curve::NurbsType:
-          return IntersectGeneralCase( curve1, curve2 );
-      }
-    case Curve::CircleType:
-      return IntersectGeneralCase( curve1, curve2 );
-    case Curve::EllipseType:
-      return IntersectGeneralCase( curve1, curve2 );
-    case Curve::NurbsType:
-      return IntersectGeneralCase( curve1, curve2 );
-      break;
-
-  }*/
-  return intersectCurves;
 }
 
 

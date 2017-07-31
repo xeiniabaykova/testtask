@@ -14,8 +14,8 @@
 
 namespace Math {
 typedef std::vector<std::pair<std::pair<double, double>, std::pair<size_t, size_t>>> CurveNumIntersection;
-/// Нахождение всех точек пересечения кривых.
-std::vector<Point> Intersector               ( const std::vector<Curve> curves );
+///// Нахождение всех точек пересечения кривых.
+//std::vector<Point> Intersector               ( const std::vector<Curve> curves );
 /// Найти пересечение двух отрезков.
 bool IntersectLines                          (const Curve& curve1, const Curve& curve2, Point &thePoint);
 /// Найти точки пересечения двух полилиний.
