@@ -259,7 +259,6 @@ struct LineData
   size_t                    numParam; // Номер полилинии в списке полилиний.
   double                    leftParam; // Параметр исходной кривой, соответсующий отрезку полилинии.
   double                    key;      // Ключ для сравнения отрезков - по умолчанию координата y левой точки.
- // LineData () = default;
   LineData ( Line theLine, const GeomPolyline* thePolyline, double theLeftParam, size_t thenumParam, double theKey ):
     line ( theLine ),
     polyline ( thePolyline ),
