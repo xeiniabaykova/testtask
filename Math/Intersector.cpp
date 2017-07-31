@@ -244,8 +244,7 @@ enum typeEvent
 {
   Intersection, // Точка пересечения отрезков.
   Left,         // Левый конец отрезка.
-  Right,        // Правый конец отрезка.
-  NonValid
+  Right        // Правый конец отрезка.
 };
 
 
@@ -259,10 +258,8 @@ struct LineData
   const GeomPolyline*       polyline; // Полилиния, которой принадлежит отрезок.
   size_t                    numParam; // Номер полилинии в списке полилиний.
   double                    leftParam; // Параметр исходной кривой, соответсующий отрезку полилинии.
-  size_t                    indexNumber; // Номер линии в списке линий.
-  double                    key;
-
-  LineData () = default;
+  double                    key;      // Ключ для сравнения отрезков - по умолчанию координата y левой точки.
+ // LineData () = default;
   LineData ( Line theLine, const GeomPolyline* thePolyline, double theLeftParam, size_t thenumParam, double theKey ):
     line ( theLine ),
     polyline ( thePolyline ),
@@ -270,11 +267,6 @@ struct LineData
     numParam ( thenumParam ),
     key ( theKey )
   {}
-
-  //bool operator==( const LineData& obj ) const
-  //{
-  //  return obj.line == line && obj.polyline == polyline;
-  //}
 };
 
 
@@ -289,24 +281,11 @@ struct PointEvent
   Point     point; // Точка события.
   LineData  *s1;   // Отрезок, соответствующий точке события.
   LineData  *s2;   // Если точка события является точкой пересечения, то храним второй отрезок тоже.
-  size_t    indexNumber; // Номер отрезка, которому принадлежит эта точка.
-  PointEvent(): point( 0., 0. ) {}
   PointEvent( Point thePoint, LineData *theS1, typeEvent theType ):
     point( thePoint ),
     type( theType ),
     s1( theS1 )
   {}
-  //PointEvent& operator = ( const PointEvent &obj )
-  //{
-  //  type = obj.type;
-  //  point = obj.point;
-  //  s1 = obj.s1;
-  //  s2 = obj.s2;
-  //}
-  //bool operator == ( PointEvent rhs ) const
-  //{
-  //  return IsEqual( point, rhs.point );
-  //}
 };
 
 
