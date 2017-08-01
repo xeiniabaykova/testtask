@@ -288,23 +288,6 @@ struct PointEvent
 };
 
 
-
-//-----------------------------------------------------------------------------
-// Получить по координате х, принадлежащей отрезку, координату y.
-// ---
-double GetYFromX( const Line& line, double x )
-{
-  double x1 = line.GetStartPoint().GetX();
-  double y1 = line.GetStartPoint().GetY();
-  double x2 = line.GetEndPoint().GetX();
-  double y2 = line.GetEndPoint().GetY();
-  double ch = -( x1 * y2 - x2 * y1 ) - x * ( y1 - y2 );
-  if ( fabs(x1 - x2) < CommonConstantsMath::NULL_TOL )
-    return y2;
-  return ch / ( x2 - x1 );
-}
-
-
 //-----------------------------------------------------------------------------
 // Сравнить точки лексикографически.
 // ---
@@ -490,26 +473,26 @@ void ProcessPoint( std::multiset<PointEvent, SortByX>& Q, std::set<LineData*, Ke
     auto itS1 = T.find( point.s1 );
     LineData* s2 = point.s2;
     auto itS2 = T.find( point.s2 );
-    LineData* lower;
+   LineData* lower;
     LineData* upper;
-    if ( FindNeighborUpper( lower, T, itS1 ) && lower != s2 )
+    if ( FindNeighborUpper( upper, T, itS1 ) && upper != s2 )
     {
       Point newPoint;
-      if ( lower->polyline != s1->polyline && ( IntersectLines( lower->line, point.s1->line, newPoint ) ||
-                                                 fabs(Distance(lower->line, s1->line, newPoint) < 2. * CommonConstantsMath::PRECISION_POLYLINE)) )
+      if ( upper->polyline != s1->polyline && ( IntersectLines( upper->line, point.s2->line, newPoint ) ||
+                                                 fabs(Distance(upper->line, s2->line, newPoint) < 2. * CommonConstantsMath::PRECISION_POLYLINE)) )
       {
-        PointEvent event( newPoint, lower, typeEvent::Intersection );
-        event.s2 = lower;
+        PointEvent event( newPoint, upper, typeEvent::Intersection );
+        event.s2 = upper;
         intersectionPoints.push_back( event );
       }
     }
-    if ( FindNeighborsLower(upper, T, itS2) && upper != s1 )
+    if ( FindNeighborsLower(lower, T, itS2) && lower != s1 )
     {
       Point newPoint;
-      if ( upper->polyline != s2->polyline && ( IntersectLines( upper->line, point.s2->line, newPoint ) ||
-                                                 fabs(Distance(upper->line, s2->line, newPoint) < 2. *CommonConstantsMath::PRECISION_POLYLINE)) )
+      if ( lower->polyline != s2->polyline && ( IntersectLines( lower->line, point.s1->line, newPoint ) ||
+                                                 fabs(Distance(lower->line, s1->line, newPoint) < 2. *CommonConstantsMath::PRECISION_POLYLINE)) )
       {
-        PointEvent event( newPoint, upper, typeEvent::Intersection );
+        PointEvent event( newPoint, lower, typeEvent::Intersection );
         event.s2 = point.s1;
         intersectionPoints.push_back( event );
       }

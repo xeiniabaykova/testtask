@@ -197,6 +197,33 @@ TEST( Intersector, SimpleCaseLineLine )
   EXPECT_TRUE( IsPairEqual( points[0].first, std::make_pair( 0.5, 0.5 ) ) );
   EXPECT_TRUE( IsPairEqual( points[0].second, std::make_pair( 0, 1 ) ) );
 }
+
+TEST( Intersector, SimpleCase4Line )
+{
+  std::vector<Math::Point> refPointsPolyline1 =
+  { Point( 0.28, 9.25 ), Point( 2.03, 9.26) };
+  std::vector<Math::Point> refPointsPolyline2 =
+  { Point( 0.40, 8.49 ), Point( 2.07, 8.42 ) };
+  std::vector<Math::Point> refPointsPolyline3 =
+  { Point( 0.79, 9.74 ), Point( 1.12, 7.74 ) };
+  std::vector<Math::Point> refPointsPolyline4 =
+  { Point( 1.17, 9.85 ), Point( 1.603, 8.03 ) };
+  Math::GeomPolyline polyline1( refPointsPolyline1 );
+  Math::GeomPolyline polyline2( refPointsPolyline2 );
+  Math::GeomPolyline polyline3( refPointsPolyline3 );
+  Math::GeomPolyline polyline4( refPointsPolyline4 );
+  std::vector<Curve*> curves;
+  curves.push_back( &polyline1 );
+  curves.push_back( &polyline2 );
+  curves.push_back( &polyline3 );
+  curves.push_back( &polyline4 );
+  CurveNumIntersection points = Math::IntersectGeneralCase( curves );
+  ASSERT_TRUE( points.size() == 4 );
+  EXPECT_TRUE( IsPairEqual( points[0].first, std::make_pair( 0.337310535, 0.243313447 ) ) );
+  EXPECT_TRUE( IsPairEqual( points[1].first, std::make_pair( 0.359522445, 0.6375832855 ) ) );
+  EXPECT_TRUE( IsPairEqual( points[2].first, std::make_pair( 0.589340080, 0.32643219 ) ) );
+  EXPECT_TRUE( IsPairEqual( points[3].first, std::make_pair( 0.661422556, 0.772692076 ) ) );
+}
 TEST( Intersector, PerpendicularLineLine )
 {
   std::vector<Math::Point> refPointsPolyline1 =
