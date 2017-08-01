@@ -7,9 +7,9 @@
 
 */
 ////////////////////////////////////////////////////////////////////////////////
-#include "Math/GeometricPrimitive.h"
-#include "Math/Curve.h"
-#include "Math/Point.h"
+#include "GeometricPrimitive.h"
+#include "Curve.h"
+#include "Point.h"
 #include <istream>
 #include <memory>
 

@@ -538,15 +538,12 @@ TEST(Nurbs, 15Intersect)
   curves.push_back(&curve8);
   curves.push_back(&curve9);
   curves.push_back(&curve10);
+
   float fTimeStart = clock() / ( float ) CLOCKS_PER_SEC;
-
-  Math::IntersectGeneralCase( curves );
-
-
+  const auto intPoints = Math::IntersectGeneralCase( curves );
   float fTimeStop = clock() / ( float ) CLOCKS_PER_SEC;
-  std::cout << fTimeStop;
-   std::cin.get();
-    std::cin.get();
+  std::cout << std::string("Time of intersection: ") << fTimeStop
+            << std::string(", ") << intPoints.size() << std::string(" intersection points were found.") << std::endl;
 }
 //
 //TEST(segmenttest, Intersector)
