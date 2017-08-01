@@ -475,25 +475,25 @@ void ProcessPoint( std::multiset<PointEvent, SortByX>& Q, std::set<LineData*, Ke
     auto itS2 = T.find( point.s2 );
    LineData* lower;
     LineData* upper;
-    if ( FindNeighborUpper( upper, T, itS1 ) && upper != s2 )
+    if ( FindNeighborUpper( upper, T, itS1 )/* && upper != s2*/ )
     {
       Point newPoint;
-      if ( upper->polyline != s1->polyline && ( IntersectLines( upper->line, point.s2->line, newPoint ) ||
+      if ( upper->polyline != s2->polyline && ( IntersectLines( upper->line, point.s2->line, newPoint ) ||
                                                  fabs(Distance(upper->line, s2->line, newPoint) < 2. * CommonConstantsMath::PRECISION_POLYLINE)) )
       {
         PointEvent event( newPoint, upper, typeEvent::Intersection );
-        event.s2 = upper;
+        event.s2 = point.s2;
         intersectionPoints.push_back( event );
       }
     }
     if ( FindNeighborsLower(lower, T, itS2) && lower != s1 )
     {
       Point newPoint;
-      if ( lower->polyline != s2->polyline && ( IntersectLines( lower->line, point.s1->line, newPoint ) ||
+      if ( lower->polyline != s1->polyline && ( IntersectLines( lower->line, point.s1->line, newPoint ) ||
                                                  fabs(Distance(lower->line, s1->line, newPoint) < 2. *CommonConstantsMath::PRECISION_POLYLINE)) )
       {
-        PointEvent event( newPoint, lower, typeEvent::Intersection );
-        event.s2 = point.s1;
+        PointEvent event( newPoint, point.s1, typeEvent::Intersection );
+        event.s2 = lower;
         intersectionPoints.push_back( event );
       }
     }

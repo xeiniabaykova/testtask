@@ -75,6 +75,7 @@ public:
   void ClearScreen            ();                              ///< Обработать очистку экрана.
   void CreateChart            ();                              ///< Обработать создание экрана.
   void CreateRefPoint         ( Math::Point point );           ///< Отобразить точку, выбранную пользователем.
+  void FindIntersections      ();                              ///< Найти точки пересечений кривых.
 };
 }
 #endif // MAINWINDOWHANDLER_H

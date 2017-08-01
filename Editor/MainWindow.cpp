@@ -251,7 +251,7 @@ void MainWindow::OnStopCreateCurve()
 // ---
 void MainWindow::OnFindIntersection()
 {
-
+  windowHandler.FindIntersections();
 }
 
 

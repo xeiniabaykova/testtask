@@ -85,8 +85,8 @@ void DisplayedObject::AddCurveToChart( QChart * chart)
   for ( size_t i = 0; i < polyPoints.GetReferensedPoints().size(); i++ )
     *currentseries << QPointF( polyPoints.GetReferensedPoints()[i].GetX(), polyPoints.GetReferensedPoints()[i].GetY() );
 
-  for ( size_t i = 0; i < curve->GetReferensedPoints().size(); i++ )
-     *seriesRef << QPointF( curve->GetReferensedPoints()[i].GetX(), curve->GetReferensedPoints()[i].GetY() );
+  //for ( size_t i = 0; i < curve->GetReferensedPoints().size(); i++ )
+   //  *seriesRef << QPointF( curve->GetReferensedPoints()[i].GetX(), curve->GetReferensedPoints()[i].GetY() );
 
   seriesRef->setMarkerShape( QScatterSeries::MarkerShapeCircle );
   seriesRef->setMarkerSize( 15.0 );

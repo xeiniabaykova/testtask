@@ -9,6 +9,8 @@
 #include <QtCharts/QLineSeries>
 #include <functional>
 #include "CommonConstantsEditor.h"
+#include "Math/Intersector.h"
+#include "Math/Curve.h"
 
 
 namespace Editor {
@@ -302,5 +304,21 @@ void MainWindowHandler::CreateRefPoint( Math::Point point )
   *tempSeriesReferenced << QPointF( point.GetX(), point.GetY() );
   tempSeriesReferenced->setMarkerShape( QScatterSeries::MarkerShapeCircle );
   tempSeriesReferenced->setMarkerSize( 15.0 );
+}
+
+
+//-----------------------------------------------------------------------------
+//    Найти точки пересечений кривых.
+//---
+void MainWindowHandler::FindIntersections()
+{
+  std::vector<Math::Curve*> curves;
+  for ( size_t i = 0; i < displayedCurves.size(); i++ )
+   curves.push_back( displayedCurves[i]->GetPrimitive().get() );
+  Math::CurveNumIntersection intersections = Math::IntersectGeneralCase( curves );
+  for ( size_t i = 0; i < intersections.size(); i++ )
+  {
+    CreateRefPoint( curves[intersections[i].second.first]->GetPoint(intersections[i].first.first) );
+  }
 }
 }
