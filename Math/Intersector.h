@@ -23,17 +23,40 @@ namespace Math {
 ///////////////////////////////////////////////////////////////////////////////
 struct CurveIntersectionData
 {
+private:
   const Curve* curve1;      // Указатель на первую кривую. 
   const Curve* curve2;      // Указатель на вторую кривую. 
   double       paramCurve1; // Параметр первой кривой, соответствующий точке пересечения.
   double       paramCurve2; // Параметр второй кривой, соответствующий точке пересечения.
+public:
+  CurveIntersectionData() = default;
+  virtual ~CurveIntersectionData() = default;
+  CurveIntersectionData( const CurveIntersectionData &obj ) = default;
+  CurveIntersectionData& operator=( CurveIntersectionData &obj ) = delete;
+
+  /**  \brief Создать данные о пересечении двух параметрических кривых.
+  \param[in] theCurve1 - Первая кривая .\~
+  \param[in] theCurve1 - Вторая кривая .\~
+  \param[int] theParamPoint - Набор парметров, при которых кривые пересекаются.\~
+  */
+  //---
   CurveIntersectionData( const Curve* theCurve1, const Curve* theCurve2, std::pair<double, double> theParamPoint ):
     curve1      ( theCurve1 ),
     curve2      ( theCurve2 ),
     paramCurve1 ( theParamPoint.first ),
     paramCurve2 ( theParamPoint.second )
   {}
-
+  /// Вернуть первую кривую.
+  const Curve* GetCurve1()
+  {
+    return curve1;
+  }
+  /// Вернуть вторую криву.
+  const Curve* GetCurve2()
+  {
+    return curve2;
+  }
+/// Вернуть набор параметров, при которых кривые пересекаются.
   std::pair<double, double> GetParamPoint()
   {
     return std::make_pair( paramCurve1, paramCurve2 );

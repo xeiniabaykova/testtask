@@ -578,10 +578,10 @@ std::vector<CurveIntersectionData> Intersect( const std::vector<Curve*>& curves 
 
   for ( size_t i = 0; i < intersections.size(); i++ )
   {
-    std::pair<double,double> intersectPoint = NewtonMethod( intersections[i].curve1, intersections[i].curve2, intersections[i].GetParamPoint() );
+    std::pair<double,double> intersectPoint = NewtonMethod( intersections[i].GetCurve1(), intersections[i].GetCurve2(), intersections[i].GetParamPoint() );
 
-    if ( Distance(intersections[i].curve1->GetPoint(intersectPoint.first), intersections[i].curve2->GetPoint(intersectPoint.second) ) < CommonConstantsMath::NULL_TOL )
-      intersectPoints.push_back( CurveIntersectionData( intersections[i].curve1, intersections[i].curve2, intersectPoint) );
+    if ( Distance(intersections[i].GetCurve1()->GetPoint(intersectPoint.first), intersections[i].GetCurve2()->GetPoint(intersectPoint.second) ) < CommonConstantsMath::NULL_TOL )
+      intersectPoints.push_back( CurveIntersectionData( intersections[i].GetCurve1(), intersections[i].GetCurve2(), intersectPoint) );
   }
   return intersectPoints;
 }
