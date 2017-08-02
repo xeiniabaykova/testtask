@@ -379,7 +379,7 @@ static bool FindNeighborsLower( LineData*& lower, std::set<LineData*, KeySort>& 
 //-----------------------------------------------------------------------------
 // Обработать точку события.
 // ---
-static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints, std::set<LineData*, KeySort>& T, PointEvent point,
+static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints, std::set<LineData*, KeySort>& currentSegments, PointEvent point,
                    std::vector<PointEvent>& intersectionPoints,
                    std::vector<CurveIntersectionData>& params )
 {
@@ -387,10 +387,10 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
   if ( point.type == TypeEvent::Left )
   {
     point.s1->key = point.point.GetY();
-    auto it = T.insert( point.s1 ).first;
+    auto it = currentSegments.insert( point.s1 ).first;
 
     LineData* lower = nullptr;
-    if ( FindNeighborsLower(lower, T, it) )
+    if ( FindNeighborsLower(lower, currentSegments, it) )
     {
       Point newPoint;
       if ( lower->polyline != point.s1->polyline && (IntersectLines( lower->line, point.s1->line, newPoint ) ||
@@ -402,7 +402,7 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
       }
     }   
     LineData* upper = nullptr;
-    if ( FindNeighborUpper( upper, T, it ) )
+    if ( FindNeighborUpper( upper, currentSegments, it ) )
     {
       Point newPoint;
       if ( upper->polyline != point.s1->polyline && ( IntersectLines( upper->line, point.s1->line, newPoint ) ||
@@ -418,8 +418,8 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
   {
     LineData* lower = nullptr;
     LineData* upper = nullptr;
-    auto it = T.find( point.s1 );
-    if ( FindNeighborsLower( lower, T, it ) && FindNeighborUpper( upper, T, it ) )
+    auto it = currentSegments.find( point.s1 );
+    if ( FindNeighborsLower( lower, currentSegments, it ) && FindNeighborUpper( upper, currentSegments, it ) )
     {
       Point newPoint;
       if ( lower->polyline != upper->polyline && ( IntersectLines( upper->line, lower->line, newPoint ) ||
@@ -434,17 +434,17 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
       }
     }
 
-    T.erase( it );
+    currentSegments.erase( it );
   }
   else
   {// Если точка является точкой пересечения.
     LineData* s1 = point.s1;
-    auto itS1 = T.find( point.s1 );
+    auto itS1 = currentSegments.find( point.s1 );
     LineData* s2 = point.s2;
-    auto itS2 = T.find( point.s2 );
+    auto itS2 = currentSegments.find( point.s2 );
     LineData* lower;
     LineData* upper;
-    if ( FindNeighborUpper( upper, T, itS1 )/* && upper != s2*/ )
+    if ( FindNeighborUpper( upper, currentSegments, itS1 )/* && upper != s2*/ )
     {
       Point newPoint;
       if ( upper->polyline != s2->polyline && ( IntersectLines( upper->line, point.s2->line, newPoint ) ||
@@ -455,7 +455,7 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
         intersectionPoints.push_back( event );
       }
     }
-    if ( FindNeighborsLower(lower, T, itS2) && lower != s1 )
+    if ( FindNeighborsLower(lower, currentSegments, itS2) && lower != s1 )
     {
       Point newPoint;
       if ( lower->polyline != s1->polyline && ( IntersectLines( lower->line, point.s1->line, newPoint ) ||
@@ -466,17 +466,17 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
         intersectionPoints.push_back( event );
       }
     }
-    if ( itS1 != T.end() && itS2 != T.end() && itS1 != itS2 )
+    if ( itS1 != currentSegments.end() && itS2 != currentSegments.end() && itS1 != itS2 )
     {
       s1 = *itS1;     
       s2 = *itS2;
-      T.erase( itS1 );
-      T.erase(T.find(point.s2 ) );
+      currentSegments.erase( itS1 );
+      currentSegments.erase( currentSegments.find(point.s2 ) );
       double key = s1->key;
       s1->key = s2->key;
       s2->key = key;
-      T.insert( s1 );
-      T.insert( s2 );
+      currentSegments.insert( s1 );
+      currentSegments.insert( s2 );
     }
 
   }
