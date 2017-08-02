@@ -48,6 +48,7 @@ private:
   DisplayedObject& operator=( DisplayedObject &obj ) = delete;
 
  public:
+  void                         DelRefSeries            ();                                                               ///< Удалить опорные точки.
   void                         AddCurveToChart         ( QChart * chart );                                             ///< Добавить кривую к пространству отрисовки.
   bool                         GetSelectionStatus      ();                                                             ///< Получить информацию о селектированности кривой
   void                         ModifySelectionStatus   ( Math::Point cursor, double precision, QColor selectedColor ); ///< Изменить информацию о селектированности кривой в зависимости от полученной точки

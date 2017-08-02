@@ -89,6 +89,7 @@ void MainWindow::CreateMenus()
   optionsMenu = menuBar()->addMenu( tr("&Options") );
   optionsMenu->addAction( deleteCurveAct );
   optionsMenu->addAction( findIntersectionAct) ;
+   optionsMenu->addAction( delRefPointAct ) ;
 
   screenMenu = menuBar()->addMenu( tr("&Screen") );
   screenMenu->addAction( clearScreenAct );
@@ -151,6 +152,10 @@ void MainWindow::CreateActions()
   findIntersectionAct = new QAction( tr("&Find Intersection"), this );
   findIntersectionAct->setStatusTip( tr("Find Intersection") );
   connect( findIntersectionAct, &QAction::triggered, this, &MainWindow::OnFindIntersection );
+
+  delRefPointAct = new QAction( tr("&Delete Reference points"), this );
+  delRefPointAct->setStatusTip( tr("Delete Reference points") );
+  connect( delRefPointAct, &QAction::triggered, this, &MainWindow::OnDelRefPoints );
 
   clearScreenAct = new QAction( tr("&Clear Screen"), this );
   clearScreenAct->setStatusTip( tr("Clear Screen") );
@@ -336,6 +341,14 @@ void MainWindow::OnReColorCurve()
   windowHandler.ChangeColor( newColor );
 }
 
+
+//-----------------------------------------------------------------------------
+// Удалить опорные точки.
+// ---
+void MainWindow::OnDelRefPoints()
+{
+  windowHandler.DelRefPoints();
+}
 
 //-----------------------------------------------------------------------------
 // Обработчик изменения размера окна.

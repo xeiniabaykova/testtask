@@ -66,7 +66,7 @@ void MainWindowHandler::CreateCircle()
 // ---
 void MainWindowHandler::CreateNurbs()
 {
-  state = StateCreateLine;
+  state = StateCreateNURBS;
   geomCreator = std::make_shared<CreatorHandler>( -1, CreatorHandler::CreateNURBS );
 }
 
@@ -125,7 +125,10 @@ void MainWindowHandler::SaveFile()
 void MainWindowHandler::CreateCurve()
 {
   std::shared_ptr<Math::Curve> primitive = geomCreator->Create();
+  if ( primitive == nullptr )
+    return;
   std::shared_ptr<DisplayedObject> curve = std::make_shared<DisplayedObject>( primitive );
+
   curve->AddCurveToChart( chart );
   displayedCurves.push_back( curve );
   tempSeriesReferenced->clear();
@@ -138,7 +141,7 @@ void MainWindowHandler::CreateCurve()
 // ---
 void MainWindowHandler::StopCreateCurve()
 {
-  if ( state == StateCreateLine )
+  if ( state == StateCreateLine || state == StateCreateNURBS )
   {
     CreateCurve();
   }
@@ -157,14 +160,20 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
     return;
 
   if ( event->buttons() == Qt::MiddleButton )
-    state = StopCreatePolyline;
+  {
+    if ( state == StateCreateLine )
+      state = StopCreatePolyline;
+    if (state == StateCreateNURBS)
+      state = StopCreateNurbs;
+
+  }
 
   QRect rec = QApplication::desktop()->screenGeometry();
   double height = rec.height();
   double width = rec.width();
   chart->resize( width, height );
   CreateEmptySeries();
-  if ( state == StateCreateCurve  || state == StateCreateLine )
+  if ( state == StateCreateCurve  || state == StateCreateLine || state == StateCreateNURBS )
   {
     QPointF currentPoint = chart->mapToValue( QPointF(event->x(), event->y() - 30) );
     geomCreator->AddPointFromScreen( Math::Point(currentPoint.x(), currentPoint.y()) );
@@ -187,6 +196,12 @@ void MainWindowHandler::MouseEvent( QMouseEvent *event )
       geomCreator->ClearPoints();
       CreatePolyline();
     }
+  if ( state == StopCreateNurbs )
+  {
+    CreateCurve();
+    geomCreator->ClearPoints();
+    CreateNurbs();
+  }
 }
 
 
@@ -314,11 +329,27 @@ void MainWindowHandler::FindIntersections()
 {
   std::vector<Math::Curve*> curves;
   for ( size_t i = 0; i < displayedCurves.size(); i++ )
-   curves.push_back( displayedCurves[i]->GetPrimitive().get() );
-  Math::CurveNumIntersection intersections = Math::IntersectGeneralCase( curves );
-  for ( size_t i = 0; i < intersections.size(); i++ )
   {
-    CreateRefPoint( curves[intersections[i].second.first]->GetPoint(intersections[i].first.first) );
+    if ( displayedCurves[i]->GetSelectionStatus() )
+      curves.push_back( displayedCurves[i]->GetPrimitive().get() );
+  }
+  std::vector<Math::CurveIntersectionData> points = Math::Intersect( curves );
+  for ( size_t i = 0; i < points.size(); i++ )
+  {
+    CreateRefPoint( points[i].curve1->GetPoint( points[i].paramCurve1 ) );
   }
 }
+
+
+//-----------------------------------------------------------------------------
+//    Удалить опорные точки.
+//---
+void MainWindowHandler::DelRefPoints()
+{
+  for ( size_t i = 0; i < displayedCurves.size(); i++ )
+  {
+     displayedCurves[i]->DelRefSeries();
+  }
+}
+
 }

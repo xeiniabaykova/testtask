@@ -32,7 +32,9 @@ class MainWindowHandler {
     StateCreateCurve,    /// Создание кривой.
     StateFindIntersecion, /// Нахождение пересечения.
     StateCreateLine,      /// Остановка создания кривой по точкам.
-    StopCreatePolyline    /// Остановка создания кривой.
+    StateCreateNURBS,     /// Остановка создания нурбс - кривой.
+    StopCreatePolyline,   /// Остановка создания кривой.
+    StopCreateNurbs       /// Остановка создания nurbs - кривой.
   };
 
 private:
@@ -76,6 +78,7 @@ public:
   void CreateChart            ();                              ///< Обработать создание экрана.
   void CreateRefPoint         ( Math::Point point );           ///< Отобразить точку, выбранную пользователем.
   void FindIntersections      ();                              ///< Найти точки пересечений кривых.
+  void DelRefPoints           ();                              ///< Удалить опорные точки.
 };
 }
 #endif // MAINWINDOWHANDLER_H

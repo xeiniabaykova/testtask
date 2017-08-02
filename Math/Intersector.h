@@ -13,23 +13,39 @@
 #include "Line.h"
 
 namespace Math {
-typedef std::vector<std::pair<std::pair<double, double>, std::pair<size_t, size_t>>> CurveNumIntersection;
-///// Нахождение всех точек пересечения кривых.
-//std::vector<Point> Intersector               ( const std::vector<Curve> curves );
-/// Найти пересечение двух отрезков.
-bool IntersectLines                          (const Curve& curve1, const Curve& curve2, Point &thePoint);
-/// Найти точки пересечения двух полилиний.
-std::vector<Point> IntersectPolylinePolyline ( const Curve& curve1, const Curve& curve2, std::vector<std::pair<double, double>>& resultParams );
-std::vector<Point> IntersectPolylinePolyline ( const Curve& curve1, const Curve& curve2 );
-/// Запустить общий алгоритм пересечения кривых. Возращаемый парметр - пара параметров пересечения кривых и номера кривых в списке curves.
-CurveNumIntersection IntersectGeneralCase    ( const std::vector<Curve*> curves );
-std::vector<Point> SegmentsIntersections     ( std::vector<Line> segments, std::vector<std::pair<double, double>>& params);
-//std::vector<Point> SegmentsIntersections     ( const Math::GeomPolyline* polyline1,const Math::GeomPolyline* polyline2,
-//                                               std::vector<std::pair<std::pair<double, double>, std::pair<size_t, size_t>>>& params );
-/// Найти точки пересечения для отрезка и окружности.
-std::vector<Point> IntersectLineCircle       ( const Curve& line, const Curve& circle );
+///////////////////////////////////////////////////////////////////////////////
+//
+///  Тип для представления данных о пересечении. 
+/**
+   Тип для представления данных о пересечении двух параметрических кривых curve1 и curve2. 
+   Значения параметров curveparameter1 и paramcurve2 в этих кривых соответствуют точке пересечения.
+*/
+///////////////////////////////////////////////////////////////////////////////
+struct CurveIntersectionData
+{
+  const Curve* curve1;      // Указатель на первую кривую. 
+  const Curve* curve2;      // Указатель на вторую кривую. 
+  double       paramCurve1; // Параметр первой кривой, соответствующий точке пересечения.
+  double       paramCurve2; // Параметр второй кривой, соответствующий точке пересечения.
+  CurveIntersectionData( const Curve* theCurve1, const Curve* theCurve2, std::pair<double, double> theParamPoint ):
+    curve1      ( theCurve1 ),
+    curve2      ( theCurve2 ),
+    paramCurve1 ( theParamPoint.first ),
+    paramCurve2 ( theParamPoint.second )
+  {}
 
+  std::pair<double, double> GetParamPoint()
+  {
+    return std::make_pair( paramCurve1, paramCurve2 );
+  }
 
+};
+/**  \brief Найти пересечения кривых
+\param[in] curves - вектор указателей на кривые .\~
+\param[out] Вектор данных о пересечениях.\~
+*/
+//---
+std::vector<CurveIntersectionData> Intersect( const std::vector<Curve*>& curves );
 }
 
 #endif // INTERSECTOR_H

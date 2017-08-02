@@ -41,6 +41,8 @@ bool CreatorHandler::IsSufficientNum() const
 // ---
 std::shared_ptr<Math::Curve> CreatorHandler::Create()
 {
+  if ( points.empty() )
+    return nullptr;
   switch( type )
   {
     case CreateLine:

@@ -47,6 +47,7 @@ private:
   QAction                   * saveAct;              ///< Событие сохранения в файл.
   QAction                   * loadAct;              ///< Событие загрузки из файла.
   QAction                   * clearScreenAct;       ///< Событие очистки экрана.
+  QAction                   * delRefPointAct;       ///< Событие удаления опорных точек.
   Editor::MainWindowHandler   windowHandler;        ///< Вспомогательный класс для обработки событий.
   QActionGroup              * creatorCurves;        ///< Группа для меню создания кривых.
 
@@ -79,7 +80,7 @@ private slots:
   void OnCreatePoint        ();                      ///< Обработать событие создания точки.
   void OnCreateLine         ();                      ///< Обработать событие создания линии.
   void OnCreateEllipse      ();                      ///< Обработать событие создания эллипса.
-   void OnCreateCircle      ();                      ///< Обработать событие создания окружности
+  void OnCreateCircle      ();                      ///< Обработать событие создания окружности
   void OnCreateNurbs        ();                      ///< Обработать событие создания nurbs.
   void OnStopCreateCurve    ();                      ///< Обработать событие прекращения создания кривых.
   void OnFindIntersection   ();                      ///< Обработать событие нахождения пересечения.
@@ -87,6 +88,7 @@ private slots:
   void OnClearScreen        ();                      ///< Обработать событие очистки экрана.
   void OnCreatePolyline     ();                      ///< Обработать событие создания полилинии.
   void OnReColorCurve       ();                      ///< Обработать событие изменения цвета кривой.
+  void OnDelRefPoints       ();                      ///< Удалить опорные точки.
   void ContextMenuRequested ( const QPoint& point ); ///< Создать контекстное меню.
 
 };
