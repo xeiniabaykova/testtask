@@ -137,9 +137,14 @@ static std::pair<double, double> NewtonMethod( const Curve& curve1, const Curve&
 {
   std::pair<double, double> currentPoint = startValue;
   std::pair<double, double> newPoint;
+  Matrix22 lastNonZeroMatrix;
   for ( size_t i = 0; i < CommonConstantsMath::NUMBER_NEWTON_METHOD; i++ )
   {
     auto invHessian = CountingHessian( curve1, curve2, newPoint.first, newPoint.second );
+    if ( fabs( invHessian[0][0] * invHessian[1][1] - invHessian[0][1] * invHessian[1][0] ) > CommonConstantsMath::NULL_TOL )
+      lastNonZeroMatrix = invHessian;
+  /*  else
+      invHessian = lastNonZeroMatrix;*/
     invHessian = InverseMatrix( invHessian );
     const Vector grad = Gradient( curve1, curve2, newPoint );
     std::pair<double, double> step( invHessian[0][0] * -grad.GetX() + invHessian[0][1] * -grad.GetY(), invHessian[1][0] *
@@ -345,15 +350,16 @@ struct KeySort
     /* если первая точка первого отрезка лексикографически меньше
     первой точки второго, то вернуть true, иначе если они равны то вернуть, меньше ли вторая точка первого отрезхка второй точки второго отрезка*/
 
-    if ( lhs->key == rhs->key )
-    {
-      if ( IsSame( lhs->line.GetStartPoint(), rhs->line.GetStartPoint() ) )
-        return IsLexLess( lhs->line.GetEndPoint(), rhs->line.GetEndPoint() );
-      else
-       return IsLexLess( lhs->line.GetStartPoint(), rhs->line.GetStartPoint() );
-    }
-    return ( lhs->key < rhs->key );
-  }
+     if ( lhs->key == rhs->key )
+     {
+       if ( IsSame( lhs->line.GetStartPoint(), rhs->line.GetStartPoint() ) )
+         return IsLexLess( lhs->line.GetEndPoint(), rhs->line.GetEndPoint() );
+       else
+        return IsLexLess( lhs->line.GetStartPoint(), rhs->line.GetStartPoint() );
+     }
+     return ( lhs->key < rhs->key );
+   }
+
 };
 
 
