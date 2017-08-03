@@ -205,6 +205,17 @@ bool Vector::IsCollinear( Vector vector, double accuracy ) const
   return ( std::fabs( VectorMult(vector) ) < accuracy );
 
 }
+
+
+//----------------------------------------------------------------------------
+//    Проверить вектора на перпендикулярность.
+// ---
+bool Vector::IsPerpendicular( Vector vector, double accuracy ) const
+{
+  return ( std::fabs(*this * vector) < accuracy );
+}
+
+
 //----------------------------------------------------------------------------
 /**
   Вернуть имя, используемое при записи точки в файл.

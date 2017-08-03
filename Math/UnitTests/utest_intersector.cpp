@@ -5,6 +5,7 @@
 #include "GeomPolyline.h"
 #include "../Intersector.h"
 #include "../NurbsCurve.h"
+#include "Intersector.cpp"
 #include <memory>
 #include <algorithm>
 #include <ctime>
@@ -363,6 +364,20 @@ TEST( Intersector, NullCurves )
   curves.push_back( &curve2 );
   std::vector<CurveIntersectionData> points = Math::Intersect( curves );
   EXPECT_TRUE( points.empty() );
+}
+
+TEST( Intersector, IntersectLinesPerpendiculart )
+{
+  Line line1( Point(0.0, 0.0), Point(0.0, 4.0) );
+  Line line2( Point( -3.0, 2.0 ), Point( 3.0, 2.0 ) );
+  Point newPoint;
+  IntersectLines( line1, line2, newPoint );
+  EXPECT_TRUE( IsEqual( newPoint ,Point(0.0, 2.0)) );
+  Line line3( Point( -3.0, 2.0 ), Point( 3.0, 2.0 ) );
+  Line line4( Point( 0.0, 0.0 ), Point( 0.0, 4.0 ) );
+  IntersectLines( line1, line2, newPoint );
+  EXPECT_TRUE( IsEqual( newPoint, Point( 0.0, 2.0 ) ) );
+  
 }
 TEST(Nurbs, 3Intersect)
 {

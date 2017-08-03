@@ -47,27 +47,17 @@ public:
     paramCurve2 ( theParamPoint.second )
   {}
   /// Вернуть первую кривую.
-  const Curve* GetCurve1()
-  {
-    return curve1;
-  }
-  /// Вернуть вторую криву.
-  const Curve* GetCurve2()
-  {
-    return curve2;
-  }
-/// Вернуть набор параметров, при которых кривые пересекаются.
-  std::pair<double, double> GetParamPoint()
-  {
-    return std::make_pair( paramCurve1, paramCurve2 );
-  }
-
+  const Curve*              GetCurve1();
+  /// Вернуть вторую кривую.
+  const Curve*              GetCurve2();
+  /// Вернуть набор параметров, при которых кривые пересекаются.
+  std::pair<double, double> GetParamPoint();
 };
-/**  \brief Найти пересечения кривых
-\param[in] curves - вектор указателей на кривые .\~
-\param[out] Вектор данных о пересечениях.\~
-*/
-//---
+  /**  \brief Найти пересечения кривых
+  \param[in] curves - вектор указателей на кривые .\~
+  \param[out] Вектор данных о пересечениях.\~
+  */
+  //---
 std::vector<CurveIntersectionData> Intersect( const std::vector<Curve*>& curves );
 }
 
