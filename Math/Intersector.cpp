@@ -77,7 +77,7 @@ static Matrix22& InverseMatrix( Matrix22& matrix )
   matrix[0][1] = -result[1][0] / determinant;
   matrix[1][0] = -result[0][1] / determinant;
   matrix[1][1] = result[0][0] / determinant;
-  return std::move( matrix );
+  return matrix;
 }
 
 
@@ -86,13 +86,13 @@ static Matrix22& InverseMatrix( Matrix22& matrix )
 // ---
 static Vector Gradient( const Curve* curve1, const Curve* curve2, std::pair<double, double> paramsCurve )
 {
-  Point point1 = curve1->GetPoint( paramsCurve.first );
-  Vector grad1 = curve1->GetDerivative( paramsCurve.first );
+  const Point point1 = curve1->GetPoint( paramsCurve.first );
+  const Vector grad1 = curve1->GetDerivative( paramsCurve.first );
 
-  Point point2 = curve2->GetPoint( paramsCurve.second );
-  Vector grad2 = curve2->GetDerivative( paramsCurve.second );
-  double aResultT1 = 2.0 * ( point1.GetX() - point2.GetX() ) * grad1.GetX() + 2.0 * ( point1.GetY() - point2.GetY() ) * grad1.GetY();
-  double aResultT2 = 2.0 * ( point2.GetX() - point1.GetX() ) * grad2.GetX() + 2.0 * ( point2.GetY() - point1.GetY() ) * grad2.GetY();
+  const Point point2 = curve2->GetPoint( paramsCurve.second );
+  const Vector grad2 = curve2->GetDerivative( paramsCurve.second );
+  const double aResultT1 = 2.0 * ( point1.GetX() - point2.GetX() ) * grad1.GetX() + 2.0 * ( point1.GetY() - point2.GetY() ) * grad1.GetY();
+  const  double aResultT2 = 2.0 * ( point2.GetX() - point1.GetX() ) * grad2.GetX() + 2.0 * ( point2.GetY() - point1.GetY() ) * grad2.GetY();
   return Vector( aResultT1, aResultT2 );
 }
 
@@ -169,7 +169,7 @@ const Curve* CurveIntersectionData::GetCurve2()
 //-----------------------------------------------------------------------------
 // Вернуть набор параметров, при которых кривые пересекаются.
 // ---
-std::pair<double, double> CurveIntersectionData::GetParamPoint()
+std::pair<double, double> CurveIntersectionData::GetParams()
 {
   return std::make_pair( paramCurve1, paramCurve2 );
 }
@@ -209,51 +209,23 @@ static bool IntersectLines( const Math::Line& lineCurveFirst, const Math::Line& 
   const Point end1 = lineCurveFirst.GetEndPoint();
   const Point end2 = lineCurveSecond.GetEndPoint();
 
-  if ( dir1 .GetX() < CommonConstantsMath::NULL_TOL &&  dir2.GetX() > CommonConstantsMath::NULL_TOL )
+
+
+ if ( !dir1.IsCollinear( dir2 ) )
   {
-    double coef = dir2.GetY() / dir2.GetX();
-    double b2 = start2.GetY() - coef * start2.GetX();
-
-    if ( start2.GetX() <= start1.GetX() && end2.GetY() >= start1.GetX() && 
-         std::min( start1.GetX(), end1.GetY() ) <= coef * start1.GetX() + b2 &&
-         std::max( start1.GetY(), end1.GetY() ) >= coef * start1.GetX() + b2 )
-    {
-      intersectionPoint = Point( start1.GetX(), coef * start1.GetX() + b2 );
-      return true;
-    }
-
-    return false;
-  }
-  else if ( dir1.GetX() > CommonConstantsMath::NULL_TOL &&  dir2.GetX() < CommonConstantsMath::NULL_TOL )
-  {
-    double coef = dir2.GetY() / dir2.GetX();
-    double b1 = start1.GetY() - coef * start1.GetX();
-
-    if ( start1.GetX() <= start2.GetX() && end1.GetX() >= start2.GetX() && 
-         std::min( start2.GetY(), end2.GetY() ) <= coef * start2.GetX() + b1 &&
-         std::max( start2.GetY(), end2.GetY() ) >= coef * start2.GetX() + b1 )
-    {
-      intersectionPoint = Point( start2.GetX(), coef * start2.GetX() + b1 );
-      return true;
-    }
-
-    return false;
-
-  }
-  else if ( !dir1.IsCollinear( dir2 ) )
-  {
-    const double StartPointDifferenceX = start1.GetX() - start2.GetX();
-    const double StartPointDifferenceY = start1.GetY() - start2.GetY();
-    double t1Intersect = ( StartPointDifferenceY - dir2.GetY() / dir2.GetX() * StartPointDifferenceX ) / ( dir2.GetY() * dir1.GetX() / dir2.GetX() - dir1.GetY() );
-    double t2Intersect = ( StartPointDifferenceX + dir1.GetX() * t1Intersect ) / dir2.GetX();
-    if ( 0. <= t1Intersect && 1. >= t1Intersect && 0. <= t2Intersect && 1. >= t2Intersect )
-    {
-      intersectionPoint = start1 + dir1 * t1Intersect;
-      return true;
-    }
-    else
-      return false;
-  }
+   double det = ( dir2.GetX() *-dir1.GetY() + dir1.GetX() * dir2.GetY() );
+   double det1 = ( start1.GetX() - start2.GetX() ) * dir1.GetY() + dir1.GetX() * ( start1.GetY() - start2.GetY() );
+   double det2 = dir2.GetX() * ( start1.GetY() - start2.GetY() ) - dir2.GetY() *  ( start1.GetX() - start2.GetX() );
+   double  t1Intersect = det1 / det;
+   double  t2Intersect = det2 / det;
+   if ( 0. <= t1Intersect && 1. >= t1Intersect && 0. <= t2Intersect && 1. >= t2Intersect )
+   {
+     intersectionPoint = start1 + dir1 * t1Intersect;
+     return true;
+   }
+   else
+     return false;
+ }
   else
     return false;
 }
@@ -630,7 +602,7 @@ std::vector<CurveIntersectionData> Intersect( const std::vector<Curve*>& curves 
 
   for ( size_t i = 0; i < intersections.size(); i++ )
   {
-    std::pair<double,double> intersectPoint = NewtonMethod( intersections[i].GetCurve1(), intersections[i].GetCurve2(), intersections[i].GetParamPoint() );
+    std::pair<double,double> intersectPoint = NewtonMethod( intersections[i].GetCurve1(), intersections[i].GetCurve2(), intersections[i].GetParams() );
 
     if ( Distance(intersections[i].GetCurve1()->GetPoint(intersectPoint.first), intersections[i].GetCurve2()->GetPoint(intersectPoint.second) ) < CommonConstantsMath::NULL_TOL )
       intersectPoints.push_back( CurveIntersectionData( intersections[i].GetCurve1(), intersections[i].GetCurve2(), intersectPoint) );
