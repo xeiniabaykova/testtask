@@ -565,7 +565,8 @@ static void SegmentsIntersections( std::vector< Math::GeomPolyline>& polyline,
   size_t size = 0;
   for ( size_t i = 0; i < polyline.size(); i++ )
     size += polyline[i].GetReferensedPoints().size();
-  std::vector<LineData> lines( size , LineData());
+  std::vector<LineData> lines;
+  lines.reserve( size );
   for ( size_t i = 0; i < polyline.size(); i++ )
   {
     if ( curves[i] != nullptr )
