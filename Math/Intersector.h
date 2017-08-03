@@ -47,9 +47,9 @@ public:
     paramCurve2 ( theParamPoint.second )
   {}
   /// Вернуть первую кривую.
-  const Curve&              GetCurve1();
+  const Curve&              GetCurve1() const;
   /// Вернуть вторую кривую.
-  const Curve&             GetCurve2();
+  const Curve&             GetCurve2() const;
   /// Вернуть набор параметров, при которых кривые пересекаются.
   std::pair<double, double> GetParams();
 };

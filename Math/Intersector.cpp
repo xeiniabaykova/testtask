@@ -139,7 +139,12 @@ static std::pair<double, double> NewtonMethod( const Curve& curve1, const Curve&
   std::pair<double, double> newPoint;
   for ( size_t i = 0; i < CommonConstantsMath::NUMBER_NEWTON_METHOD; i++ )
   {
-    newPoint = NewtonMethodIteration( curve1, curve2, currentPoint );
+    auto invHessian = CountingHessian( curve1, curve2, newPoint.first, newPoint.second );
+    invHessian = InverseMatrix( invHessian );
+    const Vector grad = Gradient( curve1, curve2, newPoint );
+    std::pair<double, double> step( invHessian[0][0] * -grad.GetX() + invHessian[0][1] * -grad.GetY(), invHessian[1][0] *
+                                    -grad.GetX() + invHessian[1][1] * -grad.GetY() );
+    newPoint = newPoint + step;
     if ( fabs( Distance( newPoint, currentPoint ) ) < CommonConstantsMath::ACCURANCY_METHOD_NEWTON )
       break;
     currentPoint = newPoint;
@@ -151,7 +156,7 @@ static std::pair<double, double> NewtonMethod( const Curve& curve1, const Curve&
 //-----------------------------------------------------------------------------
 // Вернуть первую кривую.
 // ---
-const Curve& CurveIntersectionData::GetCurve1()
+const Curve& CurveIntersectionData::GetCurve1() const
 {
   return curve1;
 }
@@ -160,7 +165,7 @@ const Curve& CurveIntersectionData::GetCurve1()
 //-----------------------------------------------------------------------------
 // Вернуть вторую кривую.
 // ---
-const Curve& CurveIntersectionData::GetCurve2()
+const Curve& CurveIntersectionData::GetCurve2() const
 {
   return curve2;
 }
@@ -263,6 +268,7 @@ struct LineData
     key       ( theKey ),
     curve     ( theCurve )
   {}
+  LineData() = default;
 };
 
 
@@ -556,11 +562,10 @@ static void SegmentsIntersections( std::vector< Math::GeomPolyline>& polyline,
 
   std::multiset<PointEvent, IsLexLessX> setEventPoints;
   std::set<LineData*, KeySort> T;
-  std::vector<LineData> lines;
   size_t size = 0;
   for ( size_t i = 0; i < polyline.size(); i++ )
     size += polyline[i].GetReferensedPoints().size();
-  lines.reserve( size );
+  std::vector<LineData> lines( size , LineData());
   for ( size_t i = 0; i < polyline.size(); i++ )
   {
     if ( curves[i] != nullptr )
