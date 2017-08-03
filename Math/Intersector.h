@@ -24,8 +24,8 @@ namespace Math {
 struct CurveIntersectionData
 {
 private:
-  Curve& curve1;      // Указатель на первую кривую. 
-  Curve& curve2;      // Указатель на вторую кривую. 
+  const Curve& curve1;      // Указатель на первую кривую. 
+  const Curve& curve2;      // Указатель на вторую кривую. 
   double       paramCurve1; // Параметр первой кривой, соответствующий точке пересечения.
   double       paramCurve2; // Параметр второй кривой, соответствующий точке пересечения.
 public:

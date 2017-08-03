@@ -22,31 +22,31 @@ using Matrix22 = std::array<std::array<double, 2>, 2>;
 //-----------------------------------------------------------------------------
 //  Найти значение матрицы Гессе для квадрата расстояния между кривыми в точке (t1, t2).
 // ---
-static Matrix22 CountingHessian( const Curve* curve1, const Curve* curve2, double t1, double t2 )
+static Matrix22 CountingHessian( const Curve& curve1, const Curve& curve2, double t1, double t2 )
 {
-  const Point t1Point = curve1->GetPoint( t1 );
+  const Point t1Point = curve1.GetPoint( t1 );
   const double x1 = t1Point.GetX();
   const double y1 = t1Point.GetY();
 
-  const Point t1PointD = curve1->GetDerivative( t1 );
+  const Point t1PointD = curve1.GetDerivative( t1 );
   const double x1d = t1PointD.GetX();
   const double y1d = t1PointD.GetY();
 
-  const Point t1Point2D = curve1->Get2Derivative( t1 );
+  const Point t1Point2D = curve1.Get2Derivative( t1 );
   const double x1dd = t1Point2D.GetX();
   const double y1dd = t1Point2D.GetY();
 
-  const Point t2Point = curve2->GetPoint( t2 );
+  const Point t2Point = curve2.GetPoint( t2 );
   const double x2 = t2Point.GetX();
   const double y2 = t2Point.GetY();
 
-  const Point t2PointD = curve2->GetDerivative( t2 );
+  const Point t2PointD = curve2.GetDerivative( t2 );
   const double x2d = t2PointD.GetX();
   const double y2d = t2PointD.GetY();
 
-  const Point t2Point2D = curve2->Get2Derivative( t2 );
-  const double x2dd = curve2->Get2Derivative( t2 ).GetX();
-  const double y2dd = curve2->Get2Derivative( t2 ).GetY();
+  const Point t2Point2D = curve2.Get2Derivative( t2 );
+  const double x2dd = curve2.Get2Derivative( t2 ).GetX();
+  const double y2dd = curve2.Get2Derivative( t2 ).GetY();
 
   Matrix22 hessian;
   hessian[0][0] = x1dd * 2. * ( x1 - x2 ) + 2. * x1d * x1d + y1dd * 2. * ( y1 - y2 ) + 2. * y1d * y1d;
@@ -84,13 +84,13 @@ static Matrix22& InverseMatrix( Matrix22& matrix )
 //-----------------------------------------------------------------------------
 //  Вернуть градиент для квадрата расстояния между кривыми в заданной точке.
 // ---
-static Vector Gradient( const Curve* curve1, const Curve* curve2, std::pair<double, double> paramsCurve )
+static Vector Gradient( const Curve& curve1, const Curve& curve2, std::pair<double, double> paramsCurve )
 {
-  const Point point1 = curve1->GetPoint( paramsCurve.first );
-  const Vector grad1 = curve1->GetDerivative( paramsCurve.first );
+  const Point point1 = curve1.GetPoint( paramsCurve.first );
+  const Vector grad1 = curve1.GetDerivative( paramsCurve.first );
 
-  const Point point2 = curve2->GetPoint( paramsCurve.second );
-  const Vector grad2 = curve2->GetDerivative( paramsCurve.second );
+  const Point point2 = curve2.GetPoint( paramsCurve.second );
+  const Vector grad2 = curve2.GetDerivative( paramsCurve.second );
   const double aResultT1 = 2.0 * ( point1.GetX() - point2.GetX() ) * grad1.GetX() + 2.0 * ( point1.GetY() - point2.GetY() ) * grad1.GetY();
   const  double aResultT2 = 2.0 * ( point2.GetX() - point1.GetX() ) * grad2.GetX() + 2.0 * ( point2.GetY() - point1.GetY() ) * grad2.GetY();
   return Vector( aResultT1, aResultT2 );
@@ -118,7 +118,7 @@ static std::pair<double, double> operator + ( std::pair<double, double>& point1,
 //-----------------------------------------------------------------------------
 //  Провести одну итерацию метода Ньютона.
 // ---
-static std::pair<double, double> NewtonMethodIteration( const Curve* curve1, const Curve* curve2, std::pair<double, double> paramsCurve )
+static std::pair<double, double> NewtonMethodIteration( const Curve& curve1, const Curve& curve2, std::pair<double, double> paramsCurve )
 {
 
   auto invHessian = CountingHessian( curve1, curve2, paramsCurve.first, paramsCurve.second );
@@ -133,7 +133,7 @@ static std::pair<double, double> NewtonMethodIteration( const Curve* curve1, con
 //-----------------------------------------------------------------------------
 //  Запустить метод Ньютона для поиска локального минимума квадарта расстояния между кривыми с начальной точкой в startValue.
 // ---
-static std::pair<double, double> NewtonMethod( const Curve* curve1, const Curve* curve2, std::pair<double, double> startValue )
+static std::pair<double, double> NewtonMethod( const Curve& curve1, const Curve& curve2, std::pair<double, double> startValue )
 {
   std::pair<double, double> currentPoint = startValue;
   std::pair<double, double> newPoint;
@@ -344,7 +344,7 @@ struct KeySort
       if ( IsSame( lhs->line.GetStartPoint(), rhs->line.GetStartPoint() ) )
         return IsLexLess( lhs->line.GetEndPoint(), rhs->line.GetEndPoint() );
       else
-        IsLexLess( lhs->line.GetStartPoint(), rhs->line.GetStartPoint() );
+       return IsLexLess( lhs->line.GetStartPoint(), rhs->line.GetStartPoint() );
     }
     return ( lhs->key < rhs->key );
   }
@@ -686,7 +686,7 @@ static std::vector<Point> IntersectPolylinePolyline( const Curve& curve1, const 
         if ( result == std::end( intersectPoints ) )
         {
           intersectPoints.push_back( point );
-          resultParams.push_back( CurveIntersectionData( &curve1, &curve2, std::make_pair( refParams1[i], refParams2[j] ) ) );
+          resultParams.push_back( CurveIntersectionData( curve1, curve2, std::make_pair( refParams1[i], refParams2[j] ) ) );
         }
       }
     }

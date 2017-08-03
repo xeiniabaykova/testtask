@@ -177,7 +177,7 @@ TEST( Intersector, SameEndLineLinePoints )
   curves.push_back( &polyline2 );
   std::vector<CurveIntersectionData> points = Math::Intersect( curves );
   ASSERT_TRUE( points.size() == 1 );
-  EXPECT_TRUE( IsEqual(points[0].GetCurve1()->GetPoint(points[0].GetParams().first), points[0].GetCurve2()->GetPoint(points[0].GetParams().second)) );
+  EXPECT_TRUE( IsEqual(points[0].GetCurve1().GetPoint(points[0].GetParams().first), points[0].GetCurve2().GetPoint(points[0].GetParams().second)) );
 }
 TEST( Intersector, SimpleCaseLineLine )
 {
@@ -192,7 +192,7 @@ TEST( Intersector, SimpleCaseLineLine )
   curves.push_back( &polyline2 );
   std::vector<CurveIntersectionData> points = Math::Intersect( curves );
   ASSERT_TRUE( points.size() == 1 );
-  EXPECT_TRUE( IsEqual(points[0].GetCurve1()->GetPoint(points[0].GetParams().first), points[0].GetCurve2()->GetPoint(points[0].GetParams().second)) );
+  EXPECT_TRUE( IsEqual(points[0].GetCurve1().GetPoint(points[0].GetParams().first), points[0].GetCurve2()->GetPoint(points[0].GetParams().second)) );
 }
 
 TEST( Intersector, SimpleCase4Line )
