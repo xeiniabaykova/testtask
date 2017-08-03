@@ -151,7 +151,7 @@ static std::pair<double, double> NewtonMethod( const Curve* curve1, const Curve*
 //-----------------------------------------------------------------------------
 // Вернуть первую кривую.
 // ---
-const Curve* CurveIntersectionData::GetCurve1()
+const Curve& CurveIntersectionData::GetCurve1()
 {
   return curve1;
 }
@@ -160,7 +160,7 @@ const Curve* CurveIntersectionData::GetCurve1()
 //-----------------------------------------------------------------------------
 // Вернуть вторую кривую.
 // ---
-const Curve* CurveIntersectionData::GetCurve2()
+const Curve& CurveIntersectionData::GetCurve2()
 {
   return curve2;
 }
@@ -214,9 +214,9 @@ static bool IntersectLines( const Math::Line& lineCurveFirst, const Math::Line& 
  if ( !dir1.IsCollinear( dir2 ) )
   {
    double det = ( dir2.GetX() *-dir1.GetY() + dir1.GetX() * dir2.GetY() );
-   double det1 = ( start1.GetX() - start2.GetX() ) * dir1.GetY() + dir1.GetX() * ( start1.GetY() - start2.GetY() );
+   double det1 = ( start1.GetX() - start2.GetX() ) * dir1.GetY() - dir1.GetX() * ( start1.GetY() - start2.GetY() );
    double det2 = dir2.GetX() * ( start1.GetY() - start2.GetY() ) - dir2.GetY() *  ( start1.GetX() - start2.GetX() );
-   double  t1Intersect = det1 / det;
+   double  t1Intersect = -det1 / det;
    double  t2Intersect = det2 / det;
    if ( 0. <= t1Intersect && 1. >= t1Intersect && 0. <= t2Intersect && 1. >= t2Intersect )
    {
@@ -252,10 +252,10 @@ struct LineData
   Line                      line;      // Отрезок.
   const GeomPolyline&       polyline;  // Полилиния, которой принадлежит отрезок.
   size_t                    numParam;  // Номер полилинии в списке полилиний.
-  Curve                     *curve;    // Кривая, соответствующая отрезку.
+  Curve                     &curve;    // Кривая, соответствующая отрезку.
   double                    leftParam; // Параметр исходной кривой, соответсующий отрезку полилинии.
   double                    key;       // Ключ для сравнения отрезков - по умолчанию координата y левой точки.
-  LineData    ( Line theLine, const GeomPolyline& thePolyline, double theLeftParam, size_t thenumParam, double theKey, Curve* theCurve ):
+  LineData    ( Line theLine, const GeomPolyline& thePolyline, double theLeftParam, size_t thenumParam, double theKey, Curve& theCurve ):
     line      ( theLine ),
     polyline  ( thePolyline ),
     leftParam ( theLeftParam ),
@@ -339,19 +339,14 @@ struct KeySort
     /* если первая точка первого отрезка лексикографически меньше
     первой точки второго, то вернуть true, иначе если они равны то вернуть, меньше ли вторая точка первого отрезхка второй точки второго отрезка*/
 
-    if ( lhs->key < rhs->key )
-      return true;
-    else if ( lhs->key == rhs->key )
+    if ( lhs->key == rhs->key )
     {
-      if ( IsLexLess( lhs->line.GetStartPoint(), rhs->line.GetStartPoint() ) )
-        return true;
-      else if ( IsLexLess( rhs->line.GetStartPoint(), lhs->line.GetStartPoint() ) )
-        return false;
-      else
+      if ( IsSame( lhs->line.GetStartPoint(), rhs->line.GetStartPoint() ) )
         return IsLexLess( lhs->line.GetEndPoint(), rhs->line.GetEndPoint() );
+      else
+        IsLexLess( lhs->line.GetStartPoint(), rhs->line.GetStartPoint() );
     }
-    else
-      return false;
+    return ( lhs->key < rhs->key );
   }
 };
 
@@ -521,7 +516,7 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
 //-----------------------------------------------------------------------------
 //  Добавить в множество точек событий опорные точки полилинии.
 // ---
-static void CollectEventPoints( std::vector<LineData>& lines, const Math::GeomPolyline& polyline, Curve* curves,
+static void CollectEventPoints( std::vector<LineData>& lines, const Math::GeomPolyline& polyline, Curve& curves,
                          std::multiset<PointEvent, IsLexLessX>& setEventPoints, size_t numPolyline )
 {
   std::vector<Point> polylinePoints = polyline.GetReferensedPoints();
@@ -569,7 +564,7 @@ static void SegmentsIntersections( std::vector< Math::GeomPolyline>& polyline,
   for ( size_t i = 0; i < polyline.size(); i++ )
   {
     if ( curves[i] != nullptr )
-    CollectEventPoints( lines, polyline[i], curves[i], setEventPoints, i );
+    CollectEventPoints( lines, polyline[i], *curves[i], setEventPoints, i );
   }
 
   while ( !setEventPoints.empty() )
@@ -604,7 +599,7 @@ std::vector<CurveIntersectionData> Intersect( const std::vector<Curve*>& curves 
   {
     std::pair<double,double> intersectPoint = NewtonMethod( intersections[i].GetCurve1(), intersections[i].GetCurve2(), intersections[i].GetParams() );
 
-    if ( Distance(intersections[i].GetCurve1()->GetPoint(intersectPoint.first), intersections[i].GetCurve2()->GetPoint(intersectPoint.second) ) < CommonConstantsMath::NULL_TOL )
+    if ( Distance(intersections[i].GetCurve1().GetPoint(intersectPoint.first), intersections[i].GetCurve2().GetPoint(intersectPoint.second) ) < CommonConstantsMath::NULL_TOL )
       intersectPoints.push_back( CurveIntersectionData( intersections[i].GetCurve1(), intersections[i].GetCurve2(), intersectPoint) );
   }
   return intersectPoints;
