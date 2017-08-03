@@ -161,7 +161,7 @@ static std::pair<double, double> NewtonMethod( const Curve& curve1, const Curve&
 //-----------------------------------------------------------------------------
 // Вернуть первую кривую.
 // ---
-const Curve& CurveIntersectionData::GetCurve1() const
+inline const Curve& CurveIntersectionData::GetCurve1() const
 {
   return curve1;
 }
@@ -170,7 +170,7 @@ const Curve& CurveIntersectionData::GetCurve1() const
 //-----------------------------------------------------------------------------
 // Вернуть вторую кривую.
 // ---
-const Curve& CurveIntersectionData::GetCurve2() const
+inline const Curve& CurveIntersectionData::GetCurve2() const
 {
   return curve2;
 }
@@ -179,7 +179,7 @@ const Curve& CurveIntersectionData::GetCurve2() const
 //-----------------------------------------------------------------------------
 // Вернуть набор параметров, при которых кривые пересекаются.
 // ---
-std::pair<double, double> CurveIntersectionData::GetParams()
+inline std::pair<double, double> CurveIntersectionData::GetParams()
 {
   return std::make_pair( paramCurve1, paramCurve2 );
 }
@@ -223,10 +223,10 @@ static bool IntersectLines( const Math::Line& lineCurveFirst, const Math::Line& 
 
  if ( !dir1.IsCollinear( dir2 ) )
   {
-   double det = ( dir2.GetX() *-dir1.GetY() + dir1.GetX() * dir2.GetY() );
-   double det1 = ( start1.GetX() - start2.GetX() ) * dir1.GetY() - dir1.GetX() * ( start1.GetY() - start2.GetY() );
-   double det2 = dir2.GetX() * ( start1.GetY() - start2.GetY() ) - dir2.GetY() *  ( start1.GetX() - start2.GetX() );
-   double  t1Intersect = -det1 / det;
+   double det = -dir2.GetX() * dir1.GetY() + dir1.GetX() * dir2.GetY();
+   double det1 = dir2.GetX() * ( start1.GetY() - start2.GetY() ) - dir2.GetY() *  ( start1.GetX() - start2.GetX() );
+   double det2 = -( start1.GetX() - start2.GetX() ) * dir1.GetY() + dir1.GetX() * ( start1.GetY() - start2.GetY() );
+   double  t1Intersect = det1 / det;
    double  t2Intersect = det2 / det;
    if ( 0. <= t1Intersect && 1. >= t1Intersect && 0. <= t2Intersect && 1. >= t2Intersect )
    {
@@ -592,7 +592,7 @@ static void SegmentsIntersections( std::vector< Math::GeomPolyline>& polyline,
 //-----------------------------------------------------------------------------
 //  Запустить общий случай нахождения пересечения кривых, используя алгоритм перечения отрзков из Preparata,Sheimos.
 // ---
-std::vector<CurveIntersectionData> Intersect( const std::vector<Curve*>& curves )
+inline std::vector<CurveIntersectionData> Intersect( const std::vector<Curve*>& curves )
 {
   std::vector<GeomPolyline> polylinePoints( curves.size() );
   for ( size_t i = 0; i < curves.size(); i++ )

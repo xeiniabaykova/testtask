@@ -3,7 +3,6 @@
 #include "../Line.h"
 #include "../Ellipse.h"
 #include "GeomPolyline.h"
-#include "../Intersector.h"
 #include "../NurbsCurve.h"
 #include "Intersector.cpp"
 #include <memory>

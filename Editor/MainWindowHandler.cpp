@@ -336,7 +336,7 @@ void MainWindowHandler::FindIntersections()
   std::vector<Math::CurveIntersectionData> points = Math::Intersect( curves );
   for ( size_t i = 0; i < points.size(); i++ )
   {
-    CreateRefPoint( points[i].GetCurve1()->GetPoint( points[i].GetParamPoint().first ) );
+    CreateRefPoint( points[i].GetCurve1().GetPoint( points[i].GetParams().first ) );
   }
 }
 
