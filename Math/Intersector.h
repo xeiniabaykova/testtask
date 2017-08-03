@@ -51,7 +51,7 @@ public:
   /// Вернуть вторую кривую.
   const Curve&             GetCurve2() const;
   /// Вернуть набор параметров, при которых кривые пересекаются.
-  std::pair<double, double> GetParams();
+  std::pair<double, double> GetParams() const;
 };
   /**  \brief Найти пересечения кривых
   \param[in] curves - вектор указателей на кривые .\~

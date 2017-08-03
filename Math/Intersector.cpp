@@ -179,7 +179,7 @@ const Curve& CurveIntersectionData::GetCurve2() const
 //-----------------------------------------------------------------------------
 // Вернуть набор параметров, при которых кривые пересекаются.
 // ---
-std::pair<double, double> CurveIntersectionData::GetParams()
+std::pair<double, double> CurveIntersectionData::GetParams() const
 {
   return std::make_pair( paramCurve1, paramCurve2 );
 }
@@ -354,19 +354,14 @@ struct KeySort
     первой точки второго, то вернуть true, иначе если они равны то вернуть, меньше ли вторая точка первого отрезхка второй точки второго отрезка*/
 
 
-    if ( lhs->key < rhs->key )
-      return true;
-    else if ( lhs->key == rhs->key )
+    if ( lhs->key == rhs->key )
     {
-      if ( IsLexLess( lhs->line.GetStartPoint(), rhs->line.GetStartPoint() ) )
-        return true;
-      else if ( IsLexLess( rhs->line.GetStartPoint(), lhs->line.GetStartPoint() ) )
-        return false;
-      else
+      if ( IsSame( lhs->line.GetStartPoint(), rhs->line.GetStartPoint() ) )
         return IsLexLess( lhs->line.GetEndPoint(), rhs->line.GetEndPoint() );
+      else
+        return IsLexLess( lhs->line.GetStartPoint(), rhs->line.GetStartPoint() );
     }
-    else
-      return false;
+    return ( lhs->key < rhs->key );
   }
 
 };
@@ -417,6 +412,14 @@ static bool FindNeighborsLower( LineData*& lower, std::set<LineData*, KeySort>& 
 }
 
 
+//-----------------------------------------------------------------------------
+// Оператор сравнения точек пересечения.
+// ---
+bool  operator <  ( const CurveIntersectionData obj1, const CurveIntersectionData obj2 )
+{
+  return ( obj1.GetParams().first < obj2.GetParams().first && obj1.GetParams().second < obj2.GetParams().second );
+
+}
 //-----------------------------------------------------------------------------
 // Обработать точку события.
 // ---
@@ -623,6 +626,8 @@ std::vector<CurveIntersectionData> Intersect( const std::vector<Curve*>& curves 
     if ( Distance(intersections[i].GetCurve1().GetPoint(intersectPoint.first), intersections[i].GetCurve2().GetPoint(intersectPoint.second) ) < CommonConstantsMath::NULL_TOL )
       intersectPoints.push_back( CurveIntersectionData( intersections[i].GetCurve1(), intersections[i].GetCurve2(), intersectPoint) );
   }
+  std::set<CurveIntersectionData> s( intersectPoints.begin(), intersectPoints.end() );
+  intersectPoints.assign( s.begin(), s.end() );
   return intersectPoints;
 }
 
