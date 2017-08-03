@@ -137,20 +137,20 @@ static std::pair<double, double> NewtonMethod( const Curve& curve1, const Curve&
 {
   std::pair<double, double> currentPoint = startValue;
   std::pair<double, double> newPoint;
-  Matrix22 lastNonZeroMatrix;
+  Matrix22 lastNonZeroMatrix = { 1.,1.,1.,1. };
   for ( size_t i = 0; i < CommonConstantsMath::NUMBER_NEWTON_METHOD; i++ )
   {
-    auto invHessian = CountingHessian( curve1, curve2, newPoint.first, newPoint.second );
+    auto invHessian = CountingHessian( curve1, curve2, currentPoint.first, currentPoint.second );
     if ( fabs( invHessian[0][0] * invHessian[1][1] - invHessian[0][1] * invHessian[1][0] ) > CommonConstantsMath::NULL_TOL )
       lastNonZeroMatrix = invHessian;
-  /*  else
-      invHessian = lastNonZeroMatrix;*/
+    else
+      invHessian = lastNonZeroMatrix;
     invHessian = InverseMatrix( invHessian );
-    const Vector grad = Gradient( curve1, curve2, newPoint );
+    const Vector grad = Gradient( curve1, curve2, currentPoint );
     std::pair<double, double> step( invHessian[0][0] * -grad.GetX() + invHessian[0][1] * -grad.GetY(), invHessian[1][0] *
                                     -grad.GetX() + invHessian[1][1] * -grad.GetY() );
-    newPoint = newPoint + step;
-    if ( fabs( Distance( newPoint, currentPoint ) ) < CommonConstantsMath::ACCURANCY_METHOD_NEWTON )
+    newPoint = currentPoint + step;
+    if ( fabs( Distance(newPoint, currentPoint) ) < CommonConstantsMath::ACCURANCY_METHOD_NEWTON )
       break;
     currentPoint = newPoint;
   }
@@ -161,7 +161,7 @@ static std::pair<double, double> NewtonMethod( const Curve& curve1, const Curve&
 //-----------------------------------------------------------------------------
 // Вернуть первую кривую.
 // ---
-inline const Curve& CurveIntersectionData::GetCurve1() const
+const Curve& CurveIntersectionData::GetCurve1() const
 {
   return curve1;
 }
@@ -170,7 +170,7 @@ inline const Curve& CurveIntersectionData::GetCurve1() const
 //-----------------------------------------------------------------------------
 // Вернуть вторую кривую.
 // ---
-inline const Curve& CurveIntersectionData::GetCurve2() const
+const Curve& CurveIntersectionData::GetCurve2() const
 {
   return curve2;
 }
@@ -179,7 +179,7 @@ inline const Curve& CurveIntersectionData::GetCurve2() const
 //-----------------------------------------------------------------------------
 // Вернуть набор параметров, при которых кривые пересекаются.
 // ---
-inline std::pair<double, double> CurveIntersectionData::GetParams()
+std::pair<double, double> CurveIntersectionData::GetParams()
 {
   return std::make_pair( paramCurve1, paramCurve2 );
 }
@@ -212,30 +212,33 @@ static bool IsYinSegment( const Line& line, double y )
 // ---
 static bool IntersectLines( const Math::Line& lineCurveFirst, const Math::Line& lineCurveSecond, Point& intersectionPoint  )
 {
-  const Vector dir1 = lineCurveFirst.GetDerivative( 0.);
+
+  const Vector dir1 = lineCurveFirst.GetDerivative( 0. );
   const Vector dir2 = lineCurveSecond.GetDerivative( 0. );
   const Point start1 = lineCurveFirst.GetStartPoint();
   const Point start2 = lineCurveSecond.GetStartPoint();
   const Point end1 = lineCurveFirst.GetEndPoint();
   const Point end2 = lineCurveSecond.GetEndPoint();
+  double rX = start1.GetX() - start2.GetX();
+  double rY = start1.GetY() - start2.GetY();
 
 
 
- if ( !dir1.IsCollinear( dir2 ) )
+  if ( !dir1.IsCollinear( dir2 ) )
   {
-   double det = -dir2.GetX() * dir1.GetY() + dir1.GetX() * dir2.GetY();
-   double det1 = dir2.GetX() * ( start1.GetY() - start2.GetY() ) - dir2.GetY() *  ( start1.GetX() - start2.GetX() );
-   double det2 = -( start1.GetX() - start2.GetX() ) * dir1.GetY() + dir1.GetX() * ( start1.GetY() - start2.GetY() );
-   double  t1Intersect = det1 / det;
-   double  t2Intersect = det2 / det;
-   if ( 0. <= t1Intersect && 1. >= t1Intersect && 0. <= t2Intersect && 1. >= t2Intersect )
-   {
-     intersectionPoint = start1 + dir1 * t1Intersect;
-     return true;
-   }
-   else
-     return false;
- }
+    double det = ( dir2.GetX() *-dir1.GetY() + dir1.GetX() * dir2.GetY() );
+    double det1 = rY * dir2.GetX() - dir2.GetY() * rX;
+    double det2 = -dir1.GetY() * rX + dir1.GetX() *  rY;
+    double  t1Intersect = det1 / det;
+    double  t2Intersect = det2 / det;
+    if ( 0. <= t1Intersect && 1. >= t1Intersect && 0. <= t2Intersect && 1. >= t2Intersect )
+    {
+      intersectionPoint = start1 + dir1 * t1Intersect;
+      return true;
+    }
+    else
+      return false;
+  }
   else
     return false;
 }
@@ -350,15 +353,21 @@ struct KeySort
     /* если первая точка первого отрезка лексикографически меньше
     первой точки второго, то вернуть true, иначе если они равны то вернуть, меньше ли вторая точка первого отрезхка второй точки второго отрезка*/
 
-     if ( lhs->key == rhs->key )
-     {
-       if ( IsSame( lhs->line.GetStartPoint(), rhs->line.GetStartPoint() ) )
-         return IsLexLess( lhs->line.GetEndPoint(), rhs->line.GetEndPoint() );
-       else
-        return IsLexLess( lhs->line.GetStartPoint(), rhs->line.GetStartPoint() );
-     }
-     return ( lhs->key < rhs->key );
-   }
+
+    if ( lhs->key < rhs->key )
+      return true;
+    else if ( lhs->key == rhs->key )
+    {
+      if ( IsLexLess( lhs->line.GetStartPoint(), rhs->line.GetStartPoint() ) )
+        return true;
+      else if ( IsLexLess( rhs->line.GetStartPoint(), lhs->line.GetStartPoint() ) )
+        return false;
+      else
+        return IsLexLess( lhs->line.GetEndPoint(), rhs->line.GetEndPoint() );
+    }
+    else
+      return false;
+  }
 
 };
 
@@ -592,7 +601,7 @@ static void SegmentsIntersections( std::vector< Math::GeomPolyline>& polyline,
 //-----------------------------------------------------------------------------
 //  Запустить общий случай нахождения пересечения кривых, используя алгоритм перечения отрзков из Preparata,Sheimos.
 // ---
-inline std::vector<CurveIntersectionData> Intersect( const std::vector<Curve*>& curves )
+std::vector<CurveIntersectionData> Intersect( const std::vector<Curve*>& curves )
 {
   std::vector<GeomPolyline> polylinePoints( curves.size() );
   for ( size_t i = 0; i < curves.size(); i++ )
