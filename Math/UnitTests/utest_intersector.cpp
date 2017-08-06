@@ -365,7 +365,7 @@ TEST( Intersector, NullCurves )
   EXPECT_TRUE( points.empty() );
 }
 
-TEST( Intersector, IntersectLinesPerpendiculart )
+TEST( Intersector, IntersectLinesPerpendicular )
 {
   Line line1( Point(0.0, 0.0), Point(0.0, 4.0) );
   Line line2( Point( -3.0, 2.0 ), Point( 3.0, 2.0 ) );
@@ -377,6 +377,18 @@ TEST( Intersector, IntersectLinesPerpendiculart )
   IntersectLines( line1, line2, newPoint );
   EXPECT_TRUE( IsEqual( newPoint, Point( 0.0, 2.0 ) ) );
   
+}
+TEST( Intersector, IntersectLineCircle )
+{
+  Line line1( Point( 2.75, 4.61 ), Point( 5.59, 8.41 ) );
+  Ellipse ellipse1( Point( 4.04, 7.32 ), 2.293, 1.41, -1.47, 0.098 );
+  Point newPoint;
+  std::vector<Curve*> curves;
+  curves.push_back( &line1 );
+  curves.push_back( &ellipse1 );
+  std::vector<CurveIntersectionData> points = Math::Intersect( curves );
+  EXPECT_TRUE( IsEqual( newPoint, Point( 0.0, 2.0 ) ) );
+
 }
 TEST(Nurbs, 3Intersect)
 {

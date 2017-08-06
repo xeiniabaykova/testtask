@@ -248,4 +248,23 @@ double Distance( const Line& line1, const Line& line2, Point& closestPoint )
 
 }
 
+
+//-----------------------------------------------------------------------------
+//  Получить параметр t по точке, принаджлежащей прямой.
+// ---
+double Line::GetTFromPoint( const Point& point )
+{
+  return ( point.GetX() - startPoint.GetX() ) / GetDerivative( 0. ).GetX();
+}
+
+
+//-----------------------------------------------------------------------------
+//   Проверить, принадлежит ли точка отрезку.
+// ---
+bool Line::IsPointInLine( const Point& point ) const
+{
+  return ( (point.GetX() - startPoint.GetX() ) * (endPoint.GetX() - point.GetX()) >= 0 &&
+  (point.GetY() - startPoint.GetY()) * (endPoint.GetY() - point.GetY()) >= 0 );
+
+}
 }

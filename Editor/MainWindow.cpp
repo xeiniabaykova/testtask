@@ -2,7 +2,7 @@
 #include "FileIO.h"
 #include <QLabel>
 #include <QtWidgets/QMainWindow>
-#include <ui_MainWindow.h>
+#include <Editor/ui_MainWindow.h>
 #include <QInputDialog>
 #include <QtWidgets/QVBoxLayout>
 #include <QComboBox>

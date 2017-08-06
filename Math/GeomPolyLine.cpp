@@ -287,4 +287,17 @@ Curve::CurveType GeomPolyline::GetType() const
 {
   return Curve::PolylineType;
 }
+
+
+//-----------------------------------------------------------------------------
+//  Вернуть парметр t, соответсвующий точке на полилинии.
+// ---
+double GeomPolyline::GetTFromPoint( const Point& point ) const
+{
+ for ( size_t i = 0; i < referencedPoints.size() -1; i++ )
+ {
+   if ( Line(referencedPoints[i],referencedPoints[i+1]).IsPointInLine(point) )
+     return ( (double)i + Line(referencedPoints[i],referencedPoints[i+1]).GetTFromPoint(point) );
+ }
+}
 }

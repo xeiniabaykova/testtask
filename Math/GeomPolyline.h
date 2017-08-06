@@ -34,11 +34,8 @@ public:
   GeomPolyline( const std::vector<Point>& thePoints );
   GeomPolyline();
   virtual ~GeomPolyline() = default;
-
-private:
-  GeomPolyline( const GeomPolyline &obj ) = delete;
-  GeomPolyline& operator=( GeomPolyline &obj ) = delete;
-
+  GeomPolyline( const GeomPolyline &obj ) = default;
+  GeomPolyline& operator=( GeomPolyline &obj ) = default;
 public:
   void                Init                ( const std::vector<Point>& theReferencedPoints, const std::vector<double>& refParam = std::vector<double>() ); ///< Заменить опорные точки в полилинии.
   virtual Point       GetPoint            ( double t ) const;                                ///< Вернуть точку по параметру t.
@@ -56,6 +53,7 @@ public:
   std::vector<double> GetReferensedParams() const;                                           ///< Получить значения параметра исходной кривой по которому строилась полилилния.
   std::vector<Point>  GetReferensedPoints () const;                                          ///< Вернуть опорные точки, использованные для построения полилинии.
   virtual std::string GetName             () const;                                          ///< Вернуть имя, используемое при записи полилинии в файл.
+  double              GetTFromPoint       ( const Point& point ) const;                      ///< Вернуть парметр t, соответсвующий точке на полилинии.
   virtual CurveType   GetType             () const;
 };
 }
