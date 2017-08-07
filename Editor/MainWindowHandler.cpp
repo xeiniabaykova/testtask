@@ -274,6 +274,7 @@ void MainWindowHandler::CreateEmptySeries()
 void MainWindowHandler::ClearScreen()
 { 
    displayedCurves.clear();
+   tempSeriesReferenced->clear();
    state = StateExpectAction;
 }
 
