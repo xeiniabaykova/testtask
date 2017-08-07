@@ -199,9 +199,6 @@ static bool IntersectLines( const Math::Line& lineCurveFirst, const Math::Line& 
   const Point end2 = lineCurveSecond.GetEndPoint();
   double rX = start1.GetX() - start2.GetX();
   double rY = start1.GetY() - start2.GetY();
-
-
-
   if ( !dir1.IsCollinear( dir2 ) )
   {
     double det = ( dir2.GetX() *-dir1.GetY() + dir1.GetX() * dir2.GetY() );
@@ -246,13 +243,11 @@ struct LineData
   size_t                    numParam;  // Номер полилинии в списке полилиний.
   Curve                     &curve;    // Кривая, соответствующая отрезку.
   double                    leftParam; // Параметр исходной кривой, соответсующий отрезку полилинии.
-  double                    key;       // Ключ для сравнения отрезков - по умолчанию координата y левой точки.
-  LineData    ( Line theLine, const GeomPolyline& thePolyline, double theLeftParam, size_t thenumParam, double theKey, Curve& theCurve ):
+  LineData    ( Line theLine, const GeomPolyline& thePolyline, double theLeftParam, size_t thenumParam, Curve& theCurve ):
     line      ( theLine ),
     polyline  ( thePolyline ),
     leftParam ( theLeftParam ),
     numParam  ( thenumParam ),
-    key       ( theKey ),
     curve     ( theCurve )
   {}
   LineData() = default;
@@ -301,16 +296,6 @@ static bool IsLexLessFromX( const Point& lhs, const Point& rhs )
 
 
 //-----------------------------------------------------------------------------
-// Сравнить точки лексикографически по y.
-// ---
-static bool IsLexLessFromY( const Point& lhs, const Point& rhs )
-{
-  if ( IsSame( lhs, rhs ) )
-    return false;
-  else
-    return ( lhs.GetY() < rhs.GetY() );
-}
-//-----------------------------------------------------------------------------
 //  Функтор лексиграфического упорядочивания точек по возрастанию.
 // ---
 struct IsLexLessX
@@ -343,14 +328,12 @@ double GetYFromX( const Line& line, double x )
 
 
 //-----------------------------------------------------------------------------
-//  Функтор лексикографического упорядочивания отрезков: сначала отрезки лексикографически сравниваются по первой точке.
-// Если первая точка у отрезков совпадает, то отрезки сравниваются по конечной точке. Считаем, что начало отрезка всегда меньше конца по координате x.
-// ---
-double currentX;
-Point oldPoint;
+//  Функтор лексикографического упорядочивания отрезков в текущей координате x. Текущая координата х - координата х
+//  текущей точки события.
+//--
+double currentX; // Текущая координата х.
 struct KeySort
 {
-
   inline bool operator () ( const LineData* lhs, const LineData* rhs ) const
   {
     double lhsY = GetYFromX( lhs->line, currentX );
@@ -365,21 +348,6 @@ struct KeySort
   }
 
 };
-
-
-//-----------------------------------------------------------------------------
-// Проверить есть ли точка с коодинатой х в множестве всех обрабатываемых точек событий.
-// ---
-
-static bool FindAbscissa( PointEvent thePoint, std::multiset<PointEvent, IsLexLessX>& setEventPoints )
-{
-  for ( auto it = setEventPoints.begin(); it != setEventPoints.end(); it++ )
-  {
-    if ( IsEqual(it->point, thePoint.point) )
-      return true;
-  }
-  return false;
-}
 
 
 //-----------------------------------------------------------------------------
@@ -412,24 +380,56 @@ static bool FindNeighborsLower( LineData*& lower, std::set<LineData*, KeySort>& 
 }
 
 
-//-----------------------------------------------------------------------------
-// Оператор сравнения точек пересечения.
-// ---
-bool  operator < ( const CurveIntersectionData obj1, const CurveIntersectionData obj2 )
-{
-  return ( obj1.GetParams().first < obj2.GetParams().first && obj1.GetParams().second < obj2.GetParams().second  );
-
-}
-
+Point oldPoint;
 
 // Set ordering occasionally could get inconsistent due to accumulated numerical errors,
 // this function restores consistent ordering
-void restoreSanity( std::set<LineData*, KeySort>& currentSegments )
+void RestoreSanity( std::set<LineData*, KeySort>& currentSegments )
 {
   std::set<LineData*, KeySort> newSet;
   for ( auto it = currentSegments.begin(); it != currentSegments.end(); it++ )
     newSet.insert( *it );
   currentSegments = newSet;
+}
+
+
+//-----------------------------------------------------------------------------
+// В случае, когда исходная кривая отрезок или полилиния, возвращаем параметр, 
+//соотвествующий точке. В другом случае возвращаем ближайшую границу параметра.
+// ---
+double GetParamFromType( Curve& intersectCurve,double leftParam, Point point )
+{
+  if ( intersectCurve.GetType() == Curve::CurveType::LineType )
+    return static_cast< Line* >( &intersectCurve )->GetTFromPoint( point );
+  else if ( intersectCurve.GetType() == Curve::CurveType::PolylineType )
+    return static_cast< GeomPolyline* >( &intersectCurve )->GetTFromPoint( point );
+  else return leftParam;
+}
+
+//-----------------------------------------------------------------------------
+// Обработать пересечение прямых. Если прямые пересекаются и полилинии совпадают, то заносим точку пересечений в множество событий,
+// но не добавляем к множеству точек пересечения. Если же прямые не пересекаются, но находятся на достаточно близком расстоянии
+// друг от друга, то не добавляем эту точку в множество событий, но добавляем к множеству точек пересечения.
+// ---
+void IntersectLinesEvent( LineData* line1, LineData* line2, std::vector<PointEvent>& intersectionPoints,
+                          std::multiset<PointEvent, IsLexLessX>& setEventPoints )
+{
+  Point newPoint;
+  if ( ( IntersectLines( line2->line, line1->line, newPoint ) ) )
+  {
+    PointEvent event( newPoint, line2, TypeEvent::Intersection );
+    event.s2 = line1;
+    setEventPoints.insert( event );
+    if ( &line1->polyline != &line2->polyline )
+      intersectionPoints.push_back( event );
+  }
+  else if ( &line1->polyline != &line2->polyline &&
+    ( fabs( Distance( line1->line, line2->line, newPoint ) ) < CommonConstantsMath::PRECISION_POLYLINE ) )
+  {
+    PointEvent event( newPoint, line2, TypeEvent::Intersection );
+    event.s2 = line1;
+  }
+
 }
 
 //-----------------------------------------------------------------------------
@@ -439,71 +439,38 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
                    std::vector<PointEvent>& intersectionPoints,
                    std::vector<CurveIntersectionData>& params )
 {
-  int numPoints = setEventPoints.size();
   currentX = point.point.GetX();
   // Если точка события - левый конец отрезка - добавляем отрезок в множество отрезков, ищем верхнего и нижнего соседа этого отрезка, проверяем на пересечение.
   if ( point.type == TypeEvent::Left )
   {
-    point.s1->key = point.point.GetY();
     auto it = currentSegments.insert( point.s1 ).first;
-
     LineData* lower = nullptr;
     std::vector<double> keys;
-    for ( auto it = currentSegments.begin(); it != currentSegments.end(); it++ )
-      keys.push_back( GetYFromX( ( *it )->line, currentX ) );
+
     if ( FindNeighborsLower(lower, currentSegments, it) )
     {
-      Point newPoint;
-      if ( (IntersectLines( lower->line, point.s1->line, newPoint) ) )
-      {
-        PointEvent event( newPoint, point.s1, TypeEvent::Intersection );
-        event.s2 = lower;
-        setEventPoints.insert( event );
-        if ( &lower->polyline != &point.s1->polyline )
-          intersectionPoints.push_back( event );
-      }
-      else if ( &lower->polyline != &point.s1->polyline &&
-        ( fabs( Distance( lower->line, point.s1->line, newPoint ) ) <  CommonConstantsMath::PRECISION_POLYLINE ) )
-      {
-        PointEvent event( newPoint, point.s1, TypeEvent::Intersection );
-        event.s2 = lower;
-        intersectionPoints.push_back( event );
-      }
+      IntersectLinesEvent( lower, point.s1, intersectionPoints, setEventPoints );
+      
     }   
     LineData* upper = nullptr;
     if ( FindNeighborUpper( upper, currentSegments, it ) )
     {
-      Point newPoint;
-      if ( IntersectLines( upper->line, point.s1->line, newPoint ) )
-      {
-        PointEvent event( newPoint, upper, TypeEvent::Intersection );
-        event.s2 = point.s1;
-        setEventPoints.insert( event );
-        if ( &upper->polyline != &point.s1->polyline )
-          intersectionPoints.push_back( event );
-      }
-      else if ( &upper->polyline != &point.s1->polyline  &&
-        ( fabs( Distance( upper->line, point.s1->line, newPoint ) ) <  CommonConstantsMath::PRECISION_POLYLINE ) )
-      {
-        PointEvent event( newPoint, upper, TypeEvent::Intersection );
-        event.s2 = point.s1;
-        intersectionPoints.push_back( event );
-      }
+      IntersectLinesEvent( point.s1, upper, intersectionPoints, setEventPoints );
     }
   }
   else if ( point.type == TypeEvent::Right )
   {
+    // В случае, если точка правая: находим у точки вехнего и нижнего соседа, проверяем их на возможное пересечение.
+    // Удаляем отрезок из множества рассматриваемых отрезков.
     LineData* lower = nullptr;
     LineData* upper = nullptr;
     auto it = currentSegments.find( point.s1 );
     if ( it == currentSegments.end() )
     {
-      restoreSanity( currentSegments );
+      RestoreSanity( currentSegments );
       it = currentSegments.find( point.s1 );
     }
-    std::vector<double> keys;
-    for ( auto it = currentSegments.begin(); it != currentSegments.end(); it++ )
-      keys.push_back( GetYFromX( ( *it )->line, currentX ) );
+
 
     if ( FindNeighborsLower( lower, currentSegments, it ) && FindNeighborUpper( upper, currentSegments, it ) )
     {
@@ -534,16 +501,16 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
   else
   {// Если точка является точкой пересечения.
     currentX = 0.5 * ( oldPoint.GetX() + point.point.GetX() );
-    std::vector<double> keys;
-    for ( auto it = currentSegments.begin(); it != currentSegments.end(); it++ )
-      keys.push_back( GetYFromX((*it)->line, currentX) );
+    // Смещаем координату x, относительно которой строится переупорядочиваение на половину расстояния до предыдущей точки события, ищем
+    // отрезки, соответсвующие вехнему соседу верхнего отрезка, нижнему соседу нижнего отрезка, проверяем их на пересечение.
+  
     LineData* s1 = point.s1;
     auto itS1 = currentSegments.find( point.s1 );
     LineData* s2 = point.s2;
     auto itS2 = currentSegments.find( point.s2 );
     if ( itS1 == currentSegments.end() || itS2 == currentSegments.end() )
     {
-      restoreSanity( currentSegments );
+      RestoreSanity( currentSegments );
       itS1 = currentSegments.find( point.s1 );
       itS2 = currentSegments.find( point.s2 );
     }
@@ -551,22 +518,22 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
     LineData* upper;
     if ( FindNeighborUpper( upper, currentSegments, itS1 ) && upper !=s1 )
     {
-      Point newPoint;
-      if (  ( IntersectLines( upper->line, point.s2->line, newPoint ) ) )
-      {
-        PointEvent event( newPoint, upper, TypeEvent::Intersection );
-        event.s2 = point.s2;
-        setEventPoints.insert( event );
-        intersectionPoints.push_back( event );
-      }
-      else if ( std::abs( Distance( upper->line, s2->line, newPoint ) < CommonConstantsMath::PRECISION_POLYLINE ) && upper != s1 )
-      {
-        PointEvent event( newPoint, upper, TypeEvent::Intersection );
-        event.s2 = point.s2;
-        intersectionPoints.push_back( event );
+      IntersectLinesEvent( upper, point.s2, intersectionPoints, setEventPoints );
+ 
+      //if (  ( IntersectLines( upper->line, point.s2->line, newPoint ) ) )
+      //{
+      //  PointEvent event( newPoint, upper, TypeEvent::Intersection );
+      //  event.s2 = point.s2;
+      //  setEventPoints.insert( event );
+      //  intersectionPoints.push_back( event );
+      //}
+      //else if ( std::abs( Distance( upper->line, s2->line, newPoint ) < CommonConstantsMath::PRECISION_POLYLINE ) && upper != s1 )
+      //{
+      //  PointEvent event( newPoint, upper, TypeEvent::Intersection );
+      //  event.s2 = point.s2;
+      //  intersectionPoints.push_back( event );
 
-      }
-
+      //}
     }
     if ( FindNeighborsLower(lower, currentSegments, itS2))
     {
@@ -602,27 +569,12 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
     }
 
   }
+
+  // Записываем результат пересечения в виде: указатели на кривые, указатели на параметры кривых, соотвествующие пересечению.
   for ( size_t i = 0; i < intersectionPoints.size(); ++i )
   {
-    double s1Param = 0.0;
-    double s2Param = 0.0;
-    if ( intersectionPoints[i].s1->curve.GetType() == Curve::CurveType::LineType )
-      s1Param = static_cast< Line* >( &intersectionPoints[i].s1->curve )->GetTFromPoint( intersectionPoints[i].point );
-    else
-      s1Param = intersectionPoints[i].s1->leftParam;
-    if ( intersectionPoints[i].s2->curve.GetType() == Curve::CurveType::LineType )
-      s2Param = static_cast< Line* >( &intersectionPoints[i].s2->curve )->GetTFromPoint( intersectionPoints[i].point );
-    else
-      s2Param = intersectionPoints[i].s2->leftParam;
-
-    if ( intersectionPoints[i].s1->curve.GetType() == Curve::CurveType::PolylineType )
-      s1Param = static_cast< GeomPolyline* >( &intersectionPoints[i].s1->curve )->GetTFromPoint( intersectionPoints[i].point );
-    else
-      s1Param = intersectionPoints[i].s1->leftParam;
-    if ( intersectionPoints[i].s2->curve.GetType() ==  Curve::CurveType::PolylineType)
-      s2Param = static_cast< GeomPolyline* >( &intersectionPoints[i].s2->curve )->GetTFromPoint( intersectionPoints[i].point );
-    else
-      s2Param = intersectionPoints[i].s2->leftParam;
+    double s1Param = GetParamFromType( intersectionPoints[i].s1->curve, intersectionPoints[i].s1->leftParam, intersectionPoints[i].point );
+    double s2Param = GetParamFromType( intersectionPoints[i].s2->curve, intersectionPoints[i].s2->leftParam, intersectionPoints[i].point );
       params.push_back( CurveIntersectionData( intersectionPoints[i].s1->curve, intersectionPoints[i].s2->curve,
                                                std::make_pair( s1Param, s2Param )) );
   }
@@ -656,7 +608,6 @@ static void CollectEventPoints( std::vector<LineData>& lines, const Math::GeomPo
       startPoint = polylinePoints[i + 1];
       endPoint = polylinePoints[i];
     }
-
     double urand1 = (double)rand() / ( double ) RAND_MAX;
     double urand2 = ( double ) rand() / ( double ) RAND_MAX;
     double urand3 = ( double ) rand() / ( double ) RAND_MAX;
@@ -664,7 +615,7 @@ static void CollectEventPoints( std::vector<LineData>& lines, const Math::GeomPo
     double lenght = ( startPoint - endPoint ).Lenght() * CommonConstantsMath::SCALING;
     Point newStart = startPoint + Point( ( urand1 - 0.5 )*lenght, ( urand2 - 0.5 ) * lenght );
     Point newEnd = endPoint + Point( ( urand3 - 0.5 )*lenght, ( urand4 - 0.5 ) * lenght );
-    lines.push_back( LineData(Line( newStart, newEnd ), polyline, refParams[i], numPolyline, 0., curves) );
+    lines.push_back( LineData(Line( newStart, newEnd ), polyline, refParams[i], numPolyline, curves) );
 
   }
   for ( size_t i = start; i < lines.size(); ++i )
