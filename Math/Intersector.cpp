@@ -320,10 +320,9 @@ double GetYFromX( const Line& line, double x )
   double y1 = line.GetStartPoint().GetY();
   double x2 = line.GetEndPoint().GetX();
   double y2 = line.GetEndPoint().GetY();
-  double ch = -( x1 * y2 - x2 * y1 ) - x * ( y1 - y2 );
   if ( fabs(x1 - x2) < CommonConstantsMath::NULL_TOL )
     return y2;
-  return ch / ( x2 - x1 );
+  return y1 + (y2 - y1)*(x - x1) / (x2 - x1);
 }
 
 
@@ -429,6 +428,7 @@ void IntersectLinesEvent( LineData* line1, LineData* line2, std::vector<PointEve
   {
     PointEvent event( newPoint, line2, TypeEvent::Intersection );
     event.s2 = line1;
+    intersectionPoints.push_back( event );
   }
 
 }
@@ -517,19 +517,20 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
     LineData* upper;
     if ( FindNeighborUpper( upper, currentSegments, itS1 ) && upper !=s1 )
     {
-      IntersectLinesEvent( upper, point.s2, intersectionPoints, setEventPoints );
+      IntersectLinesEvent(  point.s2, upper, intersectionPoints, setEventPoints );
     }
     if ( FindNeighborsLower(lower, currentSegments, itS2) )
     {
       Point newPoint;
-      if (  (IntersectLines(lower->line, point.s1->line, newPoint)) )
+      if (  (IntersectLines(lower->line, point.s1->line, newPoint)) && &lower->polyline != &point.s1->polyline )
       {
         PointEvent event( newPoint, point.s1, TypeEvent::Intersection );
         event.s2 = lower;
         setEventPoints.insert( event );
         intersectionPoints.push_back( event );
       }
-      else if ( lower != s2 && std::abs(Distance( lower->line, s1->line, newPoint ) < 2. *CommonConstantsMath::PRECISION_POLYLINE) )
+      else if ( lower != s2 && std::abs(Distance( lower->line, s1->line, newPoint ) < 2. *CommonConstantsMath::PRECISION_POLYLINE)
+                && &lower->polyline != &point.s1->polyline)
       {
         PointEvent event( newPoint, point.s1, TypeEvent::Intersection );
         event.s2 = lower;
