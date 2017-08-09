@@ -69,7 +69,7 @@ public:
   virtual CurveType          GetType             () const;                                 ///< Вернуть тип кривой. 
   bool                       operator==          ( const Line& obj) const;                 ///< Сравнить отрезки на эквивалентность.
   Line&                      operator=           ( const Line &obj);                       ///< Присвоить один отрезок другому отрезку.
-  double                     GetTFromPoint       ( const Point& point );                   ///< Получить параметр t по точке, принаджлежащей прямой.
+  double                     GetTFromPoint       ( const Point& point ) const;             ///< Получить параметр t по точке, принаджлежащей прямой.
   bool                       IsPointInLine       ( const Point& point ) const;             ///< Проверить, принадлежит ли точка отрезку.
 };
 double Distance( const Line& line1, const Line& line2, Point& closestPoint );                ///< Вернуть расстояние между отрезками.
