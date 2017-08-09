@@ -56,10 +56,11 @@ public:
 };
   /**  \brief Найти пересечения кривых
   \param[in] curves - вектор указателей на кривые .\~
+  \ param[in] accuracyPolyliline - точность апроксимации кривой полилинией .\~
   \param[out] Вектор данных о пересечениях.\~
   */
   //---
-std::vector<CurveIntersectionData> Intersect( const std::vector<Curve*>& curves, const double&  accuracyPolyliline = CommonConstantsMath::PRECISION_POLYLINE );
+std::vector<CurveIntersectionData> Intersect( const std::vector<Curve*>& curves, const double& accuracyPolyliline = CommonConstantsMath::PRECISION_POLYLINE );
 }
 
 #endif // INTERSECTOR_H

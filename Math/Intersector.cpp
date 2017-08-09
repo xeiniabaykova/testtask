@@ -26,28 +26,28 @@ using Matrix22 = std::array<std::array<double, 2>, 2>;
 static Matrix22 CountingHessian( const Curve& curve1, const Curve& curve2, double t1, double t2 )
 {
   const auto t1Point = curve1.GetPoint( t1 );
-  const double x1 = t1Point.GetX();
-  const double y1 = t1Point.GetY();
+  const auto x1 = t1Point.GetX();
+  const auto y1 = t1Point.GetY();
 
   const auto t1PointD = curve1.GetDerivative( t1 );
-  const double x1d = t1PointD.GetX();
-  const double y1d = t1PointD.GetY();
+  const auto x1d = t1PointD.GetX();
+  const auto y1d = t1PointD.GetY();
 
   const auto t1Point2D = curve1.Get2Derivative( t1 );
-  const double x1dd = t1Point2D.GetX();
-  const double y1dd = t1Point2D.GetY();
+  const auto x1dd = t1Point2D.GetX();
+  const auto y1dd = t1Point2D.GetY();
 
   const auto t2Point = curve2.GetPoint( t2 );
-  const double x2 = t2Point.GetX();
-  const double y2 = t2Point.GetY();
+  const auto x2 = t2Point.GetX();
+  const auto y2 = t2Point.GetY();
 
   const auto t2PointD = curve2.GetDerivative( t2 );
-  const double x2d = t2PointD.GetX();
-  const double y2d = t2PointD.GetY();
+  const auto x2d = t2PointD.GetX();
+  const auto y2d = t2PointD.GetY();
 
   const auto t2Point2D = curve2.Get2Derivative( t2 );
-  const double x2dd = curve2.Get2Derivative( t2 ).GetX();
-  const double y2dd = curve2.Get2Derivative( t2 ).GetY();
+  const auto x2dd = curve2.Get2Derivative( t2 ).GetX();
+  const auto y2dd = curve2.Get2Derivative( t2 ).GetY();
 
   Matrix22 hessian;
   hessian[0][0] = x1dd * 2. * ( x1 - x2 ) + 2. * x1d * x1d + y1dd * 2. * ( y1 - y2 ) + 2. * y1d * y1d;
@@ -65,7 +65,7 @@ static Matrix22 CountingHessian( const Curve& curve1, const Curve& curve2, doubl
 static Matrix22& InverseMatrix( Matrix22& matrix )
 {
   Matrix22 result( matrix );
-  const double determinant = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+  const auto determinant = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
   matrix[0][0] = result[1][1] / determinant;
   matrix[0][1] = -result[1][0] / determinant;
   matrix[1][0] = -result[0][1] / determinant;
@@ -79,12 +79,12 @@ static Matrix22& InverseMatrix( Matrix22& matrix )
 // ---
 static Vector Gradient( const Curve& curve1, const Curve& curve2, const double& paramCurve1, const double& paramCurve2 )
 {
-  const Point point1 = curve1.GetPoint( paramCurve1 );
-  const Vector grad1 = curve1.GetDerivative( paramCurve1 );
-  const Point point2 = curve2.GetPoint( paramCurve2 );
-  const Vector grad2 = curve2.GetDerivative( paramCurve2 );
-  const double aResultT1 = 2.0 * ( point1.GetX() - point2.GetX() ) * grad1.GetX() + 2.0 * ( point1.GetY() - point2.GetY() ) * grad1.GetY();
-  const  double aResultT2 = 2.0 * ( point2.GetX() - point1.GetX() ) * grad2.GetX() + 2.0 * ( point2.GetY() - point1.GetY() ) * grad2.GetY();
+  const auto point1 = curve1.GetPoint( paramCurve1 );
+  const auto grad1 = curve1.GetDerivative( paramCurve1 );
+  const auto point2 = curve2.GetPoint( paramCurve2 );
+  const auto grad2 = curve2.GetDerivative( paramCurve2 );
+  const auto aResultT1 = 2.0 * ( point1.GetX() - point2.GetX() ) * grad1.GetX() + 2.0 * ( point1.GetY() - point2.GetY() ) * grad1.GetY();
+  const auto aResultT2 = 2.0 * ( point2.GetX() - point1.GetX() ) * grad2.GetX() + 2.0 * ( point2.GetY() - point1.GetY() ) * grad2.GetY();
   return Vector( aResultT1, aResultT2 );
 }
 
@@ -106,11 +106,11 @@ static double Distance( const double& paramCurve11, const double& paramCurve12, 
 // ---
 static bool NewtonMethod( const Curve& curve1, const Curve& curve2, double& paramCurve1, double& paramCurve2 )
 {
-  double currentParamCurve1 = paramCurve1;
-  double currentParamCurve2 = paramCurve2;
+  auto currentParamCurve1 = paramCurve1;
+  auto currentParamCurve2 = paramCurve2;
   Matrix22 lastNonZeroMatrix = { 1., 0., 0., 1. };
-  double newParamCurve1 = paramCurve1;
-  double newParamCurve2 = paramCurve2;
+  auto newParamCurve1 = paramCurve1;
+  auto newParamCurve2 = paramCurve2;
   for ( size_t i = 0; i < CommonConstantsMath::NUMBER_NEWTON_METHOD; i++ )
   {
     auto invHessian = CountingHessian( curve1, curve2, currentParamCurve1, currentParamCurve2 );
@@ -120,9 +120,9 @@ static bool NewtonMethod( const Curve& curve1, const Curve& curve2, double& para
       invHessian = lastNonZeroMatrix;
 
     invHessian = InverseMatrix( invHessian );
-    const Vector grad = Gradient( curve1, curve2, currentParamCurve1, currentParamCurve2 );
-    double stepParam1 = invHessian[0][0] * -grad.GetX() + invHessian[0][1] * -grad.GetY();
-    double stepParam2 = invHessian[1][0] * -grad.GetX() + invHessian[1][1] * -grad.GetY();
+    const auto grad = Gradient( curve1, curve2, currentParamCurve1, currentParamCurve2 );
+    auto stepParam1 = invHessian[0][0] * -grad.GetX() + invHessian[0][1] * -grad.GetY();
+    auto stepParam2 = invHessian[1][0] * -grad.GetX() + invHessian[1][1] * -grad.GetY();
 
     newParamCurve1 = currentParamCurve1 + stepParam1;
     newParamCurve2 = currentParamCurve2 + stepParam2;
@@ -195,19 +195,19 @@ static bool IsYinSegment( const Line& line, const double& y )
 // ---
 static bool IntersectLines( const Math::Line& lineCurveFirst, const Math::Line& lineCurveSecond, Point& intersectionPoint  )
 {
-  const Vector dir1 = lineCurveFirst.GetDerivative( 0. );
-  const Vector dir2 = lineCurveSecond.GetDerivative( 0. );
-  const Point start1 = lineCurveFirst.GetStartPoint();
-  const Point start2 = lineCurveSecond.GetStartPoint();
-  const double rX = start1.GetX() - start2.GetX();
-  const double rY = start1.GetY() - start2.GetY();
+  const auto dir1 = lineCurveFirst.GetDerivative( 0. );
+  const auto dir2 = lineCurveSecond.GetDerivative( 0. );
+  const auto start1 = lineCurveFirst.GetStartPoint();
+  const auto start2 = lineCurveSecond.GetStartPoint();
+  const auto rX = start1.GetX() - start2.GetX();
+  const auto rY = start1.GetY() - start2.GetY();
   if ( !dir1.IsCollinear(dir2) )
   {
-    const double det = (dir2.GetX() * -dir1.GetY() + dir1.GetX() * dir2.GetY());
-    const double det1 = rY * dir2.GetX() - dir2.GetY() * rX;
-    const double det2 = -dir1.GetY() * rX + dir1.GetX() * rY;
-    const double t1Intersect = det1 / det;
-    const double t2Intersect = det2 / det;
+    const auto det = (dir2.GetX() * -dir1.GetY() + dir1.GetX() * dir2.GetY());
+    const auto det1 = rY * dir2.GetX() - dir2.GetY() * rX;
+    const auto det2 = -dir1.GetY() * rX + dir1.GetX() * rY;
+    const auto t1Intersect = det1 / det;
+    const auto t2Intersect = det2 / det;
 
     if ( 0. <= t1Intersect && 1. >= t1Intersect && 0. <= t2Intersect && 1. >= t2Intersect )
     {
@@ -241,7 +241,7 @@ struct LineData
   const GeomPolyline&      polyline;  // Полилиния, которой принадлежит отрезок.
   const Curve&             curve;    // Кривая, соответствующая полилинии, которой принадлежит отрезок.
   const double             leftParam; // Параметр исходной кривой, соответсующий отрезку полилинии.
-  LineData    ( const Line& theLine, const GeomPolyline& thePolyline, double theLeftParam, Curve& theCurve ):
+  LineData    ( const Line& theLine, const GeomPolyline& thePolyline, const double& theLeftParam, const Curve& theCurve ):
     line      ( theLine ),
     polyline  ( thePolyline ),
     leftParam ( theLeftParam ),
@@ -258,11 +258,11 @@ struct LineData
 // ---
 struct PointEvent
 {
-  TypeEvent type;   // Тип точки события.
+  TypeEvent type;          // Тип точки события.
   const Point     point;   // Точка события.
   const LineData  &s1;     // Отрезок, соответствующий точке события.
   const LineData  *s2;     // Если точка события является точкой пересечения, то храним второй отрезок тоже.
-  PointEvent ( Point thePoint, const LineData &theS1, TypeEvent theType ):
+  PointEvent ( Point thePoint, const LineData &theS1, const TypeEvent& theType ):
     point    ( thePoint ),
     type     ( theType ),
     s1       ( theS1 ),
@@ -313,10 +313,10 @@ struct IsLexLessX
 // ---
 double GetYFromX( const Line& line, const double& x )
 {
-  const double x1 = line.GetStartPoint().GetX();
-  const double y1 = line.GetStartPoint().GetY();
-  const double x2 = line.GetEndPoint().GetX();
-  const double y2 = line.GetEndPoint().GetY();
+  const auto x1 = line.GetStartPoint().GetX();
+  const auto y1 = line.GetStartPoint().GetY();
+  const auto x2 = line.GetEndPoint().GetX();
+  const auto y2 = line.GetEndPoint().GetY();
   if ( fabs(x1 - x2) < CommonConstantsMath::NULL_TOL )
     return y2;
   return y1 + (y2 - y1)*(x - x1) / (x2 - x1);
@@ -332,8 +332,8 @@ struct KeySort
 {
   inline bool operator () ( const LineData* lhs, const LineData* rhs ) const
   {
-    const double lhsY = GetYFromX( lhs->line, currentX );
-    const double rhsY = GetYFromX( rhs->line, currentX );
+    const auto lhsY = GetYFromX( lhs->line, currentX );
+    const auto rhsY = GetYFromX( rhs->line, currentX );
     if ( lhsY == rhsY )
     {
       if ( IsSame(lhs->line.GetStartPoint(), rhs->line.GetStartPoint()) )
@@ -443,7 +443,6 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
   {
     auto it = currentSegments.insert( &point.s1 ).first;
     const LineData* lower = nullptr;
-    std::vector<double> keys;
 
     if ( FindNeighborsLower(lower, currentSegments, it) )
     {
@@ -499,9 +498,9 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
     // Смещаем координату x, относительно которой строится переупорядочиваение на половину расстояния до предыдущей точки события, ищем
     // отрезки, соответсвующие вехнему соседу верхнего отрезка, нижнему соседу нижнего отрезка, проверяем их на пересечение.
   
-    const LineData* s1 = &point.s1;
+    const auto* s1 = &point.s1;
     auto itS1 = currentSegments.find( &point.s1 );
-    const LineData* s2 = point.s2;
+    const auto* s2 = point.s2;
     auto itS2 = currentSegments.find( point.s2 );
     if ( itS1 == currentSegments.end() || itS2 == currentSegments.end() )
     {
@@ -544,7 +543,7 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
       auto it = setEventPoints.begin();
       while ( it->point.GetX() <= point.point.GetX() )
         it++;
-      double shiftX = it->point.GetX();
+      auto shiftX = it->point.GetX();
       currentX = 0.5 * ( point.point.GetX() + shiftX );
       currentSegments.insert( s1 );
       currentSegments.insert( s2 );
@@ -554,8 +553,8 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
   // Записываем результат пересечения в виде: указатели на кривые, указатели на параметры кривых, соотвествующие пересечению.
   for ( size_t i = 0; i < intersectionPoints.size(); ++i )
   {
-   const double s1Param = GetParamFromType( intersectionPoints[i].s1.curve, intersectionPoints[i].s1.leftParam, intersectionPoints[i].point );
-   const double s2Param = GetParamFromType( intersectionPoints[i].s2->curve, intersectionPoints[i].s2->leftParam, intersectionPoints[i].point );
+   const auto s1Param = GetParamFromType( intersectionPoints[i].s1.curve, intersectionPoints[i].s1.leftParam, intersectionPoints[i].point );
+   const auto s2Param = GetParamFromType( intersectionPoints[i].s2->curve, intersectionPoints[i].s2->leftParam, intersectionPoints[i].point );
       params.push_back( CurveIntersectionData(intersectionPoints[i].s1.curve, intersectionPoints[i].s2->curve,
                                                std::make_pair(s1Param, s2Param)) );
   }
@@ -586,8 +585,8 @@ static std::vector<LineData> CollectLines( const std::vector<Math::GeomPolyline>
   std::vector<LineData> lines;
   for ( size_t j = 0; j < polylines.size(); j++ )
   {
-    std::vector<Point> polylinePoints = polylines[j].GetReferensedPoints();
-    std::vector<double> refParams = polylines[j].GetReferensedParams();
+    auto polylinePoints = polylines[j].GetReferensedPoints();
+    auto refParams = polylines[j].GetReferensedParams();
     Point startPoint;
     Point endPoint;
     for ( size_t i = 0; i < polylinePoints.size() - 1; ++i )
@@ -605,13 +604,13 @@ static std::vector<LineData> CollectLines( const std::vector<Math::GeomPolyline>
 
       // Добавляем шум к концам отрезков. Необходимо для того, чтобы обрабатываеть случай, когда координаты точек пересечения совпадают
       // (вырожденный случай - одна пара отрезков должна быть упорядочена "по - новому", другая пара должна быть упорядочена "по старому".
-      const  double urand1 = ( double ) rand() / ( double ) RAND_MAX;
-      const double urand2 = ( double ) rand() / ( double ) RAND_MAX;
-      const double urand3 = ( double ) rand() / ( double ) RAND_MAX;
-      const double urand4 = ( double ) rand() / ( double ) RAND_MAX;
-      const double lenght = ( startPoint - endPoint ).Lenght() * CommonConstantsMath::SCALING;
-      const Point newStart = startPoint + Point( ( urand1 - 0.5 ) * lenght, ( urand2 - 0.5 ) * lenght );
-      const Point newEnd = endPoint + Point( ( urand3 - 0.5 ) * lenght, ( urand4 - 0.5 ) * lenght );
+      const auto urand1 = ( double ) rand() / ( double ) RAND_MAX;
+      const auto urand2 = ( double ) rand() / ( double ) RAND_MAX;
+      const auto urand3 = ( double ) rand() / ( double ) RAND_MAX;
+      const auto urand4 = ( double ) rand() / ( double ) RAND_MAX;
+      const auto lenght = ( startPoint - endPoint ).Lenght() * CommonConstantsMath::SCALING;
+      const auto newStart = startPoint + Point( ( urand1 - 0.5 ) * lenght, ( urand2 - 0.5 ) * lenght );
+      const auto newEnd = endPoint + Point( ( urand3 - 0.5 ) * lenght, ( urand4 - 0.5 ) * lenght );
       const Line line( newStart, newEnd );
       lines.push_back( LineData( line, polylines[j], refParams[i], *curves[j] ) );
     }
@@ -630,7 +629,7 @@ static void SegmentsIntersections( const std::vector< Math::GeomPolyline>& polyl
   std::vector<PointEvent> intersectPoints;
   std::multiset<PointEvent, IsLexLessX> setEventPoints;
   std::set<const LineData*, KeySort> currentSegments;
-  const std::vector<LineData> lines = CollectLines( polylines, curves );
+  const auto lines = CollectLines( polylines, curves );
   CollectEventPoints( lines, setEventPoints );
   
   oldPoint = setEventPoints.begin()->point;
@@ -665,10 +664,10 @@ std::vector<CurveIntersectionData> Intersect( const std::vector<Curve*>& curves,
 
   for ( size_t i = 0; i < intersections.size(); i++ )
   {
-    double firstCurveParam = intersections[i].GetParams().first;
-    double secondCurveParam = intersections[i].GetParams().second;
+    auto firstCurveParam = intersections[i].GetParams().first;
+    auto secondCurveParam = intersections[i].GetParams().second;
     // Находим точку пересечения методом Ньютона.
-    bool solutionExists = NewtonMethod( intersections[i].GetCurve1(), intersections[i].GetCurve2(), firstCurveParam,secondCurveParam );
+    auto solutionExists = NewtonMethod( intersections[i].GetCurve1(), intersections[i].GetCurve2(), firstCurveParam,secondCurveParam );
 
     if ( solutionExists )
       intersectPoints.push_back( CurveIntersectionData(intersections[i].GetCurve1(), intersections[i].GetCurve2(), std::make_pair( firstCurveParam, secondCurveParam )) );
@@ -689,29 +688,29 @@ std::vector<CurveIntersectionData> Intersect( const std::vector<Curve*>& curves,
 static std::vector<Point> IntersectLineCircle( const Curve& line, const Curve& circle )
 {
   std::vector<Point> result;
-  const Math::Line* currentLine = dynamic_cast< const Math::Line* >( &line );
-  const Math::Ellipse* currentCircle = dynamic_cast< const Math::Ellipse* >( &circle );
-  const Point p1 = currentLine->GetStartPoint();
-  const Point p2 = currentLine->GetEndPoint();
-  const Point sc = currentCircle->GetCenter();
-  const double r = currentCircle->GetMajorRadius();
+  const auto* currentLine = dynamic_cast< const Math::Line* >( &line );
+  const auto* currentCircle = dynamic_cast< const Math::Ellipse* >( &circle );
+  const auto p1 = currentLine->GetStartPoint();
+  const auto p2 = currentLine->GetEndPoint();
+  const auto sc = currentCircle->GetCenter();
+  const auto r = currentCircle->GetMajorRadius();
 
-  const Vector dp = p2 - p1;
+  const auto dp = p2 - p1;
 
-  const double a = dp * dp;
-  const double b = 2. * ( dp.GetX() * (p1.GetX() - sc.GetX()) + dp.GetY() * (p1.GetY() - sc.GetY()) );
-  double c = sc * sc;
+  const auto a = dp * dp;
+  const auto b = 2. * ( dp.GetX() * (p1.GetX() - sc.GetX()) + dp.GetY() * (p1.GetY() - sc.GetY()) );
+  auto c = sc * sc;
   c += p1 * p1;
   c -= 2. * ( sc * p1 );
   c -= r * r;
-  const double bb4ac = b * b - 4 * a * c;
+  const auto bb4ac = b * b - 4 * a * c;
   if ( fabs( a ) < CommonConstantsMath::NULL_TOL || bb4ac < 0 )
   {
     return result;
   }
 
-  const double mu1 = ( -b + sqrt(bb4ac)) / ( 2. * a );
-  const double mu2 = ( -b - sqrt(bb4ac)) / ( 2. * a );
+  const auto mu1 = ( -b + sqrt(bb4ac)) / ( 2. * a );
+  const auto mu2 = ( -b - sqrt(bb4ac)) / ( 2. * a );
   if ( mu1 == mu2 )
   {
     result.push_back( p1 + ( p2 - p1 ) * mu1 );
@@ -719,10 +718,10 @@ static std::vector<Point> IntersectLineCircle( const Curve& line, const Curve& c
   }
   else
   {
-    Point point1 = p1 + ( p2 - p1 ) * mu1;
+    auto point1 = p1 + ( p2 - p1 ) * mu1;
     if ( IsYinSegment( *currentLine, point1.GetY() ) && IsXinSegment( *currentLine, point1.GetX() ) )
       result.push_back( point1 );
-    Point point2 = p1 + ( p2 - p1 ) * mu2;
+    auto point2 = p1 + ( p2 - p1 ) * mu2;
 
     if ( IsYinSegment( *currentLine, point2.GetY() ) && IsXinSegment( *currentLine, point2.GetX() ) )
       result.push_back( point2 );
@@ -738,12 +737,12 @@ static std::vector<Point> IntersectLineCircle( const Curve& line, const Curve& c
 static std::vector<Point> IntersectPolylinePolyline( const Curve& curve1, const Curve& curve2, std::vector<CurveIntersectionData>& resultParams )
 {
   std::vector<Point> intersectPoints;
-  const Math::GeomPolyline* lineCurveFirst = dynamic_cast< const Math::GeomPolyline* >( &curve1 );
-  std::vector<Point> refPointsFirst = lineCurveFirst->GetReferensedPoints();
-  const Math::GeomPolyline* lineCurveSecound = dynamic_cast< const Math::GeomPolyline* >( &curve2 );
+  const auto* lineCurveFirst = dynamic_cast< const Math::GeomPolyline* >( &curve1 );
+  const auto refPointsFirst = lineCurveFirst->GetReferensedPoints();
+  const auto* lineCurveSecound = dynamic_cast< const Math::GeomPolyline* >( &curve2 );
 
-  std::vector<double> refParams1 = lineCurveFirst->GetReferensedParams();
-  std::vector<double> refParams2 = lineCurveSecound->GetReferensedParams();
+  auto refParams1 = lineCurveFirst->GetReferensedParams();
+  auto refParams2 = lineCurveSecound->GetReferensedParams();
 
   std::vector<Point> refPointsSecound = lineCurveSecound->GetReferensedPoints();
   for ( size_t i = 1; i < refPointsFirst.size(); ++i )
