@@ -440,19 +440,21 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
                           std::vector<CurveIntersectionData>& params, const double& accuracyPolyliline )
 {
   currentX = point.point.GetX();
-  // Если точка события - левый конец отрезка - добавляем отрезок в множество отрезков, ищем верхнего и нижнего соседа этого отрезка, проверяем на пересечение.
+  // Если точка события - левый конец отрезка - возможно изменения статуса заметающей прямой.
+  // добавляем отрезок в множество отрезков,точка которых лежит на заметающей прямой,
+  // ищем верхнего и нижнего соседа этого отрезка на заметающей прямой проверяем на пересечение.
   if ( point.type == TypeEvent::Left )
   {
     auto it = currentSegments.insert( &point.s1 ).first;
     const LineData* lower = nullptr;
 
-    if ( FindNeighborsLower( lower, currentSegments, it ) )
+    if ( FindNeighborsLower(lower, currentSegments, it) )
     {
       IntersectLinesEvent( lower, &point.s1, intersectionPoints, setEventPoints, accuracyPolyliline );
 
     }
     const LineData* upper = nullptr;
-    if ( FindNeighborUpper( upper, currentSegments, it ) )
+    if ( FindNeighborUpper(upper, currentSegments, it) )
     {
       IntersectLinesEvent( &point.s1, upper, intersectionPoints, setEventPoints, accuracyPolyliline );
     }
@@ -484,7 +486,7 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
         }
       }
       else if ( &upper->polyline != &lower->polyline &&
-        ( fabs( Distance( upper->line, lower->line, newPoint ) ) < accuracyPolyliline )
+        ( fabs(Distance(upper->line, lower->line, newPoint)) < accuracyPolyliline )
                 && newPoint.GetX() > point.point.GetX() )
       {
         PointEvent event( newPoint, *upper, TypeEvent::Intersection );
@@ -536,8 +538,8 @@ static void ProcessPoint( std::multiset<PointEvent, IsLexLessX>& setEventPoints,
           intersectionPoints.push_back( event );
         }
       }
-      // После находния верхних и нижних соседей отрезки следует поменять местами относитльно currentX, 
-      //являющейся половиной расстояния до следующей точки пересечения.
+      // После нахождения верхних и нижних соседей отрезки следует поменять местами относитльно currentX, 
+      // являющейся половиной расстояния до следующей точки пересечения.
       if ( itS1 != currentSegments.end() && itS2 != currentSegments.end() && itS1 != itS2 )
       {
         s1 = *itS1;
@@ -637,14 +639,29 @@ static std::vector<LineData> CollectLines( const std::vector<Curve*>& curves )
 
 
 //-----------------------------------------------------------------------------
-//  Найти пересечение отрезков полилилинй. В параметр params записываются параметры исходных кривых, соответсвующих пересекающимся отрезкам.
+//
+// Используем алгоритм, построенный на основе заметающей прямой.
+// Заметающая прямая - мысленно проведенная вертикальная прямая с координатой x = -бесконечность, которую перемещают вправо.
+// Точка события - случай, когда возможно перечение отрезков. ( левый конец отрезка, правый конец отрезка, точка пересечения)
+// По ходу своего движения эта прямая будет встречаться с отрезками, причём в любой момент времени каждый отрезок будет пересекаться с нашей прямой по одной точке.
+// Таким образом,при появлении левого отрезка его точка появится на заметающей прямой и момент появления правого конца отрезка его точка удалится с прямой. 
+// В каждый момент времени сохраняется относительный порядок отрезков, пересекающих заметающую прямую, они отсортированных по их y - координате.
+// идея алгоритма в том, что при пересечении отрезков их точки будут иметь одинаковую y - координату на заметающей прямой.
+// При фиксированном положении заметающей прямой необходимо рассматривать только соседние отрезки для нахождения пересечений.
+//  Заметающую прямую необходимо рассматривать только в в следующих случаях: при появлении новых отрезков, удалении старых отрезков, а так же при нахождении пересечения 
+//  отрезков.
+// При появлении нового отрезка достаточно вставить его в нужное место в список, полученный для предыдущей сканирующей прямой. Проверять на пересечение надо только
+// добавляемый отрезок с его непосредственными соседями в списке сверху и снизу.
+// При исчезновении отрезка достаточно удалить его из текущего списка. После этого надо проверить на пересечение с верхним и нижним соседями в списке.
+// Других изменений в порядке следования отрезков в списке, кроме описанных, не существует.Других проверок на пересечения производить не надо.
+// Детальное описание алгоритма можно найти в reparata,Sheimos,Vychislitelnaya geometriya,1989гю стр 326.
 // ---
 static void SegmentsIntersections( std::vector<CurveIntersectionData>& params,
                                           const std::vector<Curve*>& curves, const double& accuracyPolyline )
 {
   std::vector<PointEvent> intersectPoints;
-  std::multiset<PointEvent, IsLexLessX> setEventPoints;
-  std::set<const LineData*, KeySort> currentSegments;
+  std::multiset<PointEvent, IsLexLessX> setEventPoints; // Множество отсортированных по х точек событий.
+  std::set<const LineData*, KeySort> currentSegments;  // Множество отрезков, отсортированных по их положению на заметающей прямой.
   const auto lines = CollectLines( curves );
   CollectEventPoints( lines, setEventPoints );
   
@@ -654,14 +671,12 @@ static void SegmentsIntersections( std::vector<CurveIntersectionData>& params,
     PointEvent currentPoint = *setEventPoints.begin();
 
     setEventPoints.erase( setEventPoints.begin() );
-    ProcessPoint( setEventPoints, currentSegments, currentPoint, intersectPoints, params, accuracyPolyline );
+    ProcessPoint( setEventPoints, currentSegments, currentPoint, intersectPoints, params, accuracyPolyline ); // Обработка текущей точки события.
   }
 }
 
 
-//-----------------------------------------------------------------------------
-//  Запустить общий случай нахождения пересечения кривых, используя алгоритм перечения отрзков из Preparata,Sheimos.
-// ---
+
 std::vector<CurveIntersectionData> Intersect( const std::vector<Curve*>& curves, const double&  accuracyPolyliline )
 {
   std::vector<CurveIntersectionData> intersections;
