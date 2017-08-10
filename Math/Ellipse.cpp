@@ -339,16 +339,12 @@ Point Ellipse::GetCenter() const
 //  Вернуть опорные точки, использованные для построения эллипса.
 //  Это точка центра.
 // ---
-std::vector<Point> Ellipse::GetReferensedPoints() const
+void Ellipse::GetReferensedPoints( std::vector<Point>& referensedPoints ) const
 {
   if ( IsValid() )
   {
-    std::vector<Point> refPoints;
-    refPoints.push_back( center );
-    return refPoints;
+    referensedPoints.push_back( center );
   }
-  else
-    return std::vector<Point>();
 }
 
 

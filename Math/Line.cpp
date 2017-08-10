@@ -167,12 +167,10 @@ bool Line::IsValid() const
 //  Вернуть опорные точки, использованные для построения отрезка.
 //  Соответственно, это точки начала и колнца отрезка.
 // ---
-std::vector<Point> Line::GetReferensedPoints() const
+void Line::GetReferensedPoints( std::vector<Point>& referensedPoints ) const
 {
-  std::vector<Point> refPoints;
-  refPoints.push_back( startPoint );
-  refPoints.push_back( endPoint );
-  return refPoints;
+  referensedPoints.push_back( startPoint );
+  referensedPoints.push_back( endPoint );
 }
 
 
@@ -266,7 +264,16 @@ bool Line::IsPointInLine( const Point& point ) const
   double tx = ( point.GetX() - startPoint.GetX() ) / GetDerivative( 0. ).GetX();
   double ty = ( point.GetY() - startPoint.GetY() ) / GetDerivative( 0. ).GetY();
   return ( 0. <= tx && 1. >= tx && 0. <= ty && 1. >= ty  && fabs(tx - ty)< CommonConstantsMath::NULL_TOL );
-  
+}
+
+
+//-----------------------------------------------------------------------------
+//   Получить для заданной точности параметры использованные для построения полилинии.
+// ---
+void Line::GetReferensedParams( std::vector<double>& referensedParams, double accuracy ) const
+{
+  referensedParams.push_back( 0. );
+  referensedParams.push_back( 1. );
 
 }
 }

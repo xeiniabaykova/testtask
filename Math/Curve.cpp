@@ -27,22 +27,19 @@ double Curve::CountingStep( double tCurrent, double accuracy) const
 void Curve::GetAsPolyLine( GeomPolyline &polyLine,double accuracy) const
 {
   std::vector<Point> polyLinePoints;
-  std::vector<double> refParam;
 
   double t = GetRange().GetStart();
 
   while ( t <= GetRange().GetEnd() )
   {
-    refParam.push_back(t);
     polyLinePoints.push_back( GetPoint(t) );
     t += CountingStep( t, accuracy);
   }
   if (!IsEqual(polyLinePoints.back(), GetPoint(GetRange().GetEnd())))
   {
     polyLinePoints.push_back(GetPoint(GetRange().GetEnd()));
-    refParam.push_back( GetRange().GetEnd() );
   }
-   polyLine.Init( polyLinePoints, refParam );
+   polyLine.Init( polyLinePoints );
 
 }
 
@@ -66,6 +63,25 @@ void Curve::FixParameter( double& t ) const
       t = range.GetStart();
     if ( t > range.GetEnd() )
       t = range.GetEnd();
+  }
+}
+
+
+//-----------------------------------------------------------------------------
+//	Получить для заданной точности параметры использованные для построения полилинии.
+// ---
+void Curve::GetReferensedParams( std::vector<double>& referensedParams, double accuracy ) const
+{
+  double t = GetRange().GetStart();
+
+  while ( t <= GetRange().GetEnd() )
+  {
+    referensedParams.push_back( t );
+    t += CountingStep( t, accuracy );
+  }
+  if ( !IsEqual( GetPoint(referensedParams.back()), GetPoint(GetRange().GetEnd())) )
+  {
+    referensedParams.push_back( GetRange().GetEnd() );
   }
 }
 }

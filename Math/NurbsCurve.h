@@ -53,7 +53,7 @@ public:
   virtual Vector              Get2Derivative         ( double t ) const;                   ///< Вернуть вторую производную на nurbs по параметру t.
   virtual void                Translate              ( double xShift, double yShift );     ///< Сдвинуть по оси x на xShift, по оси y на yShift.
   virtual void                Rotate                 ( double alpha );                     ///< Повернуть относительно начала координат на угол alpha.
-  virtual std::vector<Point>  GetReferensedPoints    () const;                             ///< Вернуть опорные точки, использованные для построения nurbs - кривой
+  virtual void                GetReferensedPoints    ( std::vector<Point>& referensedPoints ) const; ///< Вернуть опорные точки, использованные для построения nurbs - кривой
   virtual void                Scale                  ( double XScaling, double YScaling ); ///< Масштабировать на xScaling по оси x, на yScaling по оси у.
   std::vector<Point>          GetPoles               () const;                             ///< Вернуть опорные точки.
   std::vector<double>         GetWeights             () const;                             ///< Вернуть веса опорных точек.

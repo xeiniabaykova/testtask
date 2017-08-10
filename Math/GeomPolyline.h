@@ -23,9 +23,7 @@ namespace Math {
 class GeomPolyline: public Curve
 {
 private:
- std::vector<Point>  referencedPoints;
- std::vector<double> referemcedParams;
-
+ std::vector<Point>  referencedPoints; ///< Опорные точки полилинии.
 public:
  /**  \brief Конструктор полилинии по опорным точкам.
    \param[in] Points - опорные точки .\~
@@ -37,7 +35,7 @@ public:
   GeomPolyline( const GeomPolyline &obj ) = default;
   GeomPolyline& operator=( GeomPolyline &obj ) = default;
 public:
-  void                Init                ( const std::vector<Point>& theReferencedPoints, const std::vector<double>& refParam = std::vector<double>() ); ///< Заменить опорные точки в полилинии.
+  void                Init                ( const std::vector<Point>& theReferencedPoints ); ///< Заменить опорные точки в полилинии.
   virtual Point       GetPoint            ( double t ) const;                                ///< Вернуть точку по параметру t.
   virtual Vector      GetDerivative       ( double t ) const;                                ///< Вернуть производную линнии по параметру t.
   virtual Vector      Get2Derivative      ( double t ) const;                                ///< Вернуть вторую производную на линии по параметру t.
@@ -50,10 +48,11 @@ public:
   virtual void        GetAsPolyLine       ( GeomPolyline &polyLine, double accuracy = CommonConstantsMath::PRECISION_POLYLINE ) const;
   double              DistanceToPoint     ( Point point ) const;                             ///< Вернуть расстояние от точки до полилинии.
   bool                IsValid             () const;                                          ///< Проверить корректность полилинии: нет совпадающих точек, количество точек не равно нулю.
-  std::vector<double> GetReferensedParams() const;                                           ///< Получить значения параметра исходной кривой по которому строилась полилилния.
-  std::vector<Point>  GetReferensedPoints () const;                                          ///< Вернуть опорные точки, использованные для построения полилинии.
+  void                GetReferensedPoints ( std::vector<Point>& theReferensedPoints) const;     ///< Вернуть опорные точки, использованные для построения полилинии.
   virtual std::string GetName             () const;                                          ///< Вернуть имя, используемое при записи полилинии в файл.
   double              GetTFromPoint       ( const Point& point ) const;                      ///< Вернуть парметр t, соответсвующий точке на полилинии.
+  /// Получить для заданной точности параметры использованные для построения полилинии.
+  virtual void        GetReferensedParams( std::vector<double>& referensedParams, double accuracy = CommonConstantsMath::PRECISION_POLYLINE ) const;
   virtual CurveType   GetType             () const;
 };
 }

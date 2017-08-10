@@ -62,7 +62,7 @@ public:
   virtual bool               IsClosed            () const;                                 ///< Вернуть замкнутость отрезка. Отрезок всегда не замкунут.
   std::string                GetName             () const;                                 ///< Вернуть имя, используемое при записи отрезка в файл.
   bool                       IsValid             () const;                                 ///< Проверить корректность отрезка (начальная и конечная точка не совпадают).
-  virtual std::vector<Point> GetReferensedPoints () const;                                 ///< Вернуть опорные точки, использованные для построения отрезка.
+  virtual void               GetReferensedPoints ( std::vector<Point>& referensedPoints) const; ///< Вернуть опорные точки, использованные для построения отрезка.
   Point                      GetStartPoint       () const;                                 ///< Вернуть начальную точку отрезка.
   Point                      GetEndPoint         () const;                                 ///< Вернуть конечную точку отрезка.
   double                     DistanceToPoint     ( Point point ) const;                    ///< Вернуть расстояние от точки до прямой.
@@ -71,6 +71,8 @@ public:
   Line&                      operator=           ( const Line &obj);                       ///< Присвоить один отрезок другому отрезку.
   double                     GetTFromPoint       ( const Point& point ) const;             ///< Получить параметр t по точке, принаджлежащей прямой.
   bool                       IsPointInLine       ( const Point& point ) const;             ///< Проверить, принадлежит ли точка отрезку.
+  /// Получить для заданной точности параметры использованные для построения полилинии.
+  virtual void               GetReferensedParams( std::vector<double>& referensedParams, double accuracy = CommonConstantsMath::PRECISION_POLYLINE ) const;
 };
 double Distance( const Line& line1, const Line& line2, Point& closestPoint );                ///< Вернуть расстояние между отрезками.
 }

@@ -52,7 +52,7 @@ GeomPolyline::GeomPolyline( const std::vector<Point>& thePoints ):
   std::vector<double> refParams;
   for ( size_t i = 0; i < thePoints.size(); i++ )
     refParams.push_back(static_cast<double>(i));
- Init( thePoints, refParams );
+ Init( thePoints );
 }
 
 
@@ -60,20 +60,13 @@ GeomPolyline::GeomPolyline( const std::vector<Point>& thePoints ):
 //  Инициализация полилинии по опорным точкам. Если точки удовлетворяют условию корректности: их количество не равно нулю и нет совпадающих точек,
 //  то создается полилиния по воходым точкам. Считаем, что точки в полилинию добаляются в том же порядке, что и находятся в входном массиве.
 // ---
-void GeomPolyline::Init( const std::vector<Point>& theReferencedPoints, const std::vector<double>& theRefParams )
+void GeomPolyline::Init( const std::vector<Point>& theReferencedPoints )
 {
 	referencedPoints.clear();
   
   if ( IsCorrectPolylineData(theReferencedPoints) )
   {	 
     referencedPoints = theReferencedPoints;
-   
-    if (theRefParams.empty())
-      for (size_t i = 0; i < theReferencedPoints.size(); i++)
-        referemcedParams.push_back(static_cast<double>(i));
-    else 
-      referemcedParams = theRefParams;
-
   }
 }
 
@@ -229,14 +222,12 @@ bool GeomPolyline::IsValid() const
 //  Вернуть опорные точки, использованные для построения полилинии.
 //  Соответственно, это точки, на основе которых построена полилиния.
 // ---
-std::vector<Point> GeomPolyline::GetReferensedPoints() const
+void GeomPolyline::GetReferensedPoints( std::vector<Point>& theReferensedPoints ) const
 {
-  std::vector<Point> refPoints;
   if ( IsValid() )
 	{
-    refPoints = referencedPoints;
+    theReferensedPoints = referencedPoints;
 	}
-  return refPoints;
 }
 
 
@@ -245,13 +236,8 @@ std::vector<Point> GeomPolyline::GetReferensedPoints() const
 // Вернуть полилилния для полилинии - это полилиния.
 // ---
 void GeomPolyline::GetAsPolyLine( GeomPolyline &polyLine, double accuracy ) const
-{
-  std::vector<double> referemcedParams;
-  for ( size_t i = 0; i < referencedPoints.size(); i++ )
-  {
-    referemcedParams.push_back(static_cast<double>(i) );  
-  }
-  polyLine.Init( referencedPoints, referemcedParams );
+{ 
+  polyLine.Init( referencedPoints );
 
 }
 
@@ -277,12 +263,8 @@ bool GeomPolyline::IsClosed() const
 
 
 //-----------------------------------------------------------------------------
-//  Получить значения параметра исходной кривой по которому строилась полилилния.
+//  Вернуть тип полилинии.
 // ---
-std::vector<double> GeomPolyline::GetReferensedParams() const
-{
-  return referemcedParams;
-}
 Curve::CurveType GeomPolyline::GetType() const
 {
   return Curve::PolylineType;
@@ -299,5 +281,13 @@ double GeomPolyline::GetTFromPoint( const Point& point ) const
    if ( Line(referencedPoints[i],referencedPoints[i+1]).IsPointInLine(point) )
      return ( (double)i + Line(referencedPoints[i],referencedPoints[i+1]).GetTFromPoint(point) );
  }
+}
+
+void GeomPolyline::GetReferensedParams( std::vector<double>& referensedParams, double accuracy ) const
+{
+  for ( size_t i = 0; i < referencedPoints.size() - 1; i++ )
+  {
+    referensedParams.push_back( static_cast< double >(i) );
+  }
 }
 }

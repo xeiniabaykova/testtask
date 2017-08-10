@@ -600,21 +600,23 @@ static std::vector<LineData> CollectLines( const std::vector<Curve*>& curves )
   std::vector<LineData> lines;
   for ( size_t j = 0; j < polylines.size(); j++ )
   {
-    auto polylinePoints = polylines[j].GetReferensedPoints();
-    auto refParams = polylines[j].GetReferensedParams();
+    std::vector<Point> referensedPointsPolyline;
+    polylines[j].GetReferensedPoints( referensedPointsPolyline );
+    std::vector<double> refParams;
+    curves[j]->GetReferensedParams( refParams );
     Point startPoint;
     Point endPoint;
-    for ( size_t i = 0; i < polylinePoints.size() - 1; ++i )
+    for ( size_t i = 0; i < referensedPointsPolyline.size() - 1; ++i )
     {
-      if ( polylinePoints[i].GetX() < polylinePoints[i + 1].GetX() )
+      if ( referensedPointsPolyline[i].GetX() < referensedPointsPolyline[i + 1].GetX() )
       {
-        startPoint = polylinePoints[i];
-        endPoint = polylinePoints[i + 1];
+        startPoint = referensedPointsPolyline[i];
+        endPoint = referensedPointsPolyline[i + 1];
       }
       else
       {
-        startPoint = polylinePoints[i + 1];
-        endPoint = polylinePoints[i];
+        startPoint = referensedPointsPolyline[i + 1];
+        endPoint = referensedPointsPolyline[i];
       }
 
       // Добавляем шум к концам отрезков. Необходимо для того, чтобы обрабатываеть случай, когда координаты точек пересечения совпадают
@@ -743,20 +745,25 @@ static std::vector<Point> IntersectPolylinePolyline( const Curve& curve1, const 
 {
   std::vector<Point> intersectPoints;
   const auto* lineCurveFirst = dynamic_cast< const Math::GeomPolyline* >( &curve1 );
-  const auto refPointsFirst = lineCurveFirst->GetReferensedPoints();
+  std::vector<Point> referensedPointsPolyline1;
+  lineCurveFirst->GetReferensedPoints( referensedPointsPolyline1 );
   const auto* lineCurveSecound = dynamic_cast< const Math::GeomPolyline* >( &curve2 );
 
-  auto refParams1 = lineCurveFirst->GetReferensedParams();
-  auto refParams2 = lineCurveSecound->GetReferensedParams();
+  std::vector<double> refParams1;
 
-  std::vector<Point> refPointsSecound = lineCurveSecound->GetReferensedPoints();
-  for ( size_t i = 1; i < refPointsFirst.size(); ++i )
+  lineCurveFirst->GetReferensedParams( refParams1 );
+  std::vector<double> refParams2;
+  lineCurveSecound->GetReferensedParams( refParams2 );
+
+  std::vector<Point> referensedPointsPolyline2;
+  lineCurveSecound->GetReferensedPoints( referensedPointsPolyline2 );
+  for ( size_t i = 1; i < referensedPointsPolyline1.size(); ++i )
   {
-    Line firstLine( refPointsFirst[i - 1], refPointsFirst[i] );
-    for ( size_t j = 1; j < refPointsSecound.size(); ++j )
+    Line firstLine( referensedPointsPolyline1[i - 1], referensedPointsPolyline1[i] );
+    for ( size_t j = 1; j < referensedPointsPolyline2.size(); ++j )
     {
       Point point;
-      if ( IntersectLines( Line( refPointsSecound[j - 1], refPointsSecound[j] ), firstLine, point ) )
+      if ( IntersectLines( Line( referensedPointsPolyline2[j - 1], referensedPointsPolyline2[j] ), firstLine, point ) )
       {
         auto result = std::find( std::begin( intersectPoints ), std::end( intersectPoints ), point );
         if ( result == std::end( intersectPoints ) )

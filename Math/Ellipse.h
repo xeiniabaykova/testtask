@@ -72,7 +72,7 @@ public:
   virtual void               Translate           ( double xShift, double yShift );     ///< Сдвинуть по оси x на xShift, по оси y на yShift.
   virtual void               Rotate              ( double alpha );                     ///< Повернуть относительно начала координат на угол alpha.
   virtual void               Scale               ( double xScaling, double yScaling ); ///< Масштабировать на xScaling по оси x, на yScaling по оси у.
-  virtual std::vector<Point> GetReferensedPoints () const;                             ///< Вернуть опорные точки, использованные для построения эллипса.
+  virtual void               GetReferensedPoints ( std::vector<Point>& referensedPoints ) const;  ///< Вернуть опорные точки, использованные для построения эллипса.
   virtual bool               IsClosed            () const;                             ///< Эллипс по умолчанию - замкунтая фигура.
   virtual std::string        GetName             () const;                             ///< Вернуть имя, используемое при записи эллипса в файл.
   bool                       IsValid             () const;                             ///< Проверить корректность эллипса: считаем, что если оба радиуса не равны нулю, то эллипс корректен.

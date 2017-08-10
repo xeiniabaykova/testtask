@@ -571,9 +571,9 @@ size_t NurbsCurve::Degree() const
 //-----------------------------------------------------------------------------
 //  Вернуть опорные точки, использованные для построения nurbs - кривой.
 // ---
-std::vector<Point> NurbsCurve::GetReferensedPoints() const
+void NurbsCurve::GetReferensedPoints( std::vector<Point>& referensedPoints ) const
 {
-  return poles;
+  referensedPoints = poles;
 }
 
 
