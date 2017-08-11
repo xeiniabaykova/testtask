@@ -76,20 +76,20 @@ Range Line::GetRange() const
 //-----------------------------------------------------------------------------
 //  Вернуть точку по параметру t.
 // ---
-Point Line::GetPoint( double t ) const
+void Line::GetPoint( double t, Point& point ) const
 {
   FixParameter( t );
   Vector direction = endPoint - startPoint;
-  return startPoint + direction * t;
+  point = startPoint + direction * t;
 }
 
 
 //-----------------------------------------------------------------------------
 // Верунуть производную по парметру t.
 // ---
-Vector Line::GetDerivative( double ) const
+void Line::GetDerivative( double, Vector& vector ) const
 {
-  return endPoint - startPoint;
+  vector = endPoint - startPoint;
 }
 
 
@@ -252,7 +252,9 @@ double Distance( const Line& line1, const Line& line2, Point& closestPoint )
 // ---
 double Line::GetTFromPoint( const Point& point ) const
 {
-  return ( point.GetX() - startPoint.GetX() ) / GetDerivative( 0. ).GetX();
+  Vector vector;
+  GetDerivative( 0., vector );
+  return ( point.GetX() - startPoint.GetX() ) / vector.GetX();
 }
 
 
@@ -261,8 +263,10 @@ double Line::GetTFromPoint( const Point& point ) const
 // ---
 bool Line::IsPointInLine( const Point& point ) const
 {
-  double tx = ( point.GetX() - startPoint.GetX() ) / GetDerivative( 0. ).GetX();
-  double ty = ( point.GetY() - startPoint.GetY() ) / GetDerivative( 0. ).GetY();
+  Vector vector;
+  GetDerivative( 0., vector );
+  double tx = ( point.GetX() - startPoint.GetX() ) / vector.GetX();
+  double ty = ( point.GetY() - startPoint.GetY() ) / vector.GetY();
   return ( 0. <= tx && 1. >= tx && 0. <= ty && 1. >= ty  && fabs(tx - ty)< CommonConstantsMath::NULL_TOL );
 }
 

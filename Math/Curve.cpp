@@ -10,8 +10,9 @@ namespace Math {
 // ---
 double Curve::CountingStep( double tCurrent, double accuracy) const
 {
-  const Vector firstDerivative = GetDerivative( tCurrent );
-  const Vector secondDerivative = Get2Derivative( tCurrent );
+  Vector firstDerivative;
+  GetDerivative( tCurrent, firstDerivative );
+  Vector secondDerivative = Get2Derivative( tCurrent );
   const double vectorMult = firstDerivative.VectorMult( secondDerivative );
   const double normVectorMult = sqrt( vectorMult * vectorMult );
   const double multiplicationFirstDerivative = firstDerivative * firstDerivative;
@@ -24,20 +25,24 @@ double Curve::CountingStep( double tCurrent, double accuracy) const
 //  Возвращает полилинию для геометрического примитива с точностью accuracy.
 // Точки, составляющие полилинию, расчитываются с помощью функции countingStep.
 // ---
-void Curve::GetAsPolyLine( GeomPolyline &polyLine,double accuracy) const
+void Curve::GetAsPolyLine( GeomPolyline &polyLine, double accuracy) const
 {
   std::vector<Point> polyLinePoints;
 
   double t = GetRange().GetStart();
-
+  Point point;
   while ( t <= GetRange().GetEnd() )
   {
-    polyLinePoints.push_back( GetPoint(t) );
-    t += CountingStep( t, accuracy);
+    
+    GetPoint( t, point );
+    polyLinePoints.push_back( point );
+    t += CountingStep( t, accuracy); 
   }
-  if (!IsEqual(polyLinePoints.back(), GetPoint(GetRange().GetEnd())))
+  GetPoint( GetRange().GetEnd(), point );
+  if ( !IsEqual(polyLinePoints.back(), point) )
   {
-    polyLinePoints.push_back(GetPoint(GetRange().GetEnd()));
+    GetPoint( GetRange().GetEnd(), point );
+    polyLinePoints.push_back( point );
   }
    polyLine.Init( polyLinePoints );
 
@@ -79,7 +84,11 @@ void Curve::GetReferensedParams( std::vector<double>& referensedParams, double a
     referensedParams.push_back( t );
     t += CountingStep( t, accuracy );
   }
-  if ( !IsEqual( GetPoint(referensedParams.back()), GetPoint(GetRange().GetEnd())) )
+  Point point1;
+  GetPoint( referensedParams.back(), point1 );
+  Point point2;
+  GetPoint( GetRange().GetEnd(), point2 );
+  if ( !IsEqual( point1, point2) )
   {
     referensedParams.push_back( GetRange().GetEnd() );
   }

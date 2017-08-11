@@ -65,21 +65,21 @@ private:
   Ellipse& operator=( Ellipse &obj ) = delete;
 
 public:
-  virtual Point              GetPoint            ( double t ) const;                   ///< Вернуть точку на кривой по параметру t.
-  virtual Range              GetRange            () const;                             ///< Вернуть границы параметра для эллипса : [0, 2 * pi].
-  virtual Vector             GetDerivative       ( double t ) const;                   ///< Вернуть производную на эллипсе по параметру t.
-  virtual Vector             Get2Derivative      ( double t ) const;                   ///< Вернуть вторую производную на эллипсе по параметру t.
-  virtual void               Translate           ( double xShift, double yShift );     ///< Сдвинуть по оси x на xShift, по оси y на yShift.
-  virtual void               Rotate              ( double alpha );                     ///< Повернуть относительно начала координат на угол alpha.
-  virtual void               Scale               ( double xScaling, double yScaling ); ///< Масштабировать на xScaling по оси x, на yScaling по оси у.
-  virtual void               GetReferensedPoints ( std::vector<Point>& referensedPoints ) const;  ///< Вернуть опорные точки, использованные для построения эллипса.
-  virtual bool               IsClosed            () const;                             ///< Эллипс по умолчанию - замкунтая фигура.
-  virtual std::string        GetName             () const;                             ///< Вернуть имя, используемое при записи эллипса в файл.
-  bool                       IsValid             () const;                             ///< Проверить корректность эллипса: считаем, что если оба радиуса не равны нулю, то эллипс корректен.
-  double                     GetMajorRadius      () const;                             ///< Вернуть гравный радиус.
-  double                     GetMinorRadius      () const;                             ///< Вернуть побочный радиус.
-  double                     GetAlphaMajorAxis   () const;                             ///< Вернуть угол наклона главной оси относительно оси ох.
-  double                     GetAlphaMinorAxis   () const;                             ///< Вернуть угол наклона побочной оси относительно оси ох.
+  virtual void         GetPoint            ( double t, Point& point ) const;      ///< Вернуть точку на кривой по параметру t.
+  virtual Range        GetRange            () const;                             ///< Вернуть границы параметра для эллипса : [0, 2 * pi].
+  virtual void         GetDerivative       ( double t, Vector& vector ) const;                   ///< Вернуть производную на эллипсе по параметру t.
+  virtual Vector       Get2Derivative      ( double t ) const;                   ///< Вернуть вторую производную на эллипсе по параметру t.
+  virtual void         Translate           ( double xShift, double yShift );     ///< Сдвинуть по оси x на xShift, по оси y на yShift.
+  virtual void         Rotate              ( double alpha );                     ///< Повернуть относительно начала координат на угол alpha.
+  virtual void         Scale               ( double xScaling, double yScaling ); ///< Масштабировать на xScaling по оси x, на yScaling по оси у.
+  virtual void         GetReferensedPoints ( std::vector<Point>& referensedPoints ) const;  ///< Вернуть опорные точки, использованные для построения эллипса.
+  virtual bool         IsClosed            () const;                             ///< Эллипс по умолчанию - замкунтая фигура.
+  virtual std::string  GetName             () const;                             ///< Вернуть имя, используемое при записи эллипса в файл.
+  bool                 IsValid             () const;                             ///< Проверить корректность эллипса: считаем, что если оба радиуса не равны нулю, то эллипс корректен.
+  double               GetMajorRadius      () const;                             ///< Вернуть гравный радиус.
+  double               GetMinorRadius      () const;                             ///< Вернуть побочный радиус.
+  double               GetAlphaMajorAxis   () const;                             ///< Вернуть угол наклона главной оси относительно оси ох.
+  double               GetAlphaMinorAxis   () const;                             ///< Вернуть угол наклона побочной оси относительно оси ох.
   Point                      GetCenter           () const;                             ///< Вернуть центр эллипса.
   virtual CurveType          GetType             () const;
 

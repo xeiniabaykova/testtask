@@ -176,7 +176,11 @@ TEST( Intersector, SameEndLineLinePoints )
   curves.push_back( &polyline2 );
   std::vector<CurveIntersectionData> points = Math::Intersect( curves );
   ASSERT_TRUE( points.size() == 1 );
-  EXPECT_TRUE( IsEqual(points[0].GetCurve1().GetPoint(points[0].GetParams().first), points[0].GetCurve2().GetPoint(points[0].GetParams().second)) );
+  Point point1;
+  Point point2;
+  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
+  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual(point1, point2) );
 }
 TEST( Intersector, SimpleCaseLineLine )
 {
@@ -190,8 +194,11 @@ TEST( Intersector, SimpleCaseLineLine )
   curves.push_back( &polyline1 );
   curves.push_back( &polyline2 );
   std::vector<CurveIntersectionData> points = Math::Intersect( curves );
-  ASSERT_TRUE( points.size() == 1 );
-  EXPECT_TRUE( IsEqual(points[0].GetCurve1().GetPoint(points[0].GetParams().first), points[0].GetCurve2().GetPoint(points[0].GetParams().second)) );
+  Point point1;
+  Point point2;
+  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
+  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
 }
 
 TEST( Intersector, SimpleCase4Line )
@@ -215,10 +222,20 @@ TEST( Intersector, SimpleCase4Line )
   curves.push_back( &polyline4 );
   std::vector<CurveIntersectionData> points = Math::Intersect( curves );
   ASSERT_TRUE( points.size() == 4 );
-  EXPECT_TRUE( IsEqual( points[0].GetCurve1().GetPoint( points[0].GetParams().first ), points[0].GetCurve2().GetPoint( points[0].GetParams().second ) ) );
-  EXPECT_TRUE( IsEqual( points[1].GetCurve1().GetPoint( points[1].GetParams().first ), points[1].GetCurve2().GetPoint( points[1].GetParams().second ) ) );
-  EXPECT_TRUE( IsEqual( points[2].GetCurve1().GetPoint( points[2].GetParams().first ), points[2].GetCurve2().GetPoint( points[2].GetParams().second ) ) );
-  EXPECT_TRUE( IsEqual( points[3].GetCurve1().GetPoint( points[3].GetParams().first ), points[3].GetCurve2().GetPoint( points[3].GetParams().second ) ) );
+  Point point1;
+  Point point2;
+  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
+  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
+  points[1].GetCurve1().GetPoint( points[1].GetParams().first, point1 );
+  points[1].GetCurve2().GetPoint( points[1].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
+  points[2].GetCurve1().GetPoint( points[2].GetParams().first, point1 );
+  points[2].GetCurve2().GetPoint( points[2].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
+  points[3].GetCurve1().GetPoint( points[3].GetParams().first, point1 );
+  points[3].GetCurve2().GetPoint( points[3].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
 
 }
 
@@ -244,9 +261,16 @@ TEST( Intersector, SimpleCase4Line3Intersect )
   std::vector<CurveIntersectionData> points = Math::Intersect( curves );
   ASSERT_TRUE( points.size() == 3 );
 
-  EXPECT_TRUE( IsEqual( points[0].GetCurve1().GetPoint( points[0].GetParams().first ), points[0].GetCurve2().GetPoint( points[0].GetParams().second ) ) );
-  EXPECT_TRUE( IsEqual( points[1].GetCurve1().GetPoint( points[1].GetParams().first ), points[1].GetCurve2().GetPoint( points[1].GetParams().second ) ) );
-  EXPECT_TRUE( IsEqual( points[2].GetCurve1().GetPoint( points[2].GetParams().first ), points[2].GetCurve2().GetPoint( points[2].GetParams().second ) ) );
+  Point point1;
+  Point point2;
+  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
+  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
+  points[1].GetCurve1().GetPoint( points[1].GetParams().first, point1 );
+  points[1].GetCurve2().GetPoint( points[1].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
+  points[2].GetCurve1().GetPoint( points[2].GetParams().first, point1 );
+  points[2].GetCurve2().GetPoint( points[2].GetParams().second, point2 );
 
 }
 TEST( Intersector, PerpendicularLineLine )
@@ -262,7 +286,11 @@ TEST( Intersector, PerpendicularLineLine )
   curves.push_back( &polyline2 );
   std::vector<CurveIntersectionData> points = Math::Intersect( curves );
   ASSERT_TRUE( points.size() == 1 );
-  EXPECT_TRUE( IsEqual( points[0].GetCurve1().GetPoint( points[0].GetParams().first ), points[0].GetCurve2().GetPoint( points[0].GetParams().second ) ) );
+  Point point1;
+  Point point2;
+  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
+  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
 
 }
 TEST( Intersector, NoIntersect )
@@ -292,10 +320,20 @@ TEST( Intersector, IntersectPolyline4Points )
   curves.push_back( &polyline2 );
   std::vector<CurveIntersectionData> points = Math::Intersect( curves );
   ASSERT_TRUE( points.size() == 4 );
-  EXPECT_TRUE( IsEqual( points[0].GetCurve1().GetPoint( points[0].GetParams().first ), points[0].GetCurve2().GetPoint( points[0].GetParams().second ) ) );
-  EXPECT_TRUE( IsEqual( points[1].GetCurve1().GetPoint( points[1].GetParams().first ), points[1].GetCurve2().GetPoint( points[1].GetParams().second ) ) );
-  EXPECT_TRUE( IsEqual( points[2].GetCurve1().GetPoint( points[2].GetParams().first ), points[2].GetCurve2().GetPoint( points[2].GetParams().second ) ) );
-  EXPECT_TRUE( IsEqual( points[3].GetCurve1().GetPoint( points[3].GetParams().first ), points[3].GetCurve2().GetPoint( points[3].GetParams().second ) ) );
+  Point point1;
+  Point point2;
+  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
+  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
+  points[1].GetCurve1().GetPoint( points[1].GetParams().first, point1 );
+  points[1].GetCurve2().GetPoint( points[1].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
+  points[2].GetCurve1().GetPoint( points[2].GetParams().first, point1 );
+  points[2].GetCurve2().GetPoint( points[2].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
+  points[3].GetCurve1().GetPoint( points[3].GetParams().first, point1 );
+  points[3].GetCurve2().GetPoint( points[3].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
 }
 TEST(Ellipse, 2Intersect)
 {
@@ -307,8 +345,14 @@ TEST(Ellipse, 2Intersect)
   curves.push_back( &ellipse2 );
   std::vector<CurveIntersectionData> points = Math::Intersect( curves );
   EXPECT_FALSE(points.empty());
-  EXPECT_TRUE( IsEqual( points[0].GetCurve1().GetPoint( points[0].GetParams().first ), points[0].GetCurve2().GetPoint( points[0].GetParams().second ) ) );
-  EXPECT_TRUE( IsEqual( points[1].GetCurve1().GetPoint( points[1].GetParams().first ), points[1].GetCurve2().GetPoint( points[1].GetParams().second ) ) );
+  Point point1;
+  Point point2;
+  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
+  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
+  points[1].GetCurve1().GetPoint( points[1].GetParams().first, point1 );
+  points[1].GetCurve2().GetPoint( points[1].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
 
 }
 using namespace Math;
@@ -329,7 +373,11 @@ TEST(Nurbs, 1Intersect)
   curves.push_back( &curve2 );
   std::vector<CurveIntersectionData> points = Math::Intersect( curves );
   EXPECT_FALSE( points.empty() );
-  EXPECT_TRUE( IsEqual( points[0].GetCurve1().GetPoint( points[0].GetParams().first ), points[0].GetCurve2().GetPoint( points[0].GetParams().second ) ) );
+  Point point1;
+  Point point2;
+  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
+  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
 
 }
 
@@ -350,8 +398,14 @@ TEST(Nurbs, 2Intersect)
   curves.push_back( &curve2 );
   std::vector<CurveIntersectionData> points = Math::Intersect( curves );
   EXPECT_FALSE( points.empty() );
-  EXPECT_TRUE( IsEqual( points[0].GetCurve1().GetPoint( points[0].GetParams().first ), points[0].GetCurve2().GetPoint( points[0].GetParams().second ) ) );
-  EXPECT_TRUE( IsEqual( points[1].GetCurve1().GetPoint( points[1].GetParams().first ), points[1].GetCurve2().GetPoint( points[1].GetParams().second ) ) );
+  Point point1;
+  Point point2;
+  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
+  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
+  points[1].GetCurve1().GetPoint( points[1].GetParams().first, point1 );
+  points[1].GetCurve2().GetPoint( points[1].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
 }
 
 TEST( Intersector, NullCurves )
@@ -418,8 +472,14 @@ TEST(Nurbs, 3Intersect)
   curves.push_back( &curve2 );
   std::vector<CurveIntersectionData> points = Math::Intersect( curves );
   EXPECT_FALSE(points.empty());
-  EXPECT_TRUE( IsEqual( points[0].GetCurve1().GetPoint( points[0].GetParams().first ), points[0].GetCurve2().GetPoint( points[0].GetParams().second ) ) );
-  EXPECT_TRUE( IsEqual( points[1].GetCurve1().GetPoint( points[1].GetParams().first ), points[1].GetCurve2().GetPoint( points[1].GetParams().second ) ) );
+  Point point1;
+  Point point2;
+  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
+  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
+  points[1].GetCurve1().GetPoint( points[1].GetParams().first, point1 );
+  points[1].GetCurve2().GetPoint( points[1].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
   curves.clear();
 
   NurbsCurve curve3(poles3, weights, false, 3);
@@ -428,10 +488,18 @@ TEST(Nurbs, 3Intersect)
 
   points = Math::Intersect( curves );
   EXPECT_FALSE(points.empty());
-  EXPECT_TRUE( IsEqual( points[0].GetCurve1().GetPoint( points[0].GetParams().first ), points[0].GetCurve2().GetPoint( points[0].GetParams().second ) ) );
-  EXPECT_TRUE( IsEqual( points[1].GetCurve1().GetPoint( points[1].GetParams().first ), points[1].GetCurve2().GetPoint( points[1].GetParams().second ) ) );
-  EXPECT_TRUE( IsEqual( points[2].GetCurve1().GetPoint( points[2].GetParams().first ), points[2].GetCurve2().GetPoint( points[2].GetParams().second ) ) );
-  EXPECT_TRUE( IsEqual( points[3].GetCurve1().GetPoint( points[3].GetParams().first ), points[3].GetCurve2().GetPoint( points[3].GetParams().second ) ) );
+  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
+  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
+  points[1].GetCurve1().GetPoint( points[1].GetParams().first, point1 );
+  points[1].GetCurve2().GetPoint( points[1].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
+  points[2].GetCurve1().GetPoint( points[2].GetParams().first, point1 );
+  points[2].GetCurve2().GetPoint( points[2].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
+  points[3].GetCurve1().GetPoint( points[3].GetParams().first, point1 );
+  points[3].GetCurve2().GetPoint( points[3].GetParams().second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
   /*EXPECT_TRUE( IsEqual( points[4].GetCurve1().GetPoint( points[4].GetParams().first ), points[4].GetCurve2().GetPoint( points[4].GetParams().second ) ) );*/
 
   /// случай, когда пересечения кривых нет

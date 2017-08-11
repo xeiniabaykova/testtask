@@ -314,7 +314,7 @@ double NurbsCurve::CountWeight( size_t k, double x )  const
 //-----------------------------------------------------------------------------
 //   Вернуть точку на кривой по параметру t.
 // ---
-Point NurbsCurve::GetPoint( double t ) const
+void NurbsCurve::GetPoint( double t, Point& point ) const
 {
   if ( IsValid() )
   {
@@ -332,11 +332,10 @@ Point NurbsCurve::GetPoint( double t ) const
       resultPoint += poles[span - degree + i] * node[i] * weights[span - degree + i];
     }
 
-    return Point( resultPoint / weightNurbs );
+    point = Point( resultPoint / weightNurbs );
   }
   else
-    return
-      Point( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
+     point = Point( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
@@ -460,15 +459,15 @@ Vector NurbsCurve::CountingDer( double t, size_t der) const
 //-----------------------------------------------------------------------------
 // Вернуть производную на nurbs по параметру t.
 // ---
-Vector  NurbsCurve::GetDerivative( double t ) const
+void NurbsCurve::GetDerivative( double t, Vector& vector ) const
 {
   if ( IsValid() )
   {
     FixParameter( t );
-    return CountingDer( t, 1 );
+    vector = CountingDer( t, 1 );
   }
   else
-    return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
+    vector = Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 

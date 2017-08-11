@@ -87,7 +87,7 @@ Range GeomPolyline::GetRange() const
 //-----------------------------------------------------------------------------
 // Вернуть точку по параметру t.
 // ---
-Point GeomPolyline::GetPoint( double t ) const
+void GeomPolyline::GetPoint( double t, Point& point ) const
 {
 	if ( IsValid() ) 
 	{
@@ -97,21 +97,22 @@ Point GeomPolyline::GetPoint( double t ) const
     leftParam = static_cast<size_t>( leftParam );
     if ( leftParam >= referencedPoints.size() - 1 )
 		{
-      return  Point( referencedPoints[referencedPoints.size() - 1] );
+      point = Point( referencedPoints[referencedPoints.size() - 1] );
+      return;
 		}
 		Point startPoint( referencedPoints[leftParam] );
 		Vector derection = referencedPoints[leftParam + 1] - referencedPoints[leftParam];
-    return startPoint + derection * t;
+    point = startPoint + derection * t;
 	}
 	else
-		return Point( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
+		point = Point( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
 //-----------------------------------------------------------------------------
 // Вернуть производную полилиннии по параметру t.
 // ---
-Vector GeomPolyline::GetDerivative( double t ) const
+void GeomPolyline::GetDerivative( double t, Vector& vector ) const
 {
   if ( IsValid() )
 	{
@@ -121,12 +122,14 @@ Vector GeomPolyline::GetDerivative( double t ) const
     leftParam = static_cast<size_t>( leftParam );
     if ( leftParam >= referencedPoints.size() - 1 )
 		{
-      return  ( referencedPoints[referencedPoints.size() - 1] - referencedPoints[referencedPoints.size() - 2] );
+     vector = ( referencedPoints[referencedPoints.size() - 1] - referencedPoints[referencedPoints.size() - 2] );
+     return;
 		}
-    return ( referencedPoints[leftParam + 1] - referencedPoints[leftParam] );
+    vector = ( referencedPoints[leftParam + 1] - referencedPoints[leftParam] );
+    return;
 	}
 	else
-		return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
+		vector = Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 

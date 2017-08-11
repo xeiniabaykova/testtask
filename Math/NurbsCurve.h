@@ -47,9 +47,9 @@ public:
   NurbsCurve( const std::vector<Point>& ppoles, const std::vector<double>& wweights,
               bool iisClosed, size_t ddegree );
 
-  virtual Point               GetPoint               ( double t ) const;                    ///< Вернуть точку на кривой по параметру t.
+  virtual void               GetPoint                ( double t, Point& point ) const;                    ///< Вернуть точку на кривой по параметру t.
   virtual Range               GetRange               () const;                             ///< Вернуть границы параметра для Nurbs : [nodes[0], nodes[size]].
-  virtual Vector              GetDerivative          ( double t ) const;                   ///< Вернуть производную на nurbs по параметру t.
+  virtual void               GetDerivative           ( double t, Vector& vector ) const;                   ///< Вернуть производную на nurbs по параметру t.
   virtual Vector              Get2Derivative         ( double t ) const;                   ///< Вернуть вторую производную на nurbs по параметру t.
   virtual void                Translate              ( double xShift, double yShift );     ///< Сдвинуть по оси x на xShift, по оси y на yShift.
   virtual void                Rotate                 ( double alpha );                     ///< Повернуть относительно начала координат на угол alpha.
