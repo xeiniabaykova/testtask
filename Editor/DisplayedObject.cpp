@@ -81,12 +81,15 @@ void DisplayedObject::AddCurveToChart( QChart * chart)
 
   Math::GeomPolyline polyPoints;
   curve->GetAsPolyLine( polyPoints );
+  std::vector<Math::Point> refPoints1;
+  polyPoints.GetReferensedPoints(refPoints1);
+  for ( size_t i = 0; i < refPoints1.size(); i++ )
+    *currentseries << QPointF( refPoints1[i].GetX(), refPoints1[i].GetY() );
 
-  for ( size_t i = 0; i < polyPoints.GetReferensedPoints().size(); i++ )
-    *currentseries << QPointF( polyPoints.GetReferensedPoints()[i].GetX(), polyPoints.GetReferensedPoints()[i].GetY() );
-
-  for ( size_t i = 0; i < curve->GetReferensedPoints().size(); i++ )
-     *seriesRef << QPointF( curve->GetReferensedPoints()[i].GetX(), curve->GetReferensedPoints()[i].GetY() );
+  std::vector<Math::Point> refPoints2;
+  curve->GetReferensedPoints(refPoints2);
+  for ( size_t i = 0; i <refPoints2.size(); i++ )
+     *seriesRef << QPointF( refPoints2[i].GetX(),refPoints2[i].GetY() );
 
   seriesRef->setMarkerShape( QScatterSeries::MarkerShapeCircle );
   seriesRef->setMarkerSize( 15.0 );

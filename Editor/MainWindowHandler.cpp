@@ -334,10 +334,18 @@ void MainWindowHandler::FindIntersections()
     if ( displayedCurves[i]->GetSelectionStatus() )
       curves.push_back( displayedCurves[i]->GetPrimitive().get() );
   }
-  std::vector<Math::CurveIntersectionData> points = Math::Intersect( curves );
-  for ( size_t i = 0; i < points.size(); i++ )
+  std::map<std::pair<const Math::Curve*, const Math::Curve*>,
+          std::vector<std::pair<double, double>>> intersectionPoints;
+  Math::Intersect( curves,intersectionPoints );
+  for ( auto it = intersectionPoints.begin(); it != intersectionPoints.end(); it++ )
   {
-    CreateRefPoint( points[i].GetCurve1().GetPoint( points[i].GetParams().first ) );
+      std::vector<std::pair<double, double>> points = it->second;
+      for ( size_t i = 0; i < points.size(); i++ )
+      {
+          Math::Point point;
+          it->first.first->GetPoint( points[i].first,point );
+          CreateRefPoint( point );
+      }
   }
 }
 
