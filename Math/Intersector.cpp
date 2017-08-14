@@ -58,10 +58,11 @@ static Matrix22 ComputeHessian( const Curve& curve1, const Curve& curve2, double
   // f''t1t2 = 2 * x1'(t1) * x2'(t2) - 2*y1'(t1)*y2'(t2)
   // f''t2t2 = 2 * x2'(t2)*x2(t2) -2*x2''(t2)*(x1(t1) - x2(t2)) +2*y2'(t2)^2 +2*(y1(t1) -y2(t2))*y2''(t2)
   Matrix22 hessian;
-  hessian[0][0] = x1dd * ( x1 - x2 ) +  x1d * x1d + y1dd * ( y1 - y2 ) + y1d * y1d;
-  hessian[0][1] = - x2d * x1d - y2d * y1d;
-  hessian[1][0] = -x1d * x2d - y1d * y2d;
-  hessian[1][1] = -( x1 - x2 ) * x2dd + x2d * x2d - ( y1 - y2 ) * y2dd + y2d * y2d;
+  hessian[0][0] = x1dd * 2. * ( x1 - x2 ) + 2. * x1d * x1d + y1dd * 2. * ( y1 - y2 ) + 2. * y1d * y1d;
+  hessian[0][1] = -2. * x2d * x1d - 2. * y2d * y1d;
+  hessian[1][0] = -2. *x1d * x2d - 2. * y1d * y2d;
+  hessian[1][1] = -2. * ( x1 - x2 ) * x2dd + 2.* x2d * x2d - 2. * ( y1 - y2 ) * y2dd + 2. * y2d * y2d;
+
   return hessian;
 }
 
@@ -668,12 +669,12 @@ static void SegmentsIntersections( const std::vector<Curve*>& curves,
 //-----------------------------------------------------------------------------
 //  Найти пересечения кривых.
 // ---
-void Intersect( const std::vector<Curve*>& curves, Intersections& intersectionPoints, const double& accuracyPolyliline )
+void Intersect( const std::vector<Curve*>& curves, Intersections& resultIntersectionPoints, const double& accuracyPolyliline )
 {
+  Intersections intersectionPoints;
   SegmentsIntersections( curves, intersectionPoints, accuracyPolyliline );
   // Находим начальные значения для метода Ньютона путем пересечения опроксимирующих кривые отрезков.
 
-  Intersections resultIntersectionPoints;
   for ( auto it = intersectionPoints.begin(); it != intersectionPoints.end(); it++ )
   {
     std::vector<std::pair<double, double>> params = it->second;
