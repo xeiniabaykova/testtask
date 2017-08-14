@@ -148,6 +148,66 @@ namespace {
 //  EXPECT_TRUE(Math::IsEqual(points[7], Point(1.54444196, 6.972192526)));
 //}
 
+TEST( Intersector, PolylineNurbs )
+{
+  std::vector<Point> polyline1 = {
+    Point( 1.8630451415455242525,3.434414668547249416 ),
+    Point( 2.6740627390971694055,6.664315937940760825 ),
+    Point( 4.0206579954093344398,4.520451339915373623 ),
+    Point( 4.0359602142310642137,6.777150916784202117 ),
+    Point( 5.5508798775822496552,3.603667136812411353 ),
+    Point( 5.5355776587605207695,8.0888575458392093509 ),
+    Point( 7.1652639632746755183,4.2947813822284901519 )
+  };
+  std::vector<Point> poles = {
+    Point( 1.4192807957153787957,5.5359661495063461345 ),
+    Point( 1.9778117827084928937	,4.9294781382228487487 ),
+    Point( 2.5133894414690134411,4.746121297602256206 ),
+    Point( 2.8041315990818671544,5.2397743300423123003 ),
+    Point( 3.2938026013771999345,5.9590973201692518657 ),
+    Point( 3.7911247130833976016,6.1847672778561353368 ),
+    Point( 4.3114001530221885972,5.8039492242595196458 ),
+    Point( 4.7551644988523342761,5.3949224259520445202 ),
+    Point( 5.9257842387146144603,6.2129760225669956597 ),
+    Point( 6.2700841622035197176,6.5655853314527501396 ),
+    Point( 6.9510328997704675658,6.4245416078984476371 ),
+    Point( 7.6319816373374145257,7.5246826516220020054 ),
+  };
+  std::vector<double> weights { 1, 1, 1, 1, 1, 1, 1, 1,1,1,1,1,1,1,1, };
+
+  NurbsCurve curve1( poles, weights, false, 3 );
+  Math::GeomPolyline polyline2( polyline1 );
+  std::vector<Curve*> curves;
+  curves.push_back( &curve1 );
+  curves.push_back( &polyline2 );
+  std::map<std::pair<const Curve*, const Curve*>, std::vector<std::pair<double, double>>> intersectionPoints;
+  Math::Intersect( curves, intersectionPoints );
+
+
+}
+
+TEST( Intersector, Polyline3Lines )
+{
+  std::vector<Point> polyline1 = {
+    Point( 2.765876052027544052,5.098730606488010686 ),
+    Point( 3.607498087222647420,8.5401974612129745168 ),
+    Point( 5.0382555470543231024,5.2961918194640338342 )
+  };
+  Line line1( Point( 1.9778117827084928937, 7.1297602256699574852 ), Point( 6.5225707727620507725, 8.2016925246826506424 ) );
+  Line line2( Point( 1.648814078041316078, 5.7898448519040899285 ), Point( 7.383638928067700391, 6.9357306809487377919 ) );
+  Line line3( Point( 1.5646518745218058744, 6.5302218821729152154 ), Point( 6.5302218821729152154, 7.6375176304654432968 ) );
+
+  Math::GeomPolyline polyline2( polyline1 );
+  std::vector<Curve*> curves;
+  curves.push_back( &line1 );
+  curves.push_back( &line2 );
+  curves.push_back( &line3 );
+  curves.push_back( &polyline2 );
+  std::map<std::pair<const Curve*, const Curve*>, std::vector<std::pair<double, double>>> intersectionPoints;
+  Math::Intersect( curves, intersectionPoints );
+
+
+}
 TEST( Intersector, SameStartLineLinePoints )
 {
   std::vector<Math::Point> refPointsPolyline1 =
@@ -159,8 +219,9 @@ TEST( Intersector, SameStartLineLinePoints )
   std::vector<Curve*> curves;
   curves.push_back( &polyline1 );
   curves.push_back( &polyline2 );
-  std::vector<CurveIntersectionData> points = Math::Intersect( curves );
-  ASSERT_TRUE( points.size() == 1 );
+  std::map<std::pair<const Curve*, const Curve*>, std::vector<std::pair<double, double>>> intersectionPoints;
+  Math::Intersect( curves, intersectionPoints );
+  ASSERT_TRUE( intersectionPoints.size() == 1 );
 }
 
 TEST( Intersector, SameEndLineLinePoints )
@@ -174,13 +235,15 @@ TEST( Intersector, SameEndLineLinePoints )
   std::vector<Curve*> curves;
   curves.push_back( &polyline1 );
   curves.push_back( &polyline2 );
-  std::vector<CurveIntersectionData> points = Math::Intersect( curves );
-  ASSERT_TRUE( points.size() == 1 );
+  std::map<std::pair<const Curve*, const Curve*>, std::vector<std::pair<double, double>>> intersectionPoints;
+  Math::Intersect( curves, intersectionPoints );
+  // ASSERT_TRUE( intersectionPoints.size() == 1 );
   Point point1;
   Point point2;
-  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
-  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
-  EXPECT_TRUE( IsEqual(point1, point2) );
+  /* auto it = intersectionPoints.begin();
+  it->first.first->GetPoint( it->second[0].first, point1 );
+  it->first.second->GetPoint( it->second[0].first, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );*/
 }
 TEST( Intersector, SimpleCaseLineLine )
 {
@@ -193,18 +256,21 @@ TEST( Intersector, SimpleCaseLineLine )
   std::vector<Curve*> curves;
   curves.push_back( &polyline1 );
   curves.push_back( &polyline2 );
-  std::vector<CurveIntersectionData> points = Math::Intersect( curves );
+  std::map<std::pair<const Curve*, const Curve*>, std::vector<std::pair<double, double>>> intersectionPoints;
+  Math::Intersect( curves, intersectionPoints );
+
   Point point1;
   Point point2;
-  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
-  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
+  auto it = intersectionPoints.begin();
+  it->first.first->GetPoint( it->second[0].first, point1 );
+  it->first.second->GetPoint( it->second[0].second, point2 );
   EXPECT_TRUE( IsEqual( point1, point2 ) );
 }
 
 TEST( Intersector, SimpleCase4Line )
 {
   std::vector<Math::Point> refPointsPolyline1 =
-  { Point( 0.28, 9.25 ), Point( 2.03, 9.26) };
+  { Point( 0.28, 9.25 ), Point( 2.03, 9.26 ) };
   std::vector<Math::Point> refPointsPolyline2 =
   { Point( 0.40, 8.49 ), Point( 2.07, 8.42 ) };
   std::vector<Math::Point> refPointsPolyline3 =
@@ -220,21 +286,14 @@ TEST( Intersector, SimpleCase4Line )
   curves.push_back( &polyline2 );
   curves.push_back( &polyline3 );
   curves.push_back( &polyline4 );
-  std::vector<CurveIntersectionData> points = Math::Intersect( curves );
-  ASSERT_TRUE( points.size() == 4 );
+  std::map<std::pair<const Curve*, const Curve*>, std::vector<std::pair<double, double>>> intersectionPoints;
+  Math::Intersect( curves, intersectionPoints );
+
   Point point1;
   Point point2;
-  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
-  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
-  EXPECT_TRUE( IsEqual( point1, point2 ) );
-  points[1].GetCurve1().GetPoint( points[1].GetParams().first, point1 );
-  points[1].GetCurve2().GetPoint( points[1].GetParams().second, point2 );
-  EXPECT_TRUE( IsEqual( point1, point2 ) );
-  points[2].GetCurve1().GetPoint( points[2].GetParams().first, point1 );
-  points[2].GetCurve2().GetPoint( points[2].GetParams().second, point2 );
-  EXPECT_TRUE( IsEqual( point1, point2 ) );
-  points[3].GetCurve1().GetPoint( points[3].GetParams().first, point1 );
-  points[3].GetCurve2().GetPoint( points[3].GetParams().second, point2 );
+  auto it = intersectionPoints.begin();
+  it->first.first->GetPoint( it->second[0].first, point1 );
+  it->first.second->GetPoint( it->second[0].second, point2 );
   EXPECT_TRUE( IsEqual( point1, point2 ) );
 
 }
@@ -258,19 +317,24 @@ TEST( Intersector, SimpleCase4Line3Intersect )
   curves.push_back( &polyline2 );
   curves.push_back( &polyline3 );
   curves.push_back( &polyline4 );
-  std::vector<CurveIntersectionData> points = Math::Intersect( curves );
-  ASSERT_TRUE( points.size() == 3 );
+  std::map<std::pair<const Curve*, const Curve*>, std::vector<std::pair<double, double>>> intersectionPoints;
+  Math::Intersect( curves, intersectionPoints );
+  ASSERT_TRUE( intersectionPoints.size() == 3 );
 
   Point point1;
   Point point2;
-  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
-  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
+  auto it = intersectionPoints.begin();
+  it->first.first->GetPoint( it->second[0].first, point1 );
+  it->first.second->GetPoint( it->second[0].second, point2 );
   EXPECT_TRUE( IsEqual( point1, point2 ) );
-  points[1].GetCurve1().GetPoint( points[1].GetParams().first, point1 );
-  points[1].GetCurve2().GetPoint( points[1].GetParams().second, point2 );
+  it++;
+  it->first.first->GetPoint( it->second[0].first, point1 );
+  it->first.second->GetPoint( it->second[0].second, point2 );
   EXPECT_TRUE( IsEqual( point1, point2 ) );
-  points[2].GetCurve1().GetPoint( points[2].GetParams().first, point1 );
-  points[2].GetCurve2().GetPoint( points[2].GetParams().second, point2 );
+  it++;
+  it->first.first->GetPoint( it->second[0].first, point1 );
+  it->first.second->GetPoint( it->second[0].second, point2 );
+  EXPECT_TRUE( IsEqual( point1, point2 ) );
 
 }
 TEST( Intersector, PerpendicularLineLine )
@@ -284,12 +348,14 @@ TEST( Intersector, PerpendicularLineLine )
   std::vector<Curve*> curves;
   curves.push_back( &polyline1 );
   curves.push_back( &polyline2 );
-  std::vector<CurveIntersectionData> points = Math::Intersect( curves );
-  ASSERT_TRUE( points.size() == 1 );
+  std::map<std::pair<const Curve*, const Curve*>, std::vector<std::pair<double, double>>> intersectionPoints;
+  Math::Intersect( curves, intersectionPoints );
+  ASSERT_TRUE( intersectionPoints.size() == 1 );
   Point point1;
   Point point2;
-  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
-  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
+  auto it = intersectionPoints.begin();
+  it->first.first->GetPoint( it->second[0].first, point1 );
+  it->first.second->GetPoint( it->second[0].second, point2 );
   EXPECT_TRUE( IsEqual( point1, point2 ) );
 
 }
@@ -304,108 +370,104 @@ TEST( Intersector, NoIntersect )
   std::vector<Curve*> curves;
   curves.push_back( &polyline1 );
   curves.push_back( &polyline2 );
-  std::vector<CurveIntersectionData> points = Math::Intersect( curves );
-  ASSERT_TRUE( points.size() == 0 );
+  std::map<std::pair<const Curve*, const Curve*>, std::vector<std::pair<double, double>>> intersectionPoints;
+  Math::Intersect( curves, intersectionPoints );
 }
 TEST( Intersector, IntersectPolyline4Points )
 {
   std::vector<Math::Point> refPointsPolyline1 =
-  { Point( 1., 1. ), Point( 2., 2. ), Point(3.,1.), Point(4.,2), Point(5.,1) };
+  { Point( 1., 1. ), Point( 2., 2. ), Point( 3.,1. ), Point( 4.,2 ), Point( 5.,1 ) };
   std::vector<Math::Point> refPointsPolyline2 =
-  { Point( 1., 2. ), Point( 2., 1. ), Point(3.,2.),Point(4.,1.), Point(5.,2) };
+  { Point( 1., 2. ), Point( 2., 1. ), Point( 3.,2. ),Point( 4.,1. ), Point( 5.,2 ) };
   Math::GeomPolyline polyline1( refPointsPolyline1 );
   Math::GeomPolyline polyline2( refPointsPolyline2 );
   std::vector<Curve*> curves;
   curves.push_back( &polyline1 );
   curves.push_back( &polyline2 );
-  std::vector<CurveIntersectionData> points = Math::Intersect( curves );
-  ASSERT_TRUE( points.size() == 4 );
+  std::map<std::pair<const Curve*, const Curve*>, std::vector<std::pair<double, double>>> intersectionPoints;
+  Math::Intersect( curves, intersectionPoints );
+  ASSERT_TRUE( intersectionPoints.size() == 2 );
   Point point1;
   Point point2;
-  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
-  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
+  auto it = intersectionPoints.begin();
+  it->first.first->GetPoint( it->second[0].first, point1 );
+  it->first.second->GetPoint( it->second[0].second, point2 );
   EXPECT_TRUE( IsEqual( point1, point2 ) );
-  points[1].GetCurve1().GetPoint( points[1].GetParams().first, point1 );
-  points[1].GetCurve2().GetPoint( points[1].GetParams().second, point2 );
-  EXPECT_TRUE( IsEqual( point1, point2 ) );
-  points[2].GetCurve1().GetPoint( points[2].GetParams().first, point1 );
-  points[2].GetCurve2().GetPoint( points[2].GetParams().second, point2 );
-  EXPECT_TRUE( IsEqual( point1, point2 ) );
-  points[3].GetCurve1().GetPoint( points[3].GetParams().first, point1 );
-  points[3].GetCurve2().GetPoint( points[3].GetParams().second, point2 );
+
+  it->first.first->GetPoint( it->second[1].first, point1 );
+  it->first.second->GetPoint( it->second[1].second, point2 );
   EXPECT_TRUE( IsEqual( point1, point2 ) );
 }
-TEST(Ellipse, 2Intersect)
+TEST( Ellipse, 2Intersect )
 {
-  Math::Ellipse ellipse1(Math::Point(0., 0.), 2., 1., 0.);
-  Math::Ellipse ellipse2(Math::Point(0., 0.5), 2., 1., 0.);
-  Math::Line line(Math::Point(-2., 1.), Math::Point(0., 0.));
+  Math::Ellipse ellipse1( Math::Point( 0., 0. ), 2., 1., 0. );
+  Math::Ellipse ellipse2( Math::Point( 0., 0.5 ), 2., 1., 0. );
+  Math::Line line( Math::Point( -2., 1. ), Math::Point( 0., 0. ) );
   std::vector<Curve*> curves;
   curves.push_back( &ellipse1 );
   curves.push_back( &ellipse2 );
-  std::vector<CurveIntersectionData> points = Math::Intersect( curves );
-  EXPECT_FALSE(points.empty());
+  std::map<std::pair<const Curve*, const Curve*>, std::vector<std::pair<double, double>>> intersectionPoints;
+  Math::Intersect( curves, intersectionPoints );
+  ASSERT_TRUE( intersectionPoints.size() == 2 );
   Point point1;
   Point point2;
-  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
-  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
+  auto it = intersectionPoints.begin();
+  it->first.first->GetPoint( it->second[0].first, point1 );
+  it->first.second->GetPoint( it->second[0].second, point2 );
   EXPECT_TRUE( IsEqual( point1, point2 ) );
-  points[1].GetCurve1().GetPoint( points[1].GetParams().first, point1 );
-  points[1].GetCurve2().GetPoint( points[1].GetParams().second, point2 );
-  EXPECT_TRUE( IsEqual( point1, point2 ) );
+
 
 }
 using namespace Math;
 
-TEST(Nurbs, 1Intersect)
+TEST( Nurbs, 1Intersect )
 {
-  std::vector<Point> poles{ Point(-14., -5.), Point(-7.2, 7.), Point(-2.4, 7.), Point(3., 2.1),
-    Point(9., -4.8), Point(15., -2.), Point(19., 8.), Point(13.4, 9.3) };
-  std::vector<Point> poles2{ Point(-20, -10.), Point(1., 7.), Point(3, 7.), Point(1., 2.1),
-    Point(4., 8), Point(2., 2.), Point(6., 6.), Point(10, 4) };
-  std::vector<double> weights{ 1, 1, 1, 1, 1, 1, 1, 1 };
-  std::vector<double> nodes{ 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
-  std::vector<double> closedNodes{ -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-  NurbsCurve curve1(poles, weights, false, 3);
-  NurbsCurve curve2(poles2, weights, false, 3);
+  std::vector<Point> poles { Point( -14., -5. ), Point( -7.2, 7. ), Point( -2.4, 7. ), Point( 3., 2.1 ),
+    Point( 9., -4.8 ), Point( 15., -2. ), Point( 19., 8. ), Point( 13.4, 9.3 ) };
+  std::vector<Point> poles2 { Point( -20, -10. ), Point( 1., 7. ), Point( 3, 7. ), Point( 1., 2.1 ),
+    Point( 4., 8 ), Point( 2., 2. ), Point( 6., 6. ), Point( 10, 4 ) };
+  std::vector<double> weights { 1, 1, 1, 1, 1, 1, 1, 1 };
+  std::vector<double> nodes { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
+  std::vector<double> closedNodes { -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+  NurbsCurve curve1( poles, weights, false, 3 );
+  NurbsCurve curve2( poles2, weights, false, 3 );
   std::vector<Curve*> curves;
   curves.push_back( &curve1 );
   curves.push_back( &curve2 );
-  std::vector<CurveIntersectionData> points = Math::Intersect( curves );
-  EXPECT_FALSE( points.empty() );
+  std::map<std::pair<const Curve*, const Curve*>, std::vector<std::pair<double, double>>> intersectionPoints;
+  Math::Intersect( curves, intersectionPoints );
+  ASSERT_TRUE( intersectionPoints.size() == 1 );
   Point point1;
   Point point2;
-  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
-  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
-  EXPECT_TRUE( IsEqual( point1, point2 ) );
+  auto it = intersectionPoints.begin();
+  it->first.first->GetPoint( it->second[0].first, point1 );
+  it->first.second->GetPoint( it->second[0].second, point2 );
 
 }
 
-TEST(Nurbs, 2Intersect)
+TEST( Nurbs, 2Intersect )
 {
-  std::vector<Point> poles{ Point(-14., -5.), Point(-7.2, 7.), Point(-2.4, 7.), Point(3., 2.1),
-    Point(9., -4.8), Point(15., -2.), Point(19., 8.), Point(13.4, 9.3) };
-  std::vector<Point> poles2{ Point(-20, -10.), Point(1., 7.), Point(3, 7.), Point(1., 2.1),
-    Point(4., 8), Point(2., 2.), Point(6., 6.), Point(10, 4) };
-  std::vector<double> weights{ 1, 2, 1, 2, 1, 4, 1, 6 };
-  std::vector<double> nodes{ 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
-  std::vector<double> closedNodes{ -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-  NurbsCurve curve1(poles, weights, false, 3);
-  NurbsCurve curve2(poles2, weights, false, 3);
+  std::vector<Point> poles { Point( -14., -5. ), Point( -7.2, 7. ), Point( -2.4, 7. ), Point( 3., 2.1 ),
+    Point( 9., -4.8 ), Point( 15., -2. ), Point( 19., 8. ), Point( 13.4, 9.3 ) };
+  std::vector<Point> poles2 { Point( -20, -10. ), Point( 1., 7. ), Point( 3, 7. ), Point( 1., 2.1 ),
+    Point( 4., 8 ), Point( 2., 2. ), Point( 6., 6. ), Point( 10, 4 ) };
+  std::vector<double> weights { 1, 2, 1, 2, 1, 4, 1, 6 };
+  std::vector<double> nodes { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
+  std::vector<double> closedNodes { -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+  NurbsCurve curve1( poles, weights, false, 3 );
+  NurbsCurve curve2( poles2, weights, false, 3 );
 
   std::vector<Curve*> curves;
   curves.push_back( &curve1 );
   curves.push_back( &curve2 );
-  std::vector<CurveIntersectionData> points = Math::Intersect( curves );
-  EXPECT_FALSE( points.empty() );
+  std::map<std::pair<const Curve*, const Curve*>, std::vector<std::pair<double, double>>> intersectionPoints;
+  Math::Intersect( curves, intersectionPoints );
+  ASSERT_TRUE( intersectionPoints.size() == 1 );
   Point point1;
   Point point2;
-  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
-  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
-  EXPECT_TRUE( IsEqual( point1, point2 ) );
-  points[1].GetCurve1().GetPoint( points[1].GetParams().first, point1 );
-  points[1].GetCurve2().GetPoint( points[1].GetParams().second, point2 );
-  EXPECT_TRUE( IsEqual( point1, point2 ) );
+  auto it = intersectionPoints.begin();
+  it->first.first->GetPoint( it->second[0].first, point1 );
+  it->first.second->GetPoint( it->second[0].second, point2 );
 }
 
 TEST( Intersector, NullCurves )
@@ -415,22 +477,23 @@ TEST( Intersector, NullCurves )
   std::vector<Curve*> curves;
   curves.push_back( &curve1 );
   curves.push_back( &curve2 );
-  std::vector<CurveIntersectionData> points = Math::Intersect( curves );
-  EXPECT_TRUE( points.empty() );
+  std::map<std::pair<const Curve*, const Curve*>, std::vector<std::pair<double, double>>> intersectionPoints;
+  Math::Intersect( curves, intersectionPoints );
+  ASSERT_TRUE( intersectionPoints.size() == 0 );
 }
 
 TEST( Intersector, IntersectLinesPerpendicular )
 {
-  Line line1( Point(0.0, 0.0), Point(0.0, 4.0) );
+  Line line1( Point( 0.0, 0.0 ), Point( 0.0, 4.0 ) );
   Line line2( Point( -3.0, 2.0 ), Point( 3.0, 2.0 ) );
   Point newPoint;
   IntersectLines( line1, line2, newPoint );
-  EXPECT_TRUE( IsEqual( newPoint ,Point(0.0, 2.0)) );
+  EXPECT_TRUE( IsEqual( newPoint, Point( 0.0, 2.0 ) ) );
   Line line3( Point( -3.0, 2.0 ), Point( 3.0, 2.0 ) );
   Line line4( Point( 0.0, 0.0 ), Point( 0.0, 4.0 ) );
   IntersectLines( line1, line2, newPoint );
   EXPECT_TRUE( IsEqual( newPoint, Point( 0.0, 2.0 ) ) );
-  
+
 }
 TEST( Intersector, IntersectLineCircle )
 {
@@ -440,75 +503,65 @@ TEST( Intersector, IntersectLineCircle )
   std::vector<Curve*> curves;
   curves.push_back( &line1 );
   curves.push_back( &ellipse1 );
-  std::vector<CurveIntersectionData> points = Math::Intersect( curves );
-  EXPECT_TRUE( IsEqual( newPoint, Point( 0.0, 2.0 ) ) );
+  std::map<std::pair<const Curve*, const Curve*>, std::vector<std::pair<double, double>>> intersectionPoints;
+  Math::Intersect( curves, intersectionPoints );
+  ASSERT_TRUE( intersectionPoints.size() == 1 );
+  Point point1;
+  Point point2;
+  auto it = intersectionPoints.begin();
+  it->first.first->GetPoint( it->second[0].first, point1 );
+  it->first.second->GetPoint( it->second[0].second, point2 );
 
 }
-TEST(Nurbs, 3Intersect)
+TEST( Nurbs, 3Intersect )
 {
-  std::vector<Point> poles{
-    Point(0.185, 8.7904), Point(0.5131, 7.908), Point(1.238, 7.350), Point(1.630, 7.223), Point(2.103,7.135), Point(2.463, 7.1939),
-    Point(2.614, 7.4289), Point(2.6141, 7.722), Point(2.468, 8.163), Point(2.307, 8.85259),  Point(2.195, 8.7218), Point(2.0231, 8.976),Point(1.845, 9.1429),
-    Point(1.598, 9.260), Point(1.260, 9.36), Point(0.5507, 9.3682),Point(0.235, 9.2507) };
+  std::vector<Point> poles {
+    Point( 0.185, 8.7904 ), Point( 0.5131, 7.908 ), Point( 1.238, 7.350 ), Point( 1.630, 7.223 ), Point( 2.103,7.135 ), Point( 2.463, 7.1939 ),
+    Point( 2.614, 7.4289 ), Point( 2.6141, 7.722 ), Point( 2.468, 8.163 ), Point( 2.307, 8.85259 ),  Point( 2.195, 8.7218 ), Point( 2.0231, 8.976 ),Point( 1.845, 9.1429 ),
+    Point( 1.598, 9.260 ), Point( 1.260, 9.36 ), Point( 0.5507, 9.3682 ),Point( 0.235, 9.2507 ) };
 
-  std::vector<Point> poles2{ Point(1.598, 9.65), Point(1.367, 8.584), Point(1.636, 8.075), Point(2.635, 8.839),
-    Point(1.786, 9.857) };
+  std::vector<Point> poles2 { Point( 1.598, 9.65 ), Point( 1.367, 8.584 ), Point( 1.636, 8.075 ), Point( 2.635, 8.839 ),
+    Point( 1.786, 9.857 ) };
 
-  std::vector<Point> poles3{
-    Point(0.038, 6.909),  Point(1.012, 8.633),
-    Point(1.147, 8.300), Point(0.9645, 7.1057), Point(1.464, 8.026), Point(1.437, 6.518),  Point(1.888, 7.879) };
+  std::vector<Point> poles3 {
+    Point( 0.038, 6.909 ),  Point( 1.012, 8.633 ),
+    Point( 1.147, 8.300 ), Point( 0.9645, 7.1057 ), Point( 1.464, 8.026 ), Point( 1.437, 6.518 ),  Point( 1.888, 7.879 ) };
 
-  std::vector<Point> poles4{ Point(10.598, 5.65), Point(10.367, 8.584), Point(13.636, 8.075), Point(11.635, 8.839),
-    Point(11.786, 9.857) };
+  std::vector<Point> poles4 { Point( 10.598, 5.65 ), Point( 10.367, 8.584 ), Point( 13.636, 8.075 ), Point( 11.635, 8.839 ),
+    Point( 11.786, 9.857 ) };
 
 
-  std::vector<double> weights{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1 ,1, 1, 1, 1, 1, 1 };
-  NurbsCurve curve1(poles, weights, true, 3);
-  NurbsCurve curve2(poles2, weights, false, 4);
+  std::vector<double> weights { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1 ,1, 1, 1, 1, 1, 1 };
+  NurbsCurve curve1( poles, weights, true, 3 );
+  NurbsCurve curve2( poles2, weights, false, 4 );
 
 
   std::vector<Curve*> curves;
   curves.push_back( &curve1 );
   curves.push_back( &curve2 );
-  std::vector<CurveIntersectionData> points = Math::Intersect( curves );
-  EXPECT_FALSE(points.empty());
+  std::map<std::pair<const Curve*, const Curve*>, std::vector<std::pair<double, double>>> intersectionPoints;
+  Math::Intersect( curves, intersectionPoints );
+  ASSERT_TRUE( intersectionPoints.size() == 1 );
   Point point1;
   Point point2;
-  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
-  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
-  EXPECT_TRUE( IsEqual( point1, point2 ) );
-  points[1].GetCurve1().GetPoint( points[1].GetParams().first, point1 );
-  points[1].GetCurve2().GetPoint( points[1].GetParams().second, point2 );
-  EXPECT_TRUE( IsEqual( point1, point2 ) );
+  auto it = intersectionPoints.begin();
+  it->first.first->GetPoint( it->second[0].first, point1 );
+  it->first.second->GetPoint( it->second[0].second, point2 );
   curves.clear();
 
-  NurbsCurve curve3(poles3, weights, false, 3);
+  NurbsCurve curve3( poles3, weights, false, 3 );
   curves.push_back( &curve1 );
   curves.push_back( &curve3 );
 
-  points = Math::Intersect( curves );
-  EXPECT_FALSE(points.empty());
-  points[0].GetCurve1().GetPoint( points[0].GetParams().first, point1 );
-  points[0].GetCurve2().GetPoint( points[0].GetParams().second, point2 );
-  EXPECT_TRUE( IsEqual( point1, point2 ) );
-  points[1].GetCurve1().GetPoint( points[1].GetParams().first, point1 );
-  points[1].GetCurve2().GetPoint( points[1].GetParams().second, point2 );
-  EXPECT_TRUE( IsEqual( point1, point2 ) );
-  points[2].GetCurve1().GetPoint( points[2].GetParams().first, point1 );
-  points[2].GetCurve2().GetPoint( points[2].GetParams().second, point2 );
-  EXPECT_TRUE( IsEqual( point1, point2 ) );
-  points[3].GetCurve1().GetPoint( points[3].GetParams().first, point1 );
-  points[3].GetCurve2().GetPoint( points[3].GetParams().second, point2 );
-  EXPECT_TRUE( IsEqual( point1, point2 ) );
-  /*EXPECT_TRUE( IsEqual( points[4].GetCurve1().GetPoint( points[4].GetParams().first ), points[4].GetCurve2().GetPoint( points[4].GetParams().second ) ) );*/
+  intersectionPoints.clear();
+  Math::Intersect( curves, intersectionPoints );
+  ASSERT_TRUE( intersectionPoints.size() == 2 );
+  it = intersectionPoints.begin();
+  it->first.first->GetPoint( it->second[0].first, point1 );
+  it->first.second->GetPoint( it->second[0].second, point2 );
 
-  /// случай, когда пересечения кривых нет
-  NurbsCurve curve4(poles4, weights, false, 3);
-  curves.clear();
-  curves.push_back( &curve1 );
-  curves.push_back( &curve4 );
-  points = Math::Intersect( curves );
-  EXPECT_TRUE(points.empty());
+  /// СЃР»СѓС‡Р°Р№, РєРѕРіРґР° РїРµСЂРµСЃРµС‡РµРЅРёСЏ РєСЂРёРІС‹С… РЅРµС‚
+  NurbsCurve curve4( poles4, weights, false, 3 );
 
 
 }
