@@ -7,7 +7,8 @@ BoundingBox::BoundingBox( const Curve& curve )
 {
   GeomPolyline polyline;
   curve.GetAsPolyLine( polyline );
-  const std::vector<Point> points = polyline.GetReferensedPoints();
+  std::vector<Point> points;
+  polyline.GetReferensedPoints( points );
   double minX = std::numeric_limits<double>::max();
   double minY = std::numeric_limits<double>::max();
   double maxX = std::numeric_limits<double>::min();

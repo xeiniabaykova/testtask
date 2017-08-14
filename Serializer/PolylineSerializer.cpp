@@ -39,7 +39,8 @@ std::unique_ptr<Math::Curve> PolylineSerializer::Read( std::istream& theInput )
   const Math::GeomPolyline* nurbsCurve =  static_cast<const Math::GeomPolyline*>( &theCurve );
   if ( nurbsCurve != nullptr )
   {
-    auto points = nurbsCurve->GetReferensedPoints();
+    std::vector<Math::Point> points;
+    nurbsCurve->GetReferensedPoints( points );
     WriteSize_t( theOutput, points.size() );
     for ( size_t i = 0; i < points.size(); i++ )
     {
