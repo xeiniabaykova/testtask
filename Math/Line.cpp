@@ -96,9 +96,9 @@ void Line::GetDerivative( double, Vector& vector ) const
 //-----------------------------------------------------------------------------
 // Верунуть вторую производную по парметру t.
 // ---
-Vector Line::Get2Derivative( double ) const
+void Line::Get2Derivative( double, Vector& vector ) const
 {
-  return Vector( 0.0, 0.0 );
+  vector = Vector( 0.0, 0.0 );
 }
 
 
@@ -222,16 +222,23 @@ double Line::DistanceToPoint( Point point ) const
 
 }
 
-
+//-----------------------------------------------------------------------------
+//  Вернуть тип кривой.
+// ---
 Curve::CurveType Line::GetType() const
 {
   return Curve::LineType;
 }
 
+
+//-----------------------------------------------------------------------------
+//  Проверить отрезки на эквивалентность.
+// ---
 bool Line::operator==(const Line& obj) const
 {
   return IsEqual(startPoint, obj.GetStartPoint()) && IsEqual(endPoint, obj.GetEndPoint());
 }
+
 
 //-----------------------------------------------------------------------------
 //  Вернуть расстояние между отрезками.
@@ -252,6 +259,8 @@ double Distance( const Line& line1, const Line& line2, Point& closestPoint )
 // ---
 double Line::GetTFromPoint( const Point& point ) const
 {
+	if ( !IsPointInLine( point ) )
+		return -1;
   Vector vector;
   GetDerivative( 0., vector );
   return ( point.GetX() - startPoint.GetX() ) / vector.GetX();

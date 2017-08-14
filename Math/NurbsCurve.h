@@ -47,37 +47,37 @@ public:
   NurbsCurve( const std::vector<Point>& ppoles, const std::vector<double>& wweights,
               bool iisClosed, size_t ddegree );
 
-  virtual void               GetPoint                ( double t, Point& point ) const;                    ///< Вернуть точку на кривой по параметру t.
-  virtual Range               GetRange               () const;                             ///< Вернуть границы параметра для Nurbs : [nodes[0], nodes[size]].
-  virtual void               GetDerivative           ( double t, Vector& vector ) const;                   ///< Вернуть производную на nurbs по параметру t.
-  virtual Vector              Get2Derivative         ( double t ) const;                   ///< Вернуть вторую производную на nurbs по параметру t.
-  virtual void                Translate              ( double xShift, double yShift );     ///< Сдвинуть по оси x на xShift, по оси y на yShift.
-  virtual void                Rotate                 ( double alpha );                     ///< Повернуть относительно начала координат на угол alpha.
-  virtual void                GetReferensedPoints    ( std::vector<Point>& referensedPoints ) const; ///< Вернуть опорные точки, использованные для построения nurbs - кривой
-  virtual void                Scale                  ( double XScaling, double YScaling ); ///< Масштабировать на xScaling по оси x, на yScaling по оси у.
-  std::vector<Point>          GetPoles               () const;                             ///< Вернуть опорные точки.
-  std::vector<double>         GetWeights             () const;                             ///< Вернуть веса опорных точек.
-  std::vector<double>         GetNodes               () const;                             ///< Вернуть границы параметра t для базисных полиномов.
-  virtual bool                IsClosed               () const;                             ///< Вернуть замкнутость Nurbs - кривой.
-  size_t                      Degree                 () const;                             ///< Вернуть степень Nurbs - кривой.
-  std::string                 GetName                () const;                             ///< Вернуть имя, используемое для записи примитива в файл.
-  bool                        IsValid                () const;                             ///< Проверить правильность кривой.
-  virtual CurveType           GetType                () const;
+  virtual void      GetPoint            ( double t, Point& point ) const;     ///< Вернуть точку на кривой по параметру t.
+  virtual Range     GetRange            () const;                             ///< Вернуть границы параметра для Nurbs : [nodes[0], nodes[size]].
+  virtual void      GetDerivative       ( double t, Vector& vector ) const;   ///< Вернуть производную на nurbs по параметру t.
+  virtual void      Get2Derivative      ( double t, Vector& vector ) const;                   ///< Вернуть вторую производную на nurbs по параметру t.
+  virtual void      Translate           ( double xShift, double yShift );     ///< Сдвинуть по оси x на xShift, по оси y на yShift.
+  virtual void      Rotate              ( double alpha );                     ///< Повернуть относительно начала координат на угол alpha.
+  virtual void      GetReferensedPoints ( std::vector<Point>& referensedPoints ) const; ///< Вернуть опорные точки, использованные для построения nurbs - кривой
+  virtual void      Scale               ( double XScaling, double YScaling ); ///< Масштабировать на xScaling по оси x, на yScaling по оси у.
+  void              GetPoles            ( std::vector<Point>& poles ) const;     ///< Вернуть опорные точки.
+  void              GetWeights          ( std::vector<double>& theWeights) const; ///< Вернуть веса опорных точек.
+  void              GetNodes            ( std::vector<double>& theNodes ) const; ///< Вернуть границы параметра t для базисных полиномов.
+  virtual bool      IsClosed            () const;                             ///< Вернуть замкнутость Nurbs - кривой.
+  size_t            Degree              () const;                             ///< Вернуть степень Nurbs - кривой.
+  std::string       GetName             () const;                             ///< Вернуть имя, используемое для записи примитива в файл.
+  bool              IsValid             () const;                             ///< Проверить правильность кривой.
+  virtual CurveType GetType             () const;
 private:
-  std::vector<double>              BasicFunctions     ( size_t i, double t ) const;  ///< Подсчитать значения базисных функций на отрезке x - degree.
-  Vector                           CountingDer        ( double t, size_t der ) const;  ///<  Посдчитать производную порядка der.
+  void   BasicFunctions     ( size_t i, double t, std::vector<double>& valuesBasicFunctions ) const;  ///< Подсчитать значения базисных функций на отрезке x - degree.
+  Vector CountingDer        ( double t, size_t der ) const;  ///<  Посдчитать производную порядка der.
   /// Получить производные от базисных функций, помноженные на соответсвующие точки кривой.
-  std::vector<Point>               PointDers          ( double t , size_t der, const std::vector<std::vector<double>>& ders ) const;
+  void   PointDers          ( double t , size_t der, const std::vector<std::vector<double>>& ders, std::vector<Point>& points ) const;
    ///<  Получить производные от базисных функций, помноженные на соответсвующие веса кривой.
-  std::vector<double>              WeightDers         ( double t, size_t der, const std::vector<std::vector<double>>& ders ) const;
-  std::vector<std::vector<double>> BasicTriangleNodes ( size_t i, double t ) const; /// Подсчитать полный треугольник базисных функций для отрезка i, и параметра t.
-  double                           CountWeight        ( size_t k , double t ) const; ///< Подсчитать значения базисных функций, умноженных на вес на отрезке x - degree.
-  size_t                           FindSpan           ( double x ) const;  ///< Найти интервал ненулевых базисных функций для парметра t.
+  void   WeightDers         ( double t, size_t der, const std::vector<std::vector<double>>& ders, std::vector<double>& result ) const;
+  void   BasicTriangleNodes ( size_t i, double t, std::vector<std::vector<double>>& triangleNodes ) const; /// Подсчитать полный треугольник базисных функций для отрезка i, и параметра t.
+  double CountWeight        ( size_t k , double t ) const; ///< Подсчитать значения базисных функций, умноженных на вес на отрезке x - degree.
+  size_t FindSpan           ( double x ) const;  ///< Найти интервал ненулевых базисных функций для парметра t.
   /**  \brief Подсчитать массив производных  от базисной функции для интервала [i-degree, i] и значения парметра x, где derivativeOrder - порядок производной.
        Возвращаемый параметр - массив ders - где ders[k][j], где k - порядок производной, j - параметр ненулевого интервала от 0 до degree, для которого вычислена производная.
   */
   //---
-  void                            ComputeBasicFunctionD( const double& t, const size_t& i, const size_t& derivativeOrder, std::vector<std::vector<double>>& ders) const;
+  void ComputeBasicFunctionD( const double& t, const size_t& i, const size_t& derivativeOrder, std::vector<std::vector<double>>& ders) const;
 };
 }
 

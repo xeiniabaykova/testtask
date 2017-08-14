@@ -212,7 +212,7 @@ void Ellipse::GetDerivative( double t, Vector& theVector ) const
 //-----------------------------------------------------------------------------
 //  Вернуть вторую производную эллипса по параметру t.
 // ---
-Vector Ellipse::Get2Derivative( double t ) const
+void Ellipse::Get2Derivative( double t, Vector& vector ) const
 {
   if ( IsValid() )
 	{
@@ -220,10 +220,10 @@ Vector Ellipse::Get2Derivative( double t ) const
       Vector vector( -r1 * cos(t), -r2 * sin(t) );
       double x = vector.GetX() * cos( alphaMajorAxis ) + vector.GetY() * cos( alphaMinorAxis );
       double y = vector.GetX() * sin( alphaMajorAxis ) + vector.GetY() * sin( alphaMinorAxis );
-      return Vector( x, y );
+      vector= Vector( x, y );
 	}
   else
-    Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
+    vector =Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 

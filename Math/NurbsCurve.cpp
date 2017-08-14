@@ -161,7 +161,8 @@ void NurbsCurve::ComputeBasicFunctionD( const double& t, const size_t& i, const 
   for ( size_t k = 0; k < ders.size(); k++ )
     ders[k].resize( degree + 1 );
 
-   std::vector<std::vector<double>> triangleNodes = BasicTriangleNodes( i, t );
+  std::vector<std::vector<double>> triangleNodes;
+  BasicTriangleNodes( i, t, triangleNodes );
   // хранение двух наиболее исользуемых столбцов
   std::vector<std::vector<double>> tempders;
   tempders.resize( 2 );
@@ -230,9 +231,8 @@ void NurbsCurve::ComputeBasicFunctionD( const double& t, const size_t& i, const 
 //-----------------------------------------------------------------------------
 //  Подсчитать полный треугольник базисных функций для отрезка i, и параметра t.
 // ---
-std::vector<std::vector<double>> NurbsCurve::BasicTriangleNodes( size_t i, double t ) const
+void NurbsCurve::BasicTriangleNodes( size_t i, double t, std::vector<std::vector<double>>& triangleNodes ) const
 {
-  std::vector<std::vector<double>> triangleNodes; // храниение треугольника базисных функций. triangleNodes[i][j] - N_(i,j)(x)
   triangleNodes.resize( degree + 1 );
   for ( size_t k = 0; k < triangleNodes.size(); k++ )
     triangleNodes[k].resize( degree + 1 );
@@ -259,7 +259,6 @@ std::vector<std::vector<double>> NurbsCurve::BasicTriangleNodes( size_t i, doubl
     }
     triangleNodes[j][j] = saved; // отдельно обработываем случай диагонального элемента
   }
-  return triangleNodes;
 }
 
 
@@ -301,7 +300,8 @@ void NurbsCurve::Scale( double XScaling, double YScaling )
 double NurbsCurve::CountWeight( size_t k, double x )  const
 {
   double w = 0.0;
-  std::vector<double> node = BasicFunctions( k, x );
+  std::vector<double> node;
+  BasicFunctions( k, x, node );
 
   for ( size_t i = 0; i <= degree; i++ )
   {
@@ -325,7 +325,8 @@ void NurbsCurve::GetPoint( double t, Point& point ) const
     double weightNurbs = CountWeight (span, t );
     Point resultPoint( 0.0, 0.0 );
     // находим значения базисных функций, принадлежащих этому интервалу
-    std::vector<double> node = BasicFunctions( span, t );
+	std::vector<double> node;
+	BasicFunctions( span, t, node );
    // находим точку по определению nurbs - кривой
     for ( size_t i = 0; i <= degree; i++ )
     {
@@ -339,22 +340,21 @@ void NurbsCurve::GetPoint( double t, Point& point ) const
 }
 
 
-
 //-----------------------------------------------------------------------------
 //   Подсчитать значения базисных функций на отрезке x - degree.
 // ---
-std::vector<double> NurbsCurve::BasicFunctions( size_t i, double x) const
+void NurbsCurve::BasicFunctions( size_t i, double x, std::vector<double>& valuesBasicFunctions ) const
 {
   // cчитаем вектор значений базисных функций от x - degree до x по формуле:
   // triangleNodes_(i - j, r) = left[j + 1]/(right[degree - j]+ left[j + 1]) * triangleNodes_(i-j, r - 1) + (3)
   //  right[j - 1]/(right[j - 1]+ left[degree -j + 1]) * triangleNodes_(i - j + 1, r - 1)
   // считаем ненулевые базисные функции по формуле :
-  std::vector<double> N( degree + 1, 0. );
+  valuesBasicFunctions.resize( degree + 1, 0. );
   std::vector<double> left( degree + 1, 0. );
   std::vector<double> right( degree + 1, 0. );
   // по определению, N_(i,0) = 1, если nodes[i] =< x =< nodes[i+1]
   // N_(i,0) = 0, иначе
-  N[0] = 1.0;
+  valuesBasicFunctions[0] = 1.0;
 
   // считаем поочередно каждый слой треугольника базисных функций
   for ( size_t j = 1; j <= degree; j++ )
@@ -365,13 +365,12 @@ std::vector<double> NurbsCurve::BasicFunctions( size_t i, double x) const
     // счтаем поочередно все базисные функции на слое
     for ( size_t k = 0; k < j; k++ )
     {
-      double temp = N[k] / ( right[k + 1] + left[j - k] );
-      N[k] = saved + right[k + 1] * temp;
+      double temp = valuesBasicFunctions[k] / ( right[k + 1] + left[j - k] );
+	  valuesBasicFunctions[k] = saved + right[k + 1] * temp;
       saved = left[j - k] * temp;
     }
-    N[j] = saved; // последнюю базисную функцию дописываем отдельно
+	valuesBasicFunctions[j] = saved; // последнюю базисную функцию дописываем отдельно
   }
-  return N;
 }
 
 
@@ -380,12 +379,11 @@ std::vector<double> NurbsCurve::BasicFunctions( size_t i, double x) const
 //  Производные от базисных функций, помноженные на соответсвующие точки кривой.
 // Возвращается ветор, такой что, vector[k] - это опорные точки ненулевого интервала, помноженые на вес, помноженые на k-ю производную базисных функций
 // ---
-std::vector<Point> NurbsCurve::PointDers( double t, size_t der, const std::vector<std::vector<double>>& ders ) const
+void NurbsCurve::PointDers( double t, size_t der, const std::vector<std::vector<double>>& ders, std::vector<Point>& points ) const
 {
   FixParameter( t );
   // находим ненулевой промежуток, на котором определены базисные функции
   size_t span = FindSpan( t );
-  std::vector<Point> points;
 
   // проходим по всему вектору производных
   for ( size_t j = 0; j <= der; j++ )
@@ -398,7 +396,6 @@ std::vector<Point> NurbsCurve::PointDers( double t, size_t der, const std::vecto
     }
     points.push_back( resultPoint );
   }
-  return points;
 }
 
 
@@ -407,12 +404,12 @@ std::vector<Point> NurbsCurve::PointDers( double t, size_t der, const std::vecto
 //  Производные от базисных функций, помноженные на соответсвующие веса кривой.
 //  Возвращается ветор, такой что, vector[k] - веса, принадлежащие ненулевому интервалу, помноженые на k-ю производную базисных функций.
 // ---
-std::vector<double> NurbsCurve::WeightDers( double t, size_t der, const std::vector<std::vector<double>>& ders ) const
+void NurbsCurve::WeightDers( double t, size_t der, const std::vector<std::vector<double>>& ders, std::vector<double>& result ) const
 {
   FixParameter( t );
   size_t span = FindSpan( t );
     // находим ненулевой промежуток, на котором определены базисные функции
-  std::vector<double> result;
+ ;
   // проходим по всему вектору производных
   for ( size_t j = 0; j <= der; j++ )
   {
@@ -424,7 +421,6 @@ std::vector<double> NurbsCurve::WeightDers( double t, size_t der, const std::vec
     }
     result.push_back( resultWeight );
   }
-  return result;
 }
 
 
@@ -439,9 +435,11 @@ Vector NurbsCurve::CountingDer( double t, size_t der) const
   std::vector<std::vector<double>> ders;
   ComputeBasicFunctionD( t, span, der, ders );
   // Считаем производные от базисных функций, домноженных на веса
-  std::vector<double> weight = WeightDers( t, der, ders );
+  std::vector<double> weight;
+  WeightDers( t, der, ders, weight );
    // Считаем производные от базисных функций, домноженных на веса и соотвествующие точки
-  std::vector<Point> pointd = PointDers( t, der, ders );
+  std::vector<Point> pointd;
+  PointDers( t, der, ders, pointd );
   Point resultPoint;
 
   std::vector<Point> dtempders( der  + 1, Point(0.,0.) ); // вектор для хранения производных до порядка der
@@ -474,15 +472,15 @@ void NurbsCurve::GetDerivative( double t, Vector& vector ) const
 //-----------------------------------------------------------------------------
 //  Вернуть вторую производную на nurbs по параметру t.
 // ---
-Vector  NurbsCurve::Get2Derivative( double t ) const
+void NurbsCurve::Get2Derivative( double t , Vector& vector ) const
 {
   if ( IsValid() )
   {
     FixParameter( t );
-    return  CountingDer( t, 2 );
+    vector =  CountingDer( t, 2 );
   }
   else
-    return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
+    vector = Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 
@@ -525,9 +523,9 @@ bool NurbsCurve::IsValid() const
 //-----------------------------------------------------------------------------
 // Вернуть опорные точки.
 // ---
-std::vector<Point> NurbsCurve::GetPoles() const
+void NurbsCurve::GetPoles( std::vector<Point>& thePoles) const
 {
-  return poles;
+	thePoles = poles;
 }
 
 
@@ -535,18 +533,18 @@ std::vector<Point> NurbsCurve::GetPoles() const
 //-----------------------------------------------------------------------------
 //  Вернуть веса опорных точек.
 // ---
-std::vector<double> NurbsCurve::GetWeights() const
+void NurbsCurve::GetWeights( std::vector<double>& theWeights ) const
 {
-  return weights;
+	theWeights = weights;
 }
 
 
 //-----------------------------------------------------------------------------
 // Вернуть границы параметра t для базисных полиномов.
 // ---
-std::vector<double> NurbsCurve::GetNodes() const
+void NurbsCurve::GetNodes( std::vector<double>& theNodes ) const
 {
-  return nodes;
+  theNodes = nodes;
 }
 
 
@@ -575,7 +573,9 @@ void NurbsCurve::GetReferensedPoints( std::vector<Point>& referensedPoints ) con
   referensedPoints = poles;
 }
 
-
+//-----------------------------------------------------------------------------
+//  Вернуть тип кривой.
+// ---
 Curve::CurveType NurbsCurve::GetType() const
 {
   return Curve::NurbsType;

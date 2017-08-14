@@ -22,7 +22,7 @@ namespace Math {
 using Matrix22 = std::array<std::array<double, 2>, 2>;
 
 //-----------------------------------------------------------------------------
-//  Найти значение матрицы вторых производных (матрицы Гессе) для квадрата расстояния между кривыми при параметрах (t1, t2).
+// Найти значение матрицы вторых производных (матрицы Гессе) для квадрата расстояния между кривыми при параметрах (t1, t2).
 // ---
 static Matrix22 ComputeHessian( const Curve& curve1, const Curve& curve2, double t1, double t2 )
 {
@@ -36,7 +36,8 @@ static Matrix22 ComputeHessian( const Curve& curve1, const Curve& curve2, double
   const auto x1d = t1PointD.GetX();
   const auto y1d = t1PointD.GetY();
 
-  Vector t1Point2D = curve1.Get2Derivative( t1 );
+  Vector t1Point2D;
+  curve1.Get2Derivative( t1, t1Point2D );
   const auto x1dd = t1Point2D.GetX();
   const auto y1dd = t1Point2D.GetY();
 
@@ -50,9 +51,10 @@ static Matrix22 ComputeHessian( const Curve& curve1, const Curve& curve2, double
   const auto x2d = t2PointD.GetX();
   const auto y2d = t2PointD.GetY();
 
-  const auto t2Point2D = curve2.Get2Derivative( t2 );
-  const auto x2dd = curve2.Get2Derivative( t2 ).GetX();
-  const auto y2dd = curve2.Get2Derivative( t2 ).GetY();
+  Vector t2Point2D;
+  curve2.Get2Derivative( t2, t2Point2D );
+  const auto x2dd = t2Point2D.GetX();
+  const auto y2dd = t2Point2D.GetY();
   // f(t1, t2) = (x1(t1) - x2(t2))^2 + (y1(t1) - y2(t2))^2
   // f''t1t1 = x1''(t1) * 2(x1(t1) - x2(t2)) + 2 * x1'(t1) + 2 * y1'(t1) + y1''(t1) * 2(y1(t1) - y2(t2))
   // f''t1t2 = 2 * x1'(t1) * x2'(t2) - 2*y1'(t1)*y2'(t2)
@@ -62,13 +64,12 @@ static Matrix22 ComputeHessian( const Curve& curve1, const Curve& curve2, double
   hessian[0][1] = -2. * x2d * x1d - 2. * y2d * y1d;
   hessian[1][0] = -2. *x1d * x2d - 2. * y1d * y2d;
   hessian[1][1] = -2. * ( x1 - x2 ) * x2dd + 2.* x2d * x2d - 2. * ( y1 - y2 ) * y2dd + 2. * y2d * y2d;
-
   return hessian;
 }
 
 
 //-----------------------------------------------------------------------------
-//  Вычислить обратную матрицу и записать ее вместо исходной. Вернуть ссылку на неё же. Предполагается, что матрица невырождена.
+// Вычислить обратную матрицу и записать ее вместо исходной. Вернуть ссылку на неё же. Предполагается, что матрица невырождена.
 // ---
 static Matrix22& InverseMatrix( Matrix22& matrix )
 {
@@ -83,7 +84,7 @@ static Matrix22& InverseMatrix( Matrix22& matrix )
 
 
 //-----------------------------------------------------------------------------
-//  Вернуть градиент для квадрата расстояния между кривыми в заданной точке.
+// Вернуть градиент для квадрата расстояния между кривыми в заданной точке.
 // ---
 static Vector Gradient( const Curve& curve1, const Curve& curve2, const double& t1, const double& t2 )
 {
@@ -105,7 +106,7 @@ static Vector Gradient( const Curve& curve1, const Curve& curve2, const double& 
 
 
 //-----------------------------------------------------------------------------
-//  Вернуть расстояние между двумя точками в параметрическом пространстве.
+// Вернуть расстояние между двумя точками в параметрическом пространстве.
 // ---
 static double Distance( const double& paramCurve11, const double& paramCurve12, const double& paramCurve21, const double& paramCurve22 )
 {
@@ -114,10 +115,10 @@ static double Distance( const double& paramCurve11, const double& paramCurve12, 
 
 
 //-----------------------------------------------------------------------------
-//  Запустить метод Ньютона для поиска локального минимума квадрата расстояния между кривыми curve1, curve2
-//  с начальными значениями параметров кривых t1,t2.
-//  Если метод не сходится к решению, то возвращается false. Если сходится к решению, то возвращается true, а в параметрах
-//  t1,t2 возвращается решение.
+// Запустить метод Ньютона для поиска локального минимума квадрата расстояния между кривыми curve1, curve2
+// с начальными значениями параметров кривых t1,t2.
+// Если метод не сходится к решению, то возвращается false. Если сходится к решению, то возвращается true, а в параметрах
+// t1,t2 возвращается решение.
 // ---
 static bool NewtonMethod( const Curve& curve1, const Curve& curve2, double& t1, double& t2 )
 {
@@ -179,8 +180,8 @@ static bool IsYinSegment( const Line& line, const double& y )
 
 
 //-----------------------------------------------------------------------------
-//  Проверить, пересекаются ли два заданных отрезка. Если отрезки пересекаются, вернуть true и в параметре intersectionPoint
-//  точку пересечения. Иначе вернуть false.
+// Проверить, пересекаются ли два заданных отрезка. Если отрезки пересекаются, вернуть true и в параметре intersectionPoint
+// точку пересечения. Иначе вернуть false.
 // ---
 static bool IntersectLines( const Math::Line& line1, const Math::Line& line2, Point& intersectionPoint  )
 {
@@ -211,8 +212,8 @@ static bool IntersectLines( const Math::Line& line1, const Math::Line& line2, Po
 
 
 //-----------------------------------------------------------------------------
-//  Отрезок и данные, необходимые для нахождения пересечения отрезков.Так же хранится указатель на полилинию:
-//  это необходимо, чтобы не учитывать перечечения отрезков внутри полилинии.
+// Отрезок и данные, необходимые для нахождения пересечения отрезков.Так же хранится указатель на полилинию:
+// это необходимо, чтобы не учитывать перечечения отрезков внутри полилинии.
 // ---
 struct LineData
 {
@@ -231,13 +232,13 @@ struct LineData
 
 
 //-----------------------------------------------------------------------------
-//  Вспомогательная структура для алгоритма быстрого пересечения отрезков.
-//  Точками события являются концы отрезков и точки пересечения.
+// Вспомогательная структура для алгоритма быстрого пересечения отрезков.
+// Точками события являются концы отрезков и точки пересечения.
 // ---
 struct PointEvent
 {
   //-----------------------------------------------------------------------------
-  //  Перечисление для определения типа точки события:
+  // Перечисление для определения типа точки события:
   // Точка может быть левым концом отрезка, правым концом отрезка, точкой переcечения.
   // ---
   enum Type
@@ -283,7 +284,7 @@ static bool IsLexLessFromX( const Point& lhs, const Point& rhs )
 
 
 //-----------------------------------------------------------------------------
-//  Функтор лексиграфического сравнения точек, x старше y. 
+// Функтор лексиграфического сравнения точек, x старше y. 
 // ---
 struct IsLexLessX
 {
@@ -313,7 +314,7 @@ double GetYFromX( const Line& line, const double& x )
 
 
 //-----------------------------------------------------------------------------
-//  Функтор упорядочивания отрезков по значению y для данного x.
+// Функтор упорядочивания отрезков по значению y для данного x.
 // (сравниваются всегда отрезки, которые содержат точку с этим x).
 //--
 struct LineComparator
@@ -432,9 +433,8 @@ void CheckIntersection( const LineData* line1, const LineData* line2, std::vecto
 //-----------------------------------------------------------------------------
 // Обработать точку события.
 // ---
-static void ProcessPoint( std::set<PointEvent, IsLexLessX>& setEventPoints, ActiveLines& currentSegments, const PointEvent& point,
-                          std::vector<PointEvent>& intersectionPoints,
-                          Intersections& intesectPoints, const double& accuracyPolyliline )
+static void ProcessPoint( std::set<PointEvent, IsLexLessX>& setEventPoints, ActiveLines& currentSegments, const PointEvent& point,std::vector<PointEvent>& intersectionPoints,
+	Intersections& intesectPoints, const double& accuracyPolyliline )
 {
   LineComparator::currentX = point.point.GetX();
   // Если точка события - левый конец отрезка - возможно изменения статуса заметающей прямой.
@@ -526,7 +526,7 @@ static void ProcessPoint( std::set<PointEvent, IsLexLessX>& setEventPoints, Acti
           setEventPoints.insert( event );
           intersectionPoints.push_back( event );
         }
-        else if ( lower != s2 && std::abs( Distance( lower->line, s1->line, newPoint ) < 2. * accuracyPolyliline )
+        else if ( lower != s2 && std::fabs( Distance( lower->line, s1->line, newPoint ) < 2. * accuracyPolyliline )
                   && &lower->polyline != &point.s1.polyline )
         {
           PointEvent event( newPoint, point.s1, PointEvent::Intersection );
@@ -558,7 +558,13 @@ static void ProcessPoint( std::set<PointEvent, IsLexLessX>& setEventPoints, Acti
   {
    const auto s1Param = RefineParameter( intersectionPoints[i].s1.curve, intersectionPoints[i].s1.baseParam, intersectionPoints[i].point );
    const auto s2Param = RefineParameter( intersectionPoints[i].s2->curve, intersectionPoints[i].s2->baseParam, intersectionPoints[i].point );
-   intesectPoints[std::make_pair<const Curve*, const Curve*>( &intersectionPoints[i].s1.curve, &intersectionPoints[i].s2->curve )].push_back( std::make_pair( s1Param, s2Param) );
+   std::pair<const Curve*, const Curve*> curves;
+   if ( &intersectionPoints[i].s1.curve > &intersectionPoints[i].s2->curve )
+	   curves = std::make_pair( &intersectionPoints[i].s2->curve, &intersectionPoints[i].s1.curve );
+   else
+	   curves = std::make_pair( &intersectionPoints[i].s1.curve, &intersectionPoints[i].s2->curve );
+
+   intesectPoints[curves].push_back( std::make_pair( s1Param, s2Param) );
   }
   intersectionPoints.clear();
   if ( oldPoint.GetX() < point.point.GetX() )
@@ -580,7 +586,7 @@ static void CollectEventPoints( const std::vector<LineData>& lines, std::set<Poi
 
 
 //-----------------------------------------------------------------------------
-//  Добавить в массив всех отрезков отрезки, полученые с полилиний.
+// Добавить в массив всех отрезков отрезки, полученые с полилиний.
 // ---
 static void CollectLines( const std::vector<Curve*>& curves, std::vector<LineData>& lines )
 {

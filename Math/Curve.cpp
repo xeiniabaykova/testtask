@@ -12,7 +12,8 @@ double Curve::CountingStep( double tCurrent, double accuracy) const
 {
   Vector firstDerivative;
   GetDerivative( tCurrent, firstDerivative );
-  Vector secondDerivative = Get2Derivative( tCurrent );
+  Vector secondDerivative;
+  Get2Derivative( tCurrent, secondDerivative );
   const double vectorMult = firstDerivative.VectorMult( secondDerivative );
   const double normVectorMult = sqrt( vectorMult * vectorMult );
   const double multiplicationFirstDerivative = firstDerivative * firstDerivative;

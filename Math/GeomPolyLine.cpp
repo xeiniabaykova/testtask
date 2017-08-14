@@ -136,14 +136,14 @@ void GeomPolyline::GetDerivative( double t, Vector& vector ) const
 //-----------------------------------------------------------------------------
 // Вернуть вторую производную полилиннии по параметру t.
 // ---
-Vector GeomPolyline::Get2Derivative( double ) const
+void GeomPolyline::Get2Derivative( double, Vector& vector ) const
 {
   if ( IsValid() )
 	{
-	  return Vector( 0.0, 0.0 );
+	  vector = Vector( 0.0, 0.0 );
 	} 
 	else 
-		return Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
+	vector = Vector( std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity() );
 }
 
 

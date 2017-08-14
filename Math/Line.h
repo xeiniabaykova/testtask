@@ -51,9 +51,9 @@ public:
   virtual ~Line() = default;
 
 public:
-  virtual void              GetPoint             ( double t, Point& point ) const;         ///< Вернуть точку по параметру t.
-  virtual void              GetDerivative        ( double t, Vector& vector ) const;                       ///< Вернуть производную линнии по параметру t.
-  virtual Vector             Get2Derivative      ( double t ) const;                       ///< Вернуть вторую производную на линии по параметру t.
+  virtual void               GetPoint            ( double t, Point& point ) const;         ///< Вернуть точку по параметру t.
+  virtual void               GetDerivative       ( double t, Vector& vector ) const;                       ///< Вернуть производную линнии по параметру t.
+  virtual void               Get2Derivative      ( double t, Vector& vector ) const;                       ///< Вернуть вторую производную на линии по параметру t.
   virtual Range              GetRange            () const;                                 ///< Вернуть парметризацию  параметризация от [0, 1].
   virtual void               GetAsPolyLine       ( GeomPolyline &polyLine, double ) const; ///< Вернуть полилинию для линии (это две точки - начало и конец).
   virtual void               Translate           ( double xShift, double yShift );         ///< Сдвинуть по осям x, y.

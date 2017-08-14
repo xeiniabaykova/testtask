@@ -45,12 +45,12 @@ public:
     NurbsType
   };
 
-  virtual void      GetReferensedPoints  ( std::vector<Point>& referensedPoints ) const = 0; ///< Вернуть опорные точки, использованные для построения кривой.
+  virtual void     GetReferensedPoints  ( std::vector<Point>& referensedPoints ) const = 0; ///< Вернуть опорные точки, использованные для построения кривой.
   /// Вернуть точку на кривой по параметру t. Если параметр t выходит за допустимые границы параметра, то возвращается точка, соответствубщая ближайшей границе параметра.
-  virtual void      GetPoint            ( double t, Point& point) const = 0;
-  virtual Range     GetRange            () const = 0;           ///< Вернуть допустимые границы параметра для кривой.
-  virtual void     GetDerivative         ( double t, Vector& vector ) const = 0; ///< Вернуть производную точки точки на кривой по параметру t.
-  virtual Vector    Get2Derivative      ( double t ) const = 0; ///< Вернуть вторую производную точки точки на кривой по параметру t.
+  virtual void    GetPoint            ( double t, Point& point) const = 0;
+  virtual Range   GetRange            () const = 0;           ///< Вернуть допустимые границы параметра для кривой.
+  virtual void    GetDerivative        ( double t, Vector& vector ) const = 0; ///< Вернуть производную точки точки на кривой по параметру t.
+  virtual void    Get2Derivative      ( double t, Vector& vector ) const = 0; ///< Вернуть вторую производную точки точки на кривой по параметру t.
   /// Вернуть полилинию для геометрического примитива с точностью accuracy. Точки, составляющие полилинию, расчитываются с помощью функции countingStep.
   virtual void      GetAsPolyLine       ( GeomPolyline &polyLine, double accuracy = CommonConstantsMath::PRECISION_POLYLINE) const;
   virtual bool      IsClosed            () const = 0;  /// Проверить замкнутость геометрического примитива.
@@ -59,10 +59,10 @@ public:
   virtual void     GetReferensedParams ( std::vector<double>& referensedParams, double accuracy = CommonConstantsMath::PRECISION_POLYLINE ) const;
 
 protected:
-   void                      FixParameter        ( double& t ) const;        ///< Получить по параметру t, паремтр, врходящий в область определения для геометрического примитива.
+   void            FixParameter        ( double& t ) const;        ///< Получить по параметру t, паремтр, врходящий в область определения для геометрического примитива.
 private:
   /// Расчитать параметрический шаг по кривой, позволяющий апроксимировать кривую с необходимой точностью.
-  double CountingStep                            ( double tCurrent , double accuracy = CommonConstantsMath::PRECISION_POLYLINE ) const;
+  double CountingStep                  ( double tCurrent , double accuracy = CommonConstantsMath::PRECISION_POLYLINE ) const;
 
 };
 }
